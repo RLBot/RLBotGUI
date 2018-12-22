@@ -4,3 +4,6 @@ rlbot==1.*
 
 # This will cause pip to auto-upgrade and stop scaring people with warning messages
 pip
+
+gevent
+eel
