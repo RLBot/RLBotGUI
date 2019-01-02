@@ -5,6 +5,8 @@
 	<meta charset="utf-8">
 	<meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
 
+	<link rel="shortcut icon" type="image/png" href="imgs/favicon.ico"/>
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
 	<link rel="stylesheet" href="css/vue-material.min.css"/>
 	<link rel="stylesheet" href="css/vue-fonts.css"/>
@@ -38,11 +40,11 @@
 						</md-button>
 
 						<md-menu-content>
-							<md-menu-item>
+							<md-menu-item @click="pickBotConfig()">
 								<md-icon>file_copy</md-icon>
 								<span>File</span>
 							</md-menu-item>
-							<md-menu-item>
+							<md-menu-item  @click="pickBotFolder()">
 								<md-icon>folder_open</md-icon>
 								<span>Folder</span>
 							</md-menu-item>

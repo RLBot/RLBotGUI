@@ -61,6 +61,7 @@ body {
 .bot-card {
   margin: 5px;
   padding-right: 10px;
+  cursor: move;
 }
 
 .md-card.bot-pool, .md-card.team-card, .md-card.settings-card {

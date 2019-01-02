@@ -19,6 +19,12 @@ var app = new Vue({
     methods: {
         startMatch: function (event) {
             eel.startMatch({'blue': this.blueTeam, 'orange': this.orangeTeam})
+        },
+        pickBotFolder: function (event) {
+            eel.pick_bot_folder()(botsReceived)
+        },
+        pickBotConfig: function (event) {
+            eel.pick_bot_config()(botsReceived)
         }
     }
 });
@@ -26,6 +32,11 @@ var app = new Vue({
 eel.scanForBots('.')(botsReceived);
 
 function botsReceived(bots) {
-    app.botPool = app.botPool.concat(bots);
+
+    const freshBots = bots.filter( (bot) =>
+        !app.botPool.find( (element) => element.path === bot.path ));
+
+    app.botPool = app.botPool.concat(freshBots);
+
     console.log(app.botPool);
 }
