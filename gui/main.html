@@ -52,7 +52,7 @@
 					</md-menu>
 				</md-card-header>
 
-				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}}">
+				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
 					<md-card class="bot-card md-elevation-3" v-for="bot in botPool">
 						<img v-bind:src="bot.image">
 						<span>{{ bot.name }}</span>
