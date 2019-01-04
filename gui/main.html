@@ -32,7 +32,7 @@
 
 
 			<md-card class="bot-pool">
-				<md-card-header>
+				<md-card-header class="center-flex">
 					<div class="md-title" style="display:inline-block">Player Types</div>
 					<md-menu md-direction="bottom-start" style="vertical-align: top; margin-left: 20px; margin-top: 5px">
 						<md-button class="md-fab md-mini" md-menu-trigger>
@@ -53,12 +53,18 @@
 				</md-card-header>
 
 				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-					<md-card class="bot-card md-elevation-3" v-for="bot in botPool">
-						<img v-bind:src="bot.image">
-						<span>{{ bot.name }}</span>
+					<md-card class="bot-card md-elevation-3" v-for="bot in botPool" >
+						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
+							<img v-bind:src="bot.image">
+							<span class="bot-name">{{ bot.name }}</span>
+						</button>
 					</md-card>
 				</draggable>
 			</md-card>
+
+			<div id="teamSwitcher" style="text-align: center;">
+				<md-switch v-model="teamSelection" v-bind:class="[teamSelection]" value="orange" style="margin:1px 0"></md-switch>
+			</div>
 
 			<div class="md-layout md-gutter">
 				<div class="md-layout-item">
@@ -67,9 +73,12 @@
 							<div class="md-title">Blue Team</div>
 						</md-card-header>
 						<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
-							<md-card class="bot-card md-elevation-3" v-for="bot in blueTeam">
+							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
 								<img v-bind:src="bot.image">
-								<span>{{ bot.name }}</span>
+								<span class="bot-name">{{ bot.name }}</span>
+								<md-button class="md-icon-button" @click="blueTeam.splice(index, 1)">
+									<md-icon>close</md-icon>
+								</md-button>
 							</md-card>
 						</draggable>
 					</md-card>
@@ -81,9 +90,12 @@
 							<div class="md-title">Orange Team</div>
 						</md-card-header>
 						<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
-							<md-card class="bot-card md-elevation-3" v-for="bot in orangeTeam">
+							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
 								<img v-bind:src="bot.image">
-								<span>{{ bot.name }}</span>
+								<span class="bot-name">{{ bot.name }}</span>
+								<md-button class="md-icon-button" @click="orangeTeam.splice(index, 1)">
+									<md-icon>close</md-icon>
+								</md-button>
 							</md-card>
 						</draggable>
 					</md-card>

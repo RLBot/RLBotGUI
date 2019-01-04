@@ -15,16 +15,24 @@ var app = new Vue({
         ],
         blueTeam: [],
         orangeTeam: [],
+        teamSelection: "blue"
     },
     methods: {
         startMatch: function (event) {
             eel.startMatch({'blue': this.blueTeam, 'orange': this.orangeTeam})
         },
         pickBotFolder: function (event) {
-            eel.pick_bot_folder()(botsReceived)
+            eel.pick_bot_folder()(botsReceived);
         },
         pickBotConfig: function (event) {
-            eel.pick_bot_config()(botsReceived)
+            eel.pick_bot_config()(botsReceived);
+        },
+        addToTeam: function(bot, team) {
+            if (team === 'orange') {
+                this.orangeTeam.push(bot);
+            } else {
+                this.blueTeam.push(bot);
+            }
         }
     }
 });
