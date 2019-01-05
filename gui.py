@@ -9,33 +9,27 @@ sm = None
 
 
 def startMatchHelper(configuration):
+    # TODO: use this configuration
+    print(configuration)
+
     from rlbot.setup_manager import SetupManager
     global sm
-    sm = SetupManager()
-    print('connecting to game')
-    sm.connect_to_game()
-    print('loading config')
-    sm.load_config()
-    print('launching ball prediction')
-    sm.launch_ball_prediction()
-    print('launching quick chat')
-    # sm.launch_quick_chat_manager()
-    print('launching bot processes')
-    sm.launch_bot_processes()
-    print('starting match')
-    sm.start_match()
-    print('starting infinite loop')
-    sm.infinite_loop()
 
+    if sm is not None:
+        sm.shut_down()
+
+    sm = SetupManager()
+    sm.connect_to_game()
+    sm.load_config()
+    sm.launch_ball_prediction()
+    sm.launch_quick_chat_manager()
+    sm.launch_bot_processes()
+    sm.start_match()
+    # Note that we are not calling infinite_loop because that is not compatible with the way eel works!
+    # Instead we will reproduce the important behavior from infinite_loop inside this file.
 
 @eel.expose
 def startMatch(configuration):
-    print(configuration)  # TODO: use this configuration
-
-    # TODO: figure out how to run the setup manager without blocking the eel process.
-    # See the Asynchronous Python section here: https://github.com/ChrisKnott/Eel
-    # process = multiprocessing.Process(target=startMatchHelper, args=(configuration))
-    # process.start()
     eel.spawn(startMatchHelper(configuration))
 
 @eel.expose
@@ -110,5 +104,11 @@ def scanForBots(directory):
             for bundle in scan_directory_for_bot_configs(directory)]
 
 
-eel.init('gui')
-eel.start('main.html', size=(880, 660))
+def start():
+    eel.init('gui')
+    eel.start('main.html', size=(880, 660), block=False)
+
+    while True:
+        if sm:
+            sm.try_recieve_agent_metadata()
+        eel.sleep(1.0)
