@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Exo+2:300,300i,500,500i');
+
+:root {
+  --main-color: #fff;
+  --hover: rgba(200,200,200,1);
+  --hover-controls: rgba(255,255,255,0.1);
+  --green-color: #3b7538;
+  --orange-color: #f26522;
+  --blue-color: #0054a6;
+}
+
+body {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--main-color);
+  margin: 0;
+  background-image: radial-gradient(transparent, var(--main-color) 90%),url(../imgs/arenas/Core_707.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.control-bar {
+  background-color: var(--green-color);
+  height: 2.5rem;
+  filter: drop-shadow(0 0 0.5rem rgba(0,0,0,0.6));
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 4rem;
+  height: 4rem;
+  padding: 0.5rem;
+  filter: drop-shadow(0 0 0.5rem rgba(0,0,0,0.6));
+}
+
+.title {
+  font-size: 1.5rem;
+  position: absolute;
+  top: 0.5rem;
+  left: 5rem;
+}
+
+.team-entries {
+  min-height: 200px;
+  padding: 5px;
+}
+
+.team-card {
+  position: relative;
+}
+
+.team-label {
+  position: absolute;
+  bottom: 10px;
+  color: white;
+  opacity: 0.4;
+}
+
+.bot-card {
+  margin: 5px;
+  cursor: move;
+}
+
+.center-flex {
+  display: flex;
+  align-items: center;
+}
+
+.bot-name {
+  padding-right: 10px;
+  flex-grow: 1;
+}
+
+.secret-button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: inherit;
+  outline: none;
+}
+
+.secret-button:focus {
+  background-color: rgba(0, 0, 0, 0.07);
+}
+
+#teamSwitcher .md-switch-thumb {
+  background-color: var(--blue-color);
+}
+
+#teamSwitcher .md-switch-container {
+  background-color: rgba(0, 84, 166, 0.5);
+}
+
+#teamSwitcher .orange .md-switch-thumb {
+  background-color: var(--orange-color);
+}
+
+#teamSwitcher .orange .md-switch-container {
+  background-color: rgba(242, 101, 34, 0.5);
+}
+
+#teamSwitcher .md-switch-container:focus-within {
+  background-color: var(--hover)
+}
+
+.md-card.bot-pool, .md-card.team-card, .md-card.settings-card {
+  margin: 10px;
+}
+
+#app .md-card .md-card-header {
+  padding: 5px;
+}
+
+#app .bot-pool, #app .settings-card {
+  background-color: #f2f2f2;
+}
+
+.bot-pool .bot-card {
+  display: inline-flex;
+}
+
+.bot-card img {
+  height: 1.8rem;
+  width: 1.8rem;
+  margin: 5px;
+  filter: brightness(50%);
+}
+
+.org .bot-card img {
+  filter: brightness(0%) invert(50%) sepia(25%) saturate(7482%) hue-rotate(350deg) brightness(102%) contrast(90%);
+}
+
+.blu .bot-card img {
+  filter: brightness(0%) invert(17%) sepia(78%) saturate(3372%) hue-rotate(198deg) brightness(96%) contrast(101%);
+}
+
+.org .bot-card {
+  color: var(--orange-color);
+}
+
+.blu .bot-card {
+  color: var(--blue-color);
+}
+
+#app .org {
+  color: var(--orange-color);
+  background-color: var(--orange-color);
+}
+
+#app .blu {
+  color: var(--blue-color);
+  background-color: var(--blue-color);
+}

@@ -2,94 +2,122 @@
 <html>
 <head>
 
+	<meta charset="utf-8">
+	<meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+
+	<link rel="shortcut icon" type="image/png" href="imgs/favicon.ico"/>
+
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-	<link rel="stylesheet" href="style.css"/>
-	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="css/vue-material.min.css"/>
+	<link rel="stylesheet" href="css/vue-fonts.css"/>
+	<link rel="stylesheet" href="css/black-green-light.css"/>
+	<link rel="stylesheet" href="css/style.css"/>
 	<script type="text/javascript" src="/eel.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/vue-material.min.js"></script>
+	<script type="text/javascript" src="js/Sortable.min.js"></script>
+	<script type="text/javascript" src="js/vuedraggable.min.js"></script>
 
 	<title>RLBot</title>
 
 </head>
 <body>
-	<div class="control-bar">
-		<img class="logo" src="imgs/rlbot_logo.png">
-		<span class="title">RLBot</span>
-	    <div class="window-controls">
-	    	<a href="#" id="window-minimize" class="btnWin">
-	    		<i class="material-icons">remove</i>
-			</a>
-			<a href="#" id="window-close" class="btnWin">
-	    		<i class="material-icons">clear</i>
-			</a>
-	    </div>
-	</div>
-	<div class="grid">
-		<div class="team-list org">
-			<div class="team-entries">
-				<div class="team-entry">
-					<img src="imgs/human.png" class="torange"></img>
-					<span>Player 1</span>
-					<a href="#" class="btn">
-  						<i class="material-icons org">more_vert</i>
-					</a>
-				</div>
-				<div class="team-entry">
-					<img src="imgs/psyonix.png" class="torange"></img>
-					<span>Pro</span>
-					<a href="#" class="btn">
-  						<i class="material-icons org">more_vert</i>
-					</a>
-				</div>
-				<div class="team-entry">
-					<img src="imgs/rlbot.png" class="torange"></img>
-					<span>ReliefBot</span>
-					<a href="#" class="btn">
-  						<i class="material-icons org">more_vert</i>
-					</a>
-				</div>
-			</div>
-			<a href="#" class="team-add">
-  				<i class="material-icons org">add</i>
-			</a>
+	<div id="app">
+		<div class="control-bar">
+			<img class="logo" src="imgs/rlbot_logo.png">
+			<span class="title">RLBot</span>
 		</div>
-		<div class="team-list blu">
-			<div class="team-entries">
-				<div class="team-entry">
-					<img src="imgs/human.png" class="tblue"></img>
-					<span>Player 1</span>
-					<a href="#" class="btn">
-						<i class="material-icons blu">more_vert</i>
-					</a>
-				</div>
-				<div class="team-entry">
-					<img src="imgs/psyonix.png" class="tblue"></img>
-					<span>Pro</span>
-					<a href="#" class="btn">
-						<i class="material-icons blu">more_vert</i>
-					</a>
-				</div>
-				<div class="team-entry">
-					<img src="imgs/rlbot.png" class="tblue"></img>
-					<span>ReliefBot</span>
-					<a href="#" class="btn">
-						<i class="material-icons blu">more_vert</i>
-					</a>
-				</div>
-			</div>
-			<a href="#" class="team-add">
-				<i class="material-icons blu">add</i>
-			</a>
-		</div>
-		<div class="controls">
-			<div class="match-settings">
 
+		<div>
+
+
+			<md-card class="bot-pool">
+				<md-card-header class="center-flex">
+					<div class="md-title" style="display:inline-block">Player Types</div>
+					<md-menu md-direction="bottom-start" style="vertical-align: top; margin-left: 20px; margin-top: 5px">
+						<md-button class="md-fab md-mini" md-menu-trigger>
+							<md-icon>add</md-icon>
+						</md-button>
+
+						<md-menu-content>
+							<md-menu-item @click="pickBotConfig()">
+								<md-icon>file_copy</md-icon>
+								<span>File</span>
+							</md-menu-item>
+							<md-menu-item  @click="pickBotFolder()">
+								<md-icon>folder_open</md-icon>
+								<span>Folder</span>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</md-card-header>
+
+				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
+					<md-card class="bot-card md-elevation-3" v-for="bot in botPool" >
+						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
+							<img v-bind:src="bot.image">
+							<span class="bot-name">{{ bot.name }}</span>
+						</button>
+					</md-card>
+				</draggable>
+			</md-card>
+
+			<div id="teamSwitcher" style="text-align: center;">
+				<md-switch v-model="teamSelection" v-bind:class="[teamSelection]" value="orange" style="margin:1px 0"></md-switch>
 			</div>
-			<div class="run">
-				<a href="#">Run</a>
-				<a href="#">Stop</a>
+
+			<div class="md-layout md-gutter">
+				<div class="md-layout-item">
+					<md-card class="blu team-card">
+						<md-card-header class="team-label">
+							<div class="md-title">Blue Team</div>
+						</md-card-header>
+						<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
+							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
+								<img v-bind:src="bot.image">
+								<span class="bot-name">{{ bot.name }}</span>
+								<md-button class="md-icon-button" @click="blueTeam.splice(index, 1)">
+									<md-icon>close</md-icon>
+								</md-button>
+							</md-card>
+						</draggable>
+					</md-card>
+				</div>
+
+				<div class="md-layout-item">
+					<md-card class="org team-card">
+						<md-card-header class="team-label">
+							<div class="md-title">Orange Team</div>
+						</md-card-header>
+						<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
+							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
+								<img v-bind:src="bot.image">
+								<span class="bot-name">{{ bot.name }}</span>
+								<md-button class="md-icon-button" @click="orangeTeam.splice(index, 1)">
+									<md-icon>close</md-icon>
+								</md-button>
+							</md-card>
+						</draggable>
+					</md-card>
+				</div>
 			</div>
+
+			<md-card class="settings-card">
+				<md-card-header>
+					<div class="md-title">Match Settings</div>
+				</md-card-header>
+
+				<md-card-actions>
+					<md-button v-on:click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" class="md-raised">Start Match</md-button>
+					<md-button onclick="eel.killBots()" class="md-raised">Stop</md-button>
+				</md-card-actions>
+			</md-card>
+
+
+
 		</div>
 	</div>
+
+	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
