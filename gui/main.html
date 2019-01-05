@@ -12,11 +12,6 @@
 	<link rel="stylesheet" href="css/vue-fonts.css"/>
 	<link rel="stylesheet" href="css/black-green-light.css"/>
 	<link rel="stylesheet" href="css/style.css"/>
-	<script type="text/javascript" src="/eel.js"></script>
-	<script type="text/javascript" src="js/vue.js"></script>
-	<script type="text/javascript" src="js/vue-material.min.js"></script>
-	<script type="text/javascript" src="js/Sortable.min.js"></script>
-	<script type="text/javascript" src="js/vuedraggable.min.js"></script>
 
 	<title>RLBot</title>
 
@@ -29,7 +24,6 @@
 		</div>
 
 		<div>
-
 
 			<md-card class="bot-pool">
 				<md-card-header class="center-flex">
@@ -66,9 +60,9 @@
 				<md-switch v-model="teamSelection" v-bind:class="[teamSelection]" value="orange" style="margin:1px 0"></md-switch>
 			</div>
 
-			<div class="md-layout md-gutter">
+			<div class="md-layout">
 				<div class="md-layout-item">
-					<md-card class="blu team-card">
+					<md-card class="blu team-card md-elevation-8">
 						<md-card-header class="team-label">
 							<div class="md-title">Blue Team</div>
 						</md-card-header>
@@ -85,7 +79,7 @@
 				</div>
 
 				<div class="md-layout-item">
-					<md-card class="org team-card">
+					<md-card class="org team-card md-elevation-8">
 						<md-card-header class="team-label">
 							<div class="md-title">Orange Team</div>
 						</md-card-header>
@@ -102,14 +96,79 @@
 				</div>
 			</div>
 
-			<md-card class="settings-card">
+			<md-card v-if="matchOptions" class="settings-card">
 				<md-card-header>
 					<div class="md-title">Match Settings</div>
 				</md-card-header>
 
+                <md-card-content>
+                    <div class="md-layout md-gutter">
+                        <div class="md-layout-item">
+                            <md-field>
+                                <label for="map_selection">Map</label>
+                                <md-select v-model="matchSettings.map" id="map_selection">
+                                    <md-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</md-option>
+                                </md-select>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item">
+                            <md-field>
+                                <label for="mode_selection">Mode</label>
+                                <md-select v-model="matchSettings.game_mode" id="mode_selection">
+                                    <md-option v-for="mode in matchOptions.game_modes" :key="mode" v-bind:value="mode">{{mode}}</md-option>
+                                </md-select>
+                            </md-field>
+                        </div>
+
+                        <div class="md-layout-item">
+                            <md-button class="md-raised" @click="showMutatorDialog = true">Mutators</md-button>
+                        </div>
+                    </div>
+
+
+                    <md-dialog :md-active.sync="showMutatorDialog">
+                        <md-dialog-title>Mutators</md-dialog-title>
+
+                        <md-dialog-content>
+
+                            <div class="md-layout md-gutter">
+                                <div class="md-layout-item">
+                                    <mutator-field label="Match Length" :options="matchOptions.mutators.match_length_types" v-model="matchSettings.mutators.match_length"></mutator-field>
+                                    <mutator-field label="Max Score" :options="matchOptions.mutators.max_score_types" v-model="matchSettings.mutators.max_score"></mutator-field>
+                                    <mutator-field label="Overtime Type" :options="matchOptions.mutators.overtime_types" v-model="matchSettings.mutators.overtime"></mutator-field>
+                                    <mutator-field label="Game Speed" :options="matchOptions.mutators.game_speed_types" v-model="matchSettings.mutators.game_speed"></mutator-field>
+                                    <mutator-field label="Respawn Time" :options="matchOptions.mutators.respawn_time_types" v-model="matchSettings.mutators.respawn_time"></mutator-field>
+                                </div>
+                                <div class="md-layout-item">
+                                    <mutator-field label="Max Ball Speed" :options="matchOptions.mutators.ball_max_speed_types" v-model="matchSettings.mutators.ball_max_speed"></mutator-field>
+                                    <mutator-field label="Ball Type" :options="matchOptions.mutators.ball_type_types" v-model="matchSettings.mutators.ball_type"></mutator-field>
+                                    <mutator-field label="Ball Weight" :options="matchOptions.mutators.ball_weight_types" v-model="matchSettings.mutators.ball_weight"></mutator-field>
+                                    <mutator-field label="Ball Size" :options="matchOptions.mutators.ball_size_types" v-model="matchSettings.mutators.ball_size"></mutator-field>
+                                    <mutator-field label="Ball Bounciness" :options="matchOptions.mutators.ball_bounciness_types" v-model="matchSettings.mutators.ball_bounciness"></mutator-field>
+                                </div>
+                                <div class="md-layout-item">
+                                    <mutator-field label="Boost Amount" :options="matchOptions.mutators.boost_amount_types" v-model="matchSettings.mutators.boost_amount"></mutator-field>
+                                    <mutator-field label="Rumble Type" :options="matchOptions.mutators.rumble_types" v-model="matchSettings.mutators.rumble"></mutator-field>
+                                    <mutator-field label="Boost Strength" :options="matchOptions.mutators.boost_strength_types" v-model="matchSettings.mutators.boost_strength"></mutator-field>
+                                    <mutator-field label="Gravity" :options="matchOptions.mutators.gravity_types" v-model="matchSettings.mutators.gravity"></mutator-field>
+                                    <mutator-field label="Demolition" :options="matchOptions.mutators.demolish_types" v-model="matchSettings.mutators.demolish"></mutator-field>
+                                </div>
+                            </div>
+                        </md-dialog-content>
+
+                        <md-dialog-actions>
+                            <md-button @click="resetMutatorsToDefault()">Reset Defaults</md-button>
+                            <md-button @click="showMutatorDialog = false">Close</md-button>
+                        </md-dialog-actions>
+                    </md-dialog>
+
+
+
+                </md-card-content>
+
 				<md-card-actions>
-					<md-button v-on:click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" class="md-raised">Start Match</md-button>
-					<md-button onclick="eel.killBots()" class="md-raised">Stop</md-button>
+					<md-button v-on:click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" class="md-primary md-raised">Start Match</md-button>
+					<md-button v-on:click="killBots()" class="md-raised">Stop</md-button>
 				</md-card-actions>
 			</md-card>
 
@@ -118,6 +177,11 @@
 		</div>
 	</div>
 
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/vue-material.min.js"></script>
+    <script type="text/javascript" src="js/Sortable.min.js"></script>
+    <script type="text/javascript" src="js/vuedraggable.min.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
