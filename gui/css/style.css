@@ -15,7 +15,7 @@ body {
   font-size: 16px;
   color: var(--main-color);
   margin: 0;
-  background-image: radial-gradient(transparent, var(--main-color) 90%),url(../imgs/arenas/Core_707.png);
+  background-image: radial-gradient(#ffffffaa, transparent 130%),url(../imgs/arenas/Core_707.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -24,7 +24,7 @@ body {
 .control-bar {
   background-color: var(--green-color);
   height: 2.5rem;
-  filter: drop-shadow(0 0 0.5rem rgba(0,0,0,0.6));
+  filter: drop-shadow(0 0 0.5rem rgba(0,0,0,1.0));
   margin-bottom: 30px;
 }
 
@@ -116,7 +116,7 @@ body {
 }
 
 #app .bot-pool, #app .settings-card {
-  background-color: #f2f2f2;
+  background-color: #eee;
 }
 
 .bot-pool .bot-card {
@@ -154,4 +154,8 @@ body {
 #app .blu {
   color: var(--blue-color);
   background-color: var(--blue-color);
+}
+
+.md-menu-content {
+  z-index: 10;
 }
