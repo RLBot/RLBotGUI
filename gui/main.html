@@ -106,7 +106,7 @@
                         <div class="md-layout-item">
                             <md-field>
                                 <label for="map_selection">Map</label>
-                                <md-select v-model="matchSettings.map" id="map_selection">
+                                <md-select v-model="matchSettings.map" id="map_selection" @md-closed="updateBGImage(matchSettings.map)">
                                     <md-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</md-option>
                                 </md-select>
                             </md-field>

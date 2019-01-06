@@ -68,6 +68,9 @@ const app = new Vue({
                 const mutatorName = mutator.replace('_types', '');
                 self.matchSettings.mutators[mutatorName] = self.matchOptions.mutators[mutator][0];
             });
+        },
+        updateBGImage: function(mapName) {
+            document.body.style.backgroundImage = "url(../imgs/arenas/"+mapName+".jpg)";
         }
     }
 });
@@ -90,6 +93,8 @@ function matchOptionsReceived(matchOptions) {
 
     app.matchSettings.map = app.matchOptions.map_types[0];
     app.matchSettings.game_mode = app.matchOptions.game_modes[0];
+
+    app.updateBGImage(app.matchSettings.map);
 
     app.resetMutatorsToDefault();
 }

@@ -15,10 +15,14 @@ body {
   font-size: 16px;
   color: var(--main-color);
   margin: 0;
-  background-image: radial-gradient(#ffffffaa, transparent 130%),url(../imgs/arenas/Core_707.png);
+  background-image: url(../imgs/arenas/DFHStadium.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .control-bar {
@@ -43,7 +47,7 @@ body {
 }
 
 .team-entries {
-  min-height: 200px;
+  min-height: 300px;
   padding: 5px;
 }
 
