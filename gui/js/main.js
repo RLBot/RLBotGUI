@@ -20,6 +20,22 @@ const app = new Vue({
             map: null,
             game_mode: null,
             mutators: {
+                match_length: null,
+                max_score: null,
+                overtime: null,
+                series_length: null,
+                game_speed: null,
+                ball_max_speed: null,
+                ball_type: null,
+                ball_weight: null,
+                ball_size: null,
+                ball_bounciness: null,
+                boost_amount: null,
+                rumble: null,
+                boost_strength: null,
+                gravity: null,
+                demolish: null,
+                respawn_time: null
             }
         },
         showMutatorDialog: false
@@ -84,6 +100,11 @@ Vue.component('mutator-field', {
             return {
                 id: Math.floor(Math.random() * 1000000000).toString(),
                 model: this.value
+            }
+        },
+        watch: {
+            value: function(newVal, oldVal) {
+                this.model = newVal;
             }
         },
         template: `
