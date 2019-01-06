@@ -186,16 +186,19 @@ def get_match_options():
 should_quit = False
 
 
-def on_window_exit(page, sockets):
+def on_websocket_close(page, sockets):
     global should_quit
-    should_quit = True
-    if sm is not None:
-        sm.shut_down(time_limit=5, kill_all_pids=True)
+    eel.sleep(3.0)  # We might have just refreshed. Give the websocket a moment to reconnect.
+    if not len(eel._websockets):
+        # At this point we think the browser window has been closed.
+        should_quit = True
+        if sm is not None:
+            sm.shut_down(time_limit=5, kill_all_pids=True)
 
 
 def start():
     eel.init('gui')
-    eel.start('main.html', size=(880, 760), block=False, callback=on_window_exit)
+    eel.start('main.html', size=(880, 760), block=False, callback=on_websocket_close)
 
     while not should_quit:
         if sm:
