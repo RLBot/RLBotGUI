@@ -198,7 +198,7 @@ def on_websocket_close(page, sockets):
 
 def start():
     eel.init('gui')
-    eel.start('main.html', size=(880, 760), block=False, callback=on_websocket_close)
+    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close)
 
     while not should_quit:
         if sm:
