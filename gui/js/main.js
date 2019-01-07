@@ -38,7 +38,8 @@ const app = new Vue({
                 respawn_time: null
             }
         },
-        showMutatorDialog: false
+        showMutatorDialog: false,
+        bodyStyle: null
     },
     methods: {
         startMatch: function (event) {
@@ -70,7 +71,7 @@ const app = new Vue({
             });
         },
         updateBGImage: function(mapName) {
-            document.body.style.backgroundImage = "url(../imgs/arenas/"+mapName+".jpg)";
+            this.bodyStyle = { backgroundImage: "url(../imgs/arenas/" + mapName + ".jpg)" };
         }
     }
 });
