@@ -3,7 +3,7 @@ from tkinter import filedialog
 
 import eel
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
-from rlbot.parsing.agent_config_parser import get_bot_config_bundle
+from rlbot.parsing.bot_config_bundle import get_bot_config_bundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
@@ -25,7 +25,7 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     player_config.name = bot['name']
     player_config.team = int(bot['team'])
     if 'path' in bot and bot['path']:
-        player_config.config_bundle = get_bot_config_bundle(bot['path'])
+        player_config.config_path = bot['path']
     return player_config
 
 
