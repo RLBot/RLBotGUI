@@ -1,5 +1,4 @@
-import tkinter
-from tkinter import filedialog
+from PyQt5.QtWidgets import QApplication, QFileDialog
 
 import eel
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
@@ -124,29 +123,15 @@ def pick_bot_location(is_folder):
     :return:
     """
 
-    # https://stackoverflow.com/a/7090747
-
-    # Make a top-level instance and hide since it is ugly and big.
-    root = tkinter.Tk()
-    root.withdraw()
-
-    # Make it almost invisible - no decorations, 0 size, top left corner.
-    root.overrideredirect(True)
-    root.geometry('0x0+0+0')
-    root.attributes('-alpha', 0.3)
-    root.attributes("-topmost", True)
-
-    # Show window again and lift it to top so it can get focus,
-    # otherwise dialogs will end up behind the terminal.
-    root.deiconify()
+    app = QApplication([])
+    options = QFileDialog.Options()
 
     if is_folder:
-        filename = filedialog.askdirectory(parent=root)  # Or some other dialog
+        filename = QFileDialog.getExistingDirectory(options=options)
     else:
-        filename = filedialog.askopenfilename(parent=root)
+        filename, _ = QFileDialog.getOpenFileName(options=options)  # Or some other dialog
 
-    # Get rid of the top-level instance once to make it actually invisible.
-    root.destroy()
+    app.exit()
 
     return filename
 

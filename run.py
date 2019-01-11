@@ -13,13 +13,13 @@ def install_and_import(package):
 
     try:
         importlib.import_module(package)
-    except ImportError:
+    except (ImportError, ModuleNotFoundError):
         pipmain(['install', package])
     finally:
         globals()[package] = importlib.import_module(package)
 
 
-if __name__ == '__main__':
+def upgrade_and_run():
     install_and_import('rlbot')
     from rlbot.utils import public_utils, logging_utils
 
@@ -28,8 +28,14 @@ if __name__ == '__main__':
         logger.log(logging_utils.logging_level,
                    'Skipping upgrade check for now since it looks like you have no internet')
     elif public_utils.is_safe_to_upgrade():
-        pipmain(['install', '-r', 'requirements.txt', '--upgrade', '--upgrade-strategy=eager'])
+        import os
+        requirements = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'rlbot_gui', 'requirements.txt')
+        pipmain(['install', '-r', requirements, '--upgrade', '--upgrade-strategy=eager'])
 
-    import gui
+    from rlbot_gui import gui
 
     gui.start()
+
+
+if __name__ == '__main__':
+    upgrade_and_run()
