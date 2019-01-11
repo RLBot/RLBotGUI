@@ -52,7 +52,7 @@ body {
 }
 
 .team-entries {
-  min-height: 300px;
+  min-height: 220px;
   padding: 5px;
 }
 
@@ -133,9 +133,8 @@ body {
 }
 
 .bot-card img {
-  height: 1.8rem;
-  width: 1.8rem;
-  margin: 5px;
+  height: 1.5rem;
+  margin: 3px;
   filter: brightness(50%);
 }
 
