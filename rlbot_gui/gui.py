@@ -12,7 +12,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
 from rlbot.setup_manager import SetupManager
 
-sm = None
+sm: SetupManager = None
 
 
 def create_player_config(bot, human_index_tracker: IncrementingInteger):
@@ -80,7 +80,7 @@ def start_match_helper(bot_list, match_settings):
 
 @eel.expose
 def start_match(bot_list, match_settings):
-    eel.spawn(start_match_helper(bot_list, match_settings))
+    eel.spawn(start_match_helper, bot_list, match_settings)
 
 
 @eel.expose
