@@ -18,10 +18,44 @@
 </head>
 <body>
 	<div id="app" :style="bodyStyle">
-		<div class="control-bar">
-			<img class="logo" src="imgs/rlbot_logo.png">
-			<span class="title">RLBot</span>
-		</div>
+
+		<md-toolbar class="md-primary">
+			<div class="md-toolbar-row">
+				<img class="logo" src="imgs/rlbot_logo.png">
+				<h3 class="md-title" style="flex: 1">RLBot</h3>
+				<div class="md-toolbar-section-end">
+
+					<md-menu md-direction="bottom-start">
+						<md-button md-menu-trigger class="md-icon-button">
+							<md-icon>more_vert</md-icon>
+						</md-button>
+
+						<md-menu-content>
+							<md-menu-item @click="showPackageInstaller = true;">
+								Install missing python package
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+			</div>
+		</md-toolbar>
+
+		<md-dialog :md-active.sync="showPackageInstaller">
+			<md-dialog-title>Install Package</md-dialog-title>
+
+			<md-dialog-content>
+
+				<md-field>
+					<label>Package Name</label>
+					<md-input v-model="packageString"></md-input>
+				</md-field>
+			</md-dialog-content>
+
+			<md-dialog-actions>
+				<md-button @click="installPackage()" class="md-raised md-primary">Install Package</md-button>
+				<md-button @click="showPackageInstaller = false">Close</md-button>
+			</md-dialog-actions>
+		</md-dialog>
 
 		<div>
 
@@ -172,8 +206,9 @@
 				</md-card-actions>
 			</md-card>
 
-
-
+			<md-snackbar md-position="center" :md-active.sync="showSnackbar" md-persistent>
+				<span>{{snackbarContent}}</span>
+			</md-snackbar>
 		</div>
 	</div>
 

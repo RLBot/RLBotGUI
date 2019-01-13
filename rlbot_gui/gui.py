@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QFileDialog
+from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget
+from pip._internal import main as pipmain
 
 import eel
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
@@ -129,7 +130,7 @@ def pick_bot_location(is_folder):
     if is_folder:
         filename = QFileDialog.getExistingDirectory(options=options)
     else:
-        filename, _ = QFileDialog.getOpenFileName(options=options)  # Or some other dialog
+        filename, _ = QFileDialog.getOpenFileName(filter="Config files (*.cfg)", options=options)
 
     app.exit()
 
@@ -166,6 +167,13 @@ def get_match_options():
             'respawn_time_types': respawn_time_mutator_types
         }
     }
+
+
+@eel.expose
+def install_package(package_string):
+    exit_code = pipmain(['install', package_string])
+    print(exit_code)
+    return {'exitCode': exit_code, 'package': package_string}
 
 
 should_quit = False
