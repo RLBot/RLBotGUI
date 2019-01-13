@@ -39,6 +39,10 @@ const app = new Vue({
             }
         },
         showMutatorDialog: false,
+        showPackageInstaller: false,
+        packageString: null,
+        showSnackbar: false,
+        snackbarContent: null,
         bodyStyle: null
     },
     methods: {
@@ -72,6 +76,9 @@ const app = new Vue({
         },
         updateBGImage: function(mapName) {
             this.bodyStyle = { backgroundImage: "url(../imgs/arenas/" + mapName + ".jpg)" };
+        },
+        installPackage: function () {
+            eel.install_package(this.packageString)(onInstallationComplete);
         }
     }
 });
@@ -98,6 +105,13 @@ function matchOptionsReceived(matchOptions) {
     app.updateBGImage(app.matchSettings.map);
 
     app.resetMutatorsToDefault();
+}
+
+function onInstallationComplete(result) {
+    let message = result.exitCode === 0 ? 'Successfully installed ' : 'Failed to install ';
+    message += result.package;
+    app.snackbarContent = message;
+    app.showSnackbar = true;
 }
 
 Vue.component('mutator-field', {
