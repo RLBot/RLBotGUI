@@ -108,7 +108,7 @@ def pick_bot_config():
 
     try:
         bundle = get_bot_config_bundle(filename)
-        return [{'name': bundle.name, 'image': 'imgs/rlbot.png', 'path': bundle.config_path}]
+        return [{'name': bundle.name, 'type': 'rlbot', 'image': 'imgs/rlbot.png', 'path': bundle.config_path}]
     except Exception as e:
         print(e)
 
