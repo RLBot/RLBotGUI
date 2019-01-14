@@ -5,9 +5,7 @@
 # This will cause pip to auto-upgrade and stop scaring people with warning messages
 pip
 
-# Packages used by the GUI
-gevent
-gevent-websocket
+# Packages used by the GUI which are not bundled in the installer
 PyQt5
 
 # Packages commonly used by bots
