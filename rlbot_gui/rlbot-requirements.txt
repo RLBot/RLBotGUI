@@ -1,0 +1,8 @@
+# Everything in this file will be upgraded *every* time the GUI runs
+
+# Include everything the framework requires
+# You will automatically get updates for all versions starting with "1.".
+rlbot==1.*
+
+# Chip's utilities - https://github.com/samuelpmish/RLUtilities/tree/master/RLUtilities
+RLUtilities

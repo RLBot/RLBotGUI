@@ -1,8 +1,15 @@
-# Include everything the framework requires
-# You will automatically get updates for all versions starting with "1.".
-rlbot==1.*
+# Everything in this file will be installed once, the *first* time the GUI runs.
+
+-r rlbot-requirements.txt
 
 # This will cause pip to auto-upgrade and stop scaring people with warning messages
 pip
 
-# Other requirements get baked in by the installer, see installer.cfg.
+# Packages used by the GUI
+gevent
+gevent-websocket
+PyQt5
+
+# Packages commonly used by bots
+numpy
+selenium

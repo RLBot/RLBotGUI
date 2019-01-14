@@ -11,6 +11,8 @@ def upgrade():
     package = 'rlbot'
 
     import importlib
+    import os
+    folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pkgs', 'rlbot_gui')
 
     try:
         # https://stackoverflow.com/a/24773951
@@ -23,12 +25,14 @@ def upgrade():
             logger.log(logging_utils.logging_level,
                        'Skipping upgrade check for now since it looks like you have no internet')
         elif public_utils.is_safe_to_upgrade():
-            import os
-            requirements = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pkgs', 'rlbot_gui', 'requirements.txt')
-            pipmain(['install', '-r', requirements, '--upgrade', '--upgrade-strategy=eager'])
+            # Upgrade only the rlbot-related stuff.
+            rlbot_requirements = os.path.join(folder, 'rlbot-requirements.txt')
+            pipmain(['install', '-r', rlbot_requirements, '--upgrade', '--upgrade-strategy=eager'])
 
     except (ImportError, ModuleNotFoundError):
-        pipmain(['install', package])
+        # First time installation, install lots of stuff
+        all_requirements = os.path.join(folder, 'requirements.txt')
+        pipmain(['install', '-r', all_requirements])
 
 
 if __name__ == '__main__':
