@@ -12,4 +12,5 @@ PyQt5
 
 # Packages commonly used by bots
 numpy
+websockets
 selenium
