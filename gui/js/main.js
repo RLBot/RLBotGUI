@@ -79,12 +79,21 @@ const app = new Vue({
         },
         installPackage: function () {
             eel.install_package(this.packageString)(onInstallationComplete);
+        },
+        downloadBotPack: function() {
+            eel.download_bot_pack()(botPackDownloaded);
         }
     }
 });
 
 eel.scan_for_bots('.')(botsReceived);
 eel.get_match_options()(matchOptionsReceived);
+
+function botPackDownloaded(response) {
+    app.snackbarContent = 'Downloaded Bot Pack!';
+    app.showSnackbar = true;
+    eel.scan_for_bots('.')(botsReceived);
+}
 
 function botsReceived(bots) {
 

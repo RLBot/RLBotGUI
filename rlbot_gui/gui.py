@@ -176,6 +176,19 @@ def install_package(package_string):
     return {'exitCode': exit_code, 'package': package_string}
 
 
+@eel.expose
+def download_bot_pack():
+    import urllib.request
+    # Comes from here: https://drive.google.com/open?id=1mvZ4UBESnmmn3-YStDpFrWG-u1IdmeYM
+    bot_pack_url = "https://drive.google.com/uc?export=download&id=1mvZ4UBESnmmn3-YStDpFrWG-u1IdmeYM"
+    zip_location = "RLBotPack.zip"
+    urllib.request.urlretrieve(bot_pack_url, zip_location)
+
+    import zipfile
+    with zipfile.ZipFile(zip_location, 'r') as zip_ref:
+        zip_ref.extractall(".")
+
+
 should_quit = False
 
 
