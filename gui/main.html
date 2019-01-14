@@ -69,12 +69,16 @@
 
 						<md-menu-content>
 							<md-menu-item @click="pickBotConfig()">
-								<md-icon>file_copy</md-icon>
 								<span>File</span>
+								<md-icon>file_copy</md-icon>
 							</md-menu-item>
 							<md-menu-item  @click="pickBotFolder()">
-								<md-icon>folder_open</md-icon>
 								<span>Folder</span>
+								<md-icon>folder_open</md-icon>
+							</md-menu-item>
+							<md-menu-item  @click="downloadBotPack()">
+								<span>Download Bot Pack</span>
+								<md-icon>cloud_download</md-icon>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>

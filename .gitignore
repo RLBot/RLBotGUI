@@ -185,3 +185,7 @@ typings/
 
 .idea/
 .vscode/
+
+# RLBot stuff that tends to get downloaded
+RLBotPack.zip
+RLBotPack/
