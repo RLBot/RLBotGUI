@@ -7,3 +7,5 @@ cd /D "%~dp0"
 .\Python\python.exe upgrade.py
 
 .\Python\python.exe run.py
+
+pause
