@@ -43,7 +43,8 @@ const app = new Vue({
         packageString: null,
         showSnackbar: false,
         snackbarContent: null,
-        bodyStyle: null
+        bodyStyle: null,
+        showProgressSpinner: false
     },
     methods: {
         startMatch: function (event) {
@@ -78,9 +79,11 @@ const app = new Vue({
             this.bodyStyle = { backgroundImage: "url(../imgs/arenas/" + mapName + ".jpg)" };
         },
         installPackage: function () {
+            this.showProgressSpinner = true;
             eel.install_package(this.packageString)(onInstallationComplete);
         },
         downloadBotPack: function() {
+            this.showProgressSpinner = true;
             eel.download_bot_pack()(botPackDownloaded);
         }
     }
@@ -102,7 +105,7 @@ function botsReceived(bots) {
 
     app.botPool = app.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
 
-    console.log(app.botPool);
+    app.showProgressSpinner = false;
 }
 
 function matchOptionsReceived(matchOptions) {
@@ -121,6 +124,7 @@ function onInstallationComplete(result) {
     message += result.package;
     app.snackbarContent = message;
     app.showSnackbar = true;
+    app.showProgressSpinner = false;
 }
 
 Vue.component('mutator-field', {
