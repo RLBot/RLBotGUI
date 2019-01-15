@@ -24,7 +24,7 @@
 				<img class="logo" src="imgs/rlbot_logo.png">
 				<h3 class="md-title" style="flex: 1">RLBot</h3>
 				<div class="md-toolbar-section-end">
-
+					<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
 					<md-menu md-direction="bottom-start">
 						<md-button md-menu-trigger class="md-icon-button">
 							<md-icon>more_vert</md-icon>
@@ -213,6 +213,7 @@
 			<md-snackbar md-position="center" :md-active.sync="showSnackbar" md-persistent>
 				<span>{{snackbarContent}}</span>
 			</md-snackbar>
+
 		</div>
 	</div>
 
