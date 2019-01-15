@@ -12,7 +12,7 @@ def upgrade():
 
     import importlib
     import os
-    folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pkgs', 'rlbot_gui')
+    folder = os.path.dirname(os.path.realpath(__file__))
 
     try:
         # https://stackoverflow.com/a/24773951
