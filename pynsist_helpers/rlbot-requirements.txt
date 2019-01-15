@@ -4,5 +4,8 @@
 # You will automatically get updates for all versions starting with "1.".
 rlbot==1.*
 
+# Upgrade yourself!
+rlbot_gui
+
 # Chip's utilities - https://github.com/samuelpmish/RLUtilities/tree/master/RLUtilities
 RLUtilities

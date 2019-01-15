@@ -1,3 +1,5 @@
+import os
+
 from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget
 from pip._internal import main as pipmain
 
@@ -204,7 +206,8 @@ def on_websocket_close(page, sockets):
 
 
 def start():
-    eel.init('gui')
+    gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
+    eel.init(gui_folder)
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close)
 
     while not should_quit:
