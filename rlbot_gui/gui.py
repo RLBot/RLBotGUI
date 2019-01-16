@@ -192,6 +192,19 @@ def download_bot_pack():
         zip_ref.extractall(".")
 
 
+@eel.expose
+def show_bot_in_explorer(bot_cfg_path):
+    import subprocess
+    directory = os.path.dirname(bot_cfg_path)
+    subprocess.Popen(f'explorer "{directory}"')
+
+
+@eel.expose
+def hot_reload_python_bots():
+    if sm is not None:
+        sm.reload_all_agents()
+
+
 should_quit = False
 
 
