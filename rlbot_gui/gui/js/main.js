@@ -85,6 +85,12 @@ const app = new Vue({
         downloadBotPack: function() {
             this.showProgressSpinner = true;
             eel.download_bot_pack()(botPackDownloaded);
+        },
+        showBotInExplorer: function (botPath) {
+            eel.show_bot_in_explorer(botPath);
+        },
+        hotReload: function() {
+            eel.hot_reload_python_bots();
         }
     }
 });

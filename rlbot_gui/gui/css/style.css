@@ -167,3 +167,11 @@ body {
 .md-menu-content {
   z-index: 10;
 }
+
+.bot-card .bot-hover-reveal {
+  filter: opacity(20%);
+}
+
+.bot-card:hover .bot-hover-reveal {
+  filter: opacity(100%);
+}
