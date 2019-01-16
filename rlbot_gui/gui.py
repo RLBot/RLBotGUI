@@ -1,9 +1,9 @@
 import os
 
-from PyQt5.QtWidgets import QApplication, QFileDialog, QWidget
-from pip._internal import main as pipmain
-
 import eel
+from PyQt5.QtCore import QSettings
+from PyQt5.QtWidgets import QApplication, QFileDialog
+from pip._internal import main as pipmain
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
 from rlbot.parsing.bot_config_bundle import get_bot_config_bundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
@@ -15,8 +15,10 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
 from rlbot.setup_manager import SetupManager
 
-sm: SetupManager = None
+DEFAULT_BOT_FOLDER = 'default_bot_folder'
 
+sm: SetupManager = None
+settings = QSettings('rlbotgui', 'preferences')
 
 def create_player_config(bot, human_index_tracker: IncrementingInteger):
     player_config = PlayerConfig()
@@ -99,6 +101,8 @@ def pick_bot_folder():
     filename = pick_bot_location(True)
 
     if filename:
+        settings.setValue(DEFAULT_BOT_FOLDER, filename)
+        settings.sync()
         return scan_for_bots(filename)
 
     return []
@@ -141,8 +145,9 @@ def pick_bot_location(is_folder):
 
 @eel.expose
 def scan_for_bots(directory):
+    bot_directory = directory or settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
     return [{'name': bundle.name, 'type': 'rlbot', 'image': 'imgs/rlbot.png', 'path': bundle.config_path}
-            for bundle in scan_directory_for_bot_configs(directory)]
+            for bundle in scan_directory_for_bot_configs(bot_directory)]
 
 
 @eel.expose
