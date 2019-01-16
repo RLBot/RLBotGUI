@@ -95,7 +95,7 @@ const app = new Vue({
     }
 });
 
-eel.scan_for_bots('.')(botsReceived);
+eel.scan_for_bots(null)(botsReceived);
 eel.get_match_options()(matchOptionsReceived);
 
 function botPackDownloaded(response) {
