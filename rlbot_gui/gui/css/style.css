@@ -78,8 +78,11 @@ body {
 }
 
 .bot-name {
-  padding-right: 10px;
   flex-grow: 1;
+}
+
+.bot-name:last-child {
+  padding-right: 10px;
 }
 
 .secret-button {
@@ -174,4 +177,8 @@ body {
 
 .bot-card:hover .bot-hover-reveal {
   filter: opacity(100%);
+}
+
+.bot-info-key {
+  font-weight: bold;
 }

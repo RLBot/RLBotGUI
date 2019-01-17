@@ -90,6 +90,10 @@
 						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
 							<img v-bind:src="bot.image">
 							<span class="bot-name">{{ bot.name }}</span>
+							<md-button class="md-icon-button md-dense bot-hover-reveal" v-if="bot.info"
+									   @click.stop="activeBot = bot; showBotInfo = true;">
+								<md-icon>blur_on</md-icon>
+							</md-button>
 						</button>
 					</md-card>
 				</draggable>
@@ -112,9 +116,6 @@
 							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
 								<img v-bind:src="bot.image">
 								<span class="bot-name">{{ bot.name }}</span>
-								<md-button class="md-icon-button bot-hover-reveal" v-if="bot.path" @click="showBotInExplorer(bot.path)">
-									<md-icon>folder_open</md-icon>
-								</md-button>
 								<md-button class="md-icon-button" @click="blueTeam.splice(index, 1)">
 									<md-icon>close</md-icon>
 								</md-button>
@@ -132,9 +133,6 @@
 							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
 								<img v-bind:src="bot.image">
 								<span class="bot-name">{{ bot.name }}</span>
-								<md-button class="md-icon-button bot-hover-reveal" v-if="bot.path" @click="showBotInExplorer(bot.path)">
-									<md-icon>folder_open</md-icon>
-								</md-button>
 								<md-button class="md-icon-button" @click="orangeTeam.splice(index, 1)">
 									<md-icon>close</md-icon>
 								</md-button>
@@ -226,6 +224,26 @@
 			<md-snackbar md-position="center" :md-active.sync="showSnackbar" md-persistent>
 				<span>{{snackbarContent}}</span>
 			</md-snackbar>
+
+			<md-dialog v-if="activeBot && activeBot.info" :md-active.sync="showBotInfo">
+				<md-dialog-title>{{activeBot.name}}</md-dialog-title>
+
+				<md-dialog-content>
+					<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
+					<p><span class="bot-info-key">Description:</span> {{activeBot.info.description}}</p>
+					<p><span class="bot-info-key">Fun Fact:</span> {{activeBot.info.fun_fact}}</p>
+					<p><span class="bot-info-key">GitHub:</span>
+						<a :href="activeBot.info.github" target="_blank">{{activeBot.info.github}}</a></p>
+					<p><span class="bot-info-key">Language:</span> {{activeBot.info.language}}</p>
+				</md-dialog-content>
+
+				<md-dialog-actions>
+					<md-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
+						Show Files
+					</md-button>
+					<md-button @click="showBotInfo = false">Close</md-button>
+				</md-dialog-actions>
+			</md-dialog>
 
 		</div>
 	</div>
