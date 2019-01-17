@@ -44,7 +44,10 @@ const app = new Vue({
         showSnackbar: false,
         snackbarContent: null,
         bodyStyle: null,
-        showProgressSpinner: false
+        showProgressSpinner: false,
+        languageSupport: {},
+        activeBot: null,
+        showBotInfo: false,
     },
     methods: {
         startMatch: function (event) {
@@ -97,6 +100,7 @@ const app = new Vue({
 
 eel.scan_for_bots(null)(botsReceived);
 eel.get_match_options()(matchOptionsReceived);
+eel.get_language_support()((support) => app.languageSupport = support);
 
 function botPackDownloaded(response) {
     app.snackbarContent = 'Downloaded Bot Pack!';

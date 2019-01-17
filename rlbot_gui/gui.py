@@ -5,7 +5,7 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
-from rlbot.parsing.bot_config_bundle import get_bot_config_bundle
+from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
@@ -114,7 +114,13 @@ def pick_bot_config():
 
     try:
         bundle = get_bot_config_bundle(filename)
-        return [{'name': bundle.name, 'type': 'rlbot', 'image': 'imgs/rlbot.png', 'path': bundle.config_path}]
+        return [{
+            'name': bundle.name,
+            'type': 'rlbot',
+            'image': 'imgs/rlbot.png',
+            'path': bundle.config_path,
+            'info': read_info(bundle)
+        }]
     except Exception as e:
         print(e)
 
@@ -143,11 +149,40 @@ def pick_bot_location(is_folder):
     return filename
 
 
+def read_info(bundle: BotConfigBundle):
+    details_header = 'Details'
+    if bundle.base_agent_config.has_section(details_header):
+        return {
+            'developer': bundle.base_agent_config.get(details_header, 'developer'),
+            'description': bundle.base_agent_config.get(details_header, 'description'),
+            'fun_fact': bundle.base_agent_config.get(details_header, 'fun_fact'),
+            'github': bundle.base_agent_config.get(details_header, 'github'),
+            'language': bundle.base_agent_config.get(details_header, 'language'),
+        }
+    return None
+
+
 @eel.expose
 def scan_for_bots(directory):
     bot_directory = directory or settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
-    return [{'name': bundle.name, 'type': 'rlbot', 'image': 'imgs/rlbot.png', 'path': bundle.config_path}
-            for bundle in scan_directory_for_bot_configs(bot_directory)]
+    return [
+        {
+            'name': bundle.name,
+            'type': 'rlbot',
+            'image': 'imgs/rlbot.png',
+            'path': bundle.config_path,
+            'info': read_info(bundle)
+        }
+        for bundle in scan_directory_for_bot_configs(bot_directory)]
+
+
+@eel.expose
+def get_language_support():
+    java_return_code = os.system("java -version")
+    # Only bother returning iffy languages. No point in sending 'python': True
+    return {
+        'java': java_return_code == 0,
+    }
 
 
 @eel.expose
@@ -226,7 +261,12 @@ def on_websocket_close(page, sockets):
 def start():
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
-    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close)
+
+    options = {}
+    if eel.browsers.chr.get_instance_path() is None:
+        options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
+
+    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options)
 
     while not should_quit:
         if sm:
