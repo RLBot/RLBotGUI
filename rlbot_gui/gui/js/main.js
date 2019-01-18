@@ -45,9 +45,10 @@ const app = new Vue({
         snackbarContent: null,
         bodyStyle: null,
         showProgressSpinner: false,
-        languageSupport: {},
+        languageSupport: null,
         activeBot: null,
         showBotInfo: false,
+        showLanguageWarning: false,
     },
     methods: {
         startMatch: function (event) {
@@ -100,7 +101,11 @@ const app = new Vue({
 
 eel.scan_for_bots(null)(botsReceived);
 eel.get_match_options()(matchOptionsReceived);
-eel.get_language_support()((support) => app.languageSupport = support);
+
+eel.get_language_support()((support) => {
+    app.languageSupport = support;
+    applyLanguageWarnings();
+});
 
 function botPackDownloaded(response) {
     app.snackbarContent = 'Downloaded Bot Pack!';
@@ -113,9 +118,27 @@ function botsReceived(bots) {
     const freshBots = bots.filter( (bot) =>
         !app.botPool.find( (element) => element.path === bot.path ));
 
-    app.botPool = app.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
+    freshBots.forEach((bot) => bot.warn = false);
 
+    app.botPool = app.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
+    applyLanguageWarnings();
     app.showProgressSpinner = false;
+}
+
+function applyLanguageWarnings() {
+    if (app.languageSupport) {
+        app.botPool.forEach((bot) => {
+            if (bot.info && bot.info.language) {
+                const language = bot.info.language.toLowerCase();
+                if (!app.languageSupport.java && language.match(/java|kotlin|scala/)) {
+                    bot.warn = 'java';
+                }
+                if (!app.languageSupport.chrome && language.match(/scratch/)) {
+                    bot.warn = 'chrome';
+                }
+            }
+        });
+    }
 }
 
 function matchOptionsReceived(matchOptions) {

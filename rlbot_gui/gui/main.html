@@ -16,7 +16,7 @@
 	<title>RLBot</title>
 
 </head>
-<body>
+<body id="rlbotgui">
 	<div id="app" :style="bodyStyle">
 
 		<md-toolbar class="md-primary">
@@ -90,6 +90,10 @@
 						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
 							<img v-bind:src="bot.image">
 							<span class="bot-name">{{ bot.name }}</span>
+							<md-button class="md-icon-button md-dense warning-icon" v-if="bot.warn"
+									   @click.stop="activeBot = bot; showLanguageWarning = true;">
+								<md-icon>warning</md-icon>
+							</md-button>
 							<md-button class="md-icon-button md-dense bot-hover-reveal" v-if="bot.info"
 									   @click.stop="activeBot = bot; showBotInfo = true;">
 								<md-icon>blur_on</md-icon>
@@ -242,6 +246,33 @@
 						Show Files
 					</md-button>
 					<md-button @click="showBotInfo = false">Close</md-button>
+				</md-dialog-actions>
+			</md-dialog>
+
+			<md-dialog v-if="activeBot" :md-active.sync="showLanguageWarning">
+				<md-dialog-title>Compatibility Warning</md-dialog-title>
+
+				<md-dialog-content>
+					<div v-if="activeBot.warn === 'java'">
+						<p><b>{{activeBot.name}}</b> requires Java and it looks like you don't have it installed!</p>
+						To play with it, you'll need to:
+						<ol>
+							<li>Download Java from <a href="https://java.com" target="_blank">java.com</a></li>
+							<li>Install it</li>
+							<li>Reboot your computer</li>
+						</ol>
+					</div>
+					<div v-if="activeBot.warn === 'chrome' || true">
+						<p>
+							This bot requires Google Chrome for its auto-run feature, and it looks like
+							you don't have it installed! You can
+							<a href="https://www.google.com/chrome/" target="_blank">download it here</a>.
+						</p>
+					</div>
+				</md-dialog-content>
+
+				<md-dialog-actions>
+					<md-button @click="showLanguageWarning = false">Close</md-button>
 				</md-dialog-actions>
 			</md-dialog>
 
