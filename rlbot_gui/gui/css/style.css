@@ -182,3 +182,11 @@ body {
 .bot-info-key {
   font-weight: bold;
 }
+
+#app .warning-icon, #app .warning-icon .md-icon {
+  color: #f5b700;
+}
+
+#rlbotgui a {
+  color: #4691af;
+}

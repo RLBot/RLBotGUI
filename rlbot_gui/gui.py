@@ -182,6 +182,7 @@ def get_language_support():
     # Only bother returning iffy languages. No point in sending 'python': True
     return {
         'java': java_return_code == 0,
+        'chrome': is_chrome_installed(),  # Scratch bots need chrome to auto-run
     }
 
 
@@ -258,12 +259,16 @@ def on_websocket_close(page, sockets):
             sm.shut_down(time_limit=5, kill_all_pids=True)
 
 
+def is_chrome_installed():
+    return eel.browsers.chr.get_instance_path() is not None
+
+
 def start():
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
     options = {}
-    if eel.browsers.chr.get_instance_path() is None:
+    if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
 
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options)
