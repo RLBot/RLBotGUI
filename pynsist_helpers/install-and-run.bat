@@ -4,8 +4,13 @@
 cd /D "%~dp0"
 
 
-.\Python\python.exe upgrade.py
+.\Python\python.exe upgrade.py || goto :error
+.\Python\python.exe run.py || goto :error
+exit
 
-.\Python\python.exe run.py
 
+:error
+@rem echo Failed with error #%errorlevel%.
 pause
+@rem This exit is required to close the cmd that's created in the shortcut.
+exit
