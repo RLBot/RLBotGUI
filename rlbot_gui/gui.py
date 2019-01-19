@@ -271,7 +271,11 @@ def start():
     if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
 
-    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options)
+    # This disable_cache thing only works if you have tare's fork of eel
+    # https://github.com/tarehart/Eel/commit/98395ccc268e1a7a5137da2515b472fcc03db5c5
+    # installed to pip locally using this technique https://stackoverflow.com/a/49684835
+    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
+              disable_cache=True)
 
     while not should_quit:
         if sm:
