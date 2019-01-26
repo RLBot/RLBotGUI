@@ -62,7 +62,7 @@
 			<md-card class="bot-pool">
 				<md-card-header class="center-flex">
 					<div class="md-title" style="display:inline-block">Player Types</div>
-					<md-menu md-direction="bottom-start" style="vertical-align: top; margin-left: 20px; margin-top: 5px">
+					<md-menu md-direction="bottom-start" class="bot-pool-adder">
 						<md-button class="md-fab md-mini" md-menu-trigger>
 							<md-icon>add</md-icon>
 							<md-tooltip md-direction="top">Load more player types</md-tooltip>
@@ -83,6 +83,10 @@
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
+					<md-button class="md-fab md-mini bot-pool-adder" @click="showNewBotDialog = true">
+						<md-icon>create</md-icon>
+						<md-tooltip md-direction="top">Begin a new bot!</md-tooltip>
+					</md-button>
 				</md-card-header>
 
 				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
@@ -273,6 +277,25 @@
 
 				<md-dialog-actions>
 					<md-button @click="showLanguageWarning = false">Close</md-button>
+				</md-dialog-actions>
+			</md-dialog>
+
+			<md-dialog :md-active.sync="showNewBotDialog">
+				<md-dialog-title>Create New Bot</md-dialog-title>
+
+				<md-dialog-content>
+					<md-field>
+						<label>Bot Name</label>
+						<md-input v-model="newBotName"></md-input>
+					</md-field>
+					<div>
+						<md-radio v-model="newBotLanguageChoice" value="python">Python</md-radio>
+					</div>
+				</md-dialog-content>
+
+				<md-dialog-actions>
+					<md-button class="md-raised md-primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</md-button>
+					<md-button @click="showNewBotDialog = false">Close</md-button>
 				</md-dialog-actions>
 			</md-dialog>
 
