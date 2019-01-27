@@ -49,6 +49,9 @@ const app = new Vue({
         activeBot: null,
         showBotInfo: false,
         showLanguageWarning: false,
+        showNewBotDialog: false,
+        newBotName: '',
+        newBotLanguageChoice: 'python',
     },
     methods: {
         startMatch: function (event) {
@@ -95,6 +98,17 @@ const app = new Vue({
         },
         hotReload: function() {
             eel.hot_reload_python_bots();
+        },
+        beginNewBot: function (language, bot_name) {
+            if (!bot_name) {
+                app.snackbarContent = "Please choose a proper name!";
+                app.showSnackbar = true;
+            }
+
+            if (language === 'python') {
+                app.showProgressSpinner = true;
+                eel.begin_python_bot(bot_name)(botLoadHandler);
+            }
         }
     }
 });
@@ -111,6 +125,17 @@ function botPackDownloaded(response) {
     app.snackbarContent = 'Downloaded Bot Pack!';
     app.showSnackbar = true;
     eel.scan_for_bots('.')(botsReceived);
+}
+
+function botLoadHandler(response) {
+    app.showNewBotDialog = false;
+    app.showProgressSpinner = false;
+    if (response.error) {
+        app.snackbarContent = response.error;
+        app.showSnackbar = true;
+    } else {
+        botsReceived(response.bots);
+    }
 }
 
 function botsReceived(bots) {

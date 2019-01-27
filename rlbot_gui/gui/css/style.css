@@ -190,3 +190,9 @@ body {
 #rlbotgui a {
   color: #4691af;
 }
+
+#rlbotgui .bot-pool-adder {
+  vertical-align: top;
+  margin-left: 20px;
+  margin-top: 5px;
+}
