@@ -12,7 +12,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
 
-from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
+from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot
 from rlbot_gui.bot_management.downloader import download_and_extract_zip
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
@@ -182,6 +182,14 @@ def begin_python_bot(bot_name):
 
     bot_directory = settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
     config_file = bootstrap_python_bot(bot_name, bot_directory)
+    return {'bots': load_bundle(config_file)}
+
+
+@eel.expose
+def begin_scratch_bot(bot_name):
+
+    bot_directory = settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
+    config_file = bootstrap_scratch_bot(bot_name, bot_directory)
     return {'bots': load_bundle(config_file)}
 
 
