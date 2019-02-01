@@ -1,92 +1,23 @@
-import configparser
 import os
-import string
-import tempfile
-import urllib.request
-import zipfile
 
 import eel
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
-from rlbot.agents.base_agent import BOT_CONFIG_MODULE_HEADER, BOT_NAME_KEY, PYTHON_FILE_KEY, BaseAgent
-from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
 from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
-from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
     boost_amount_mutator_types, match_length_types, max_score_types, overtime_mutator_types, \
     series_length_mutator_types, game_speed_mutator_types, ball_max_speed_mutator_types, ball_type_mutator_types, \
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
-from rlbot.setup_manager import SetupManager
+
+from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot
+from rlbot_gui.bot_management.downloader import download_and_extract_zip
+from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
-
-sm: SetupManager = None
 settings = QSettings('rlbotgui', 'preferences')
-
-def create_player_config(bot, human_index_tracker: IncrementingInteger):
-    player_config = PlayerConfig()
-    player_config.bot = bot['type'] in ('rlbot', 'psyonix')
-    player_config.rlbot_controlled = bot['type'] in ('rlbot', 'party_member_bot')
-    player_config.bot_skill = 1.0
-    player_config.human_index = 0 if player_config.bot else human_index_tracker.increment()
-    player_config.name = bot['name']
-    player_config.team = int(bot['team'])
-    if 'path' in bot and bot['path']:
-        player_config.config_path = bot['path']
-    return player_config
-
-
-def start_match_helper(bot_list, match_settings):
-    print(bot_list)
-    print(match_settings)
-    num_participants = len(bot_list)
-
-    match_config = MatchConfig()
-    match_config.num_players = num_participants
-    match_config.game_mode = match_settings['game_mode']
-    match_config.game_map = match_settings['map']
-    match_config.mutators = MutatorConfig()
-
-    mutators = match_settings['mutators']
-    match_config.mutators.match_length = mutators['match_length']
-    match_config.mutators.max_score = mutators['max_score']
-    match_config.mutators.overtime = mutators['overtime']
-    match_config.mutators.series_length = mutators['series_length']
-    match_config.mutators.game_speed = mutators['game_speed']
-    match_config.mutators.ball_max_speed = mutators['ball_max_speed']
-    match_config.mutators.ball_type = mutators['ball_type']
-    match_config.mutators.ball_weight = mutators['ball_weight']
-    match_config.mutators.ball_size = mutators['ball_size']
-    match_config.mutators.ball_bounciness = mutators['ball_bounciness']
-    match_config.mutators.boost_amount = mutators['boost_amount']
-    match_config.mutators.rumble = mutators['rumble']
-    match_config.mutators.boost_strength = mutators['boost_strength']
-    match_config.mutators.gravity = mutators['gravity']
-    match_config.mutators.demolish = mutators['demolish']
-    match_config.mutators.respawn_time = mutators['respawn_time']
-
-    human_index_tracker = IncrementingInteger(0)
-    match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
-
-    global sm
-    if sm is not None:
-        try:
-            sm.shut_down()
-        except Exception as e:
-            print(e)
-
-    sm = SetupManager()
-    sm.connect_to_game()
-    sm.load_match_config(match_config)
-    sm.launch_ball_prediction()
-    sm.launch_quick_chat_manager()
-    sm.launch_bot_processes()
-    sm.start_match()
-    # Note that we are not calling infinite_loop because that is not compatible with the way eel works!
-    # Instead we will reproduce the important behavior from infinite_loop inside this file.
 
 
 @eel.expose
@@ -96,10 +27,7 @@ def start_match(bot_list, match_settings):
 
 @eel.expose
 def kill_bots():
-    if sm is not None:
-        sm.shut_down(time_limit=5, kill_all_pids=True)
-    else:
-        print("There gotta be some setup manager already")
+    shut_down()
 
 
 @eel.expose
@@ -228,13 +156,6 @@ def install_package(package_string):
     return {'exitCode': exit_code, 'package': package_string}
 
 
-def download_and_extract_zip(download_url, local_zip_path, local_folder_path):
-    urllib.request.urlretrieve(download_url, local_zip_path)
-
-    with zipfile.ZipFile(local_zip_path, 'r') as zip_ref:
-        zip_ref.extractall(local_folder_path)
-
-
 @eel.expose
 def download_bot_pack():
     # See https://docs.google.com/document/d/10uCWwHDQYJGMGeoaW1pZu1KvRnSgm064oWL2JVx4k4M/edit?usp=sharing
@@ -253,64 +174,22 @@ def show_bot_in_explorer(bot_cfg_path):
 
 @eel.expose
 def hot_reload_python_bots():
-    if sm is not None:
-        sm.reload_all_agents()
-
-
-def convert_to_filename(text):
-    """
-    Normalizes string, converts to lowercase, removes non-alphanumeric characters,
-    and converts spaces to underscores.
-    """
-    import unicodedata
-    normalized = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    filename = ''.join(c for c in normalized if c in valid_chars)
-    filename = filename.replace(' ', '_')  # Replace spaces with underscores
-    return filename
+    hot_reload_bots()
 
 
 @eel.expose
 def begin_python_bot(bot_name):
+
     bot_directory = settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
-    sanitized_name = convert_to_filename(bot_name)
+    config_file = bootstrap_python_bot(bot_name, bot_directory)
+    return {'bots': load_bundle(config_file)}
 
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        print('created temporary directory', tmpdirname)
 
-        download_and_extract_zip(
-            download_url="https://github.com/RLBot/RLBotPythonExample/archive/master.zip",
-            local_zip_path=f"{tmpdirname}/RLBotPythonExample.zip", local_folder_path=tmpdirname)
+@eel.expose
+def begin_scratch_bot(bot_name):
 
-        try:
-            os.rename(f"{tmpdirname}/RLBotPythonExample-master", f"{bot_directory}/{sanitized_name}")
-        except FileExistsError:
-            return {'error': f'There is already a bot named {sanitized_name}, please choose a different name!'}
-
-    # Choose appropriate file names based on the bot name
-    code_dir = f"{bot_directory}/{sanitized_name}/{sanitized_name}"
-    python_file = f"{code_dir}/{sanitized_name}.py"
-    config_file = f"{code_dir}/{sanitized_name}.cfg"
-
-    # We're making some big assumptions here that the file structure / names in RLBotPythonExample will not change.
-    os.rename(f"{bot_directory}/{sanitized_name}/python_example/", code_dir)
-    os.rename(f"{code_dir}/python_example.py", python_file)
-    os.rename(f"{code_dir}/python_example.cfg", config_file)
-
-    # Update the config file to point to the renamed files, and show the correct bot name.
-    raw_bot_config = configparser.RawConfigParser()
-    raw_bot_config.read(config_file, encoding='utf8')
-    agent_config = BaseAgent.base_create_agent_configurations()
-    agent_config.parse_file(raw_bot_config)
-    agent_config.set_value(BOT_CONFIG_MODULE_HEADER, BOT_NAME_KEY, bot_name)
-    agent_config.set_value(BOT_CONFIG_MODULE_HEADER, PYTHON_FILE_KEY, f"{sanitized_name}.py")
-    with open(config_file, "w", encoding='utf8') as f:
-        f.write(str(agent_config))
-
-    # This is intended to open the example python file in the default system editor for .py files.
-    # Hopefully this will be VS Code or notepad++ or something. If it gets executed as a python script, no harm done.
-    os.startfile(python_file)
-
+    bot_directory = settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
+    config_file = bootstrap_scratch_bot(bot_name, bot_directory)
     return {'bots': load_bundle(config_file)}
 
 
@@ -323,8 +202,7 @@ def on_websocket_close(page, sockets):
     if not len(eel._websockets):
         # At this point we think the browser window has been closed.
         should_quit = True
-        if sm is not None:
-            sm.shut_down(time_limit=5, kill_all_pids=True)
+        shut_down()
 
 
 def is_chrome_installed():
@@ -346,6 +224,5 @@ def start():
               disable_cache=True)
 
     while not should_quit:
-        if sm:
-            sm.try_recieve_agent_metadata()
+        do_infinite_loop_content()
         eel.sleep(1.0)

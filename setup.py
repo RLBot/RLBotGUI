@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '0.0.5'
+__version__ = '0.0.7'
 
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
@@ -10,7 +10,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     # It actually requires 'gevent', 'eel', 'PyQt5', but that messes up the install for some people and we're
     # already bundling those in the pynsist installer.
-    install_requires=[],
+    install_requires=['configobj'],
     version=__version__,
     description='A streamlined user interface for RLBot.',
     long_description=long_description,

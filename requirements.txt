@@ -8,3 +8,4 @@ pip
 gevent
 eel
 PyQt5
+configobj
