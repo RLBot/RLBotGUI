@@ -108,9 +108,6 @@ const app = new Vue({
             if (language === 'python') {
                 app.showProgressSpinner = true;
                 eel.begin_python_bot(bot_name)(botLoadHandler);
-            } else if (language === 'scratch') {
-                app.showProgressSpinner = true;
-                eel.begin_scratch_bot(bot_name)(botLoadHandler);
             }
         }
     }
