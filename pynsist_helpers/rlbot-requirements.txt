@@ -8,7 +8,4 @@ rlbot==1.*
 rlbot_gui
 
 # Chip's utilities - https://github.com/samuelpmish/RLUtilities/tree/master/RLUtilities
-# Commented out for now at chip's request because things are in flux and he doesn't want to be
-# liable for a bunch of troubleshooting associated with wide distribution at this time.
-# Also, it currently only supports Python 3.6, whereas RLBotGUI currently bundles 3.7.
-# RLUtilities
+RLUtilities

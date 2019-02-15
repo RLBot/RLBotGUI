@@ -48,6 +48,32 @@ def bootstrap_python_bot(bot_name, directory):
     os.rename(f"{code_dir}/python_example.cfg", config_file)
 
     # Update the config file to point to the renamed files, and show the correct bot name.
+
+    # This is not an ideal way of modifying the config file, because:
+    # - It uses our custom ConfigObject class, which is limited / buggy, and we should be moving away from it
+    # - The ConfigObject class is not capable of 'round-tripping', i.e. if you parse a config file and then
+    #   write it again, the comment lines will not be preserved.
+    # - It can still write comments, but only if they have a 'description' that has been added programmatically
+    #   (see base_create_agent_configurations).
+    #
+    # One route is to add 'description' items for all the stuff we care about, including the stuff here
+    # https://github.com/RLBot/RLBotPythonExample/blob/master/python_example/python_example.cfg#L11-L27
+    # so that the resulting file is sortof the same (might have slightly different formatting). That's annoying
+    # and hard to maintain though, and again we'd be investing more in this custom config class that I would
+    # prefer to get rid of.
+    #
+    # Alternatives:
+    #
+    # Use the configobj library https://configobj.readthedocs.io/en/latest/configobj.html
+    # - I tried this in https://github.com/IamEld3st/RLBotGUI/commit/a30308940dd5a0e4a45db6ccc088e6e75a9f69f0
+    #   which worked well for me, but people reported issues during installation. If we can get the installation
+    #   ironed out, it will be a nice solution for modifying cfg files in general.
+    #
+    # Do a simple find-and-replace in the file
+    # - Very crude, but it can be reliable if we use specific commit hashes like I did in
+    #   https://github.com/IamEld3st/RLBotGUI/commit/a30308940dd5a0e4a45db6ccc088e6e75a9f69f0
+    # - It would get us up and running with the new features until we can figure out a proper config modification
+    #   solution.
     raw_bot_config = configparser.RawConfigParser()
     raw_bot_config.read(config_file, encoding='utf8')
     agent_config = BaseAgent.base_create_agent_configurations()
