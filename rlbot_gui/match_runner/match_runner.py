@@ -21,10 +21,8 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
 def start_match_helper(bot_list, match_settings):
     print(bot_list)
     print(match_settings)
-    num_participants = len(bot_list)
 
     match_config = MatchConfig()
-    match_config.num_players = num_participants
     match_config.game_mode = match_settings['game_mode']
     match_config.game_map = match_settings['map']
     match_config.mutators = MutatorConfig()
