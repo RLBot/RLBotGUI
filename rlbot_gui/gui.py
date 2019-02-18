@@ -1,9 +1,15 @@
 import os
+import time
+from datetime import datetime
 
 import eel
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
+from rlbot.utils import rate_limiter
+from rlbot.utils.logging_utils import get_logger
+from rlbot.utils.structures.game_interface import GameInterface
+from rlbot.utils.structures import game_data_struct
 from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
@@ -18,6 +24,35 @@ from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, star
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 settings = QSettings('rlbotgui', 'preferences')
+
+
+game_tick_packet = None
+
+GAME_TICK_PACKET_REFRESHES_PER_SECOND = 120  # 2*60. https://en.wikipedia.org/wiki/Nyquist_rate
+
+class GameTickReader:
+    def __init__(self):
+        self.logger = get_logger('packet reader')
+        self.game_interface = GameInterface(self.logger)
+        self.game_interface.inject_dll()
+        self.game_interface.load_interface()
+        self.game_tick_packet = game_data_struct.GameTickPacket()
+
+
+        # self.rate_limit = rate_limiter.RateLimiter(GAME_TICK_PACKET_REFRESHES_PER_SECOND)
+        self.last_call_real_time = datetime.now()  # When we last called the Agent
+
+    def get_packet(self):
+
+        now = datetime.now()
+        # self.rate_limit.acquire(now - self.last_call_real_time)
+        self.last_call_real_time = now
+
+        self.pull_data_from_game()
+        return self.game_tick_packet
+
+    def pull_data_from_game(self):
+        self.game_interface.update_live_data_packet(self.game_tick_packet)
 
 
 @eel.expose
@@ -185,6 +220,21 @@ def begin_python_bot(bot_name):
     return {'bots': load_bundle(config_file)}
 
 
+def as_jsonifyable(obj):
+    if isinstance(obj, (int, float, str)):
+        return obj
+    elif isinstance(obj, list):
+        return list(map(as_jsonifyable, obj))
+    else:
+        return {attr: as_jsonifyable(getattr(obj, attr)) for attr in dir(obj) if not attr.startswith("_")}
+
+
+@eel.expose
+def get_game_tick_packet():
+    obj = as_jsonifyable(game_tick_packet)
+    return obj
+    
+
 should_quit = False
 
 
@@ -198,13 +248,15 @@ def on_websocket_close(page, sockets):
 
 
 def is_chrome_installed():
-    return eel.browsers.chr.get_instance_path() is not None
+    return eel.browsers.chm.get_instance_path() is not None
 
 
 def start():
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
+    packet_reader = GameTickReader()
+    
     options = {}
     if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
@@ -216,5 +268,7 @@ def start():
               disable_cache=True)
 
     while not should_quit:
+        global game_tick_packet
+        game_tick_packet = packet_reader.get_packet()
         do_infinite_loop_content()
         eel.sleep(1.0)
