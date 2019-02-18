@@ -223,7 +223,7 @@ def begin_python_bot(bot_name):
 def as_jsonifyable(obj):
     if isinstance(obj, (int, float, str)):
         return obj
-    elif isinstance(obj, list):
+    elif "Array" in obj.__class__.__name__:
         return list(map(as_jsonifyable, obj))
     else:
         return {attr: as_jsonifyable(getattr(obj, attr)) for attr in dir(obj) if not attr.startswith("_")}
@@ -231,8 +231,7 @@ def as_jsonifyable(obj):
 
 @eel.expose
 def get_game_tick_packet():
-    obj = as_jsonifyable(game_tick_packet)
-    return obj
+    return as_jsonifyable(game_tick_packet)
     
 
 should_quit = False
