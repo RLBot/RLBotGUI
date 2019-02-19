@@ -1,0 +1,268 @@
+<html>
+    <head>
+        <title>Overlay Endpoint</title>
+        <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+        <style type="text/css">
+            body {
+                background-color: rgba(0,0,0,0);
+                font-family: 'Exo 2', sans-serif;
+            }
+            
+            .hidden {
+                display: none;
+            }
+            
+            .center {
+                align: center;
+            }
+        
+            #names {
+                display: flex;
+            }
+            
+            #names > .name-div {
+                flex: 1;
+            }
+        
+            .name-div {
+                color: white;
+                font-size: 32;
+                padding-top: 1%;
+                font-weight: bold;
+            }
+            
+            #name-divider {
+                width: 25%;
+            }
+            
+            #name-blue {
+                text-align: right;
+            }
+            
+            #name-orange {
+                text-align: left;
+                margin-left: 5%;
+            }
+            
+            .set {
+                position: absolute;
+                left:0;
+                top:0;
+                z-index: -5;
+            }
+            
+            #footer > img {
+                margin-left: auto;
+                margin-right: auto;
+                position: absolute;
+                top: 8%;
+                left: 0;
+                right: 0;
+            }
+            
+            #blue-action {
+                left: 7% !important;
+                top: 1% !important; 
+            }
+            
+            #orange-action {
+                left: auto !important;
+                top: 1% !important; 
+                right: 7% !important;
+            }
+            
+            .fade-in {
+                visibility: visible;
+                opacity: 1;
+                transition: opacity 2s linear;
+            }                
+             
+            .fade-out {
+                visibility: hidden;
+                opacity: 0;
+                transition: visibility 0s 2s, opacity 2s linear;
+            }                
+        </style>
+    </head>
+
+    <body>
+        <video id="goal-splash" muted="muted" class="set">
+            <source src="/imgs/frame.webm" type="video/webm" />
+        </video>
+    
+        <img src="/imgs/top.png" class="set hide-after-match" />
+        <img id="blue-action" class="set hide-after-match fade-out" height=64 width=64 />
+        <img id="orange-action" class="set hide-after-match fade-out" height=64 width=64 />
+    
+        <div id="names" class="hide-after-match">
+            <div class="name-div" id="name-blue">Blue Team</div>
+            <div id="name-divider"></div>
+            <div class="name-div" id="name-orange">Orange Team</div>
+        </div>
+        
+        
+        <div id="footer" class="hide-after-match">
+            <img src="/imgs/logo.png" height=10% width=auto />
+        </div>
+        
+        <script type="text/javascript">
+            function loadRunner() {
+                last_total_goals = 0
+                blue_saves = 0
+                blue_shots = 0
+                blue_demos = 0
+                
+                orange_saves = 0
+                orange_shots = 0
+                orange_demos = 0
+            
+                setInterval(function() {
+                    eel.get_game_tick_packet()().then( packet => {
+                        blue_names = document.getElementById("name-blue")
+                        orange_names = document.getElementById("name-orange")
+                        
+                        if (packet.game_info.is_match_ended || packet.game_cars == 0) {
+                        
+                            for (let el of document.getElementsByClassName("hide-after-match")) {
+                                el.style.display = "none"
+                            }
+                            blue_names.innerHTML = "Game ended"
+                            orange_names.innerHTML = "Game ended"
+                            last_total_goals = 0
+                        
+                        } else {
+                        
+                            for (let el of document.getElementsByClassName("hide-after-match")) {
+                                if (el.style.display == "none") {
+                                    style = "flex"
+                                    if (el.classList.contains("set")) {
+                                        style = "initial"
+                                    }
+                                    el.style.display = style
+                                }
+                            }
+                        
+                            blue_cars = []
+                            orange_cars = []
+                            
+                            new_blue_saves = 0
+                            new_blue_shots = 0
+                            new_blue_demos = 0
+                            
+                            new_orange_saves = 0
+                            new_orange_shots = 0
+                            new_orange_demos = 0
+                            
+                            goal_amount = 0
+
+                            for (let el of packet.game_cars) {
+                                goal_amount += el.score_info.goals
+                            
+                                if (el.name != "") {
+                                    if (el.team == 0) {
+                                        blue_cars.push(el)
+                                        new_blue_shots += el.score_info.shots
+                                        new_blue_saves += el.score_info.saves
+                                        new_blue_demos += el.score_info.demolitions
+                                    } else {
+                                        orange_cars.push(el)
+                                        new_orange_shots += el.score_info.shots
+                                        new_orange_saves += el.score_info.saves
+                                        new_orange_demos += el.score_info.demolitions
+                                    }
+                                }
+                            }
+                            
+                            if (new_blue_demos > blue_demos){
+                                blue_demos = new_blue_demos
+                                blue_action("demo")
+                            } else if (new_blue_shots > blue_shots) {
+                                blue_shots = new_blue_shots
+                                blue_action("shot")
+                            } else if (new_blue_saves > blue_saves) {
+                                blue_saves = new_blue_saves
+                                blue_action("save")
+                            }
+                            
+                            if (new_orange_demos > orange_demos){
+                                orange_demos = new_orange_demos
+                                orange_action("demo")
+                            } else if (new_orange_shots > orange_shots) {
+                                orange_shots = new_orange_shots
+                                orange_action("shot")
+                            } else if (new_orange_saves > orange_saves) {
+                                orange_saves = new_orange_saves
+                                orange_action("save")
+                            }
+                            
+                            if (goal_amount > last_total_goals){
+                                last_total_goals = goal_amount
+                                setTimeout(do_goal_splash, 1080)
+                                // setTimeout(do_goal_splash, 11100)
+                            }
+                            
+                            if (blue_cars.length == 1) {
+                                blue_name = blue_cars[0].name
+                            } else if (blue_cars.length == 2) {
+                                blue_name = blue_cars[0].name + " & " + blue_cars[1].name
+                            } else {
+                                cars = blue_cars.map( x => x.name )
+                                blue_name = cars.slice(0, cars.length - 1).join(", ") + " & " + cars[cars.length - 1]
+                            }
+                            
+                            blue_names.innerHTML = blue_name
+                            
+                            if (orange_cars.length == 1) {
+                                orange_name = orange_cars[0].name
+                            } else if (orange_cars.length == 2) {
+                                orange_name = orange_cars[0].name + " & " + orange_cars[1].name
+                            } else {
+                                cars = orange_cars.map( x => x.name )
+                                orange_name = cars.slice(0, cars.length - 1).join(", ") + " & " + cars[cars.length - 1]
+                            }
+                            
+                            orange_names.innerHTML = orange_name
+                        }
+                    })
+                }, (1000 / 60))
+            }
+            
+            function do_goal_splash(){
+                vid = document.getElementById("goal-splash")
+                
+                vid.style.display = "block"
+                vid.play()
+                setTimeout(function() {
+                    vid.style.display = "none"
+                    vid.pause()
+                    vid.currentTime = 0
+                }, 2000)
+            }
+            
+            function blue_action(action){
+                src = "/imgs/" + action + ".png"
+                el = document.getElementById("blue-action")
+                el.src = src
+                el.classList.remove("fade-out")
+                el.classList.add("fade-in")
+                setTimeout(function(){ 
+                    el.classList.remove("fade-in")
+                el.classList.add("fade-out")
+                }, 2500)
+            }
+            
+            function orange_action(action){
+                src = "/imgs/" + action + ".png"
+                el = document.getElementById("orange-action")
+                el.src = src
+                el.classList.remove("fade-out")
+                el.classList.add("fade-in")
+                setTimeout(function(){ 
+                    el.classList.remove("fade-in")
+                el.classList.add("fade-out")
+                }, 2500)
+            }
+        </script>
+        <script type="text/javascript" src="/eel.js" onload="loadRunner()"></script>
+    </body>
+</html>
