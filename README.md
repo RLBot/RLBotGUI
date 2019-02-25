@@ -1,5 +1,7 @@
 # RLBotGUI
 
+[<img src="https://img.shields.io/pypi/v/rlbot-gui.svg">](https://pypi.org/project/rlbot-gui/)
+
 ## About
 
 RLBotGUI is a streamlined user interface that helps you run custom
