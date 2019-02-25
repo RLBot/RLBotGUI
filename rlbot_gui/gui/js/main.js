@@ -5,13 +5,15 @@ function PythonPrint(message) {
 
 Vue.use(VueMaterial.default);
 
+const STARTING_BOT_POOL = [
+    {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
+    {'name': 'Psyonix Bot', 'type': 'psyonix', 'image': 'imgs/psyonix.png'}
+];
+
 const app = new Vue({
     el: '#app',
     data: {
-        botPool: [
-            {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
-            {'name': 'Psyonix Bot', 'type': 'psyonix', 'image': 'imgs/psyonix.png'}
-        ],
+        botPool: STARTING_BOT_POOL,
         blueTeam: [],
         orangeTeam: [],
         teamSelection: "blue",
@@ -52,6 +54,11 @@ const app = new Vue({
         showNewBotDialog: false,
         newBotName: '',
         newBotLanguageChoice: 'python',
+        folderSettings: {
+            files: [],
+            folders: []
+        },
+        showFolderSettingsDialog: false
     },
     methods: {
         startMatch: function (event) {
@@ -64,9 +71,11 @@ const app = new Vue({
         },
         pickBotFolder: function (event) {
             eel.pick_bot_folder()(botsReceived);
+            eel.get_folder_settings()(folderSettingsReceived);
         },
         pickBotConfig: function (event) {
             eel.pick_bot_config()(botsReceived);
+            eel.get_folder_settings()(folderSettingsReceived);
         },
         addToTeam: function(bot, team) {
             if (team === 'orange') {
@@ -109,11 +118,17 @@ const app = new Vue({
                 app.showProgressSpinner = true;
                 eel.begin_python_bot(bot_name)(botLoadHandler);
             }
+        },
+        applyFolderSettings: function() {
+            eel.save_folder_settings(app.folderSettings);
+            app.botPool = STARTING_BOT_POOL;
+            eel.scan_for_bots()(botsReceived);
         }
     }
 });
 
-eel.scan_for_bots(null)(botsReceived);
+eel.get_folder_settings()(folderSettingsReceived);
+eel.scan_for_bots()(botsReceived);
 eel.get_match_options()(matchOptionsReceived);
 
 eel.get_language_support()((support) => {
@@ -124,7 +139,8 @@ eel.get_language_support()((support) => {
 function botPackDownloaded(response) {
     app.snackbarContent = 'Downloaded Bot Pack!';
     app.showSnackbar = true;
-    eel.scan_for_bots('.')(botsReceived);
+    eel.get_folder_settings()(folderSettingsReceived);
+    eel.scan_for_bots()(botsReceived);
 }
 
 function botLoadHandler(response) {
@@ -175,6 +191,10 @@ function matchOptionsReceived(matchOptions) {
     app.updateBGImage(app.matchSettings.map);
 
     app.resetMutatorsToDefault();
+}
+
+function folderSettingsReceived(folderSettings) {
+    app.folderSettings = folderSettings;
 }
 
 function onInstallationComplete(result) {

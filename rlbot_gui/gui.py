@@ -17,7 +17,16 @@ from rlbot_gui.bot_management.downloader import download_and_extract_zip
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
+BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 settings = QSettings('rlbotgui', 'preferences')
+
+bot_folder_settings = settings.value(BOT_FOLDER_SETTINGS_KEY, type=dict)
+
+if not bot_folder_settings:
+    bot_folder_settings = {'files': {}, 'folders': {}}
+    default_folder = settings.value(DEFAULT_BOT_FOLDER, type=str)
+    if default_folder:
+        bot_folder_settings['folders'][default_folder] = {'visible': True}
 
 
 @eel.expose
@@ -35,9 +44,11 @@ def pick_bot_folder():
     filename = pick_bot_location(True)
 
     if filename:
+        bot_folder_settings['folders'][filename] = {'visible': True}
         settings.setValue(DEFAULT_BOT_FOLDER, filename)
+        settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
         settings.sync()
-        return scan_for_bots(filename)
+        return scan_for_bots()
 
     return []
 
@@ -61,7 +72,23 @@ def load_bundle(filename):
 @eel.expose
 def pick_bot_config():
     filename = pick_bot_location(False)
+    bot_folder_settings['files'][filename] = {'visible': True}
+    settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
+    settings.sync()
     return load_bundle(filename)
+
+
+@eel.expose
+def get_folder_settings():
+    return bot_folder_settings
+
+
+@eel.expose
+def save_folder_settings(folder_settings):
+    global bot_folder_settings
+    bot_folder_settings = folder_settings
+    settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
+    settings.sync()
 
 
 def pick_bot_location(is_folder):
@@ -100,8 +127,26 @@ def read_info(bundle: BotConfigBundle):
 
 
 @eel.expose
-def scan_for_bots(directory):
-    bot_directory = directory or settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
+def scan_for_bots():
+
+    bot_hash = {}
+
+    for folder, props in bot_folder_settings['folders'].items():
+        if props['visible']:
+            bots = get_bots_from_directory(folder)
+            for bot in bots:
+                bot_hash[bot['path']] = bot
+
+    for file, props in bot_folder_settings['files'].items():
+        if props['visible']:
+            bots = load_bundle(file)  # Returns a list of size 1
+            for bot in bots:
+                bot_hash[bot['path']] = bot
+
+    return list(bot_hash.values())
+
+
+def get_bots_from_directory(bot_directory):
     return [
         {
             'name': bundle.name,
@@ -163,6 +208,10 @@ def download_bot_pack():
     download_and_extract_zip(
         download_url="https://drive.google.com/uc?export=download&id=1OOisnGpxD48x_oAOkBmzqNdkB5POQpiV",
         local_zip_path="RLBotPack.zip", local_folder_path=".")
+
+    bot_folder_settings['folders'][os.path.abspath("./RLBotPack")] = {'visible': True}
+    settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
+    settings.sync()
 
 
 @eel.expose
