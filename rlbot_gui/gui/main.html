@@ -87,6 +87,10 @@
 						<md-icon>create</md-icon>
 						<md-tooltip md-direction="top">Begin a new bot!</md-tooltip>
 					</md-button>
+					<md-button class="md-fab md-mini bot-pool-adder" @click="showFolderSettingsDialog = true">
+						<md-icon>settings</md-icon>
+						<md-tooltip md-direction="top">Manage bot folders</md-tooltip>
+					</md-button>
 				</md-card-header>
 
 				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
@@ -234,9 +238,12 @@
 			</md-snackbar>
 
 			<md-dialog v-if="activeBot && activeBot.info" :md-active.sync="showBotInfo">
-				<md-dialog-title>{{activeBot.name}}</md-dialog-title>
-
+				<md-dialog-title>
+					{{activeBot.name}}<br />
+					<span class="bot-file-path">{{activeBot.path}}</span>
+				</md-dialog-title>
 				<md-dialog-content>
+
 					<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
 					<p><span class="bot-info-key">Description:</span> {{activeBot.info.description}}</p>
 					<p><span class="bot-info-key">Fun Fact:</span> {{activeBot.info.fun_fact}}</p>
@@ -296,6 +303,33 @@
 				<md-dialog-actions>
 					<md-button class="md-raised md-primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</md-button>
 					<md-button @click="showNewBotDialog = false">Close</md-button>
+				</md-dialog-actions>
+			</md-dialog>
+
+			<md-dialog :md-active.sync="showFolderSettingsDialog">
+				<md-dialog-title>Folder Settings</md-dialog-title>
+
+				<md-dialog-content>
+
+					<md-list>
+						<md-list-item v-for="(settings, path) in folderSettings.folders">
+							<md-switch v-model="settings.visible">{{path}}</md-switch>
+							<md-button class="md-icon-button" @click="delete folderSettings.folders[path]">
+								<md-icon>close</md-icon>
+							</md-button>
+						</md-list-item>
+						<md-list-item v-for="(settings, path) in folderSettings.files">
+							<md-switch v-model="settings.visible">{{path}}</md-switch>
+							<md-button class="md-icon-button" @click="delete folderSettings.files[path]">
+								<md-icon>close</md-icon>
+							</md-button>
+						</md-list-item>
+					</md-list>
+				</md-dialog-content>
+
+				<md-dialog-actions>
+					<md-button class="md-raised md-primary" @click="applyFolderSettings()">Apply</md-button>
+					<md-button @click="showFolderSettingsDialog = false">Close</md-button>
 				</md-dialog-actions>
 			</md-dialog>
 
