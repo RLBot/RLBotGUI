@@ -116,7 +116,7 @@
             // will be expanded later
             SETTING = "RLBot"
             
-            EXPERIMENTAL_FEATURES = false
+            EXPERIMENTAL_FEATURES = true
         
             LOGO_SRC = {
                 "WinterTide": "logo.png",
@@ -273,8 +273,10 @@
                 src = "/imgs/" + action + ".png"
                 el = document.getElementById("blue-action")
                 el.src = src
-                el.classList.remove("fade-out")
-                el.classList.add("fade-in")
+                if (el.classList.contains("fade-out")){
+                    el.classList.remove("fade-out")
+                    el.classList.add("fade-in")
+                }
                 setTimeout(function(){ 
                     el.classList.remove("fade-in")
                     el.classList.add("fade-out")
@@ -285,8 +287,10 @@
                 src = "/imgs/" + action + ".png"
                 el = document.getElementById("orange-action")
                 el.src = src
-                el.classList.remove("fade-out")
-                el.classList.add("fade-in")
+                if (el.classList.contains("fade-out")){
+                    el.classList.remove("fade-out")
+                    el.classList.add("fade-in")
+                }
                 setTimeout(function(){ 
                     el.classList.remove("fade-in")
                     el.classList.add("fade-out")
