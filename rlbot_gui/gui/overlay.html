@@ -74,13 +74,13 @@
             .fade-in {
                 visibility: visible;
                 opacity: 1;
-                transition: opacity 2s linear;
+                transition: opacity 1s linear;
             }                
              
             .fade-out {
                 visibility: hidden;
                 opacity: 0;
-                transition: visibility 0s 2s, opacity 2s linear;
+                transition: visibility 0s 1s, opacity 1s linear;
             }                
         </style>
     </head>
@@ -102,10 +102,30 @@
         
         
         <div id="footer" class="hide-after-match">
-            <img src="/imgs/logo.png" height=10% width=auto />
+            <img id="logo" src="/imgs/logo.png" height=10% width=auto />
+        </div>
+        
+        <img class="endgame-appear fade-out" src="/imgs/endgame.png" />
+        
+        <div id="endgame" class="endgame-appear fade-out">
+            
         </div>
         
         <script type="text/javascript">
+            // options: WinterTide, RLBot, Johnnyboi_i
+            // will be expanded later
+            SETTING = "RLBot"
+            
+            EXPERIMENTAL_FEATURES = true
+        
+            LOGO_SRC = {
+                "WinterTide": "logo.png",
+                "RLBot": "rlbot_logo.png",
+                "Johnnyboi_i": "johnnyboi_i.png"
+            }[SETTING]
+            
+            document.getElementById("logo").src = "/imgs/" + LOGO_SRC
+
             function loadRunner() {
                 last_total_goals = 0
                 blue_saves = 0
@@ -115,6 +135,9 @@
                 orange_saves = 0
                 orange_shots = 0
                 orange_demos = 0
+                
+                is_done = false
+                started = false
             
                 setInterval(function() {
                     eel.get_game_tick_packet()().then( packet => {
@@ -129,8 +152,15 @@
                             blue_names.innerHTML = "Game ended"
                             orange_names.innerHTML = "Game ended"
                             last_total_goals = 0
+                            
+                            if (!is_done && started && EXPERIMENTAL_FEATURES) {
+                                is_done = true
+                                setTimeout(() => displayEndgame(packet), 2000)
+                            }
                         
                         } else {
+                            is_done = false
+                            started = true
                         
                             for (let el of document.getElementsByClassName("hide-after-match")) {
                                 if (el.style.display == "none") {
@@ -243,11 +273,13 @@
                 src = "/imgs/" + action + ".png"
                 el = document.getElementById("blue-action")
                 el.src = src
-                el.classList.remove("fade-out")
-                el.classList.add("fade-in")
+                if (el.classList.contains("fade-out")){
+                    el.classList.remove("fade-out")
+                    el.classList.add("fade-in")
+                }
                 setTimeout(function(){ 
                     el.classList.remove("fade-in")
-                el.classList.add("fade-out")
+                    el.classList.add("fade-out")
                 }, 2500)
             }
             
@@ -255,12 +287,77 @@
                 src = "/imgs/" + action + ".png"
                 el = document.getElementById("orange-action")
                 el.src = src
-                el.classList.remove("fade-out")
-                el.classList.add("fade-in")
+                if (el.classList.contains("fade-out")){
+                    el.classList.remove("fade-out")
+                    el.classList.add("fade-in")
+                }
                 setTimeout(function(){ 
                     el.classList.remove("fade-in")
-                el.classList.add("fade-out")
+                    el.classList.add("fade-out")
                 }, 2500)
+            }
+            
+            function displayEndgame(packet){
+                end_div = document.getElementById("endgame")
+                
+                function random_prop(obj) {
+                    keys = Object.keys(obj)
+                    return obj[keys[ keys.length * Math.random() << 0]]
+                }
+                
+                function get_max(prop, iter){
+                    max_item = null
+                    max_val = 0
+                    for (let item of iter){
+                        if (item.score_info[prop] > max_val){
+                            max_val = item[prop]
+                            max_item = item
+                        }
+                    }
+                    
+                    return max_item
+                }
+                
+                stats = {
+                    "goals": {"name": "Most goals", "value": get_max("goals", packet.game_cars), "title": (res)=>res.name},
+                    "points": {"name": "Most points", "value": get_max("points", packet.game_cars), "title": (res)=>res.name},
+                    "assists": {"name": "Most assists", "value": get_max("assists", packet.game_cars), "title": (res)=>res.name},
+                    "shots": {"name": "Most shots", "value": get_max("shots", packet.game_cars), "title": (res)=>res.name},
+                    "demos": {"name": "Most demolitions", "value": get_max("demolitions", packet.game_cars), "title": (res)=>res.name},
+                    "owns": {"name": "Most own goals", "value": get_max("own_goals", packet.game_cars), "title": (res)=>res.name},
+                    "saves": {"name": "Most saves", "value": get_max("saves", packet.game_cars), "title": (res)=>res.name},
+                }
+                
+                items = []
+                while (items.length < 3){
+                    item = random_prop(stats)
+                    is_in = false
+                    for (let item_in of items) {
+                        if (item_in.name == item.name){
+                            is_in = true
+                        }
+                    }
+                    
+                    if (!is_in){
+                        items[items.length] = item
+                    }
+                }
+                
+                console.log(tags)
+                console.log(items)
+                
+                tags = items.map((it) => { return "<div class='stat-entry'><div class='stat-name'>" + it.name + "</div><div class='stat-value'>" + it.title(it.value) + "</div></div>" })
+                end_div.innerHTML = tags.join("<br/>")
+                
+                for (let el of document.getElementsByClassName("endgame-appear")){
+                    el.classList.remove("fade-out")
+                    el.classList.add("fade-in")
+                    
+                    setTimeout(function(){ 
+                        el.classList.remove("fade-in")
+                        el.classList.add("fade-out")
+                    }, 10000)
+                }
             }
         </script>
         <script type="text/javascript" src="/eel.js" onload="loadRunner()"></script>
