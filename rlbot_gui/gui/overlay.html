@@ -75,6 +75,33 @@
                 right: 7% !important;
             }
             
+            #votes {
+                align: center;
+                padding-top: 1%;
+                display: flex;
+            }
+            
+            #votes > div {
+                flex: 1;
+                position: absolute;
+                height: 3px;
+                width: 311px;
+                border-style: solid;
+                border-width: 7px;
+            }
+            
+            #votes-blue {
+                border-color: blue;
+                background-color: blue;
+                left: 149px;
+            }
+            
+            #votes-orange {
+                border-color: orange;
+                background-color: orange;
+                right: 147px;
+            }
+            
             .fade-in {
                 visibility: visible;
                 opacity: 1;
@@ -101,12 +128,18 @@
             <div class="name-div" id="name-orange">Orange Team</div>
         </div>
         
+        <div id="votes" class="hide-after-match">
+            <div id="votes-blue"></div>
+            <div id="votes-orange"></div>
+        </div>
+
+        <img src="/imgs/votes.png" class="set hide-after-match" style="z-index: 5"/>
         
         <div id="footer" class="hide-after-match">
             <img id="logo" src="/imgs/logo.png" height=10% width=auto />
         </div>
         
-        <video id="goal-splash" muted="muted" class="set">
+        <video id="goal-splash" class="set" autoplay muted>
             <source src="/imgs/frame.webm" type="video/webm" />
         </video>
         
@@ -132,19 +165,25 @@
                 Johnnyboi_i: "johnnyboi_i.png"
             }[SETTING]
             
+            vid = document.getElementById("goal-splash")
+            vid.pause()
+            vid.currentTime = 0
+            
             game_stats = {
                 last_total_goals: 0,
+                mult: 0,
+                
                 blue_saves: 0,
                 blue_shots: 0,
                 blue_demos: 0,
                 blue_names: [],
-                blue_votes: 1,
+                blue_votes: 0.5,
                 
                 orange_saves: 0,
                 orange_shots: 0,
                 orange_demos: 0,
                 orange_names: [],
-                orange_votes: 1,
+                orange_votes: 0.5,
                 
                 is_done: false,
                 started: false
@@ -165,35 +204,13 @@
             client.on('message', function (channel, user, message, fromSelf) { 
                 team = getTeamVotedFor(message)
                 if (team != null) {
-                    game_stats[team+"_votes"]++
+                    game_stats[team+"_votes"] = game_stats[team+"_votes"] + (game_stats.mult * 1)
+                    updateTeams()
                 }
             })
             
             client.connect()
-            
-            function nameToTokens(name){
-                return name.toLowerCase().replace("bot", "").split(" ")
-            }
-            
-            function getTeamVotedFor(message){
-                for (let word of message.toLowerCase().replace("bot", "").split(" ")){
-                    for (let player of game_stats.blue_names){
-                        for (let key of nameToTokens(player)){
-                            if (key == word){
-                                return "blue"
-                            }
-                        }
-                    }
-                    
-                    for (let player of game_stats.orange_names){
-                        for (let key of nameToTokens(player)){
-                            if (key == word){
-                                return "orange"
-                            }
-                        }
-                    }
-                }
-            }
+            updateTeams()
             
             document.getElementById("logo").src = "/imgs/" + LOGO_SRC
 
@@ -222,6 +239,7 @@
                             }
                         
                         } else {
+                            game_stats.mult = 1 + (packet.game_info.time_elapsed / 300)
                             game_stats.is_done = false
                             game_stats.started = true
                         
@@ -325,6 +343,56 @@
                 }, (1000 / 60))
             }
             
+            function nameToTokens(name){
+                return name.toLowerCase().replace("bot", "").split(" ")
+            }
+            
+            function getTeamVotedFor(message){
+                for (let word of message.toLowerCase().replace("bot", "").split(" ")){
+                    for (let player of game_stats.blue_names){
+                        for (let key of nameToTokens(player)){
+                            if (key == word){
+                                return "blue"
+                            }
+                        }
+                    }
+                    
+                    for (let player of game_stats.orange_names){
+                        for (let key of nameToTokens(player)){
+                            if (key == word){
+                                return "orange"
+                            }
+                        }
+                    }
+                }
+            }
+            
+            function setOrangeVotePercentage(votes, total){
+                percentage = votes / total
+                new_px_width = Math.round(311 * percentage)
+                new_px_dist = 147 + (311 - new_px_width)
+                el = document.getElementById("votes-orange")
+                el.style.width = new_px_width.toString() + "px"
+                el.style.right = new_px_dist.toString() + "px"
+            }
+            
+            function setBlueVotePercentage(votes, total){
+                percentage = votes / total
+                new_px_width = Math.round(311 * percentage)
+                new_px_dist = 149 + (311 - new_px_width)
+                el = document.getElementById("votes-blue")
+                el.style.width = new_px_width.toString() + "px"
+                el.style.left = new_px_dist.toString() + "px"
+            }
+            
+            function updateTeams(){
+                orange = game_stats.orange_votes
+                blue = game_stats.blue_votes
+                total = orange + blue
+                setBlueVotePercentage(blue, total)
+                setOrangeVotePercentage(orange, total)
+            }
+            
             function do_goal_splash(){
                 vid = document.getElementById("goal-splash")
                 
@@ -344,11 +412,11 @@
                if (el.classList.contains("fade-out")){
                     el.classList.remove("fade-out")
                     el.classList.add("fade-in")
-                    setTimeout(function(){ 
-                        el.classList.remove("fade-in")
-                        el.classList.add("fade-out")
-                    }, 2500)
                 }
+                setTimeout(function(){ 
+                    el.classList.remove("fade-in")
+                    el.classList.add("fade-out")
+                }, 2500)
             }
             
             function orange_action(action){
@@ -358,11 +426,11 @@
                 if (el.classList.contains("fade-out")){
                     el.classList.remove("fade-out")
                     el.classList.add("fade-in")
-                    setTimeout(function(){ 
-                        el.classList.remove("fade-in")
-                        el.classList.add("fade-out")
-                    }, 2500)
                 }
+                setTimeout(function(){ 
+                    el.classList.remove("fade-in")
+                    el.classList.add("fade-out")
+                }, 2500)
             }
             
             function displayEndgame(packet){

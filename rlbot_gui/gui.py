@@ -306,7 +306,7 @@ def start():
 
     packet_reader = GameTickReader()
     
-    options = {}
+    options = {"chromeFlags": ["--autoplay-policy=no-user-gesture-required"]}
     if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
 
