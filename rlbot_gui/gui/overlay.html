@@ -133,7 +133,7 @@
             <div id="votes-orange"></div>
         </div>
 
-        <img src="/imgs/votes.png" class="set hide-after-match" style="z-index: 5"/>
+        <img src="/imgs/votes.png" class="set hide-after-match" style="z-index: 5" />
         
         <div id="footer" class="hide-after-match">
             <img id="logo" src="/imgs/logo.png" height=10% width=auto />
@@ -156,7 +156,7 @@
             SETTING = "RLBot"
             EXPERIMENTAL_FEATURES = false
             TWITCH_CHANNEL = "rlbotofficial"
-            
+            FPS = 60
             // end of settings
         
             LOGO_SRC = {
@@ -239,7 +239,7 @@
                             }
                         
                         } else {
-                            game_stats.mult = 1 + (packet.game_info.time_elapsed / 300)
+                            game_stats.mult = 1 // + (packet.game_info.time_elapsed / 300)
                             game_stats.is_done = false
                             game_stats.started = true
                         
@@ -340,7 +340,7 @@
                             orange_names.innerHTML = orange_name
                         }
                     })
-                }, (1000 / 60))
+                }, (1000 / FPS))
             }
             
             function nameToTokens(name){

@@ -46,10 +46,8 @@ class GameTickReader:
         self.game_tick_packet = game_data_struct.GameTickPacket()
 
     def get_packet(self):
-        return self.game_tick_packet
-
-    def pull_data_from_game(self):
         self.game_interface.update_live_data_packet(self.game_tick_packet)
+        return self.game_tick_packet
 
 
 @eel.expose
@@ -285,7 +283,7 @@ def on_websocket_close(page, sockets):
 
 
 def is_chrome_installed():
-    return eel.browsers.chr.get_instance_path() is not None
+    return getattr(eel.browsers, "chm", getattr(eel.browsers, "chr", None)).get_instance_path() is not None
 
 
 def start():
