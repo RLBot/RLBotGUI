@@ -9,7 +9,7 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     player_config = PlayerConfig()
     player_config.bot = bot['type'] in ('rlbot', 'psyonix')
     player_config.rlbot_controlled = bot['type'] in ('rlbot', 'party_member_bot')
-    player_config.bot_skill = 1.0
+    player_config.bot_skill = bot['skill']
     player_config.human_index = 0 if player_config.bot else human_index_tracker.increment()
     player_config.name = bot['name']
     player_config.team = int(bot['team'])
