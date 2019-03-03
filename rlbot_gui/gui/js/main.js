@@ -7,7 +7,9 @@ Vue.use(VueMaterial.default);
 
 const STARTING_BOT_POOL = [
     {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
-    {'name': 'Psyonix Bot', 'type': 'psyonix', 'image': 'imgs/psyonix.png'}
+    {'name': 'Psyonix Allstar', 'type': 'psyonix', 'skill': 1, 'image': 'imgs/psyonix.png'},
+    {'name': 'Psyonix Pro', 'type': 'psyonix', 'skill': 0.5, 'image': 'imgs/psyonix.png'},
+    {'name': 'Psyonix Rookie', 'type': 'psyonix', 'skill': 0, 'image': 'imgs/psyonix.png'}
 ];
 
 const app = new Vue({
@@ -62,8 +64,8 @@ const app = new Vue({
     },
     methods: {
         startMatch: function (event) {
-            const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'path': bot.path} });
-            const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'path': bot.path} });
+            const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
+            const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
             eel.start_match(blueBots.concat(orangeBots), this.matchSettings)
         },
         killBots: function(event) {

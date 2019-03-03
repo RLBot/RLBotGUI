@@ -151,6 +151,7 @@ def get_bots_from_directory(bot_directory):
         {
             'name': bundle.name,
             'type': 'rlbot',
+            'skill': 1,
             'image': 'imgs/rlbot.png',
             'path': bundle.config_path,
             'info': read_info(bundle)
