@@ -1,6 +1,4 @@
 import os
-import time
-from datetime import datetime
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -38,17 +36,7 @@ class GameTickReader:
         self.game_interface.load_interface()
         self.game_tick_packet = game_data_struct.GameTickPacket()
 
-
-        # self.rate_limit = rate_limiter.RateLimiter(GAME_TICK_PACKET_REFRESHES_PER_SECOND)
-        self.last_call_real_time = datetime.now()  # When we last called the Agent
-
     def get_packet(self):
-
-        now = datetime.now()
-        # self.rate_limit.acquire(now - self.last_call_real_time)
-        self.last_call_real_time = now
-
-        self.pull_data_from_game()
         return self.game_tick_packet
 
     def pull_data_from_game(self):
@@ -247,7 +235,7 @@ def on_websocket_close(page, sockets):
 
 
 def is_chrome_installed():
-    return eel.browsers.chm.get_instance_path() is not None
+    return eel.browsers.chr.get_instance_path() is not None
 
 
 def start():
