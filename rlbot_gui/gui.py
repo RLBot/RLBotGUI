@@ -27,8 +27,6 @@ settings = QSettings('rlbotgui', 'preferences')
 
 game_tick_packet = None
 
-GAME_TICK_PACKET_REFRESHES_PER_SECOND = 120  # 2*60. https://en.wikipedia.org/wiki/Nyquist_rate
-
 
 class GameTickReader:
     def __init__(self):
