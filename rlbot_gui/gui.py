@@ -1,4 +1,5 @@
 import os
+import webbrowser
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -27,6 +28,7 @@ settings = QSettings('rlbotgui', 'preferences')
 game_tick_packet = None
 
 GAME_TICK_PACKET_REFRESHES_PER_SECOND = 120  # 2*60. https://en.wikipedia.org/wiki/Nyquist_rate
+
 
 class GameTickReader:
     def __init__(self):
@@ -237,6 +239,8 @@ def is_chrome_installed():
 
 
 def start():
+    webbrowser.open("steam://rungameid/252950")  # Open rocket league if not already opened
+
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
