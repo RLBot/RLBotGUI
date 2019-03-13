@@ -237,7 +237,7 @@ def is_chrome_installed():
 
 
 def start():
-    webbrowser.open("steam://rungameid/252950")  # Open rocket league if not already opened
+    webbrowser.open("steam://rungameid/252950//-rlbot")  # Open rocket league if not already opened
 
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
