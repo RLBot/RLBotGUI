@@ -1,4 +1,5 @@
 import os
+import webbrowser
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -25,6 +26,7 @@ settings = QSettings('rlbotgui', 'preferences')
 
 
 game_tick_packet = None
+
 
 class GameTickReader:
     def __init__(self):
@@ -235,6 +237,8 @@ def is_chrome_installed():
 
 
 def start():
+    webbrowser.open("steam://rungameid/252950//-rlbot")  # Open rocket league if not already opened
+
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
