@@ -1,4 +1,6 @@
 import os
+import time
+from threading import Thread
 import webbrowser
 
 import eel
@@ -254,8 +256,17 @@ def start():
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
               disable_cache=True)
 
+    def reload_packet():
+        while True:
+            global game_tick_packet
+            game_tick_packet = packet_reader.get_packet()
+            time.sleep(1/120)
+
+    th = Thread(target=reload_packet)
+    th.start()
+
     while not should_quit:
-        global game_tick_packet
-        game_tick_packet = packet_reader.get_packet()
         do_infinite_loop_content()
         eel.sleep(1.0)
+
+    th.join()
