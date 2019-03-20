@@ -1,0 +1,54 @@
+{
+  "format": "json",
+  "description": "Falling balls",
+  "type": "scorer",
+  "entries": [
+    {
+      "ball": {
+        "location": [0, 1000, 4000]
+      },
+      "cars": [{
+        "location": [0, -1000, 100],
+        "boost": "randint(0, 100)"
+      }]
+    },
+    {
+      "ball": {
+        "location": [-200, 2000, 2000]
+      },
+      "cars": [{
+        "location": [-500, -1000, 100],
+        "boost": 10
+      }]
+    },
+    {
+      "ball": {
+        "location": [0, 1000, "3000 + randint(0, 5) * 100"]
+      },
+      "cars": [{
+        "location": [0, -3000, 4000],
+        "boost": "choice([0, 10, 20, 30])"
+      }]
+    },
+    {
+      "ball": {
+        "location": [0, -3000, 1000]
+      },
+      "cars": [{
+        "location": [0, -5000, 100],
+        "boost": "randint(0, 50)"
+      }],
+      "timeout": 10.0
+    },
+    {
+      "ball": {
+        "location": [0, -3000, 1000]
+      },
+      "cars": [{
+        "location": [0, -5000, 100],
+        "boost": "1 + (2 * randint(0, 40))"
+      }],
+      "timeout": 10.0
+    }
+  ]
+}

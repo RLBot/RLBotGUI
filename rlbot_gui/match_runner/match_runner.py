@@ -1,8 +1,18 @@
-from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
+import random
+import time
+import traceback
+from pathlib import Path
+
+from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, Team
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
+from rlbottraining.exercise_runner import run_playlist, print_result
+
+from rlbot_gui.rlbottrainingpack.exercises import JSONExercise
+from rlbot_gui.rlbottrainingpack.importer import import_pack
 
 sm: SetupManager = None
+in_training = False
 
 
 def create_player_config(bot, human_index_tracker: IncrementingInteger):
@@ -16,6 +26,32 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     if 'path' in bot and bot['path']:
         player_config.config_path = bot['path']
     return player_config
+
+
+def start_training_helper(playlist_path, bot, seed=None):
+    global in_training
+    if in_training:
+        return
+    in_training = True
+    playlist = import_pack(playlist_path)
+    for el in playlist:
+        if isinstance(el, JSONExercise):
+            el.set_bot(bot["path"])
+        else:
+            el.match_config.player_configs = [
+                PlayerConfig.bot_config(
+                    Path(bot["path"]),
+                    Team.BLUE
+                ),
+            ]
+    for result in run_playlist(playlist, seed=seed or random.randint(1, 1000)):
+        try:
+            print_result(result)
+        except Exception:
+            print("An error occurred trying to run training exercise:")
+            traceback.print_exc()
+        time.sleep(1)  # Allow bot to finish its action so it doesnt fuck up
+    in_training = False
 
 
 def start_match_helper(bot_list, match_settings):
