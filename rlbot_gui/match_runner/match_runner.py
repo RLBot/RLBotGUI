@@ -47,14 +47,15 @@ def start_training_helper(playlist_path, bot, seed=None):
                     Team.BLUE
                 ),
             ]
-
-    for result in run_playlist(playlist, seed=seed or random.randint(1, 1000)):
-        try:
+    try:
+        for result in run_playlist(playlist, seed=seed or random.randint(1, 1000)):
             log_result(result, logger)
-        except Exception:
-            print("An error occurred trying to run training exercise:")
-            traceback.print_exc()
-        time.sleep(1)  # Allow bot to finish its action so it doesnt fuck up
+            # Note(domnomnom): The following comment is confusing: That reasoning should neither be necessary nor sufficient.
+            time.sleep(1)  # Allow bot to finish its action so it doesnt fuck up
+    except Exception:
+        print("An error occurred trying to run training exercise:")
+        traceback.print_exc()
+
     in_training = False
 
 
