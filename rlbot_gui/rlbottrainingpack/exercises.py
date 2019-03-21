@@ -11,7 +11,7 @@ from rlbottraining.common_graders.goal_grader import (
     PassOnGoalForAllyTeam, StrikerGrader, PassOnBallGoingAwayFromGoal,
     GoalieGrader
 )
-from rlbottraining.match_configs import make_empty_match_config
+from rlbottraining.match_configs import make_default_match_config
 from rlbottraining.rng import SeededRandomNumberGenerator
 
 from rlbot_gui.rlbottrainingpack.math_parser import parse_item
@@ -33,18 +33,9 @@ class JSONExercise:
 
     def __init__(self):
         self.name = self.description + token_hex(5)
-        self.match_config = None
+        self.match_config = make_default_match_config()
         while len(self.boosts) < 34:
             self.boosts.append(0)
-
-    def set_bot(self, cfg_file: str):
-        self.match_config = make_empty_match_config()
-        self.match_config.player_configs = [
-            PlayerConfig.bot_config(
-                Path(cfg_file),
-                Team.BLUE
-            ),
-        ]
 
     def make_game_state(self, rng: SeededRandomNumberGenerator) -> GameState:
         return GameState(
