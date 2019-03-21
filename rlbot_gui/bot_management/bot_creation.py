@@ -1,5 +1,6 @@
 import configparser
 import os
+import shutil
 import string
 import tempfile
 
@@ -33,7 +34,7 @@ def bootstrap_python_bot(bot_name, directory):
             local_zip_path=f"{tmpdirname}/RLBotPythonExample.zip", local_folder_path=tmpdirname)
 
         try:
-            os.rename(f"{tmpdirname}/RLBotPythonExample-master", f"{bot_directory}/{sanitized_name}")
+            shutil.move(f"{tmpdirname}/RLBotPythonExample-master", f"{bot_directory}/{sanitized_name}")
         except FileExistsError:
             return {'error': f'There is already a bot named {sanitized_name}, please choose a different name!'}
 
@@ -43,9 +44,9 @@ def bootstrap_python_bot(bot_name, directory):
     config_file = f"{code_dir}/{sanitized_name}.cfg"
 
     # We're making some big assumptions here that the file structure / names in RLBotPythonExample will not change.
-    os.rename(f"{bot_directory}/{sanitized_name}/python_example/", code_dir)
-    os.rename(f"{code_dir}/python_example.py", python_file)
-    os.rename(f"{code_dir}/python_example.cfg", config_file)
+    shutil.move(f"{bot_directory}/{sanitized_name}/python_example/", code_dir)
+    shutil.move(f"{code_dir}/python_example.py", python_file)
+    shutil.move(f"{code_dir}/python_example.cfg", config_file)
 
     # Update the config file to point to the renamed files, and show the correct bot name.
 
