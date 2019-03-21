@@ -1,0 +1,11 @@
+{
+  "format": "bakkesmod",
+  "description": "whatever idk",
+  "playlist_id": "quJfnUJf22",
+  "shots": [
+    "must be present if playlist_id is not!",
+    "shot_id_1",
+    "shot_id_2",
+    "shot_id_3"
+  ]
+}
