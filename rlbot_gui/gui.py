@@ -1,6 +1,8 @@
 import os
 import webbrowser
 from pathlib import Path
+import subprocess
+from tempfile import TemporaryDirectory
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -19,6 +21,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     series_length_mutator_types, game_speed_mutator_types, ball_max_speed_mutator_types, ball_type_mutator_types, \
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
+from rlbottraining.paths import _common_exercises_dir
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
 from rlbot_gui.bot_management.downloader import download_and_extract_zip
@@ -187,12 +190,34 @@ def pick_bot_location(is_folder):
 
     return filename
 
+shortcut_vbs_script = '''
+Set oWS = WScript.CreateObject("WScript.Shell")
+Set oLink = oWS.CreateShortcut("{link}.lnk")
+oLink.TargetPath = "{target}"
+oLink.Save
+'''
+def create_shortcut(link: Path, target: Path):
+    """
+    Creates a windows shortcut pointing to the
+    Rant: Really windows?! This is the simplest way of doing this.
+    """
+    with TemporaryDirectory() as tempdir:
+        vbs_file = Path(tempdir) / 'create_shortcut.vbs'
+        with open(vbs_file, 'w') as f:
+            f.write(shortcut_vbs_script.format(link=link, target=target))
+        subprocess.run(  # create a symlink to the common exercises dir.
+            f'cscript //Nologo {vbs_file.absolute()}',
+            shell=True,
+        )
+
 @eel.expose
 def pick_training_module():
+    training_packs_dir = Path(__file__).absolute().parent / 'training_packs'
+    create_shortcut(training_packs_dir / "common_exercises", _common_exercises_dir)
     app = QApplication([])
     filename, _ = QFileDialog.getOpenFileName(
         caption='Select Training Module',
-        directory=str(Path(__file__).absolute().parent / 'training_packs' / 'python'), # TODO: remove the python dir
+        directory=str(training_packs_dir),
         filter="Training Module (*.py)"
     )
 

@@ -189,3 +189,4 @@ typings/
 # RLBot stuff that tends to get downloaded
 RLBotPack.zip
 RLBotPack/
+rlbot_gui/training_packs/common_exercises.lnk
