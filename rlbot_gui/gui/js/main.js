@@ -123,9 +123,12 @@ const app = new Vue({
             // TODO: Nicer UI
             const titleEl = document.getElementById('page-title');
             const originalText = titleEl.textContent;
-            titleEl.textContent = `Training: ${training_module_path}`
+            titleEl.textContent = `RLBotTraining: ${training_module_path.replace('\\', '/').split('/').slice(-2).join('/')}`
+
             // Run the module with our current bot configuration.
             await eel.start_training(training_module_path, this.getBots(), this.matchSettings)();
+
+            // titleEl.textContent = originalText;
         },
         beginNewBot: function (language, bot_name) {
             if (!bot_name) {
