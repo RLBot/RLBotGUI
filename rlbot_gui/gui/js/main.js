@@ -64,9 +64,12 @@ const app = new Vue({
     },
     methods: {
         startMatch: function (event) {
-            const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-            const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-            eel.start_match(blueBots.concat(orangeBots), this.matchSettings)
+            eel.start_match(this.getBots(), this.matchSettings)
+        },
+        getBots() {
+            const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'path': bot.path} });
+            const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'path': bot.path} });
+            return blueBots.concat(orangeBots);
         },
         killBots: function(event) {
             eel.kill_bots()
@@ -109,6 +112,20 @@ const app = new Vue({
         },
         hotReload: function() {
             eel.hot_reload_python_bots();
+        },
+        async runTrainingModule() {
+            const training_module_path = await eel.pick_training_module()();
+
+            // TODO: load the MatchConfig of the training module playlist and customize the bots which play.
+            // TODO: deal with different exercises having different bots nicely.
+
+            // Give a bit of user feedback that we're doing something
+            // TODO: Nicer UI
+            const titleEl = document.getElementById('page-title');
+            const originalText = titleEl.textContent;
+            titleEl.textContent = `Training: ${training_module_path}`
+            // Run the module with our current bot configuration.
+            await eel.start_training(training_module_path, this.getBots(), this.matchSettings)();
         },
         beginNewBot: function (language, bot_name) {
             if (!bot_name) {

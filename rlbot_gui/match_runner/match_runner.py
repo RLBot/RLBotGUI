@@ -2,12 +2,12 @@ import random
 import time
 import traceback
 from pathlib import Path
+from contextlib import contextmanager
 
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, Team
-from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
 from rlbot.utils.logging_utils import get_logger
-from rlbottraining.exercise_runner import run_playlist
+from rlbottraining.exercise_runner import load_default_playlist, run_playlist
 from rlbottraining.history.exercise_result import log_result
 
 from rlbot_gui.rlbottrainingpack.exercises import JSONExercise
@@ -31,63 +31,35 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     return player_config
 
 
-def start_training_helper(playlist_path, bot, seed=None):
+@contextmanager
+def in_training_lock():
     global in_training
-    if in_training:
+    if in_training:  # TODO: use an actual lock because of worries about async.
         return
     in_training = True
-    playlist = import_pack(playlist_path)
-    for el in playlist:
-        if isinstance(el, JSONExercise):
-            el.set_bot(bot["path"])
-        else:
-            el.match_config.player_configs = [
-                PlayerConfig.bot_config(
-                    Path(bot["path"]),
-                    Team.BLUE
-                ),
-            ]
     try:
-        for result in run_playlist(playlist, seed=seed or random.randint(1, 1000)):
-            log_result(result, logger)
-            # Note(domnomnom): The following comment is confusing: That reasoning should neither be necessary nor sufficient.
-            time.sleep(1)  # Allow bot to finish its action so it doesnt fuck up
+        yield
     except Exception:
         print("An error occurred trying to run training exercise:")
         traceback.print_exc()
-
     in_training = False
 
+def start_training_helper(training_module: Path, customized_match_config: MatchConfig):
+    with in_training_lock():
+        playlist = load_default_playlist(training_module)()
 
-def start_match_helper(bot_list, match_settings):
-    print(bot_list)
-    print(match_settings)
+        # Override attributes of the playlist with what the user
+        # TODO: Deal with edits for the individual exercises as different exercises may have different numbers of bots in the same playlist
+        for exercise in playlist:
+            if customized_match_config.player_configs:
+                exercise.match_config.player_configs = customized_match_config.player_configs
+            # TODO: Copy mutators to/from the GUI.
 
-    match_config = MatchConfig()
-    match_config.game_mode = match_settings['game_mode']
-    match_config.game_map = match_settings['map']
-    match_config.mutators = MutatorConfig()
+        for result in run_playlist(playlist, seed=random.randint(1, 1000)):
+            log_result(result, logger)
 
-    mutators = match_settings['mutators']
-    match_config.mutators.match_length = mutators['match_length']
-    match_config.mutators.max_score = mutators['max_score']
-    match_config.mutators.overtime = mutators['overtime']
-    match_config.mutators.series_length = mutators['series_length']
-    match_config.mutators.game_speed = mutators['game_speed']
-    match_config.mutators.ball_max_speed = mutators['ball_max_speed']
-    match_config.mutators.ball_type = mutators['ball_type']
-    match_config.mutators.ball_weight = mutators['ball_weight']
-    match_config.mutators.ball_size = mutators['ball_size']
-    match_config.mutators.ball_bounciness = mutators['ball_bounciness']
-    match_config.mutators.boost_amount = mutators['boost_amount']
-    match_config.mutators.rumble = mutators['rumble']
-    match_config.mutators.boost_strength = mutators['boost_strength']
-    match_config.mutators.gravity = mutators['gravity']
-    match_config.mutators.demolish = mutators['demolish']
-    match_config.mutators.respawn_time = mutators['respawn_time']
 
-    human_index_tracker = IncrementingInteger(0)
-    match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
+def start_match_helper(match_config: MatchConfig):
 
     global sm
     if sm is not None:

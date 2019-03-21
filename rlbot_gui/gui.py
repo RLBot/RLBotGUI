@@ -1,10 +1,13 @@
 import os
 import webbrowser
+from pathlib import Path
 
 import eel
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
+from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, Team
+from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.utils import rate_limiter
 from rlbot.utils.logging_utils import get_logger
 from rlbot.utils.structures.game_interface import GameInterface
@@ -57,12 +60,53 @@ class GameTickReader:
 
 @eel.expose
 def start_match(bot_list, match_settings):
-    eel.spawn(start_match_helper, bot_list, match_settings)
+    eel.spawn(start_match_helper, parse_match_config(bot_list, match_settings))
 
 
 @eel.expose
-def start_training(playlist, bot):
-    eel.spawn(start_training_helper, playlist, bot)
+def start_training(playlist: str, bot_list, match_settings):
+    # TODO: Handle
+    eel.spawn(start_training_helper, Path(playlist), parse_match_config(bot_list, match_settings))
+
+def create_player_config(bot, human_index_tracker: IncrementingInteger):
+    player_config = PlayerConfig()
+    player_config.bot = bot['type'] in ('rlbot', 'psyonix')
+    player_config.rlbot_controlled = bot['type'] in ('rlbot', 'party_member_bot')
+    player_config.bot_skill = 1.0
+    player_config.human_index = 0 if player_config.bot else human_index_tracker.increment()
+    player_config.name = bot['name']
+    player_config.team = int(bot['team'])
+    if 'path' in bot and bot['path']:
+        player_config.config_path = bot['path']
+    return player_config
+
+def parse_match_config(bot_list, match_settings) -> MatchConfig:
+    match_config = MatchConfig()
+    match_config.game_mode = match_settings['game_mode']
+    match_config.game_map = match_settings['map']
+    match_config.mutators = MutatorConfig()
+
+    mutators = match_settings['mutators']
+    match_config.mutators.match_length = mutators['match_length']
+    match_config.mutators.max_score = mutators['max_score']
+    match_config.mutators.overtime = mutators['overtime']
+    match_config.mutators.series_length = mutators['series_length']
+    match_config.mutators.game_speed = mutators['game_speed']
+    match_config.mutators.ball_max_speed = mutators['ball_max_speed']
+    match_config.mutators.ball_type = mutators['ball_type']
+    match_config.mutators.ball_weight = mutators['ball_weight']
+    match_config.mutators.ball_size = mutators['ball_size']
+    match_config.mutators.ball_bounciness = mutators['ball_bounciness']
+    match_config.mutators.boost_amount = mutators['boost_amount']
+    match_config.mutators.rumble = mutators['rumble']
+    match_config.mutators.boost_strength = mutators['boost_strength']
+    match_config.mutators.gravity = mutators['gravity']
+    match_config.mutators.demolish = mutators['demolish']
+    match_config.mutators.respawn_time = mutators['respawn_time']
+
+    human_index_tracker = IncrementingInteger(0)
+    match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
+    return match_config
 
 
 @eel.expose
@@ -142,6 +186,19 @@ def pick_bot_location(is_folder):
     app.exit()
 
     return filename
+
+@eel.expose
+def pick_training_module():
+    app = QApplication([])
+    filename, _ = QFileDialog.getOpenFileName(
+        caption='Select Training Module',
+        directory=str(Path(__file__).absolute().parent / 'training_packs' / 'python'), # TODO: remove the python dir
+        filter="Training Module (*.py)"
+    )
+
+    app.exit()
+
+    return str(filename)
 
 
 def read_info(bundle: BotConfigBundle):
@@ -278,7 +335,7 @@ def as_jsonifyable(obj):
 @eel.expose
 def get_game_tick_packet():
     return as_jsonifyable(game_tick_packet)
-    
+
 
 should_quit = False
 
@@ -297,13 +354,14 @@ def is_chrome_installed():
 
 
 def start():
-    webbrowser.open("steam://rungameid/252950")  # Open rocket league if not already opened
+    # TODO: revert me
+    # webbrowser.open("steam://rungameid/252950")  # Open rocket league if not already opened
 
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
     packet_reader = GameTickReader()
-    
+
     options = {"chromeFlags": ["--autoplay-policy=no-user-gesture-required"]}
     if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
