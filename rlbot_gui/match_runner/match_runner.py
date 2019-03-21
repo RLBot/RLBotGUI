@@ -6,13 +6,16 @@ from pathlib import Path
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, Team
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
-from rlbottraining.exercise_runner import run_playlist, print_result
+from rlbot.utils.logging_utils import get_logger
+from rlbottraining.exercise_runner import run_playlist
+from rlbottraining.history.exercise_result import log_result
 
 from rlbot_gui.rlbottrainingpack.exercises import JSONExercise
 from rlbot_gui.rlbottrainingpack.importer import import_pack
 
 sm: SetupManager = None
 in_training = False
+logger = get_logger('training')
 
 
 def create_player_config(bot, human_index_tracker: IncrementingInteger):
@@ -44,9 +47,10 @@ def start_training_helper(playlist_path, bot, seed=None):
                     Team.BLUE
                 ),
             ]
+
     for result in run_playlist(playlist, seed=seed or random.randint(1, 1000)):
         try:
-            print_result(result)
+            log_result(result, logger)
         except Exception:
             print("An error occurred trying to run training exercise:")
             traceback.print_exc()
