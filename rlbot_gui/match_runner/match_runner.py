@@ -5,6 +5,7 @@ from pathlib import Path
 from contextlib import contextmanager
 
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, Team
+from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
 from rlbot.utils.logging_utils import get_logger
 from rlbottraining.exercise_runner import load_default_playlist, run_playlist
@@ -44,9 +45,11 @@ def in_training_lock():
         traceback.print_exc()
     in_training = False
 
+
 def start_training_helper(training_module: Path, customized_match_config: MatchConfig):
     with in_training_lock():
-        playlist = load_default_playlist(training_module)()
+        playlist = import_pack(str(training_module))
+        # playlist = load_default_playlist(training_module)()
 
         # Override attributes of the playlist with what the user
         # TODO: Deal with edits for the individual exercises as different exercises may have different numbers of bots in the same playlist
