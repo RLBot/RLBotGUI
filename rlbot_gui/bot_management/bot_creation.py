@@ -1,6 +1,7 @@
+from pathlib import Path
+from shutil import move
 import configparser
 import os
-import shutil
 import string
 import tempfile
 
@@ -23,30 +24,31 @@ def convert_to_filename(text):
 
 
 def bootstrap_python_bot(bot_name, directory):
-    bot_directory = directory or '.'
     sanitized_name = convert_to_filename(bot_name)
+    bot_directory = Path(directory or '.')
 
     with tempfile.TemporaryDirectory() as tmpdirname:
-        print('created temporary directory', tmpdirname)
+        tmpdir = Path(tmpdirname)
+        print('created temporary directory', tmpdir)
 
         download_and_extract_zip(
             download_url='https://github.com/RLBot/RLBotPythonExample/archive/master.zip',
-            local_zip_path=f'{tmpdirname}/RLBotPythonExample.zip', local_folder_path=tmpdirname)
+            local_zip_path=tmpdir / 'RLBotPythonExample.zip', local_folder_path=tmpdir)
 
         try:
-            shutil.move(f'{tmpdirname}/RLBotPythonExample-master', f'{bot_directory}/{sanitized_name}')
+            move(tmpdir / 'RLBotPythonExample-master', bot_directory / sanitized_name)
         except FileExistsError:
             return {'error': f'There is already a bot named {sanitized_name}, please choose a different name!'}
 
     # Choose appropriate file names based on the bot name
-    code_dir = f'{bot_directory}/{sanitized_name}/{sanitized_name}'
-    python_file = f'{code_dir}/{sanitized_name}.py'
-    config_file = f'{code_dir}/{sanitized_name}.cfg'
+    code_dir = bot_directory / sanitized_name / sanitized_name
+    python_file = code_dir / f'{sanitized_name}.py'
+    config_file = code_dir / f'{sanitized_name}.cfg'
 
     # We're making some big assumptions here that the file structure / names in RLBotPythonExample will not change.
-    shutil.move(f'{bot_directory}/{sanitized_name}/python_example/', code_dir)
-    shutil.move(f'{code_dir}/python_example.py', python_file)
-    shutil.move(f'{code_dir}/python_example.cfg', config_file)
+    move(bot_directory / sanitized_name / 'python_example', code_dir)
+    move(code_dir / 'python_example.py', python_file)
+    move(code_dir / 'python_example.cfg', config_file)
 
     # Update the config file to point to the renamed files, and show the correct bot name.
 
