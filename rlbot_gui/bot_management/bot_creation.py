@@ -17,7 +17,7 @@ def convert_to_filename(text):
     """
     import unicodedata
     normalized = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
-    valid_chars = '-_.() %s%s' % (string.ascii_letters, string.digits)
+    valid_chars = f'-_.() {string.ascii_letters}{string.digits}'
     filename = ''.join(c for c in normalized if c in valid_chars)
     filename = filename.replace(' ', '_')  # Replace spaces with underscores
     return filename
