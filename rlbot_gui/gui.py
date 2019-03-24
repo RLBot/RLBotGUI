@@ -1,9 +1,16 @@
 import os
+import time
+from threading import Thread
+import webbrowser
 
 import eel
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
+from rlbot.utils import rate_limiter
+from rlbot.utils.logging_utils import get_logger
+from rlbot.utils.structures.game_interface import GameInterface
+from rlbot.utils.structures import game_data_struct
 from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
@@ -27,6 +34,22 @@ if not bot_folder_settings:
     default_folder = settings.value(DEFAULT_BOT_FOLDER, type=str)
     if default_folder:
         bot_folder_settings['folders'][default_folder] = {'visible': True}
+
+
+game_tick_packet = None
+
+
+class GameTickReader:
+    def __init__(self):
+        self.logger = get_logger('packet reader')
+        self.game_interface = GameInterface(self.logger)
+        self.game_interface.inject_dll()
+        self.game_interface.load_interface()
+        self.game_tick_packet = game_data_struct.GameTickPacket()
+
+    def get_packet(self):
+        self.game_interface.update_live_data_packet(self.game_tick_packet)
+        return self.game_tick_packet
 
 
 @eel.expose
@@ -235,6 +258,20 @@ def begin_python_bot(bot_name):
     return {'bots': load_bundle(config_file)}
 
 
+def as_jsonifyable(obj):
+    if isinstance(obj, (int, float, str)):
+        return obj
+    elif "Array" in obj.__class__.__name__:
+        return list(map(as_jsonifyable, obj))
+    else:
+        return {attr: as_jsonifyable(getattr(obj, attr)) for attr in dir(obj) if not attr.startswith("_")}
+
+
+@eel.expose
+def get_game_tick_packet():
+    return as_jsonifyable(game_tick_packet)
+    
+
 should_quit = False
 
 
@@ -248,14 +285,18 @@ def on_websocket_close(page, sockets):
 
 
 def is_chrome_installed():
-    return eel.browsers.chr.get_instance_path() is not None
+    return getattr(eel.browsers, "chm", getattr(eel.browsers, "chr", None)).get_instance_path() is not None
 
 
 def start():
+    webbrowser.open("steam://rungameid/252950//-rlbot")  # Open rocket league if not already opened
+
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
-    options = {}
+    packet_reader = GameTickReader()
+    
+    options = {"chromeFlags": ["--autoplay-policy=no-user-gesture-required"]}
     if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
 
@@ -265,6 +306,17 @@ def start():
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
               disable_cache=True)
 
+    def reload_packet():
+        while True:
+            global game_tick_packet
+            game_tick_packet = packet_reader.get_packet()
+            time.sleep(1/120)
+
+    th = Thread(target=reload_packet)
+    th.start()
+
     while not should_quit:
         do_infinite_loop_content()
         eel.sleep(1.0)
+
+    th.join()
