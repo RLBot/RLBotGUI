@@ -248,14 +248,19 @@ def on_websocket_close(page, sockets):
 
 
 def is_chrome_installed():
-    return eel.browsers.chr.get_instance_path() is not None
+    if hasattr(eel.browsers, 'chr'):
+        return eel.browsers.chr.get_instance_path() is not None
+    else:
+        return eel.browsers.chm.get_instance_path() is not None
 
 
 def start():
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
-    options = {}
+    # Ultra rare port, unlikely to conflict with other programs.
+    # options = {'port': 51993}
+    options = {'port': 51993}
     if not is_chrome_installed():
         options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
 
