@@ -60,8 +60,8 @@ def start_match_helper(bot_list, match_settings):
     sm.load_match_config(match_config)
     sm.launch_ball_prediction()
     sm.launch_quick_chat_manager()
-    sm.launch_bot_processes()
     sm.start_match()
+    sm.launch_bot_processes()
     # Note that we are not calling infinite_loop because that is not compatible with the way eel works!
     # Instead we will reproduce the important behavior from infinite_loop inside this file.
 
