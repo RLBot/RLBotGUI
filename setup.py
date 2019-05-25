@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '0.0.14'
+__version__ = '0.0.15'
 
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
@@ -17,7 +17,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     author='RLBot Community',
     author_email='rlbotofficial@gmail.com',
-    url='https://github.com/IamEld3st/RLBotGUI',
+    url='https://github.com/RLBot/RLBotGUI',
     keywords=['rocket-league'],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -67,7 +67,7 @@ def start_match_helper(bot_list, match_settings):
 
 
 def do_infinite_loop_content():
-    if sm is not None:
+    if sm is not None and sm.has_started:
         sm.try_recieve_agent_metadata()
 
 
