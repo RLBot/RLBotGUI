@@ -13,7 +13,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
-from rlbot_gui.bot_management.downloader import download_and_extract_zip
+from rlbot_gui.bot_management.downloader import download_and_extract_zip, download_gitlfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
