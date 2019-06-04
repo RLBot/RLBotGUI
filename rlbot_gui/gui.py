@@ -204,11 +204,11 @@ def install_package(package_string):
 
 @eel.expose
 def download_bot_pack():
-    # See https://docs.google.com/document/d/10uCWwHDQYJGMGeoaW1pZu1KvRnSgm064oWL2JVx4k4M/edit?usp=sharing
-    # To learn how the bot pack file is hosted and maintained.
-    download_and_extract_zip(
-        download_url="https://drive.google.com/uc?export=download&id=1OOisnGpxD48x_oAOkBmzqNdkB5POQpiV",
-        local_zip_path="RLBotPack.zip", local_folder_path=".")
+    # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
+    download_gitlfs(
+        repo_url="https://github.com/RLBot/RLBotPack",
+        checkout_folder="RLBotPack",
+        branch_name='master')
 
     bot_folder_settings['folders'][os.path.abspath("./RLBotPack")] = {'visible': True}
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
