@@ -13,7 +13,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
-from rlbot_gui.bot_management.downloader import download_and_extract_zip
+from rlbot_gui.bot_management.downloader import download_and_extract_zip, download_gitlfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
@@ -204,11 +204,11 @@ def install_package(package_string):
 
 @eel.expose
 def download_bot_pack():
-    # See https://docs.google.com/document/d/10uCWwHDQYJGMGeoaW1pZu1KvRnSgm064oWL2JVx4k4M/edit?usp=sharing
-    # To learn how the bot pack file is hosted and maintained.
-    download_and_extract_zip(
-        download_url="https://drive.google.com/uc?export=download&id=1OOisnGpxD48x_oAOkBmzqNdkB5POQpiV",
-        local_zip_path="RLBotPack.zip", local_folder_path=".")
+    # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
+    download_gitlfs(
+        repo_url="https://github.com/RLBot/RLBotPack",
+        checkout_folder="RLBotPack",
+        branch_name='master')
 
     bot_folder_settings['folders'][os.path.abspath("./RLBotPack")] = {'visible': True}
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
