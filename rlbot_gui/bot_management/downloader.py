@@ -16,7 +16,7 @@ def download_gitlfs(repo_url: str, checkout_folder: Path, branch_name: str):
     # Download the most of the files eg. https://github.com/RLBot/RLBotPack/archive/master.zip
     download_and_extract_zip(
         download_url=repo_url + '/archive/' + branch_name + '.zip',
-        local_zip_path='download.zip',
+        local_zip_path='github-bot-pack.zip',
         local_folder_path=checkout_folder)
 
     repo_extraction_name = '/' + repo_url.split('/')[-1] + '-' + branch_name + '/'
