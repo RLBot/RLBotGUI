@@ -23,6 +23,9 @@ const app = new Vue({
         matchSettings: {
             map: null,
             game_mode: null,
+            skip_replays: false,
+            instant_start: false,
+            match_behavior: null,
             mutators: {
                 match_length: null,
                 max_score: null,
@@ -60,16 +63,17 @@ const app = new Vue({
             files: [],
             folders: []
         },
-        showFolderSettingsDialog: false
+        showFolderSettingsDialog: false,
+        showExtraOptions: false
     },
     methods: {
         startMatch: function (event) {
             const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
             const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-            eel.start_match(blueBots.concat(orangeBots), this.matchSettings)
+            eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
         },
         killBots: function(event) {
-            eel.kill_bots()
+            eel.kill_bots();
         },
         pickBotFolder: function (event) {
             eel.pick_bot_folder()(botsReceived);
@@ -189,6 +193,7 @@ function matchOptionsReceived(matchOptions) {
 
     app.matchSettings.map = app.matchOptions.map_types[0];
     app.matchSettings.game_mode = app.matchOptions.game_modes[0];
+    app.matchSettings.match_behavior = app.matchOptions.match_behaviours[0];
 
     app.updateBGImage(app.matchSettings.map);
 
