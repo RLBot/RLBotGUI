@@ -25,6 +25,9 @@ def start_match_helper(bot_list, match_settings):
     match_config = MatchConfig()
     match_config.game_mode = match_settings['game_mode']
     match_config.game_map = match_settings['map']
+    match_config.skip_replays = match_settings['skip_replays']
+    match_config.instant_start = match_settings['instant_start']
+    match_config.existing_match_behavior = match_settings['match_behavior']
     match_config.mutators = MutatorConfig()
 
     mutators = match_settings['mutators']

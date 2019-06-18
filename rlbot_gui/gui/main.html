@@ -183,6 +183,9 @@
 						</div>
 
 						<md-button class="md-raised" style="margin-left: 20px" @click="showMutatorDialog = true">Mutators</md-button>
+
+						<md-button class="md-raised" @click="showExtraOptions = true">Extra</md-button>
+
 						<span style="flex-grow: 1"></span>
 
 						<md-button @click="hotReload()" class="md-icon-button">
@@ -193,6 +196,19 @@
 						<md-button @click="killBots()" class="md-raised">Stop</md-button>
 					</div>
 
+					<md-dialog :md-active.sync="showExtraOptions">
+                        <md-dialog-title>Extra Options</md-dialog-title>
+
+                        <md-dialog-content>
+                            <md-switch v-model="matchSettings.skip_replays">Skip Replays</md-switch>
+							<md-switch v-model="matchSettings.instant_start">Instant Start</md-switch>
+							<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
+                        </md-dialog-content>
+
+                        <md-dialog-actions>
+                            <md-button @click="showExtraOptions = false">Close</md-button>
+                        </md-dialog-actions>
+                    </md-dialog>
 
                     <md-dialog :md-active.sync="showMutatorDialog">
                         <md-dialog-title>Mutators</md-dialog-title>

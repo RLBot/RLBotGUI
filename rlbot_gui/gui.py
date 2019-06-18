@@ -10,7 +10,8 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_amount_mutator_types, match_length_types, max_score_types, overtime_mutator_types, \
     series_length_mutator_types, game_speed_mutator_types, ball_max_speed_mutator_types, ball_type_mutator_types, \
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
-    boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types
+    boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
+    existing_match_behavior_types
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
 from rlbot_gui.bot_management.downloader import download_and_extract_zip, download_gitlfs
@@ -174,6 +175,7 @@ def get_match_options():
     return {
         'map_types': map_types,
         'game_modes': game_mode_types,
+        'match_behaviours': existing_match_behavior_types,
         'mutators': {
             'match_length_types': match_length_types,
             'max_score_types': max_score_types,
