@@ -69,24 +69,24 @@
 						</md-button>
 
 						<md-menu-content>
-							<md-menu-item @click="pickBotConfig()">
-								<span>File</span>
-								<md-icon>file_copy</md-icon>
-							</md-menu-item>
-							<md-menu-item  @click="pickBotFolder()">
-								<span>Folder</span>
-								<md-icon>folder_open</md-icon>
-							</md-menu-item>
 							<md-menu-item  @click="downloadBotPack()">
 								<span>Download Bot Pack</span>
 								<md-icon>cloud_download</md-icon>
 							</md-menu-item>
+							<md-menu-item  @click="showNewBotDialog = true">
+								<span>Start Your Own Bot!</span>
+								<md-icon>create</md-icon>
+							</md-menu-item>
+							<md-menu-item  @click="pickBotFolder()">
+								<span>Load Folder</span>
+								<md-icon>folder_open</md-icon>
+							</md-menu-item>
+							<md-menu-item @click="pickBotConfig()">
+								<span>Load Cfg File</span>
+								<md-icon>file_copy</md-icon>
+							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
-					<md-button class="md-fab md-mini bot-pool-adder" @click="showNewBotDialog = true">
-						<md-icon>create</md-icon>
-						<md-tooltip md-direction="top">Begin a new bot!</md-tooltip>
-					</md-button>
 					<md-button class="md-fab md-mini bot-pool-adder" @click="showFolderSettingsDialog = true">
 						<md-icon>settings</md-icon>
 						<md-tooltip md-direction="top">Manage bot folders</md-tooltip>

@@ -14,10 +14,12 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     existing_match_behavior_types
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
-from rlbot_gui.bot_management.downloader import download_and_extract_zip, download_gitlfs
+from rlbot_gui.bot_management.downloader import download_gitlfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
+RLBOTPACK_FOLDER = "RLBotPackDeletable"
+CREATED_BOTS_FOLDER = 'MyBots'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 settings = QSettings('rlbotgui', 'preferences')
 
@@ -209,10 +211,10 @@ def download_bot_pack():
     # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
     download_gitlfs(
         repo_url="https://github.com/RLBot/RLBotPack",
-        checkout_folder="RLBotPack",
+        checkout_folder=RLBOTPACK_FOLDER,
         branch_name='master')
 
-    bot_folder_settings['folders'][os.path.abspath("./RLBotPack")] = {'visible': True}
+    bot_folder_settings['folders'][os.path.abspath(RLBOTPACK_FOLDER)] = {'visible': True}
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
@@ -232,9 +234,19 @@ def hot_reload_python_bots():
 @eel.expose
 def begin_python_bot(bot_name):
 
-    bot_directory = settings.value(DEFAULT_BOT_FOLDER, type=str) or "."
-    config_file = bootstrap_python_bot(bot_name, bot_directory)
-    return {'bots': load_bundle(config_file)}
+    bot_directory = CREATED_BOTS_FOLDER
+    if not os.path.exists(bot_directory):
+        os.mkdir(bot_directory)
+
+    bot_folder_settings['folders'][os.path.abspath(CREATED_BOTS_FOLDER)] = {'visible': True}
+    settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
+    settings.sync()
+
+    try:
+        config_file = bootstrap_python_bot(bot_name, bot_directory)
+        return {'bots': load_bundle(config_file)}
+    except FileExistsError as e:
+        return {'error': str(e)}
 
 
 should_quit = False
