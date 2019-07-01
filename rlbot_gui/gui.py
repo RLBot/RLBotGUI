@@ -18,7 +18,8 @@ from rlbot_gui.bot_management.downloader import download_gitlfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
-RLBOTPACK_FOLDER = "RLBotPackDeletable"
+BOTPACK_FOLDER = 'RLBotPackDeletable'
+OLD_BOTPACK_FOLDER = 'RLBotPack'
 CREATED_BOTS_FOLDER = 'MyBots'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 settings = QSettings('rlbotgui', 'preferences')
@@ -211,10 +212,16 @@ def download_bot_pack():
     # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
     download_gitlfs(
         repo_url="https://github.com/RLBot/RLBotPack",
-        checkout_folder=RLBOTPACK_FOLDER,
+        checkout_folder=BOTPACK_FOLDER,
         branch_name='master')
 
-    bot_folder_settings['folders'][os.path.abspath(RLBOTPACK_FOLDER)] = {'visible': True}
+    # Configure the folder settings.
+    bot_folder_settings['folders'][os.path.abspath(BOTPACK_FOLDER)] = {'visible': True}
+
+    if bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)]:
+        # Toggle off the old one since it's been replaced.
+        bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)] = {'visible': False}
+
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
