@@ -23,9 +23,16 @@ def convert_to_filename(text):
     return filename
 
 
+def safe_move(src, dst):
+    """ https://bugs.python.org/issue32689 """
+    move(str(src), str(dst))
+
+
 def bootstrap_python_bot(bot_name, directory):
     sanitized_name = convert_to_filename(bot_name)
     bot_directory = Path(directory or '.')
+    if os.path.exists(bot_directory / sanitized_name):
+        raise FileExistsError(f'There is already a bot named {sanitized_name}, please choose a different name!')
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         tmpdir = Path(tmpdirname)
@@ -33,12 +40,9 @@ def bootstrap_python_bot(bot_name, directory):
 
         download_and_extract_zip(
             download_url='https://github.com/RLBot/RLBotPythonExample/archive/master.zip',
-            local_zip_path=tmpdir / 'RLBotPythonExample.zip', local_folder_path=tmpdir)
+            local_folder_path=tmpdir)
 
-        try:
-            move(tmpdir / 'RLBotPythonExample-master', bot_directory / sanitized_name)
-        except FileExistsError:
-            return {'error': f'There is already a bot named {sanitized_name}, please choose a different name!'}
+        safe_move(tmpdir / 'RLBotPythonExample-master', bot_directory / sanitized_name)
 
     # Choose appropriate file names based on the bot name
     code_dir = bot_directory / sanitized_name / sanitized_name
@@ -46,9 +50,9 @@ def bootstrap_python_bot(bot_name, directory):
     config_file = code_dir / f'{sanitized_name}.cfg'
 
     # We're making some big assumptions here that the file structure / names in RLBotPythonExample will not change.
-    move(bot_directory / sanitized_name / 'python_example', code_dir)
-    move(code_dir / 'python_example.py', python_file)
-    move(code_dir / 'python_example.cfg', config_file)
+    safe_move(bot_directory / sanitized_name / 'python_example', code_dir)
+    safe_move(code_dir / 'python_example.py', python_file)
+    safe_move(code_dir / 'python_example.cfg', config_file)
 
     # Update the config file to point to the renamed files, and show the correct bot name.
 
