@@ -218,7 +218,7 @@ def download_bot_pack():
     # Configure the folder settings.
     bot_folder_settings['folders'][os.path.abspath(BOTPACK_FOLDER)] = {'visible': True}
 
-    if bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)]:
+    if os.path.abspath(OLD_BOTPACK_FOLDER) in bot_folder_settings['folders']:
         # Toggle off the old one since it's been replaced.
         bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)] = {'visible': False}
 
