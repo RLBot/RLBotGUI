@@ -8,15 +8,12 @@ RLBotGUI is a streamlined user interface that helps you run custom
 Rocket League bots for offline entertainment. It relies on the RLBot
 project to work its magic: https://github.com/RLBot/RLBot
 
-It works on Windows only and requires Google Chrome to run.
+It works on Windows only.
 
 ## Installation
 
 If you just want to use this GUI, you can go download the installer from
 https://drive.google.com/drive/folders/1LZdTVPQeqO0ZGtelQE3yPyBlvC_pqsGT?usp=sharing
-
-When installing, choose "Install just for me," otherwise it will be necessary
-to run the program as administrator all the time.
 
 It will put "RLBotGUI" in your Windows start menu.
 
