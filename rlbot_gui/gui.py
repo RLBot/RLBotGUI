@@ -269,10 +269,14 @@ def on_websocket_close(page, sockets):
 
 
 def is_chrome_installed():
+    # Lots of hasattr checks because we're currently stuck supporting multiple versions of eel at once.
     if hasattr(eel.browsers, 'chr'):
         return eel.browsers.chr.get_instance_path() is not None
     else:
-        return eel.browsers.chm.get_instance_path() is not None
+        chm = eel.browsers.chm
+        if hasattr(chm, 'get_instance_path'):
+            return eel.browsers.chm.get_instance_path() is not None
+        return chm.find_path() is not None
 
 
 def start():
@@ -280,16 +284,20 @@ def start():
     eel.init(gui_folder)
 
     # Ultra rare port, unlikely to conflict with other programs.
-    # options = {'port': 51993}
-    options = {'port': 51993}
-    if not is_chrome_installed():
-        options = {'mode': 'system-default'}  # Use the system default browser if the user doesn't have chrome.
+    port = 51993
+    mode = 'chrome'
 
-    # This disable_cache thing only works if you have tare's fork of eel
-    # https://github.com/tarehart/Eel/commit/98395ccc268e1a7a5137da2515b472fcc03db5c5
+    options = {'port': port}
+    if not is_chrome_installed():
+        mode = 'system-default'  # Use the system default browser if the user doesn't have chrome.
+        options['mode'] = mode
+
+    # This disable_cache thing only works if you have tare's fork of eel https://github.com/ChrisKnott/Eel/pull/102
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
+    # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
+    # options argument since a lot of our user base has an older version of eel.
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
-              disable_cache=True)
+              disable_cache=True, mode=mode, port=port, suppress_error=True)
 
     while not should_quit:
         do_infinite_loop_content()
