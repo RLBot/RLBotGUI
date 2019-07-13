@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+
+	<link rel="icon" type="image/png" sizes="192x192" href="imgs/rlbot_logo.png">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+	<link rel="stylesheet" href="css/vue-material.min.css"/>
+	<link rel="stylesheet" href="css/vue-fonts.css"/>
+	<link rel="stylesheet" href="css/black-green-light.css"/>
+	<link rel="stylesheet" href="css/style.css"/>
+	<link rel="stylesheet" href="css/botmanager.css"/>
+
+	<title>Hub</title>
+
+</head>
+<body id="rlbotgui">
+	<div id="app" :style="bodyStyle">
+
+		<md-toolbar class="md-primary">
+			<div class="md-toolbar-row">
+				<img class="logo" src="imgs/rlbot_logo.png">
+				<a href="main.html"><h3 class="md-title" style="flex: 1">RLBot</h3></a> &nbsp;
+				<a href="botmanager.html"><h3 class="md-title" style="flex: 1">Hub</h3></a>
+				<div class="md-toolbar-section-end">
+					<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
+					<md-menu md-direction="bottom-start">
+						<md-button md-menu-trigger class="md-icon-button">
+							<md-icon>more_vert</md-icon>
+						</md-button>
+
+						<md-menu-content>
+							<md-menu-item @click="showPackageInstaller = true;">
+								Install missing python package
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+			</div>
+		</md-toolbar>
+
+		<md-dialog :md-active.sync="showPackageInstaller">
+			<md-dialog-title>Install Package</md-dialog-title>
+
+			<md-dialog-content>
+
+				<md-field>
+					<label>Package Name</label>
+					<md-input v-model="packageString"></md-input>
+				</md-field>
+			</md-dialog-content>
+
+			<md-dialog-actions>
+				<md-button @click="installPackage()" class="md-raised md-primary">Install Package</md-button>
+				<md-button @click="showPackageInstaller = false">Close</md-button>
+			</md-dialog-actions>
+		</md-dialog>
+
+		<aside>
+			<md-card v-if="matchOptions" class="settings-card">
+				<md-card-header>
+					<div class="md-title">Filters</div>
+				</md-card-header>
+
+                <md-card-content>
+
+                	<label for="searchBotName">search</label>
+                	<input id="searchBotName" type="text" name="" class="" placeholder="search on bot name"><br>
+
+                	<hr>
+
+					<div class="center-flex">
+
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item">
+								<label for="gamemodes">Gamemode</label>
+								<div id="gamemodes" class="list">
+									<p><input type="checkbox" name="gamemode" value="1v1">1v1</p>
+									<p><input type="checkbox" name="gamemode" value="2v2">2v2</p>
+									<p><input type="checkbox" name="gamemode" value="3v3">3v3</p>
+									<p><input type="checkbox" name="gamemode" value="4v4">4v4</p>
+								</div>
+							</div>
+
+							<div class="md-layout-item">
+								<label for="category">Gamemode</label>
+								<div id="category" class="list">
+									<p><input type="checkbox" name="category" value="Example">Example</p>
+									<p><input type="checkbox" name="category" value="Simple">Simple</p>
+									<p><input type="checkbox" name="category" value="Agressive">Agressive</p>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+                </md-card-content>
+			</md-card>
+
+			<md-card v-if="matchOptions" class="settings-card">
+				<md-card-header>
+					<div class="md-title">News</div>
+				</md-card-header>
+
+                <md-card-content>
+
+					<div class="center-flex">
+
+						<div class="md-layout md-gutter">
+							
+						</div>
+					</div>
+
+                </md-card-content>
+			</md-card>
+		</aside>
+
+		<div id="main">
+		</div>
+	</div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/vue-material.min.js"></script>
+    <script type="text/javascript" src="js/Sortable.min.js"></script>
+    <script type="text/javascript" src="js/vuedraggable.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+
+	<!-- GIT -->
+	<script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
+	<script src="https://unpkg.com/isomorphic-git"></script>
+	<script>
+	test()
+	async function test(){
+		// Initialize isomorphic-git with a file system
+		window.fs = new LightningFS('fs');
+		git.plugins.set('fs', window.fs);
+		// I prefer using the Promisified version honestly
+		window.pfs = window.fs.promises;
+		var dirname = 'test';
+		window.dir = '/'+dirname;
+
+		var dirs = await pfs.readdir('/');
+
+		if (!dirs.includes(dirname)){
+			await pfs.mkdir(dir);
+		}
+
+
+		repos = ["https://github.com/ard1998/RLBot-repos"];
+		for(var i=0; i<repos.length; ++i){
+			await git.clone({
+				dir,
+				corsProxy: 'https://cors.isomorphic-git.org',
+				url: repos[i],
+				ref: 'master',
+				singleBranch: true,
+				depth: 10
+			});
+		}
+
+		files = await pfs.readdir(dir)
+
+		var jsonstring = "";
+		for (var i = 0; i < files.length; i++) {
+			if (files[i].substr(files[i].length-5, 5)==".json") {
+				var fileContent = await pfs.readFile(dir + '/' + files[i]);
+				var string = new TextDecoder("utf-8").decode(fileContent);
+				jsonstring = string;
+			}
+		}
+		var json = JSON.parse(jsonstring);
+
+		for (var i = 0; i < json.repos.length; i++) {
+			var repo = json.repos[i];
+
+			gamemodeString = '';
+			for (var index = repo.gamemodes.length - 1; index >= 0; index--) {
+				gamemodeString+=repo.gamemodes[index].name;
+				if (index!=0) {
+					gamemodeString += ', '
+				}
+			}
+
+			categoryString = '';
+			for (var index = repo.category.length - 1; index >= 0; index--) {
+				categoryString+=repo.category[index].name;
+				if (index!=0) {
+					categoryString += ', '
+				}
+			}
+
+
+			/*Filling in template and inserting it*/
+			var html = '';
+
+			html +=	'<div class="md-card settings-card md-theme-default">';
+			html +=		'<div class="md-card-header">';
+        	html += 		'<div class="md-title">'+repo.name+'</div>';
+        	html +=		'</div>';
+        	html +=		'<div class="md-card-content">';
+			html += 		'<div class="center-flex">';
+			html += 			'<div class="md-layout md-gutter">';
+			html += 			    '<div class="md-layout-item"><label for="gamemodes-0">gamemode</label>';
+			html += 			        '<p id="gamemodes-0" class="managerInfo">'+gamemodeString+'</p>';
+			html += 			    '</div>';
+			html += 			    '<div class="md-layout-item"><label for="type-0">Category</label>';
+			html += 			        '<p id="type-0" class="managerInfo">'+categoryString+'</p>';
+			html += 			    '</div>';
+			html += 			'</div> ';
+			html += 			'<span style="flex-grow: 1;"></span> ';
+			html += 			'<button type="button" class="md-button md-primary md-raised md-theme-default">';
+			html += 				'<div class="md-ripple">';
+			html += 					'<div class="md-button-content">Download</div>';
+			html += 				'</div>'
+			html += 			'</button> ';
+			html += 			'<button type="button" class="md-button md-raised md-theme-default">';
+			html += 				'<div class="md-ripple">';
+			html += 					'<div class="md-button-content">More info</div>';
+			html += 				'</div>';
+			html += 			'</button>';
+			html += 		'</div>';
+        	html +=		'</div>';
+        	html +=	'</div>';
+
+			repo = json.repos[i];
+			document.getElementById('main').innerHTML += html;
+		}
+	}
+	</script>
+</body>
+</html>
