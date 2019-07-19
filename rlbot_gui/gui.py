@@ -279,25 +279,28 @@ def is_chrome_installed():
         return chm.find_path() is not None
 
 
-def start():
-    gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
-    eel.init(gui_folder)
-
-    # Ultra rare port, unlikely to conflict with other programs.
+def launch_eel(browser_mode):
     port = 51993
-    mode = 'chrome'
-
-    options = {'port': port}
-    if not is_chrome_installed():
-        mode = 'system-default'  # Use the system default browser if the user doesn't have chrome.
-        options['mode'] = mode
+    options = {'port': port, 'mode': browser_mode}
 
     # This disable_cache thing only works if you have tare's fork of eel https://github.com/ChrisKnott/Eel/pull/102
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
-              disable_cache=True, mode=mode, port=port, suppress_error=True)
+              disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
+
+
+def start():
+    gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
+    eel.init(gui_folder)
+
+    try:
+        if not is_chrome_installed():
+            raise Exception
+        launch_eel('chrome')
+    except:
+        launch_eel('system-default')
 
     while not should_quit:
         do_infinite_loop_content()
