@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -15,6 +16,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
 from rlbot_gui.bot_management.downloader import download_gitlfs
+from rlbot_gui.bot_management.downloader import download_botfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
@@ -225,13 +227,33 @@ def download_bot_pack():
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
+@eel.expose
+def download_bot(repo, branch):
+    download_botfs(
+        repo_url=repo,
+        checkout_folder='download',
+        branch_name=branch,
+        bot_path=os.path.abspath(BOTPACK_FOLDER))
+    return 0;
+
+@eel.expose
+def delete_bot(name):
+    shutil.rmtree(os.path.abspath(BOTPACK_FOLDER + "/" + name))
+    return 0;
+
+@eel.expose
+def isBotInstalled(bot_name):
+    bot_directory = BOTPACK_FOLDER
+    if os.path.exists(bot_directory+'/'+bot_name):
+        return True
+    else:
+        return False
 
 @eel.expose
 def show_bot_in_explorer(bot_cfg_path):
     import subprocess
     directory = os.path.dirname(bot_cfg_path)
     subprocess.Popen(f'explorer "{directory}"')
-
 
 @eel.expose
 def hot_reload_python_bots():
@@ -279,25 +301,28 @@ def is_chrome_installed():
         return chm.find_path() is not None
 
 
-def start():
-    gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
-    eel.init(gui_folder)
-
-    # Ultra rare port, unlikely to conflict with other programs.
+def launch_eel(browser_mode):
     port = 51993
-    mode = 'chrome'
-
-    options = {'port': port}
-    if not is_chrome_installed():
-        mode = 'system-default'  # Use the system default browser if the user doesn't have chrome.
-        options['mode'] = mode
+    options = {'port': port, 'mode': browser_mode}
 
     # This disable_cache thing only works if you have tare's fork of eel https://github.com/ChrisKnott/Eel/pull/102
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
     eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
-              disable_cache=True, mode=mode, port=port, suppress_error=True)
+              disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
+
+
+def start():
+    gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
+    eel.init(gui_folder)
+
+    try:
+        if not is_chrome_installed():
+            raise Exception
+        launch_eel('chrome')
+    except:
+        launch_eel('system-default')
 
     while not should_quit:
         do_infinite_loop_content()

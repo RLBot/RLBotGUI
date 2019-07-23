@@ -108,6 +108,15 @@ const app = new Vue({
             this.showProgressSpinner = true;
             eel.download_bot_pack()(botPackDownloaded);
         },
+        downloadBot: function(repo, branch) {
+            eel.download_bot(repo, branch)(downloadBotComplete);
+        },
+        deleteBot: function(name) {
+            eel.delete_bot(name)(deleteBotComplete);
+        },
+        isBotInstalled: function (name) {
+            return eel.isBotInstalled(name)
+        },
         showBotInExplorer: function (botPath) {
             eel.show_bot_in_explorer(botPath);
         },
@@ -210,6 +219,14 @@ function onInstallationComplete(result) {
     app.snackbarContent = message;
     app.showSnackbar = true;
     app.showProgressSpinner = false;
+}
+
+function downloadBotComplete(){
+    console.log('test')
+}
+
+function deleteBotComplete(){
+    console.log('test')
 }
 
 Vue.component('mutator-field', {

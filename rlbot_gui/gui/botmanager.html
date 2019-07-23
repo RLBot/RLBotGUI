@@ -130,26 +130,47 @@
 	<script type="text/javascript" src="js/main.js"></script>
 
 	<!-- GIT -->
-	<script src="https://unpkg.com/@isomorphic-git/lightning-fs"></script>
 	<script src="https://unpkg.com/isomorphic-git"></script>
-	<script>
+	<script type="text/javascript" src="js/browserfs.js"></script>
+	<script type="text/javascript">
+	// Installs globals onto window:
+	// * Buffer
+	// * require (monkey-patches if already defined)
+	// * process
+	// You can pass in an arbitrary object if you do not wish to pollute
+	// the global namespace.
+
+	BrowserFS.install(window);
+	// Configures BrowserFS to use the LocalStorage file system.
+
+	BrowserFS.configure({
+		fs: "LocalStorage",
+	}, function(e) {
+		if (e) {
+			// An error happened!
+			throw e;
+		}
+	// Otherwise, BrowserFS is ready-to-use!
+	});
+
+	// Initialize isomorphic-git with a file system
+	window.fs = require('fs');
+	git.plugins.set('fs', window.fs);
+
+	var dirname = 'test12345';
+	window.dir = '/'+dirname;
+
 	test()
 	async function test(){
-		// Initialize isomorphic-git with a file system
-		window.fs = new LightningFS('fs');
-		git.plugins.set('fs', window.fs);
-		// I prefer using the Promisified version honestly
-		window.pfs = window.fs.promises;
-		var dirname = 'test';
-		window.dir = '/'+dirname;
 
-		var dirs = await pfs.readdir('/');
+		var dirs = await fs.readdirSync('/');
 
 		if (!dirs.includes(dirname)){
-			await pfs.mkdir(dir);
+			await fs.mkdirSync(dir);
 		}
 
 
+		//clone repos
 		repos = ["https://github.com/ard1998/RLBot-repos"];
 		for(var i=0; i<repos.length; ++i){
 			await git.clone({
@@ -162,18 +183,20 @@
 			});
 		}
 
-		files = await pfs.readdir(dir)
 
+		// find repofile and make an json object out of it
+		files = await fs.readdirSync(dir)
 		var jsonstring = "";
 		for (var i = 0; i < files.length; i++) {
 			if (files[i].substr(files[i].length-5, 5)==".json") {
-				var fileContent = await pfs.readFile(dir + '/' + files[i]);
+				var fileContent = await fs.readFileSync(dir + '/' + files[i]);
 				var string = new TextDecoder("utf-8").decode(fileContent);
 				jsonstring = string;
 			}
 		}
 		var json = JSON.parse(jsonstring);
 
+		//make bot ui elements out of json data
 		for (var i = 0; i < json.repos.length; i++) {
 			var repo = json.repos[i];
 
@@ -194,37 +217,43 @@
 			}
 
 
-			/*Filling in template and inserting it*/
+			//Filling in template and inserting it
 			var html = '';
 
-			html +=	'<div class="md-card settings-card md-theme-default">';
-			html +=		'<div class="md-card-header">';
-        	html += 		'<div class="md-title">'+repo.name+'</div>';
-        	html +=		'</div>';
-        	html +=		'<div class="md-card-content">';
-			html += 		'<div class="center-flex">';
-			html += 			'<div class="md-layout md-gutter">';
-			html += 			    '<div class="md-layout-item"><label for="gamemodes-0">gamemode</label>';
-			html += 			        '<p id="gamemodes-0" class="managerInfo">'+gamemodeString+'</p>';
-			html += 			    '</div>';
-			html += 			    '<div class="md-layout-item"><label for="type-0">Category</label>';
-			html += 			        '<p id="type-0" class="managerInfo">'+categoryString+'</p>';
-			html += 			    '</div>';
-			html += 			'</div> ';
-			html += 			'<span style="flex-grow: 1;"></span> ';
-			html += 			'<button type="button" class="md-button md-primary md-raised md-theme-default">';
-			html += 				'<div class="md-ripple">';
-			html += 					'<div class="md-button-content">Download</div>';
-			html += 				'</div>'
-			html += 			'</button> ';
-			html += 			'<button type="button" class="md-button md-raised md-theme-default">';
-			html += 				'<div class="md-ripple">';
-			html += 					'<div class="md-button-content">More info</div>';
-			html += 				'</div>';
-			html += 			'</button>';
-			html += 		'</div>';
-        	html +=		'</div>';
-        	html +=	'</div>';
+			html +=	"<div class=\"md-card settings-card md-theme-default\">";
+			html +=		"<div class=\"md-card-header\">";
+        	html += 		"<div class=\"md-title\">"+repo.name+"</div>";
+        	html +=		"</div>";
+        	html +=		"<div class=\"md-card-content\">";
+			html += 		"<div class=\"center-flex\">";
+			html += 			"<div class=\"md-layout md-gutter\">";
+			html += 			    "<div class=\"md-layout-item\"><label for=\"gamemodes-0\">gamemode</label>";
+			html += 			        "<p id=\"gamemodes-0\" class=\"managerInfo\">"+gamemodeString+"</p>";
+			html += 			    "</div>";
+			html += 			    "<div class=\"md-layout-item\"><label for=\"type-0\">Category</label>";
+			html += 			        "<p id=\"type-0\" class=\"managerInfo\">"+categoryString+"</p>";
+			html += 			    "</div>";
+			html += 			"</div> ";
+			html += 			"<span style=\"flex-grow: 1;\"></span> ";
+			html += 			"<button type=\"button\" class=\"md-button md-primary md-raised md-theme-default\">";
+			html += 				"<div class=\"md-ripple\">";
+
+			if (await eel.isBotInstalled(repo.name)()){
+				html +=					"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(downloadBotComplete)\">Delete</div>";	
+			}
+			else{
+				html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')\">Download</div>";	
+			}
+			html += 				"</div>"
+			html += 			"</button> ";
+			html += 			"<button type=\"button\" class=\"md-button md-raised md-theme-default\">";
+			html += 				"<div class=\"md-ripple\">";
+			html += 					"<div class=\"md-button-content\">More info</div>";
+			html += 				"</div>";
+			html += 			"</button>";
+			html += 		"</div>";
+        	html +=		"</div>";
+        	html +=	"</div>";
 
 			repo = json.repos[i];
 			document.getElementById('main').innerHTML += html;

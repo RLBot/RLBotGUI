@@ -5,6 +5,9 @@ import zipfile
 from pathlib import Path
 from shutil import rmtree
 
+from distutils.dir_util import copy_tree
+
+
 
 def download_and_extract_zip(download_url: str, local_folder_path: Path, clobber: bool = False):
     """
@@ -41,5 +44,21 @@ def download_gitlfs(repo_url: str, checkout_folder: Path, branch_name: str):
                 repo_url + '/raw/' + branch_name + '/' + line.split(' ')[0],
                 checkout_folder + repo_extraction_name + line.split(' ')[0])
     file.close()
+
+    print('Done downloading git repo.')
+
+def download_botfs(repo_url: str, checkout_folder: Path, branch_name: str, bot_path: str):
+    print('Starting download of a git repo... this might take a while.')
+
+    rmtree(checkout_folder, ignore_errors=True)
+
+    # Download the most of the files eg. https://github.com/RLBot/RLBotPack/archive/master.zip
+    download_and_extract_zip(
+        download_url=repo_url + '/archive/' + branch_name + '.zip',
+        local_folder_path=checkout_folder, clobber=True)
+
+    repo_extraction_name = '/' + repo_url.split('/')[-1] + '-' + branch_name + '/'
+
+    copy_tree(checkout_folder + repo_extraction_name, bot_path+'/')
 
     print('Done downloading git repo.')
