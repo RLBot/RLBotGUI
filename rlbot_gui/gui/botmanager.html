@@ -17,7 +17,7 @@
 	<title>Hub</title>
 
 </head>
-<body id="rlbotgui">
+<body id="rlbotgui" onload="downloadRepos()">
 	<div id="app" :style="bodyStyle">
 
 		<md-toolbar class="md-primary">
@@ -68,7 +68,7 @@
                 <md-card-content>
 
                 	<label for="searchBotName">search</label>
-                	<input id="searchBotName" onkeyup="displayRepoData(globalJson)" type="text" name="" class="" placeholder="search on bot name"><br>
+                	<input id="searchBotName" onkeyup="displayRepoData()" type="text" name="" class="" placeholder="search on bot name"><br>
 
                 	<hr>
 
@@ -78,13 +78,13 @@
 							<div class="md-layout-item">
 								<label for="gamemodes">Gamemode</label>
 								<div id="gamemodes" class="list">
-									<p><input onclick="displayRepoData(globalJson)" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
-									<p><input onclick="displayRepoData(globalJson)" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
-									<p><input onclick="displayRepoData(globalJson)" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
-									<p><input onclick="displayRepoData(globalJson)" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
-									<p><input onclick="displayRepoData(globalJson)" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
-									<p><input onclick="displayRepoData(globalJson)" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
-									<p><input onclick="displayRepoData(globalJson)" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
+									<p><input onclick="displayRepoData()" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
+									<p><input onclick="displayRepoData()" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
+									<p><input onclick="displayRepoData()" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
+									<p><input onclick="displayRepoData()" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
+									<p><input onclick="displayRepoData()" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
+									<p><input onclick="displayRepoData()" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
+									<p><input onclick="displayRepoData()" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
 								</div>
 							</div>
 						</div>
@@ -126,26 +126,45 @@
 	<script type="text/javascript">
 	var globalJson
 
-	document.addEventListener("DOMContentLoaded", function(event) { 
-		showdata();
-	});
-	function showdata(){
-		fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
-		  .then(function(response) {
-		    return response.json();
-		  })
-		  .then(function(myJson) {
-		  	globalJson = myJson;
-		    displayRepoData(myJson);
-		  });
+	async function downloadRepos(){
+		await fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(myJson) {
+			globalJson = myJson;
+			addPackageData(myJson);
+		});
 	}
 
-	async function displayRepoData(json){
+	async function addPackageData(json){
+		for (var index = 0; index < json.repos.length; index++) {
+			var repo = json.repos[index];
+
+			var urlPart = repo.url.substr(repo.url.indexOf('/', 10));
+			await fetch('https://raw.githubusercontent.com' + urlPart +'/' + repo.branch + '/download/' + repo.name + '/packaging.json')
+				.then(function(response) {
+					return response.json();
+				})
+				.then(function(myJson) {
+					globalJson.repos[index].testedFrameworkVersion = myJson.testedFrameworkVersion;
+					globalJson.repos[index].version = myJson.version;
+					globalJson.repos[index].category = myJson.category;
+					globalJson.repos[index].gamemodes = myJson.gamemodes;
+					globalJson = json;
+				});
+		}
+
+		displayRepoData()
+
+	}
+
+	async function displayRepoData(){
 		document.getElementById('main').innerHTML = '';
 		//make bot ui elements out of json data
-		for (var i = 0; i < json.repos.length; i++) {
+		for (var i = 0; i < globalJson.repos.length; i++) {
 
-			repo = json.repos[i];
+			repo = globalJson.repos[i];
 			display = true;
 
 			//fill gamemode filters
@@ -169,12 +188,11 @@
 					}
 				}
 			}
-			if (gamemodeNotFoundCount != 0 || repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())==-1) {
+			if (gamemodeNotFoundCount != 0 /*|| repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())==-1*/) {
 				display = false
 			}
 
 			if (display) {
-				var repo = json.repos[i];
 
 				gamemodeString = '';
 				for (var index = repo.gamemodes.length - 1; index >= 0; index--) {
@@ -232,7 +250,6 @@
 	        	html +=		"</div>";
 	        	html +=	"</div>";
 
-				repo = json.repos[i];
 				document.getElementById('main').innerHTML += html;
 			}
 		}
