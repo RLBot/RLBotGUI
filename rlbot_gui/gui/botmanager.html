@@ -129,73 +129,16 @@
     <script type="text/javascript" src="js/vuedraggable.min.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 
-	<!-- GIT -->
-	<script src="https://unpkg.com/isomorphic-git"></script>
-	<script type="text/javascript" src="js/browserfs.js"></script>
 	<script type="text/javascript">
-	// Installs globals onto window:
-	// * Buffer
-	// * require (monkey-patches if already defined)
-	// * process
-	// You can pass in an arbitrary object if you do not wish to pollute
-	// the global namespace.
+	fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
+	  .then(function(response) {
+	    return response.json();
+	  })
+	  .then(function(myJson) {
+	    displayRepoData(myJson);
+	  });
 
-	BrowserFS.install(window);
-	// Configures BrowserFS to use the LocalStorage file system.
-
-	BrowserFS.configure({
-		fs: "LocalStorage",
-	}, function(e) {
-		if (e) {
-			// An error happened!
-			throw e;
-		}
-	// Otherwise, BrowserFS is ready-to-use!
-	});
-
-	// Initialize isomorphic-git with a file system
-	window.fs = require('fs');
-	git.plugins.set('fs', window.fs);
-
-	var dirname = 'test12345';
-	window.dir = '/'+dirname;
-
-	test()
-	async function test(){
-
-		var dirs = await fs.readdirSync('/');
-
-		if (!dirs.includes(dirname)){
-			await fs.mkdirSync(dir);
-		}
-
-
-		//clone repos
-		repos = ["https://github.com/ard1998/RLBot-repos"];
-		for(var i=0; i<repos.length; ++i){
-			await git.clone({
-				dir,
-				corsProxy: 'https://cors.isomorphic-git.org',
-				url: repos[i],
-				ref: 'master',
-				singleBranch: true,
-				depth: 10
-			});
-		}
-
-
-		// find repofile and make an json object out of it
-		files = await fs.readdirSync(dir)
-		var jsonstring = "";
-		for (var i = 0; i < files.length; i++) {
-			if (files[i].substr(files[i].length-5, 5)==".json") {
-				var fileContent = await fs.readFileSync(dir + '/' + files[i]);
-				var string = new TextDecoder("utf-8").decode(fileContent);
-				jsonstring = string;
-			}
-		}
-		var json = JSON.parse(jsonstring);
-
+	async function displayRepoData(json){
 		//make bot ui elements out of json data
 		for (var i = 0; i < json.repos.length; i++) {
 			var repo = json.repos[i];
@@ -204,7 +147,7 @@
 			for (var index = repo.gamemodes.length - 1; index >= 0; index--) {
 				gamemodeString+=repo.gamemodes[index].name;
 				if (index!=0) {
-					gamemodeString += ', '
+					gamemodeString += ', ';
 				}
 			}
 
@@ -212,7 +155,7 @@
 			for (var index = repo.category.length - 1; index >= 0; index--) {
 				categoryString+=repo.category[index].name;
 				if (index!=0) {
-					categoryString += ', '
+					categoryString += ', ';
 				}
 			}
 
