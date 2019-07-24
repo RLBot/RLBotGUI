@@ -142,7 +142,7 @@
 			var repo = json.repos[index];
 
 			var urlPart = repo.url.substr(repo.url.indexOf('/', 10));
-			await fetch('https://raw.githubusercontent.com' + urlPart +'/' + repo.branch + '/download/' + repo.name + '/packaging.json')
+			await fetch('https://raw.githubusercontent.com' + urlPart +'/' + repo.branch + '/' + repo.name + '/packaging.json')
 				.then(function(response) {
 					return response.json();
 				})
@@ -163,7 +163,6 @@
 		document.getElementById('main').innerHTML = '';
 		//make bot ui elements out of json data
 		for (var i = 0; i < globalJson.repos.length; i++) {
-
 			repo = globalJson.repos[i];
 			display = true;
 
@@ -234,7 +233,13 @@
 				html += 				"<div id=\"button"+i+"\" class=\"md-ripple\">";
 
 				if (await eel.isBotInstalled(repo.name)()){
-					html +=					"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Delete</div>";	
+					config = JSON.parse(await eel.getBotPackaging(repo.name)());
+					if (config.version==repo.version) {
+						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Delete</div>";
+					}
+					else {
+						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"'); eel.download_bot('"+repo.url+"','"+repo.branch+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Update</div>";	
+					}
 				}
 				else{
 					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Download</div>";	
