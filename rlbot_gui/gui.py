@@ -250,6 +250,17 @@ def isBotInstalled(bot_name):
         return False
 
 @eel.expose
+def getBotPackaging(bot_name):
+    bot_directory = BOTPACK_FOLDER
+    if os.path.exists(bot_directory+'/'+bot_name):
+        file = open(bot_directory+'/'+bot_name+'/packaging.json',"r")
+        filestr = file.read()
+        file.close
+        return filestr
+    else:
+        return False
+
+@eel.expose
 def show_bot_in_explorer(bot_cfg_path):
     import subprocess
     directory = os.path.dirname(bot_cfg_path)
