@@ -68,7 +68,7 @@
                 <md-card-content>
 
                 	<label for="searchBotName">search</label>
-                	<input id="searchBotName" type="text" name="" class="" placeholder="search on bot name"><br>
+                	<input id="searchBotName" onkeyup="displayRepoData(globalJson)" type="text" name="" class="" placeholder="search on bot name"><br>
 
                 	<hr>
 
@@ -78,22 +78,15 @@
 							<div class="md-layout-item">
 								<label for="gamemodes">Gamemode</label>
 								<div id="gamemodes" class="list">
-									<p><input type="checkbox" name="gamemode" value="1v1">1v1</p>
-									<p><input type="checkbox" name="gamemode" value="2v2">2v2</p>
-									<p><input type="checkbox" name="gamemode" value="3v3">3v3</p>
-									<p><input type="checkbox" name="gamemode" value="4v4">4v4</p>
+									<p><input onclick="displayRepoData(globalJson)" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
+									<p><input onclick="displayRepoData(globalJson)" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
+									<p><input onclick="displayRepoData(globalJson)" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
+									<p><input onclick="displayRepoData(globalJson)" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
+									<p><input onclick="displayRepoData(globalJson)" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
+									<p><input onclick="displayRepoData(globalJson)" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
+									<p><input onclick="displayRepoData(globalJson)" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
 								</div>
 							</div>
-
-							<div class="md-layout-item">
-								<label for="category">Gamemode</label>
-								<div id="category" class="list">
-									<p><input type="checkbox" name="category" value="Example">Example</p>
-									<p><input type="checkbox" name="category" value="Simple">Simple</p>
-									<p><input type="checkbox" name="category" value="Agressive">Agressive</p>
-								</div>
-							</div>
-
 						</div>
 					</div>
 
@@ -130,76 +123,115 @@
 	<script type="text/javascript" src="js/main.js"></script>
 
 	<script type="text/javascript">
-	fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
-	  .then(function(response) {
-	    return response.json();
-	  })
-	  .then(function(myJson) {
-	    displayRepoData(myJson);
-	  });
+	var globalJson
+
+	showdata();
+	function showdata(){
+		fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
+		  .then(function(response) {
+		    return response.json();
+		  })
+		  .then(function(myJson) {
+		  	globalJson = myJson;
+		    displayRepoData(myJson);
+		  });
+	}
 
 	async function displayRepoData(json){
+		document.getElementById('main').innerHTML = '';
 		//make bot ui elements out of json data
 		for (var i = 0; i < json.repos.length; i++) {
-			var repo = json.repos[i];
-
-			gamemodeString = '';
-			for (var index = repo.gamemodes.length - 1; index >= 0; index--) {
-				gamemodeString+=repo.gamemodes[index].name;
-				if (index!=0) {
-					gamemodeString += ', ';
-				}
-			}
-
-			categoryString = '';
-			for (var index = repo.category.length - 1; index >= 0; index--) {
-				categoryString+=repo.category[index].name;
-				if (index!=0) {
-					categoryString += ', ';
-				}
-			}
-
-
-			//Filling in template and inserting it
-			var html = '';
-
-			html +=	"<div class=\"md-card settings-card md-theme-default\">";
-			html +=		"<div class=\"md-card-header\">";
-        	html += 		"<div class=\"md-title\">"+repo.name+"</div>";
-        	html +=		"</div>";
-        	html +=		"<div class=\"md-card-content\">";
-			html += 		"<div class=\"center-flex\">";
-			html += 			"<div class=\"md-layout md-gutter\">";
-			html += 			    "<div class=\"md-layout-item\"><label for=\"gamemodes-0\">gamemode</label>";
-			html += 			        "<p id=\"gamemodes-0\" class=\"managerInfo\">"+gamemodeString+"</p>";
-			html += 			    "</div>";
-			html += 			    "<div class=\"md-layout-item\"><label for=\"type-0\">Category</label>";
-			html += 			        "<p id=\"type-0\" class=\"managerInfo\">"+categoryString+"</p>";
-			html += 			    "</div>";
-			html += 			"</div> ";
-			html += 			"<span style=\"flex-grow: 1;\"></span> ";
-			html += 			"<button type=\"button\" class=\"md-button md-primary md-raised md-theme-default\">";
-			html += 				"<div class=\"md-ripple\">";
-
-			if (await eel.isBotInstalled(repo.name)()){
-				html +=					"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(downloadBotComplete)\">Delete</div>";	
-			}
-			else{
-				html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')\">Download</div>";	
-			}
-			html += 				"</div>"
-			html += 			"</button> ";
-			html += 			"<button type=\"button\" class=\"md-button md-raised md-theme-default\">";
-			html += 				"<div class=\"md-ripple\">";
-			html += 					"<div class=\"md-button-content\">More info</div>";
-			html += 				"</div>";
-			html += 			"</button>";
-			html += 		"</div>";
-        	html +=		"</div>";
-        	html +=	"</div>";
 
 			repo = json.repos[i];
-			document.getElementById('main').innerHTML += html;
+			display = true;
+
+			//fill gamemode filters
+			var gamemodeFilters = [];
+			for (var j = document.getElementsByName('gamemode').length - 1; j >= 0; j--) {
+				if(document.getElementsByName('gamemode')[j].checked){
+					arrLen = gamemodeFilters.length;
+					gamemodeFilters[arrLen] = document.getElementsByName('gamemode')[j].value;
+				}
+			}
+
+			var gamemodeNotFoundCount = 0;
+			if (gamemodeFilters.length != 0) {
+				//if any active gamemode gamemodeFilters, apply them
+				var gamemodeNotFoundCount = gamemodeFilters.length
+				for (var gamemodeFilterIndex = gamemodeFilters.length - 1; gamemodeFilterIndex >= 0; gamemodeFilterIndex--) {
+					for (var j = repo.gamemodes.length - 1; j >= 0; j--) {
+						if (repo.gamemodes[j].name.toLowerCase() == gamemodeFilters[gamemodeFilterIndex].toLowerCase()) {
+							--gamemodeNotFoundCount;
+						}
+					}
+				}
+			}
+			if (gamemodeNotFoundCount != 0 || repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())==-1) {
+				display = false
+			}
+
+			if (display) {
+				var repo = json.repos[i];
+
+				gamemodeString = '';
+				for (var index = repo.gamemodes.length - 1; index >= 0; index--) {
+					gamemodeString+=repo.gamemodes[index].name;
+					if (index!=0) {
+						gamemodeString += ', ';
+					}
+				}
+
+				categoryString = '';
+				for (var index = repo.category.length - 1; index >= 0; index--) {
+					categoryString+=repo.category[index].name;
+					if (index!=0) {
+						categoryString += ', ';
+					}
+				}
+
+
+
+				//Filling in template and inserting it
+				var html = '';
+
+				html +=	"<div class=\"md-card settings-card md-theme-default\">";
+				html +=		"<div class=\"md-card-header\">";
+	        	html += 		"<div class=\"md-title\">"+repo.name+"</div>";
+	        	html +=		"</div>";
+	        	html +=		"<div class=\"md-card-content\">";
+				html += 		"<div class=\"center-flex\">";
+				html += 			"<div class=\"md-layout md-gutter\">";
+				html += 			    "<div class=\"md-layout-item\"><label for=\"gamemodes-0\">gamemode</label>";
+				html += 			        "<p id=\"gamemodes-0\" class=\"managerInfo\">"+gamemodeString+"</p>";
+				html += 			    "</div>";
+				html += 			    "<div class=\"md-layout-item\"><label for=\"type-0\">Category</label>";
+				html += 			        "<p id=\"type-0\" class=\"managerInfo\">"+categoryString+"</p>";
+				html += 			    "</div>";
+				html += 			"</div> ";
+				html += 			"<span style=\"flex-grow: 1;\"></span> ";
+				html += 			"<button type=\"button\" class=\"md-button md-primary md-raised md-theme-default\">";
+				html += 				"<div class=\"md-ripple\">";
+
+				if (await eel.isBotInstalled(repo.name)()){
+					html +=					"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(downloadBotComplete)\">Delete</div>";	
+				}
+				else{
+					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')\">Download</div>";	
+				}
+				html += 				"</div>"
+				html += 			"</button> ";
+				html += 			"<button type=\"button\" class=\"md-button md-raised md-theme-default\">";
+				html += 				"<div class=\"md-ripple\">";
+				html += 					"<div class=\"md-button-content\">More info</div>";
+				html += 				"</div>";
+				html += 			"</button>";
+				html += 		"</div>";
+	        	html +=		"</div>";
+	        	html +=	"</div>";
+
+				repo = json.repos[i];
+				document.getElementById('main').innerHTML += html;
+			}
 		}
 	}
 	</script>
