@@ -271,11 +271,15 @@ def on_websocket_close(page, sockets):
 def is_chrome_installed():
     # Lots of hasattr checks because we're currently stuck supporting multiple versions of eel at once.
     if hasattr(eel.browsers, 'chr'):
+        print("Chrome check v1")
         return eel.browsers.chr.get_instance_path() is not None
     else:
         chm = eel.browsers.chm
         if hasattr(chm, 'get_instance_path'):
-            return eel.browsers.chm.get_instance_path() is not None
+            print("Chrome check v2")
+            return chm.get_instance_path() is not None
+
+        print("Chrome check v3")
         return chm.find_path() is not None
 
 
@@ -297,9 +301,10 @@ def start():
 
     try:
         if not is_chrome_installed():
-            raise Exception
+            raise Exception("Chrome does not appear to be installed.")
         launch_eel('chrome')
-    except:
+    except Exception as e:
+        print(f'Falling back to system default browser because: {str(e)}')
         launch_eel('system-default')
 
     while not should_quit:
