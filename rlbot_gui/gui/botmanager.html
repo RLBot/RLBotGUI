@@ -96,6 +96,7 @@
 			<md-card v-if="matchOptions" class="settings-card">
 				<md-card-header>
 					<div class="md-title">News</div>
+					<p>Coming soon</p>
 				</md-card-header>
 
                 <md-card-content>
@@ -125,7 +126,9 @@
 	<script type="text/javascript">
 	var globalJson
 
-	showdata();
+	document.addEventListener("DOMContentLoaded", function(event) { 
+		showdata();
+	});
 	function showdata(){
 		fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
 		  .then(function(response) {
@@ -210,13 +213,13 @@
 				html += 			"</div> ";
 				html += 			"<span style=\"flex-grow: 1;\"></span> ";
 				html += 			"<button type=\"button\" class=\"md-button md-primary md-raised md-theme-default\">";
-				html += 				"<div class=\"md-ripple\">";
+				html += 				"<div id=\"button"+i+"\" class=\"md-ripple\">";
 
 				if (await eel.isBotInstalled(repo.name)()){
-					html +=					"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(downloadBotComplete)\">Delete</div>";	
+					html +=					"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Delete</div>";	
 				}
 				else{
-					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')\">Download</div>";	
+					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Download</div>";	
 				}
 				html += 				"</div>"
 				html += 			"</button> ";
@@ -234,6 +237,15 @@
 			}
 		}
 	}
+
+	function buttonReplaceToDownload(index, name, url, branch){
+		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.download_bot('"+url+"','"+branch+"')(buttonReplaceToDelete("+index+", '"+name+"', '"+url+"', '"+branch+"'))\">Download</div>";	
+	}
+
+	function buttonReplaceToDelete(index, name, url, branch){
+		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+name+"')(buttonReplaceToDownload("+index+", '"+name+"', '"+url+"', '"+branch+"'))\">Delete</div>";
+	}
+
 	</script>
 </body>
 </html>
