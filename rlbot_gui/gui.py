@@ -255,7 +255,7 @@ def getBotPackaging(bot_name):
     if os.path.exists(bot_directory+'/'+bot_name):
         file = open(bot_directory+'/'+bot_name+'/packaging.json',"r")
         filestr = file.read()
-        file.close
+        file.close()
         return filestr
     else:
         return False
