@@ -253,7 +253,7 @@ def isBotInstalled(bot_name):
 def getBotPackaging(bot_name):
     bot_directory = BOTPACK_FOLDER
     if os.path.exists(bot_directory+'/'+bot_name):
-        file = open(bot_directory+'/'+bot_name+'/packaging.json',"r")
+        file = open(bot_directory+'/'+bot_name+'/botpackage.json',"r")
         filestr = file.read()
         file.close()
         return filestr

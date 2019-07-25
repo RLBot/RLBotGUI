@@ -142,7 +142,7 @@
 			var repo = json.repos[index];
 
 			var urlPart = repo.url.substr(repo.url.indexOf('/', 10));
-			await fetch('https://raw.githubusercontent.com' + urlPart +'/' + repo.branch + '/' + repo.name + '/packaging.json')
+			await fetch('https://raw.githubusercontent.com' + urlPart +'/' + repo.branch + '/' + repo.name + '/botpackage.json')
 				.then(function(response) {
 					return response.json();
 				})
