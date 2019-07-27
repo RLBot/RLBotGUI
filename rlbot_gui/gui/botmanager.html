@@ -143,15 +143,26 @@
 		for (var index = 0; index < json.repos.length; index++) {
 			var repo = json.repos[index];
 
-			var urlPart = repo.url.substr(repo.url.indexOf('/', 10));
-			await fetch('https://raw.githubusercontent.com' + urlPart +'/' + repo.branch + '/' + repo.name + '/botpackage.json')
+			var urlPart = "";
+
+			if (urlPart.indexOf("tree")==-1) {
+				urlPart = repo.url.substr(18)+"/master";
+			}
+			else{
+				var part = repo.url.substr(18);
+				var link = part.substr(0, part.indexOf("/tree"));
+				var branch = part.substr(part.indexOf("/tree")+5);
+				urlPart = link + branch;
+			}
+			var url = 'https://raw.githubusercontent.com' + urlPart + '/' + repo.name + '/botpackage.json'
+			await fetch(url)
 				.then(function(response) {
 					return response.json();
 				})
 				.then(function(myJson) {
 					globalJson.repos[index].testedFrameworkVersion = myJson.testedFrameworkVersion;
 					globalJson.repos[index].version = myJson.version;
-					globalJson.repos[index].category = myJson.category;
+					globalJson.repos[index].categories = myJson.categories;
 					globalJson.repos[index].gamemodes = myJson.gamemodes;
 					globalJson = json;
 				});
@@ -204,8 +215,8 @@
 				}
 
 				categoryString = '';
-				for (var index = repo.category.length - 1; index >= 0; index--) {
-					categoryString+=repo.category[index].name;
+				for (var index = repo.categories.length - 1; index >= 0; index--) {
+					categoryString+=repo.categories[index].name;
 					if (index!=0) {
 						categoryString += ', ';
 					}
@@ -237,14 +248,14 @@
 				if (await eel.isBotInstalled(repo.name)()){
 					config = JSON.parse(await eel.getBotPackaging(repo.name)());
 					if (config.version==repo.version) {
-						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Delete</div>";
+						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"'))\">Delete</div>";
 					}
 					else {
-						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"'); eel.download_bot('"+repo.url+"','"+repo.branch+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Update</div>";	
+						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"'); eel.download_bot('"+repo.url+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Update</div>";	
 					}
 				}
 				else{
-					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"','"+repo.branch+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"', '"+repo.branch+"'))\">Download</div>";	
+					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Download</div>";	
 				}
 				html += 				"</div>"
 				html += 			"</button> ";
@@ -262,12 +273,12 @@
 		}
 	}
 
-	function buttonReplaceToDownload(index, name, url, branch){
-		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.download_bot('"+url+"','"+branch+"')(buttonReplaceToDelete("+index+", '"+name+"', '"+url+"', '"+branch+"'))\">Download</div>";	
+	function buttonReplaceToDownload(index, name, url){
+		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.download_bot('"+url+"')(buttonReplaceToDelete("+index+", '"+name+"', '"+url+"'))\">Download</div>";	
 	}
 
-	function buttonReplaceToDelete(index, name, url, branch){
-		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+name+"')(buttonReplaceToDownload("+index+", '"+name+"', '"+url+"', '"+branch+"'))\">Delete</div>";
+	function buttonReplaceToDelete(index, name, url){
+		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+name+"')(buttonReplaceToDownload("+index+", '"+name+"', '"+url+"'))\">Delete</div>";
 	}
 
 	</script>

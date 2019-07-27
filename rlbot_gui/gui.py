@@ -228,7 +228,15 @@ def download_bot_pack():
     settings.sync()
 
 @eel.expose
-def download_bot(repo, branch):
+def download_bot(repo):
+
+    branch = ""
+    if "tree" in repo:
+        branch = repo.split('/')[-1]
+        repo = repo.split('/tree')[0]
+    else:
+        branch = "master"
+
     download_botfs(
         repo_url=repo,
         checkout_folder='download',
