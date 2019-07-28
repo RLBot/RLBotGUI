@@ -332,15 +332,17 @@ def launch_eel(browser_mode):
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 
+
 def start():
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
     try:
         if not is_chrome_installed():
-            raise Exception
+            raise Exception("Chrome does not appear to be installed.")
         launch_eel('chrome')
-    except:
+    except Exception as e:
+        print(f'Falling back to system default browser because: {str(e)}')
         launch_eel('system-default')
 
     while not should_quit:
