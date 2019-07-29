@@ -271,21 +271,26 @@ def on_websocket_close(page, sockets):
 def is_chrome_installed():
     # Lots of hasattr checks because we're currently stuck supporting multiple versions of eel at once.
     if hasattr(eel.browsers, 'chr'):
-        print("Chrome check v1")
         return eel.browsers.chr.get_instance_path() is not None
     else:
         chm = eel.browsers.chm
         if hasattr(chm, 'get_instance_path'):
-            print("Chrome check v2")
             return chm.get_instance_path() is not None
 
-        print("Chrome check v3")
         return chm.find_path() is not None
 
 
-def launch_eel(browser_mode):
+def launch_eel(use_chrome):
     port = 51993
-    options = {'port': port, 'mode': browser_mode}
+    options = {'port': port}
+
+    if use_chrome:
+        # Don't put anything in the options dict. The dict is used by old eel,
+        # and old eel (0.10) defaults nicely to chrome app.
+        browser_mode = 'chrome'  # New eel (1.0) needs it to be 'chrome'.
+    else:
+        browser_mode = 'system-default'
+        options['mode'] = browser_mode
 
     # This disable_cache thing only works if you have tare's fork of eel https://github.com/ChrisKnott/Eel/pull/102
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
@@ -302,10 +307,10 @@ def start():
     try:
         if not is_chrome_installed():
             raise Exception("Chrome does not appear to be installed.")
-        launch_eel('chrome')
+        launch_eel(use_chrome=True)
     except Exception as e:
         print(f'Falling back to system default browser because: {str(e)}')
-        launch_eel('system-default')
+        launch_eel(use_chrome=False)
 
     while not should_quit:
         do_infinite_loop_content()
