@@ -101,24 +101,24 @@ var globalJson
 
 				html +=	"<div class=\"md-card settings-card md-theme-default\">";
 				html +=		"<div class=\"md-card-header\">";
-	        	html += 		"<div class=\"md-title\">"+repo.name+"</div>";
-	        	html +=		"</div>";
-	        	html +=		"<div class=\"md-card-content\">";
+				html += 		"<div class=\"md-title\">"+repo.name+"</div>";
+				html +=		"</div>";
+				html +=		"<div class=\"md-card-content\">";
 				html += 		"<div class=\"center-flex\">";
 				html += 			"<div class=\"md-layout md-gutter\">";
 				html += 			    "<div class=\"md-layout-item\"><label for=\"gamemodes-0\">gamemode</label>";
-				html += 			        "<p id=\"gamemodes-0\" class=\"managerInfo\">"+gamemodeString+"</p>";
+				html += 					"<p id=\"gamemodes-0\" class=\"managerInfo\">"+gamemodeString+"</p>";
 				html += 			    "</div>";
 				html += 			    "<div class=\"md-layout-item\"><label for=\"type-0\">Category</label>";
-				html += 			        "<p id=\"type-0\" class=\"managerInfo\">"+categoryString+"</p>";
+				html += 					"<p id=\"type-0\" class=\"managerInfo\">"+categoryString+"</p>";
 				html += 			    "</div>";
 				html += 			"</div> ";
 				html += 			"<span style=\"flex-grow: 1;\"></span> ";
 				html += 			"<button type=\"button\" class=\"md-button md-primary md-raised md-theme-default\">";
 				html += 				"<div id=\"button"+i+"\" class=\"md-ripple\">";
 
-				if (await eel.isBotInstalled(repo.name)()){
-					config = JSON.parse(await eel.getBotPackaging(repo.name)());
+				if (await eel.is_bot_installed(repo.name)()){
+					config = JSON.parse(await eel.get_bot_packaging(repo.name)());
 					if (config.version==repo.version) {
 						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"'))\">Delete</div>";
 					}
@@ -137,8 +137,8 @@ var globalJson
 				html += 				"</div>";
 				html += 			"</button>";
 				html += 		"</div>";
-	        	html +=		"</div>";
-	        	html +=	"</div>";
+				html +=		"</div>";
+				html +=	"</div>";
 
 				document.getElementById('main').innerHTML += html;
 			}
