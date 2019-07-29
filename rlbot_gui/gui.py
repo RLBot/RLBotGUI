@@ -274,6 +274,7 @@ def show_bot_in_explorer(bot_cfg_path):
     directory = os.path.dirname(bot_cfg_path)
     subprocess.Popen(f'explorer "{directory}"')
 
+    
 @eel.expose
 def hot_reload_python_bots():
     hot_reload_bots()
