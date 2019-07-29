@@ -250,7 +250,7 @@ def delete_bot(name):
     return 0;
 
 @eel.expose
-def isBotInstalled(bot_name):
+def is_bot_installed(bot_name):
     bot_directory = BOTPACK_FOLDER
     if os.path.exists(bot_directory+'/'+bot_name):
         return True
@@ -258,7 +258,7 @@ def isBotInstalled(bot_name):
         return False
 
 @eel.expose
-def getBotPackaging(bot_name):
+def get_bot_packaging(bot_name):
     bot_directory = BOTPACK_FOLDER
     if os.path.exists(bot_directory+'/'+bot_name):
         file = open(bot_directory+'/'+bot_name+'/botpackage.json',"r")
