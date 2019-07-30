@@ -131,11 +131,16 @@ var globalJson
 				}
 				html += 				"</div>"
 				html += 			"</button> ";
-				html += 			"<button type=\"button\" class=\"md-button md-raised md-theme-default\">";
+				/*html += 			"<button type=\"button\" class=\"md-button md-raised md-theme-default\">";
 				html += 				"<div class=\"md-ripple\">";
 				html += 					"<div class=\"md-button-content\">More info</div>";
 				html += 				"</div>";
 				html += 			"</button>";
+				html += 			"<button type=\"button\" class=\"md-button md-raised md-theme-default\">";
+				html += 				"<div class=\"md-ripple\">";
+				html += 					"<div class=\"md-button-content\">Configure bot</div>";
+				html += 				"</div>";
+				html += 			"</button>";*/
 				html += 		"</div>";
 				html +=		"</div>";
 				html +=	"</div>";
