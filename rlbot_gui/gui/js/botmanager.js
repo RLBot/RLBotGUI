@@ -123,11 +123,11 @@ var globalJson
 						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"'))\">Delete</div>";
 					}
 					else {
-						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"'); eel.download_bot('"+repo.url+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Update</div>";	
+						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"'); eel.download_bot('"+repo.url+"', '"+repo.name+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Update</div>";	
 					}
 				}
 				else{
-					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Download</div>";	
+					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"', '"+repo.name+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Download</div>";	
 				}
 				html += 				"</div>"
 				html += 			"</button> ";
@@ -151,7 +151,7 @@ var globalJson
 	}
 
 	function buttonReplaceToDownload(index, name, url){
-		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.download_bot('"+url+"')(buttonReplaceToDelete("+index+", '"+name+"', '"+url+"'))\">Download</div>";	
+		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.download_bot('"+url+"', '"+repo.name+"')(buttonReplaceToDelete("+index+", '"+name+"', '"+url+"'))\">Download</div>";	
 	}
 
 	function buttonReplaceToDelete(index, name, url){

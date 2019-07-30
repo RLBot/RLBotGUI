@@ -228,7 +228,7 @@ def download_bot_pack():
     settings.sync()
 
 @eel.expose
-def download_bot(repo):
+def download_bot(repo, bot_dir):
 
     branch = ""
     if "tree" in repo:
@@ -241,7 +241,8 @@ def download_bot(repo):
         repo_url=repo,
         checkout_folder='download',
         branch_name=branch,
-        bot_path=os.path.abspath(BOTPACK_FOLDER))
+        bot_path=os.path.abspath(BOTPACK_FOLDER),
+        bot_dir_name=bot_dir)
     return 0;
 
 @eel.expose
