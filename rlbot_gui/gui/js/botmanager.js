@@ -1,7 +1,7 @@
 var globalJson
 
 	async function downloadRepos() {
-		await fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
+		await fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json');
 		.then(function(response) {
 			return response.json();
 		})
@@ -54,7 +54,7 @@ var globalJson
 			//fill gamemode filters
 			var gamemodeFilters = [];
 			for (var j = document.getElementsByName('gamemode').length - 1; j >= 0; j--) {
-				if(document.getElementsByName('gamemode')[j].checked){
+				if(document.getElementsByName('gamemode')[j].checked) {
 					arrLen = gamemodeFilters.length;
 					gamemodeFilters[arrLen] = document.getElementsByName('gamemode')[j].value;
 				}
@@ -116,7 +116,7 @@ var globalJson
 				html += 			"<button type=\"button\" class=\"md-button md-primary md-raised md-theme-default\">";
 				html += 				"<div id=\"button"+i+"\" class=\"md-ripple\">";
 
-				if (await eel.is_bot_installed(repo.name)()){
+				if (await eel.is_bot_installed(repo.name)()) {
 					config = JSON.parse(await eel.get_bot_packaging(repo.name)());
 					if (config.version==repo.version) {
 						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"')(buttonReplaceToDownload("+i+", '"+repo.name+"', '"+repo.url+"'))\">Delete</div>";
