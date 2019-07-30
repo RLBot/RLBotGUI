@@ -1,5 +1,5 @@
 *maximizing the GUI and then changing tabs makes is turn into the default size
-*switching quickly ends up in the GUI losing connection to local host
+*Switching quickly from one tab to the other makes it reload it all again (should be saved on cache or just hidden behind one another so the webpage doesn't need to reload).
 *Add some kind of animation to indicate the bot is being downloaded
 *Advanced mode
 *More info button (popup)
