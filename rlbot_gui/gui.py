@@ -303,7 +303,7 @@ should_quit = False
 
 def on_websocket_close(page, sockets):
     global should_quit
-    eel.sleep(3.0)  # We might have just refreshed. Give the websocket a moment to reconnect.
+    eel.sleep(100.0)  # We might have just refreshed. Give the websocket a moment to reconnect.
     if not len(eel._websockets):
         # At this point we think the browser window has been closed.
         should_quit = True
