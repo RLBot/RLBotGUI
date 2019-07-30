@@ -1,6 +1,6 @@
 var globalJson
 
-	async function downloadRepos(){
+	async function downloadRepos() {
 		await fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
 		.then(function(response) {
 			return response.json();
@@ -11,7 +11,7 @@ var globalJson
 		});
 	}
 
-	async function addPackageData(json){
+	async function addPackageData(json) {
 		for (var index = 0; index < json.repos.length; index++) {
 			var repo = json.repos[index];
 
@@ -40,11 +40,11 @@ var globalJson
 				});
 		}
 
-		displayRepoData()
+		displayRepoData();
 
 	}
 
-	async function displayRepoData(){
+	async function displayRepoData() {
 		document.getElementById('main').innerHTML = '';
 		//make bot ui elements out of json data
 		for (var i = 0; i < globalJson.repos.length; i++) {
@@ -63,7 +63,7 @@ var globalJson
 			var gamemodeNotFoundCount = 0;
 			if (gamemodeFilters.length != 0) {
 				//if any active gamemode gamemodeFilters, apply them
-				var gamemodeNotFoundCount = gamemodeFilters.length
+				var gamemodeNotFoundCount = gamemodeFilters.length;
 				for (var gamemodeFilterIndex = gamemodeFilters.length - 1; gamemodeFilterIndex >= 0; gamemodeFilterIndex--) {
 					for (var j = repo.gamemodes.length - 1; j >= 0; j--) {
 						if (repo.gamemodes[j].name.toLowerCase() == gamemodeFilters[gamemodeFilterIndex].toLowerCase()) {
@@ -77,7 +77,6 @@ var globalJson
 			}
 
 			if (display) {
-
 				gamemodeString = '';
 				for (var index = repo.gamemodes.length - 1; index >= 0; index--) {
 					gamemodeString+=repo.gamemodes[index].name;
@@ -150,10 +149,10 @@ var globalJson
 		}
 	}
 
-	function buttonReplaceToDownload(index, name, url){
+	function buttonReplaceToDownload(index, name, url) {
 		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.download_bot('"+url+"', '"+repo.name+"')(buttonReplaceToDelete("+index+", '"+name+"', '"+url+"'))\">Download</div>";	
 	}
 
-	function buttonReplaceToDelete(index, name, url){
+	function buttonReplaceToDelete(index, name, url) {
 		document.getElementById('button'+index).innerHTML = "<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+name+"')(buttonReplaceToDownload("+index+", '"+name+"', '"+url+"'))\">Delete</div>";
 	}
