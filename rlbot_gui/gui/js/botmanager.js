@@ -1,7 +1,7 @@
 var globalJson
 
 async function downloadRepos() {
-	await fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/stableThrusted.json')
+	await fetch('https://raw.githubusercontent.com/ard1998/RLBot-repos/master/trusted.json')
 		.then(function(response) {
 			return response.json();
 		})
