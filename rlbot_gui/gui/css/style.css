@@ -202,3 +202,7 @@ body {
   font-size: 10pt;
   font-weight: normal;
 }
+
+.menuActive:not(:hover) {
+  text-decoration: underline solid white !important;
+}

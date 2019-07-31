@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -15,6 +16,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
 from rlbot_gui.bot_management.downloader import download_gitlfs
+from rlbot_gui.bot_management.downloader import download_botfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
@@ -225,6 +227,47 @@ def download_bot_pack():
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
+@eel.expose
+def download_bot(repo, bot_dir):
+
+    branch = ""
+    if "tree" in repo:
+        branch = repo.split('/')[-1]
+        repo = repo.split('/tree')[0]
+    else:
+        branch = "master"
+
+    download_botfs(
+        repo_url=repo,
+        checkout_folder='download',
+        branch_name=branch,
+        bot_path=os.path.abspath(BOTPACK_FOLDER),
+        bot_dir_name=bot_dir)
+    return 0;
+
+@eel.expose
+def delete_bot(name):
+    shutil.rmtree(os.path.abspath(BOTPACK_FOLDER + "/" + name))
+    return 0;
+
+@eel.expose
+def is_bot_installed(bot_name):
+    bot_directory = BOTPACK_FOLDER
+    if os.path.exists(bot_directory+'/'+bot_name):
+        return True
+    else:
+        return False
+
+@eel.expose
+def get_bot_packaging(bot_name):
+    bot_directory = BOTPACK_FOLDER
+    if os.path.exists(bot_directory+'/'+bot_name):
+        file = open(bot_directory+'/'+bot_name+'/botpackage.json',"r")
+        filestr = file.read()
+        file.close()
+        return filestr
+    else:
+        return False
 
 @eel.expose
 def show_bot_in_explorer(bot_cfg_path):
@@ -261,7 +304,7 @@ should_quit = False
 
 def on_websocket_close(page, sockets):
     global should_quit
-    eel.sleep(3.0)  # We might have just refreshed. Give the websocket a moment to reconnect.
+    eel.sleep(10.0)  # We might have just refreshed. Give the websocket a moment to reconnect.
     if not len(eel._websockets):
         # At this point we think the browser window has been closed.
         should_quit = True

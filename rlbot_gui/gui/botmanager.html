@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+
+	<link rel="icon" type="image/png" sizes="192x192" href="imgs/rlbot_logo.png">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+	<link rel="stylesheet" href="css/vue-material.min.css"/>
+	<link rel="stylesheet" href="css/vue-fonts.css"/>
+	<link rel="stylesheet" href="css/black-green-light.css"/>
+	<link rel="stylesheet" href="css/style.css"/>
+	<link rel="stylesheet" href="css/botmanager.css"/>
+
+	<title>Hub</title>
+
+</head>
+<body id="rlbotgui" onload="downloadRepos()">
+	<div id="app" :style="bodyStyle">
+
+		<md-toolbar class="md-primary">
+			<div class="md-toolbar-row">
+				<img class="logo" src="imgs/rlbot_logo.png">
+				<a href="main.html"><h3 class="md-title" style="flex: 1">RLBot</h3></a> &nbsp; &nbsp;
+				<a href="botmanager.html" class="menuActive"><h3 class="md-title" style="flex: 1">Hub (alpha)</h3></a>
+				<div class="md-toolbar-section-end">
+					<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
+					<md-menu md-direction="bottom-start">
+						<md-button md-menu-trigger class="md-icon-button">
+							<md-icon>more_vert</md-icon>
+						</md-button>
+
+						<md-menu-content>
+							<md-menu-item @click="showPackageInstaller = true;">
+								Install missing python package
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+				</div>
+			</div>
+		</md-toolbar>
+
+		<md-dialog :md-active.sync="showPackageInstaller">
+			<md-dialog-title>Install Package</md-dialog-title>
+
+			<md-dialog-content>
+
+				<md-field>
+					<label>Package Name</label>
+					<md-input v-model="packageString"></md-input>
+				</md-field>
+			</md-dialog-content>
+
+			<md-dialog-actions>
+				<md-button @click="installPackage()" class="md-raised md-primary">Install Package</md-button>
+				<md-button @click="showPackageInstaller = false">Close</md-button>
+			</md-dialog-actions>
+		</md-dialog>
+
+		<aside>
+			<md-card v-if="matchOptions" class="settings-card">
+				<md-card-header>
+					<div class="md-title">Filters</div>
+				</md-card-header>
+
+                <md-card-content>
+
+                	<label for="searchBotName">search</label>
+                	<input id="searchBotName" onkeyup="displayRepoData()" type="text" name="" class="" placeholder="search on bot name"><br>
+
+                	<hr>
+
+					<div class="center-flex">
+
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item">
+								<label for="gamemodes">Gamemode</label>
+								<div id="gamemodes" class="list">
+									<p><input onclick="displayRepoData()" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
+									<p><input onclick="displayRepoData()" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
+									<p><input onclick="displayRepoData()" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
+									<p><input onclick="displayRepoData()" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
+									<p><input onclick="displayRepoData()" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
+									<p><input onclick="displayRepoData()" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
+									<p><input onclick="displayRepoData()" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+                </md-card-content>
+			</md-card>
+
+			<md-card v-if="matchOptions" class="settings-card">
+				<md-card-header>
+					<div class="md-title">News</div>
+					<p>Coming soon</p>
+					<br>
+					<p>The hub is an ALPHA preview with working functionallity. Features will be added an bugs can occur more often then expexted.</p>
+				</md-card-header>
+
+                <md-card-content>
+
+					<div class="center-flex">
+
+						<div class="md-layout md-gutter">
+							
+						</div>
+					</div>
+
+                </md-card-content>
+			</md-card>
+		</aside>
+
+		<div id="main">
+		</div>
+	</div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/vue-material.min.js"></script>
+    <script type="text/javascript" src="js/Sortable.min.js"></script>
+    <script type="text/javascript" src="js/vuedraggable.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/botmanager.js"></script>
+</body>
+</html>
