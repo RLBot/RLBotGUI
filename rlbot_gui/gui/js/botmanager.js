@@ -20,7 +20,7 @@ var globalJson
 			if (urlPart.indexOf("tree")==-1) {
 				urlPart = repo.url.substr(18)+"/master";
 			}
-			else{
+			else {
 				var part = repo.url.substr(18);
 				var link = part.substr(0, part.indexOf("/tree"));
 				var branch = part.substr(part.indexOf("/tree")+5);
@@ -125,7 +125,7 @@ var globalJson
 						html +=				"<div class=\"md-button-content\" onclick=\"eel.delete_bot('"+repo.name+"'); eel.download_bot('"+repo.url+"', '"+repo.name+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Update</div>";	
 					}
 				}
-				else{
+				else {
 					html +=					"<div class=\"md-button-content\" onclick=\"eel.download_bot('"+repo.url+"', '"+repo.name+"')(buttonReplaceToDelete("+i+", '"+repo.name+"', '"+repo.url+"'))\">Download</div>";	
 				}
 				html += 				"</div>"
