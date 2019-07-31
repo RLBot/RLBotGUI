@@ -54,7 +54,7 @@ var globalJson
 			//fill gamemode filters
 			var gamemodeFilters = [];
 			for (var j = document.getElementsByName('gamemode').length - 1; j >= 0; j--) {
-				if(document.getElementsByName('gamemode')[j].checked) {
+				if (document.getElementsByName('gamemode')[j].checked) {
 					arrLen = gamemodeFilters.length;
 					gamemodeFilters[arrLen] = document.getElementsByName('gamemode')[j].value;
 				}
