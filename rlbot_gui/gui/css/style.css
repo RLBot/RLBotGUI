@@ -203,6 +203,6 @@ body {
   font-weight: normal;
 }
 
-.menuActive:not(:hover){
+.menuActive:not(:hover) {
   text-decoration: underline solid white !important;
 }
