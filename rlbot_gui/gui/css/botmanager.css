@@ -1,17 +1,17 @@
-@media screen and (orientation: landscape){
-	html{
+@media screen and (orientation: landscape) {
+	html {
 		overflow-y: hidden;
 	}
-	aside{
+	aside {
 		width: 20vw;
 		float: left;
 		height: calc(100vh - 64px);
 		display: grid;
 	}
-	aside > div{
+	aside > div {
 		display: initial;
 	}
-	#main{
+	#main {
 		width: 80vw;
 		float: right;
 	}
