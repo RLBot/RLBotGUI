@@ -96,7 +96,8 @@
 				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
 					<md-card class="bot-card md-elevation-3" v-for="bot in botPool" >
 						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
-							<img v-bind:src="bot.image">
+							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+							<img v-if="bot.logo" v-bind:src="bot.logo">
 							<span class="bot-name">{{ bot.name }}</span>
 							<md-button class="md-icon-button md-dense warning-icon" v-if="bot.warn"
 									   @click.stop="activeBot = bot; showLanguageWarning = true;">
@@ -126,7 +127,8 @@
 						</md-card-header>
 						<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
 							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
-								<img v-bind:src="bot.image">
+								<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+								<img v-if="bot.logo" v-bind:src="bot.logo">
 								<span class="bot-name">{{ bot.name }}</span>
 								<md-button class="md-icon-button" @click="blueTeam.splice(index, 1)">
 									<md-icon>close</md-icon>
@@ -143,7 +145,8 @@
 						</md-card-header>
 						<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
 							<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
-								<img v-bind:src="bot.image">
+								<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+								<img v-if="bot.logo" v-bind:src="bot.logo">
 								<span class="bot-name">{{ bot.name }}</span>
 								<md-button class="md-icon-button" @click="orangeTeam.splice(index, 1)">
 									<md-icon>close</md-icon>
@@ -255,17 +258,17 @@
 
 			<md-dialog v-if="activeBot && activeBot.info" :md-active.sync="showBotInfo">
 				<md-dialog-title>
-					{{activeBot.name}}<br />
-					<span class="bot-file-path">{{activeBot.path}}</span>
+					{{activeBot.name}}
 				</md-dialog-title>
 				<md-dialog-content>
-
+					<img v-if="activeBot.logo" class="bot-logo" v-bind:src="activeBot.logo">
 					<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
 					<p><span class="bot-info-key">Description:</span> {{activeBot.info.description}}</p>
 					<p><span class="bot-info-key">Fun Fact:</span> {{activeBot.info.fun_fact}}</p>
 					<p><span class="bot-info-key">GitHub:</span>
 						<a :href="activeBot.info.github" target="_blank">{{activeBot.info.github}}</a></p>
 					<p><span class="bot-info-key">Language:</span> {{activeBot.info.language}}</p>
+					<p class="bot-file-path">{{activeBot.path}}</p>
 				</md-dialog-content>
 
 				<md-dialog-actions>

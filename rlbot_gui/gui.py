@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -13,7 +14,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
 
-from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot
+from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, convert_to_filename
 from rlbot_gui.bot_management.downloader import download_gitlfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
@@ -57,16 +58,22 @@ def pick_bot_folder():
     return []
 
 
+def serialize_bundle(bundle):
+    return {
+        'name': bundle.name,
+        'type': 'rlbot',
+        'skill': 1,
+        'image': 'imgs/rlbot.png',
+        'path': bundle.config_path,
+        'info': read_info(bundle),
+        'logo': try_copy_logo(bundle)
+    }
+
+
 def load_bundle(filename):
     try:
         bundle = get_bot_config_bundle(filename)
-        return [{
-            'name': bundle.name,
-            'type': 'rlbot',
-            'image': 'imgs/rlbot.png',
-            'path': bundle.config_path,
-            'info': read_info(bundle)
-        }]
+        return [serialize_bundle(bundle)]
     except Exception as e:
         print(e)
 
@@ -149,17 +156,19 @@ def scan_for_bots():
     return list(bot_hash.values())
 
 
+def try_copy_logo(bundle: BotConfigBundle):
+    logo_path = bundle.get_logo_file()
+    if logo_path is not None and os.path.exists(logo_path):
+        web_url = 'imgs/logos/' + convert_to_filename(bundle.name) + '/' + convert_to_filename(logo_path)
+        target_file = os.path.join(os.path.dirname(__file__), 'gui', web_url)
+        os.makedirs(os.path.dirname(target_file), exist_ok=True)
+        shutil.copy(logo_path, target_file)
+        return web_url
+    return None
+
+
 def get_bots_from_directory(bot_directory):
-    return [
-        {
-            'name': bundle.name,
-            'type': 'rlbot',
-            'skill': 1,
-            'image': 'imgs/rlbot.png',
-            'path': bundle.config_path,
-            'info': read_info(bundle)
-        }
-        for bundle in scan_directory_for_bot_configs(bot_directory)]
+    return [serialize_bundle(bundle) for bundle in scan_directory_for_bot_configs(bot_directory)]
 
 
 @eel.expose
@@ -312,7 +321,7 @@ def launch_eel(use_chrome):
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
-    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
+    eel.start('main.html', size=(1000, 830), block=False, callback=on_websocket_close, options=options,
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 
