@@ -138,14 +138,17 @@ body {
 .bot-card img {
   height: 1.5rem;
   margin: 3px;
+}
+
+.bot-card img.darkened {
   filter: brightness(50%);
 }
 
-.org .bot-card img {
+.org .bot-card img.darkened {
   filter: brightness(0%) invert(50%) sepia(25%) saturate(7482%) hue-rotate(350deg) brightness(102%) contrast(90%);
 }
 
-.blu .bot-card img {
+.blu .bot-card img.darkened {
   filter: brightness(0%) invert(17%) sepia(78%) saturate(3372%) hue-rotate(198deg) brightness(96%) contrast(101%);
 }
 
@@ -198,7 +201,19 @@ body {
 }
 
 .bot-file-path {
-  color: #717171;
-  font-size: 10pt;
+  color: #939393;
+  font-size: 9pt;
   font-weight: normal;
+}
+
+.bot-logo {
+  float:right;
+  margin-left: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  max-width: 250px;
+}
+
+.md-dialog{
+  width:80%;
 }
