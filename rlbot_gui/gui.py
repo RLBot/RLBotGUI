@@ -13,7 +13,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
 
-from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
+from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot
 from rlbot_gui.bot_management.downloader import download_gitlfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
@@ -132,7 +132,6 @@ def read_info(bundle: BotConfigBundle):
 
 @eel.expose
 def scan_for_bots():
-
     bot_hash = {}
 
     for folder, props in bot_folder_settings['folders'].items():
@@ -238,9 +237,7 @@ def hot_reload_python_bots():
     hot_reload_bots()
 
 
-@eel.expose
-def begin_python_bot(bot_name):
-
+def ensure_bot_directory():
     bot_directory = CREATED_BOTS_FOLDER
     if not os.path.exists(bot_directory):
         os.mkdir(bot_directory)
@@ -249,8 +246,27 @@ def begin_python_bot(bot_name):
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
+    return bot_directory
+
+
+@eel.expose
+def begin_python_bot(bot_name):
+    bot_directory = ensure_bot_directory()
+
     try:
         config_file = bootstrap_python_bot(bot_name, bot_directory)
+        return {'bots': load_bundle(config_file)}
+    except FileExistsError as e:
+        return {'error': str(e)}
+
+
+@eel.expose
+def begin_scratch_bot(bot_name):
+    bot_directory = ensure_bot_directory()
+
+    try:
+        config_file = bootstrap_scratch_bot(bot_name, bot_directory)
+        install_package('webdriver_manager')  # Scratch bots need this, and the GUI's python doesn't have it by default.
         return {'bots': load_bundle(config_file)}
     except FileExistsError as e:
         return {'error': str(e)}
