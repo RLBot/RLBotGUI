@@ -124,6 +124,11 @@ const app = new Vue({
                 app.showProgressSpinner = true;
                 eel.begin_python_bot(bot_name)(botLoadHandler);
             }
+
+            if (language === 'scratch') {
+                app.showProgressSpinner = true;
+                eel.begin_scratch_bot(bot_name)(botLoadHandler);
+            }
         },
         applyFolderSettings: function() {
             eel.save_folder_settings(app.folderSettings);
