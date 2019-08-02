@@ -17,8 +17,8 @@
 	<title>Hub</title>
 
 </head>
-<body id="rlbotgui" onload="downloadRepos()">
-	<div id="app" :style="bodyStyle">
+<body id="rlbotgui">
+	<div id="app">
 
 		<md-toolbar class="md-primary">
 			<div class="md-toolbar-row">
@@ -27,40 +27,12 @@
 				<a href="botmanager.html" class="menuActive"><h3 class="md-title" style="flex: 1">Hub (alpha)</h3></a>
 				<div class="md-toolbar-section-end">
 					<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
-					<md-menu md-direction="bottom-start">
-						<md-button md-menu-trigger class="md-icon-button">
-							<md-icon>more_vert</md-icon>
-						</md-button>
-
-						<md-menu-content>
-							<md-menu-item @click="showPackageInstaller = true;">
-								Install missing python package
-							</md-menu-item>
-						</md-menu-content>
-					</md-menu>
 				</div>
 			</div>
 		</md-toolbar>
 
-		<md-dialog :md-active.sync="showPackageInstaller">
-			<md-dialog-title>Install Package</md-dialog-title>
-
-			<md-dialog-content>
-
-				<md-field>
-					<label>Package Name</label>
-					<md-input v-model="packageString"></md-input>
-				</md-field>
-			</md-dialog-content>
-
-			<md-dialog-actions>
-				<md-button @click="installPackage()" class="md-raised md-primary">Install Package</md-button>
-				<md-button @click="showPackageInstaller = false">Close</md-button>
-			</md-dialog-actions>
-		</md-dialog>
-
 		<aside>
-			<md-card v-if="matchOptions" class="settings-card">
+			<md-card class="settings-card">
 				<md-card-header>
 					<div class="md-title">Filters</div>
 				</md-card-header>
@@ -93,7 +65,7 @@
                 </md-card-content>
 			</md-card>
 
-			<md-card v-if="matchOptions" class="settings-card">
+			<md-card class="settings-card">
 				<md-card-header>
 					<div class="md-title">News</div>
 					<p>Coming soon</p>
@@ -106,7 +78,7 @@
 					<div class="center-flex">
 
 						<div class="md-layout md-gutter">
-							
+
 						</div>
 					</div>
 
@@ -115,6 +87,47 @@
 		</aside>
 
 		<div id="main">
+
+			<div v-for="repo in repos" class="md-card settings-card md-theme-default">
+				<div class="md-card-header">
+					<div class="md-title">{{repo.name}}</div>
+				</div>
+				<div class="md-card-content">
+					<div class="center-flex">
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item"><label for="gamemodes-0">gamemode</label>
+								<p id="gamemodes-0" class="managerInfo">
+									<span v-for="mode in repo.gamemodes">{{mode.name}} </span>
+								</p>
+							</div>
+							<div class="md-layout-item"><label for="type-0">Category</label>
+								<p id="type-0" class="managerInfo">
+									<span v-for="category in repo.categories">{{category.name}} </span>
+								</p>
+							</div>
+						</div>
+						<span style="flex-grow: 1;"></span>
+						<button type="button" class="md-button md-primary md-raised md-theme-default">
+							<div class="md-ripple">
+								<div v-if="repo.is_installed && config.version === repo.version"
+									 class="md-button-content"
+									 @click="eel.delete_bot(repo.name)(buttonReplaceToDownload(i, repo.name, repo.url))">
+									Delete
+								</div>
+								<div v-if="repo.is_installed && config.version !== repo.version"
+									 class="md-button-content"
+									 @click="eel.delete_bot(repo.name); eel.download_bot(repo.url, repo.name)(buttonReplaceToDelete(i, repo.name, repo.url))">
+									Update
+								</div>
+								<div v-if="!repo.is_installed" class="md-button-content"
+									 @click="downloadBot(repo)">
+									Download
+								</div>
+							</div>
+						</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -123,7 +136,6 @@
     <script type="text/javascript" src="js/vue-material.min.js"></script>
     <script type="text/javascript" src="js/Sortable.min.js"></script>
     <script type="text/javascript" src="js/vuedraggable.min.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
 	<script type="text/javascript" src="js/botmanager.js"></script>
 </body>
 </html>
