@@ -23,8 +23,10 @@ DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
 OLD_BOTPACK_FOLDER = 'RLBotPack'
 CREATED_BOTS_FOLDER = 'MyBots'
+HUB_FOLDER = 'repos'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 settings = QSettings('rlbotgui', 'preferences')
+
 
 bot_folder_settings = settings.value(BOT_FOLDER_SETTINGS_KEY, type=dict)
 
@@ -210,25 +212,6 @@ def install_package(package_string):
     print(exit_code)
     return {'exitCode': exit_code, 'package': package_string}
 
-
-@eel.expose
-def download_bot_pack():
-    # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
-    download_gitlfs(
-        repo_url="https://github.com/RLBot/RLBotPack",
-        checkout_folder=BOTPACK_FOLDER,
-        branch_name='master')
-
-    # Configure the folder settings.
-    bot_folder_settings['folders'][os.path.abspath(BOTPACK_FOLDER)] = {'visible': True}
-
-    if os.path.abspath(OLD_BOTPACK_FOLDER) in bot_folder_settings['folders']:
-        # Toggle off the old one since it's been replaced.
-        bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)] = {'visible': False}
-
-    settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
-    settings.sync()
-
 @eel.expose
 def download_bot(repo_path, repo, bot_dir):
     print(repo)
@@ -243,25 +226,25 @@ def download_bot(repo_path, repo, bot_dir):
         repo_url=repo,
         checkout_folder='download',
         branch_name=branch,
-        bot_path=os.path.abspath(BOTPACK_FOLDER) + '/' + repo_path,
+        bot_path=os.path.abspath(HUB_FOLDER) + '/' + repo_path,
         bot_dir_name=bot_dir)
     return 0;
 
 @eel.expose
 def delete_bot(repo_path, name):
-    shutil.rmtree(os.path.abspath(BOTPACK_FOLDER + "/" + repo_path + '/' + name))
+    shutil.rmtree(os.path.abspath(HUB_FOLDER + "/" + repo_path + '/' + name))
     return 0;
 
 @eel.expose
 def is_bot_installed(repo_path, bot_name):
-    if os.path.exists(BOTPACK_FOLDER + "/" + repo_path + '/' + bot_name):
+    if os.path.exists(HUB_FOLDER + "/" + repo_path + '/' + bot_name):
         return True
     else:
         return False
 
 @eel.expose
 def get_bot_packaging(repo_path, bot_name):
-    bot_directory = BOTPACK_FOLDER + "/" + repo_path
+    bot_directory = HUB_FOLDER + "/" + repo_path
     if os.path.exists(bot_directory+'/'+bot_name):
         file = open(bot_directory+'/'+bot_name+'/botpackage.json',"r")
         filestr = file.read()

@@ -104,10 +104,6 @@ const app = new Vue({
             this.showProgressSpinner = true;
             eel.install_package(this.packageString)(onInstallationComplete);
         },
-        downloadBotPack: function() {
-            this.showProgressSpinner = true;
-            eel.download_bot_pack()(botPackDownloaded);
-        },
         downloadBot: function(repo, branch) {
             eel.download_bot(repo, branch)(downloadBotComplete);
         },
