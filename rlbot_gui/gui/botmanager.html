@@ -115,18 +115,18 @@
 						<button type="button" class="md-button md-primary md-raised md-theme-default">
 							<div class="md-ripple">
 								<div v-if="!repo.is_installed" class="md-button-content"
-									 @click="downloadBot(repo)">
+									 @click="downloadBot(repo, true)">
 									Download
-								</div>
-								<div v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion"
-									 class="md-button-content"
-									 @click="deleteBot(repo); eel.download_bot(repo)">
-									Update
 								</div>
 								<div v-if="repo.is_installed && repo.localVersion === repo.onlineVersion"
 									 class="md-button-content"
 									 @click="deleteBot(repo)">
 									Delete
+								</div>
+								<div v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion"
+									 class="md-button-content"
+									 @click="deleteBot(repo); eel.download_bot(repo, false)">
+									Update
 								</div>
 							</div>
 						</button>

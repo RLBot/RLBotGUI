@@ -6,10 +6,10 @@ function PythonPrint(message) {
 Vue.use(VueMaterial.default);
 
 const STARTING_BOT_POOL = [
-    {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
-    {'name': 'Psyonix Allstar', 'type': 'psyonix', 'skill': 1, 'image': 'imgs/psyonix.png'},
-    {'name': 'Psyonix Pro', 'type': 'psyonix', 'skill': 0.5, 'image': 'imgs/psyonix.png'},
-    {'name': 'Psyonix Rookie', 'type': 'psyonix', 'skill': 0, 'image': 'imgs/psyonix.png'}
+    {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png', 'safe': true},
+    {'name': 'Psyonix Allstar', 'type': 'psyonix', 'skill': 1, 'image': 'imgs/psyonix.png', 'safe': true},
+    {'name': 'Psyonix Pro', 'type': 'psyonix', 'skill': 0.5, 'image': 'imgs/psyonix.png', 'safe': true},
+    {'name': 'Psyonix Rookie', 'type': 'psyonix', 'skill': 0, 'image': 'imgs/psyonix.png', 'safe': true}
 ];
 
 const app = new Vue({

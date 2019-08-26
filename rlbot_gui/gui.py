@@ -156,6 +156,7 @@ def get_bots_from_directory(bot_directory):
     return [
         {
             'name': bundle.name,
+            'safe': 1 if bundle.config_path.split('\\')[7] != 'unferifiedCommunity' else 0,
             'type': 'rlbot',
             'skill': 1,
             'image': 'imgs/rlbot.png',

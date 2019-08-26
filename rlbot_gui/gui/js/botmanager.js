@@ -21,19 +21,25 @@ const app = new Vue({
     },
     methods: {
     	downloadBot: function (repo) {
-            eel.download_bot(repo.repoName, repo.url, repo.name)(function() {
+    		if (!repo.safe) {
+    			if (!confirm('This download is from an unferified source and may contain unsafe code. Do you really want to download this')) {
+    				return false;
+    			}
+    		}
+            eel.download_bot(repo.repoName, repo.url, repo.name)(async function() {
 				repo.is_installed = true;
-				app.highestCardID += 1
-				repo.ID = app.highestCardID
-				repo.push()
+				app.highestCardID += 1;
+				repo.ID = app.highestCardID;
+				repo.localVersion = JSON.parse(await eel.get_bot_packaging(repoName, repo.name)()).version
+				repo.push();
 			})
 		},
         deleteBot: function (repo) {
             eel.delete_bot(repo.repoName, repo.name)(function() {
 				repo.is_installed = false;
-				app.highestCardID += 1
-				repo.ID = app.highestCardID
-				repo.push()
+				app.highestCardID += 1;
+				repo.ID = app.highestCardID;
+				repo.push();
             })
         },
 	}
@@ -91,8 +97,10 @@ async function addPackageData(repoListIndex, json) {
 				cardData.botLanguage = myJson.botLanguage;
 				cardData.gamemodes = myJson.gamemodes;
 				cardData.categories = myJson.categories;
-				cardData.is_installed = await eel.is_bot_installed(repoName, repo.name)()
 				cardData.display=true
+				cardData.is_installed = await eel.is_bot_installed(repoName, repo.name)();
+				cardData.display=true;
+				cardData.safe=repoListIndex<1?true:false
 
 				app.repos.push(cardData);
 			});

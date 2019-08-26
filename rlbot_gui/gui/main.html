@@ -98,7 +98,8 @@
 					<md-card class="bot-card md-elevation-3" v-for="bot in botPool" >
 						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
 							<img v-bind:src="bot.image">
-							<span class="bot-name">{{ bot.name }}</span>
+							<span class="bot-name" v-if="bot.safe" >{{ bot.name }}</span>
+							<span class="bot-name" v-if="!bot.safe" style="color: red">{{ bot.name }}</span>
 							<md-button class="md-icon-button md-dense warning-icon" v-if="bot.warn"
 									   @click.stop="activeBot = bot; showLanguageWarning = true;">
 								<md-icon>warning</md-icon>
