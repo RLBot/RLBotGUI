@@ -160,6 +160,7 @@ def get_bots_from_directory(bot_directory):
             'skill': 1,
             'image': 'imgs/rlbot.png',
             'path': bundle.config_path,
+            'display_path': bundle.config_path.split('\\')[7],
             'info': read_info(bundle)
         }
         for bundle in scan_directory_for_bot_configs(bot_directory)]
@@ -228,8 +229,8 @@ def download_bot_pack():
     settings.sync()
 
 @eel.expose
-def download_bot(repo, bot_dir):
-
+def download_bot(repo_path, repo, bot_dir):
+    print(repo)
     branch = ""
     if "tree" in repo:
         branch = repo.split('/')[-1]
@@ -241,26 +242,25 @@ def download_bot(repo, bot_dir):
         repo_url=repo,
         checkout_folder='download',
         branch_name=branch,
-        bot_path=os.path.abspath(BOTPACK_FOLDER),
+        bot_path=os.path.abspath(BOTPACK_FOLDER) + '/' + repo_path,
         bot_dir_name=bot_dir)
     return 0;
 
 @eel.expose
-def delete_bot(name):
-    shutil.rmtree(os.path.abspath(BOTPACK_FOLDER + "/" + name))
+def delete_bot(repo_path, name):
+    shutil.rmtree(os.path.abspath(BOTPACK_FOLDER + "/" + repo_path + '/' + name))
     return 0;
 
 @eel.expose
-def is_bot_installed(bot_name):
-    bot_directory = BOTPACK_FOLDER
-    if os.path.exists(bot_directory+'/'+bot_name):
+def is_bot_installed(repo_path, bot_name):
+    if os.path.exists(BOTPACK_FOLDER + "/" + repo_path + '/' + bot_name):
         return True
     else:
         return False
 
 @eel.expose
-def get_bot_packaging(bot_name):
-    bot_directory = BOTPACK_FOLDER
+def get_bot_packaging(repo_path, bot_name):
+    bot_directory = BOTPACK_FOLDER + "/" + repo_path
     if os.path.exists(bot_directory+'/'+bot_name):
         file = open(bot_directory+'/'+bot_name+'/botpackage.json',"r")
         filestr = file.read()

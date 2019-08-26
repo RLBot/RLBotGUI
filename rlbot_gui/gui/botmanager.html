@@ -40,7 +40,7 @@
                 <md-card-content>
 
                 	<label for="searchBotName">search</label>
-                	<input id="searchBotName" onkeyup="displayRepoData()" type="text" name="" class="" placeholder="search on bot name"><br>
+                	<input id="searchBotName" onkeyup="reloadCards()" type="text" name="" class="" placeholder="search on bot name"><br>
 
                 	<hr>
 
@@ -50,13 +50,13 @@
 							<div class="md-layout-item">
 								<label for="gamemodes">Gamemode</label>
 								<div id="gamemodes" class="list">
-									<p><input onclick="displayRepoData()" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
-									<p><input onclick="displayRepoData()" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
-									<p><input onclick="displayRepoData()" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
-									<p><input onclick="displayRepoData()" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
-									<p><input onclick="displayRepoData()" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
-									<p><input onclick="displayRepoData()" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
-									<p><input onclick="displayRepoData()" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
+									<p><input onclick="reloadCards()" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
+									<p><input onclick="reloadCards()" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
+									<p><input onclick="reloadCards()" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
+									<p><input onclick="reloadCards()" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
+									<p><input onclick="reloadCards()" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
+									<p><input onclick="reloadCards()" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
+									<p><input onclick="reloadCards()" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
 								</div>
 							</div>
 						</div>
@@ -88,7 +88,7 @@
 
 		<div id="main">
 
-			<div v-for="repo in repos" class="md-card settings-card md-theme-default">
+			<div v-for="repo in repos" class="md-card settings-card md-theme-default" :key="repo.ID" v-if="repo.display">
 				<div class="md-card-header">
 					<div class="md-title">{{repo.name}}</div>
 				</div>
@@ -105,23 +105,28 @@
 									<span v-for="category in repo.categories">{{category.name}} </span>
 								</p>
 							</div>
+							<div class="md-layout-item"><label for="type-0">Category</label>
+								<p id="type-0" class="managerInfo">
+									<span>{{repo.repoName}} </span>
+								</p>
+							</div>
 						</div>
 						<span style="flex-grow: 1;"></span>
 						<button type="button" class="md-button md-primary md-raised md-theme-default">
 							<div class="md-ripple">
-								<div v-if="repo.is_installed && config.version === repo.version"
-									 class="md-button-content"
-									 @click="eel.delete_bot(repo.name)(buttonReplaceToDownload(i, repo.name, repo.url))">
-									Delete
-								</div>
-								<div v-if="repo.is_installed && config.version !== repo.version"
-									 class="md-button-content"
-									 @click="eel.delete_bot(repo.name); eel.download_bot(repo.url, repo.name)(buttonReplaceToDelete(i, repo.name, repo.url))">
-									Update
-								</div>
 								<div v-if="!repo.is_installed" class="md-button-content"
 									 @click="downloadBot(repo)">
 									Download
+								</div>
+								<div v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion"
+									 class="md-button-content"
+									 @click="deleteBot(repo); eel.download_bot(repo)">
+									Update
+								</div>
+								<div v-if="repo.is_installed && repo.localVersion === repo.onlineVersion"
+									 class="md-button-content"
+									 @click="deleteBot(repo)">
+									Delete
 								</div>
 							</div>
 						</button>
