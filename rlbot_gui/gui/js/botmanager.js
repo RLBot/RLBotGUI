@@ -78,13 +78,11 @@ async function addPackageData(repoListIndex, json) {
 			urlPart = link + branch;
 		}
 		var url = 'https://raw.githubusercontent.com' + urlPart + '/' + repo.name + '/botpackage.json';
-		console.log(url);
 		await fetch(url)
 			.then(function(response) {
 				return response.json();
 			})
 			.then(async function(myJson) {
-				console.log(myJson + ' ' + repoListIndex)
 				app.highestCardID+=1;
 
 				cardData = []
