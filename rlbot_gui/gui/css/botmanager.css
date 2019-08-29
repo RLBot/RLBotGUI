@@ -15,4 +15,18 @@
 		width: 80vw;
 		float: right;
 	}
+	.botinfo-short{
+		width: 10vw;
+	}
+	.botinfo-long{
+		width: 25vw;
+	}
+}
+
+.md-title > small {
+    font-size: small;
+}
+
+.md-layout-item > p > .gamemode:not(:last-of-type)::after, .md-layout-item > p > .category:not(:last-of-type)::after{
+	content: ', ';
 }

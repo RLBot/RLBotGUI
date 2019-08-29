@@ -27,6 +27,20 @@
 				<a href="botmanager.html" class="menuActive"><h3 class="md-title" style="flex: 1">Hub (alpha)</h3></a>
 				<div class="md-toolbar-section-end">
 					<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
+					<md-menu md-direction="bottom-start">
+						<md-button md-menu-trigger class="md-icon-button">
+							<md-icon>more_vert</md-icon>
+						</md-button>
+
+						<md-menu-content>
+							<md-menu-item @click="showPackageInstaller = true;">
+								Install missing python package
+							</md-menu-item>
+							<md-menu-item @click="">
+								Add custom repo (todo)
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
 				</div>
 			</div>
 		</md-toolbar>
@@ -50,13 +64,20 @@
 							<div class="md-layout-item">
 								<label for="gamemodes">Gamemode</label>
 								<div id="gamemodes" class="list">
-									<p><input onclick="reloadCards()" id="1v1" type="checkbox" name="gamemode" value="1v1">1v1</p>
-									<p><input onclick="reloadCards()" id="2v2" type="checkbox" name="gamemode" value="2v2">2v2</p>
-									<p><input onclick="reloadCards()" id="3v3" type="checkbox" name="gamemode" value="3v3">3v3</p>
-									<p><input onclick="reloadCards()" id="4v4" type="checkbox" name="gamemode" value="4v4">4v4</p>
-									<p><input onclick="reloadCards()" id="hoops" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
-									<p><input onclick="reloadCards()" id="dropshot" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
-									<p><input onclick="reloadCards()" id="snowday" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
+									<p><input onclick="reloadCards()" type="checkbox" name="gamemode" value="soccar">soccar</p>
+									<p><input onclick="reloadCards()" type="checkbox" name="gamemode" value="Hoops">Hoops</p>
+									<p><input onclick="reloadCards()" type="checkbox" name="gamemode" value="Dropshot">Dropshot</p>
+									<p><input onclick="reloadCards()" type="checkbox" name="gamemode" value="Rumble">Rumble</p>
+									<p><input onclick="reloadCards()" type="checkbox" name="gamemode" value="Snowday">Snowday</p>
+								</div>
+							</div>
+							<div class="md-layout-item">
+								<label for="gamemodes">Repo</label>
+								<div id="gamemodes" class="list">
+									<p><input onclick="reloadCards()" type="radio" name="source" value="all" checked>all</p>
+									<p><input onclick="reloadCards()" type="radio" name="source" value="Trusted">Trusted</p>
+									<p><input onclick="reloadCards()" type="radio" name="source" value="UnferifiedCommunity">UnferifiedCommunity</p>
+									<p><input onclick="reloadCards()" type="radio" name="source" value="localRepo">localRepo</p>
 								</div>
 							</div>
 						</div>
@@ -90,22 +111,30 @@
 
 			<div v-for="repo in repos" class="md-card settings-card md-theme-default" :key="repo.ID" v-if="repo.display">
 				<div class="md-card-header">
-					<div class="md-title">{{repo.name}}</div>
+					<div class="md-title">{{repo.name}}
+						<small v-if="!repo.is_installed || repo.is_installed && repo.localVersion === repo.onlineVersion" >Version {{repo.onlineVersion}}</small>
+						<small v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion" >Version {{repo.localVersion}}, an update to version Version {{repo.onlineVersion}} is available</small>
+					</div>
 				</div>
 				<div class="md-card-content">
 					<div class="center-flex">
 						<div class="md-layout md-gutter">
-							<div class="md-layout-item"><label for="gamemodes-0">gamemode</label>
+							<div class="md-layout-item botinfo-short"><label for="gamemodes-0"><b>Gamemode</b></label>
 								<p id="gamemodes-0" class="managerInfo">
-									<span v-for="mode in repo.gamemodes">{{mode.name}} </span>
+									<span class="gamemode" v-for="mode in repo.gamemodes">{{mode.name}} </span>
 								</p>
 							</div>
-							<div class="md-layout-item"><label for="type-0">Category</label>
+							<div class="md-layout-item botinfo-short"><label for="type-0"><b>Categories</b></label>
 								<p id="type-0" class="managerInfo">
-									<span v-for="category in repo.categories">{{category.name}} </span>
+									<span class="category" v-for="category in repo.categories">{{category.name}} </span>
 								</p>
 							</div>
-							<div class="md-layout-item"><label for="type-0">Category</label>
+							<div class="md-layout-item botinfo-long"><label for="type-0"><b>Description</b></label>
+								<p id="type-0" class="managerInfo">
+									<span>{{repo.description}} </span>
+								</p>
+							</div>
+							<div class="md-layout-item botinfo-short"><label for="type-0"><b>Source</b></label>
 								<p id="type-0" class="managerInfo">
 									<span>{{repo.repoName}} </span>
 								</p>
@@ -115,7 +144,7 @@
 						<button type="button" class="md-button md-primary md-raised md-theme-default">
 							<div class="md-ripple">
 								<div v-if="!repo.is_installed" class="md-button-content"
-									 @click="downloadBot(repo, true)">
+									 @click="downloadBot(repo)">
 									Download
 								</div>
 								<div v-if="repo.is_installed && repo.localVersion === repo.onlineVersion"
@@ -125,7 +154,7 @@
 								</div>
 								<div v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion"
 									 class="md-button-content"
-									 @click="deleteBot(repo); eel.download_bot(repo, false)">
+									 @click="updateBot(repo)">
 									Update
 								</div>
 							</div>

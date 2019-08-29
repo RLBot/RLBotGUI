@@ -20,28 +20,40 @@ const app = new Vue({
 	    }
     },
     methods: {
-    	downloadBot: function (repo) {
-    		if (!repo.safe) {
+    	downloadBot: async function (repo, update=false) {
+    		if (!repo.safe && !update) {
     			if (!confirm('This download is from an unferified source and may contain unsafe code. Do you really want to download this')) {
     				return false;
     			}
     		}
-            eel.download_bot(repo.repoName, repo.url, repo.name)(async function() {
+            await eel.download_bot(repo.repoName, repo.url, repo.name)(async function() {
+				var botpackage = await eel.get_bot_packaging(repo.repoName, repo.name)()
+
 				repo.is_installed = true;
+				repo.localVersion = JSON.parse(botpackage).version
+				
 				app.highestCardID += 1;
 				repo.ID = app.highestCardID;
-				repo.localVersion = JSON.parse(await eel.get_bot_packaging(repoName, repo.name)()).version
+
 				repo.push();
 			})
 		},
-        deleteBot: function (repo) {
+        deleteBot: function (repo, update=false) {
             eel.delete_bot(repo.repoName, repo.name)(function() {
-				repo.is_installed = false;
-				app.highestCardID += 1;
-				repo.ID = app.highestCardID;
-				repo.push();
+            	if (!update) {
+					repo.is_installed = false;
+
+					app.highestCardID += 1;
+					repo.ID = app.highestCardID;
+					
+					repo.push();
+				}
             })
         },
+        updateBot(repo){
+        	delete_bot(repo, true)
+        	download_bot(repo, true)
+        }
 	}
 });
 
@@ -88,11 +100,11 @@ async function addPackageData(repoListIndex, json) {
 				cardData = []
 				cardData.ID = app.highestCardID;
 				cardData.name = myJson.name;
-				cardData.description = myJson.description;
+				cardData.description = myJson.description.length<=100?myJson.description:myJson.description.substr(0, 100) + '...';
 				cardData.url =  repo.url;
 				cardData.repoName = repoName;
-				cardData.onlineVersion = myJson.version;
 				cardData.localVersion = JSON.parse(await eel.get_bot_packaging(repoName, repo.name)()).version
+				cardData.onlineVersion = myJson.version;
 				cardData.testedFrameworkVersion = myJson.testedFrameworkVersion;
 				cardData.botLanguage = myJson.botLanguage;
 				cardData.gamemodes = myJson.gamemodes;
@@ -110,12 +122,13 @@ async function addPackageData(repoListIndex, json) {
 function reloadCards(){
 	for (var i = app.repos.length - 1; i >= 0; i--) {
 		var repo = app.repos[i];
+		
 		//fill gamemode filters
 		var gamemodeFilters = [];
 		for (var j = document.getElementsByName('gamemode').length - 1; j >= 0; j--) {
 			if (document.getElementsByName('gamemode')[j].checked) {
 				arrLen = gamemodeFilters.length;
-				gamemodeFilters[arrLen] = document.getElementsByName('gamemode')[j].value;
+				gamemodeFilters[arrLen] = document.getElementsByName('gamemode')[j].value.toLowerCase();
 			}
 		}
 
@@ -123,20 +136,33 @@ function reloadCards(){
 		if (gamemodeFilters.length != 0) {
 			//if any active gamemode gamemodeFilters, apply them
 			var gamemodeNotFoundCount = gamemodeFilters.length;
-			for (var gamemodeFilterIndex = gamemodeFilters.length - 1; gamemodeFilterIndex >= 0; gamemodeFilterIndex--) {
-				for (var j = repo.gamemodes.length - 1; j >= 0; j--) {
-					if (repo.gamemodes[j].name.toLowerCase() == gamemodeFilters[gamemodeFilterIndex].toLowerCase()) {
-						--gamemodeNotFoundCount;
-					}
+			for (var gamemodeFilterIndex = repo.gamemodes.length - 1; gamemodeFilterIndex >= 0; gamemodeFilterIndex--) {
+				if (gamemodeFilters.includes(repo.gamemodes[gamemodeFilterIndex].name.toLowerCase())) {
+					--gamemodeNotFoundCount;
 				}
 			}
 		}
-		if (gamemodeNotFoundCount != 0 || repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())==-1) {
-			app.repos[i].display=false;
+
+		//fill repo filters
+		var repoFilterPass = false;
+		var repoFilter = '';
+		for (var j = document.getElementsByName('source').length - 1; j >= 0; j--) {
+			if (document.getElementsByName('source')[j].checked) {
+				repoFilter = document.getElementsByName('source')[j].value.toLowerCase();
+			}
 		}
-		else{
+		if (repo.repoName.toLowerCase() === repoFilter || repoFilter === 'all') {
+			repoFilterPass = true;
+		}
+
+		//display or hide cards
+		if (repoFilterPass && gamemodeNotFoundCount === 0 && repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())!==-1) {
 			app.repos[i].display=true;
 		}
+		else{
+			app.repos[i].display=false;
+		}
+
 		app.repos[1].push()
 	}
 }
