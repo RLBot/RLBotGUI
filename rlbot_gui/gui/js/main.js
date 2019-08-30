@@ -25,6 +25,7 @@ const app = new Vue({
             game_mode: null,
             skip_replays: false,
             instant_start: false,
+            enable_lockstep: false,
             match_behavior: null,
             mutators: {
                 match_length: null,
