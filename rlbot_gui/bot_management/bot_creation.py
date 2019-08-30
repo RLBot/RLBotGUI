@@ -8,6 +8,8 @@ import tempfile
 from pathlib import Path
 from shutil import move
 
+from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
+
 from rlbot_gui.bot_management.downloader import download_and_extract_zip
 
 
@@ -52,23 +54,11 @@ def bootstrap_python_bot(bot_name, directory):
 
         safe_move(tmpdir / 'RLBotPythonExample-master', top_dir)
 
-    # Choose appropriate file names based on the bot name
-    code_dir = top_dir / sanitized_name
-    python_filename = f'{sanitized_name}.py'
-    python_file = code_dir / python_filename
-    config_filename = f'{sanitized_name}.cfg'
-    config_file = code_dir / config_filename
-
-    replace_all(top_dir / 'rlbot.cfg', r'(participant_config_\d = ).*$',
-                r'\1' + os.path.join(sanitized_name, config_filename).replace('\\', '\\\\'))
-
-    # We're making some big assumptions here that the file structure / names in RLBotPythonExample will not change.
-    safe_move(top_dir / 'python_example', code_dir)
-    safe_move(code_dir / 'python_example.py', python_file)
-    safe_move(code_dir / 'python_example.cfg', config_file)
+    bundle = scan_directory_for_bot_configs(top_dir).pop()
+    config_file = bundle.config_path
+    python_file = bundle.python_file
 
     replace_all(config_file, r'name = .*$', 'name = ' + bot_name)
-    replace_all(config_file, r'python_file = .*$', 'python_file = ' + python_filename)
 
     # This is intended to open the example python file in the default system editor for .py files.
     # Hopefully this will be VS Code or notepad++ or something. If it gets executed as a python script, no harm done.
