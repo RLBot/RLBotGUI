@@ -212,6 +212,7 @@ def install_package(package_string):
     print(exit_code)
     return {'exitCode': exit_code, 'package': package_string}
 
+
 @eel.expose
 def download_bot(repo_path, repo, bot_dir):
     print(repo)
@@ -230,10 +231,12 @@ def download_bot(repo_path, repo, bot_dir):
         bot_dir_name=bot_dir)
     return 0;
 
+
 @eel.expose
 def delete_bot(repo_path, name):
     shutil.rmtree(os.path.abspath(HUB_FOLDER + "/" + repo_path + '/' + name))
     return 0;
+
 
 @eel.expose
 def is_bot_installed(repo_path, bot_name):
@@ -241,6 +244,7 @@ def is_bot_installed(repo_path, bot_name):
         return True
     else:
         return False
+
 
 @eel.expose
 def get_bot_packaging(repo_path, bot_name):

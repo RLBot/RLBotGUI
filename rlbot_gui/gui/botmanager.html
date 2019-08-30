@@ -24,7 +24,7 @@
 			<div class="md-toolbar-row">
 				<img class="logo" src="imgs/rlbot_logo.png">
 				<a href="main.html"><h3 class="md-title" style="flex: 1">RLBot</h3></a> &nbsp; &nbsp;
-				<a href="botmanager.html" class="menuActive"><h3 class="md-title" style="flex: 1">Hub (alpha)</h3></a>
+				<a href="botmanager.html" class="menuActive"><h3 class="md-title" style="flex: 1">Hub (beta)</h3></a>
 				<div class="md-toolbar-section-end">
 					<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
 					<md-menu md-direction="bottom-start">
@@ -60,7 +60,7 @@
 
 					<div class="center-flex">
 
-						<div class="md-layout md-gutter">
+						<div class="md-layout">
 							<div class="md-layout-item">
 								<label for="gamemodes">Gamemode</label>
 								<div id="gamemodes" class="list">
@@ -88,19 +88,36 @@
 
 			<md-card class="settings-card">
 				<md-card-header>
-					<div class="md-title">News</div>
-					<p>Coming soon</p>
-					<br>
-					<p>The hub is an ALPHA preview with working functionallity. Features will be added an bugs can occur more often then expexted.</p>
+					<div class="md-title">Beta notice</div>
 				</md-card-header>
 
                 <md-card-content>
 
 					<div class="center-flex">
 
-						<div class="md-layout md-gutter">
-
+						<div class="md-layout">
+							<p>The hub is an beta preview. bugs can occur more often then expected.</p>
 						</div>
+					</div>
+
+                </md-card-content>
+			</md-card>
+
+			<md-card class="settings-card">
+				<md-card-header>
+					<div class="md-title">News</div>
+				</md-card-header>
+
+                <md-card-content>
+
+					<div class="center-flex">
+
+						<table>
+							<tr v-for="newsItem in newsItems">
+								<td>{{newsItem.date}}</td>
+								<td>{{newsItem.content}}</td>
+							</tr>
+						</table>
 					</div>
 
                 </md-card-content>

@@ -2,12 +2,14 @@ Vue.use(VueMaterial.default);
 
 const repolists = ['https://raw.githubusercontent.com/ard1998/RLBot-repos/master/trusted.json',
 				   'https://raw.githubusercontent.com/ard1998/RLBot-repos/master/unferifiedCommunity.json'];
+const newsLink = 'https://raw.githubusercontent.com/ard1998/RLBot-repos/master/news.json';
 var init = true
 
 const app = new Vue({
     el: '#app',
     data: {
         repos: [],
+        newsItems: [],
         showNewRepoDialog: false,
         showProgressSpinner: false,
         init: true,
@@ -17,6 +19,7 @@ const app = new Vue({
     created: function () {
     	if (init) {
 	        downloadRepos();
+	        getNews();
 	        init = false;
 	    }
     },
@@ -84,8 +87,9 @@ const app = new Vue({
         		alert('Error fetching ' + json.repos[len].url + '/' + json.repos[len].name + ': Branch or folder does not exist');
         	}
         	else{
-        		eel.write_local_repofile(jsonstr)();
-        		showNewRepoDialog = false;
+        		await eel.write_local_repofile(jsonstr)();
+        		await app.downloadBot(json.repos[len], app.highestCardID)
+        		app.showNewRepoDialog = false;
         	}
         },
         removeBotFromLocalRepofile: async function(url){
@@ -108,6 +112,19 @@ const app = new Vue({
         }
 	}
 });
+
+function getNews(){
+	fetch(newsLink)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(async function(myJson) {
+			console.log(myJson)
+			for (var i = 0; i < myJson.length; i++) {
+				app.newsItems.push(myJson[i])
+			}
+		});
+}
 
 async function downloadRepos() {
 	for (var i = 0; i < repolists.length; i++) {

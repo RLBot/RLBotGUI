@@ -5,15 +5,18 @@
 	aside {
 		width: 20vw;
 		float: left;
-		height: calc(100vh - 64px);
 		display: grid;
 	}
 	aside > div {
 		display: initial;
 	}
+	aside, #main{
+		height: calc(100vh - 64px);
+	}
 	#main {
-		width: 80vw;
 		float: right;
+		overflow-y: auto;
+		width: 80vw;
 	}
 	.botinfo-short{
 		width: 10vw;
@@ -29,4 +32,17 @@
 
 .md-layout-item > p > .gamemode:not(:last-of-type)::after, .md-layout-item > p > .category:not(:last-of-type)::after{
 	content: ', ';
+}
+
+.md-layout{
+	width: 100%;
+}
+
+.md-card{
+	overflow-y: hidden;
+}
+
+.md-card-content{
+	height: 100%;
+	overflow-y: auto;
 }
