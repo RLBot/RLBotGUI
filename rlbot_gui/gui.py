@@ -158,7 +158,7 @@ def get_bots_from_directory(bot_directory):
     return [
         {
             'name': bundle.name,
-            'safe': 1 if bundle.config_path.split('\\')[7] != 'unferifiedCommunity' else 0,
+            'safe': 1 if bundle.config_path.split('\\')[7] != 'unferifiedCommunity' and bundle.config_path.split('\\')[7] != 'localRepo' else 0,
             'type': 'rlbot',
             'skill': 1,
             'image': 'imgs/rlbot.png',
@@ -252,6 +252,23 @@ def get_bot_packaging(repo_path, bot_name):
         return filestr
     else:
         return False
+
+
+@eel.expose
+def read_local_repofile():
+    if os.path.exists('localRepo.json'):
+        file = open('localRepo.json',"r")
+        filestr = file.read()
+        file.close()
+        return filestr
+    else:
+        return False
+
+@eel.expose
+def write_local_repofile(jsonstr):
+    file = open('localRepo.json',"w")
+    file.write(jsonstr)
+    file.close()
 
 @eel.expose
 def show_bot_in_explorer(bot_cfg_path):

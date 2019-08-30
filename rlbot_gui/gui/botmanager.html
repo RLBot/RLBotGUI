@@ -36,7 +36,7 @@
 							<md-menu-item @click="showPackageInstaller = true;">
 								Install missing python package
 							</md-menu-item>
-							<md-menu-item @click="">
+							<md-menu-item @click="showNewRepoDialog = true">
 								Add custom repo (todo)
 							</md-menu-item>
 						</md-menu-content>
@@ -163,6 +163,25 @@
 				</div>
 			</div>
 		</div>
+		<md-dialog :md-active.sync="showNewRepoDialog">
+			<md-dialog-title>Add bot to local repo</md-dialog-title>
+
+			<md-dialog-content>
+				<md-field>
+					<label>Repo url</label>
+					<md-input v-model="newRepoUrl"></md-input>
+				</md-field>
+				<md-field>
+					<label>Folder Name</label>
+					<md-input v-model="newRepoFolder"></md-input>
+				</md-field>
+			</md-dialog-content>
+
+			<md-dialog-actions>
+				<md-button class="md-raised md-primary" @click="addBotToLocalRepofile(newRepoUrl, newRepoFolder)">Begin</md-button>
+				<md-button @click="showNewRepoDialog = false">Close</md-button>
+			</md-dialog-actions>
+		</md-dialog>
 	</div>
 
     <script type="text/javascript" src="/eel.js"></script>

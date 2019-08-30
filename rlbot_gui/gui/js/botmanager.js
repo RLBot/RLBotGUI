@@ -8,6 +8,7 @@ const app = new Vue({
     el: '#app',
     data: {
         repos: [],
+        showNewRepoDialog: false,
         showProgressSpinner: false,
         init: true,
         filterChangeCount: 0,
@@ -46,13 +47,64 @@ const app = new Vue({
 					app.highestCardID += 1;
 					repo.ID = app.highestCardID;
 					
-					repo.push();
+					if (repo.repoName === 'localRepo') {
+						repo.display = false;
+						app.removeBotFromLocalRepofile(repo.url);
+					}
+
+					app.repo.push();
 				}
             })
         },
-        updateBot(repo){
+        updateBot: function(repo){
         	delete_bot(repo, true)
         	download_bot(repo, true)
+        },
+        readRepofile: async function(){
+        	var repostr = await eel.read_local_repofile()();
+        	if (repostr === false) {
+        		var repostr = '{"note": "Note when enabling the repo", "repos":[]}'
+        	}
+        	var obj = JSON.parse(repostr);
+        	return obj;
+        },
+        addBotToLocalRepofile: async function(url, folder){
+			//todo directly downloading the bot after adding 
+
+        	var json = await app.readRepofile()
+        	var len = json.repos.length
+
+        	json.repos[len] = {};
+        	json.repos[len].url = url;
+        	json.repos[len].name = folder;
+        	var jsonstr = JSON.stringify(json);
+        	await downloadBotCard(json.repos[len], 'localRepo');
+        	
+        	if(app.repos[app.highestCardID].error){
+        		alert('Error fetching ' + json.repos[len].url + '/' + json.repos[len].name + ': Branch or folder does not exist');
+        	}
+        	else{
+        		eel.write_local_repofile(jsonstr)();
+        		showNewRepoDialog = false;
+        	}
+        },
+        removeBotFromLocalRepofile: async function(url){
+        	var json = await app.readRepofile()
+        	var len = json.repos.length -1;
+        	var found = false;
+
+        	do{
+        		if (json.repos[len].url === url) {
+        			delete json.repos[len];
+        			found = true;
+        		}
+        		--len;
+        	}
+        	while (len >=0 || !found)
+
+        	var jsonstr = JSON.stringify(json);
+        	jsonstr = jsonstr.replace("null", "");
+        	eel.write_local_repofile(jsonstr);
         }
 	}
 });
@@ -67,28 +119,41 @@ async function downloadRepos() {
 				await addPackageData(i, myJson);
 			});
 	}
+	json = await app.readRepofile();
+	await addPackageData(repolists.length, json);
 }
 
 async function addPackageData(repoListIndex, json) {
-	repoUrlArr = repolists[repoListIndex].split('/');
-	repoName = repoUrlArr[repoUrlArr.length-1];
-	repoNameLength = repoName.length-5;
-	repoName = repoName.substr(0, repoNameLength);
+	repoName = ''
+
+	if (repoListIndex<repolists.length) {
+		repoUrlArr = repolists[repoListIndex].split('/');
+		repoName = repoUrlArr[repoUrlArr.length-1];
+		repoNameLength = repoName.length-5;
+		repoName = repoName.substr(0, repoNameLength);
+	}
+	else{
+		repoName = 'localRepo';
+	}
 
 	for (var index = 0; index < json.repos.length; index++) {
-		var repo = json.repos[index];
+		await downloadBotCard(json.repos[index], repoName)
+	}
+}
 
-		var urlPart = "";
+async function downloadBotCard(repo, repoName){
+	var urlPart = "";
 
-		if (repo.url.indexOf("tree") === -1) {
-			urlPart = repo.url.substr(18)+"/master";
-		}
-		else {
-			var part = repo.url.substr(18);
-			var link = part.substr(0, part.indexOf("/tree"));
-			var branch = part.substr(part.indexOf("/tree")+5);
-			urlPart = link + branch;
-		}
+	if (repo.url.indexOf("tree") === -1) {
+		urlPart = repo.url.substr(18)+"/master";
+	}
+	else {
+		var part = repo.url.substr(18);
+		var link = part.substr(0, part.indexOf("/tree"));
+		var branch = part.substr(part.indexOf("/tree")+5);
+		urlPart = link + branch;
+	}
+	try{
 		var url = 'https://raw.githubusercontent.com' + urlPart + '/' + repo.name + '/botpackage.json';
 		await fetch(url)
 			.then(function(response) {
@@ -97,8 +162,8 @@ async function addPackageData(repoListIndex, json) {
 			.then(async function(myJson) {
 				app.highestCardID+=1;
 
-				cardData = []
-				cardData.ID = app.highestCardID;
+				cardData = {}
+				cardData.ID = app.repos.length;
 				cardData.name = myJson.name;
 				cardData.description = myJson.description.length<=100?myJson.description:myJson.description.substr(0, 100) + '...';
 				cardData.url =  repo.url;
@@ -111,11 +176,33 @@ async function addPackageData(repoListIndex, json) {
 				cardData.categories = myJson.categories;
 				cardData.display=true
 				cardData.is_installed = await eel.is_bot_installed(repoName, repo.name)();
-				cardData.display=true;
-				cardData.safe=repoListIndex<1?true:false
+				cardData.safe=repoName!='localRepo'&&repoName!='unferifiedCommunity'
+				cardData.error=false;
 
 				app.repos.push(cardData);
 			});
+	}
+	catch(e){
+			cardData = {}
+			app.highestCardID+=1;
+
+			cardData.ID = app.repos.length;
+			cardData.name = "Error fetching " + repo.url + '/' + repo.name + ': Branch or folder does not exist';
+			cardData.description = "";
+			cardData.url = "";
+			cardData.repoName = "";
+			cardData.localVersion = "";
+			cardData.onlineVersion = "";
+			cardData.testedFrameworkVersion = "";
+			cardData.botLanguage = "";
+			cardData.gamemodes = "";
+			cardData.categories = {};
+			cardData.display=repoName!=='localRepo'?true:false;
+			cardData.is_installed = false;
+			cardData.safe=repoName!='localRepo'&&repoName!='unferifiedCommunity'
+			cardData.error=true;
+
+			app.repos.push(cardData);
 	}
 }
 
@@ -163,6 +250,6 @@ function reloadCards(){
 			app.repos[i].display=false;
 		}
 
-		app.repos[1].push()
+		app.repos.push()
 	}
 }
