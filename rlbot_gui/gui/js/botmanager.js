@@ -1,7 +1,7 @@
 Vue.use(VueMaterial.default);
 
 const repolists = ['https://raw.githubusercontent.com/ard1998/RLBot-repos/master/trusted.json',
-				   'https://raw.githubusercontent.com/ard1998/RLBot-repos/master/unferifiedCommunity.json'];
+				   'https://raw.githubusercontent.com/ard1998/RLBot-repos/master/unverifiedCommunity.json'];
 const newsLink = 'https://raw.githubusercontent.com/ard1998/RLBot-repos/master/news.json';
 var init = true
 

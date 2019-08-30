@@ -6,6 +6,7 @@
 		width: 20vw;
 		float: left;
 		display: grid;
+		grid-template-rows: max-content auto auto;
 	}
 	aside > div {
 		display: initial;
@@ -39,6 +40,7 @@
 }
 
 .md-card{
+	display: grid;
 	overflow-y: hidden;
 }
 
