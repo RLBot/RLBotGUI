@@ -52,6 +52,7 @@ const app = new Vue({
 					
 					if (repo.repoName === 'localRepo') {
 						repo.display = false;
+						repo.deleted = true;
 						app.removeBotFromLocalRepofile(repo.url);
 					}
 
@@ -81,14 +82,14 @@ const app = new Vue({
         	json.repos[len].url = url;
         	json.repos[len].name = folder;
         	var jsonstr = JSON.stringify(json);
-        	await downloadBotCard(json.repos[len], 'localRepo');
+        	var repo = await downloadBotCard(json.repos[len], 'localRepo');
         	
-        	if(app.repos[app.highestCardID].error){
-        		alert('Error fetching ' + json.repos[len].url + '/' + json.repos[len].name + ': Branch or folder does not exist');
+        	if(repo.error){
+        		alert('Error fetching ' + repo.url + '/' + repo.name + ': Branch or folder does not exist');
         	}
         	else{
         		await eel.write_local_repofile(jsonstr)();
-        		await app.downloadBot(json.repos[len], app.highestCardID)
+        		await app.downloadBot(repo, true)
         		app.showNewRepoDialog = false;
         	}
         },
@@ -160,6 +161,7 @@ async function addPackageData(repoListIndex, json) {
 
 async function downloadBotCard(repo, repoName){
 	var urlPart = "";
+	var cardData = {}
 
 	if (repo.url.indexOf("tree") === -1) {
 		urlPart = repo.url.substr(18)+"/master";
@@ -179,7 +181,6 @@ async function downloadBotCard(repo, repoName){
 			.then(async function(myJson) {
 				app.highestCardID+=1;
 
-				cardData = {}
 				cardData.ID = app.repos.length;
 				cardData.name = myJson.name;
 				cardData.description = myJson.description.length<=100?myJson.description:myJson.description.substr(0, 100) + '...';
@@ -195,12 +196,12 @@ async function downloadBotCard(repo, repoName){
 				cardData.is_installed = await eel.is_bot_installed(repoName, repo.name)();
 				cardData.safe=repoName!='localRepo'&&repoName!='unferifiedCommunity'
 				cardData.error=false;
+				cardData.deleted=false;
 
 				app.repos.push(cardData);
 			});
 	}
 	catch(e){
-			cardData = {}
 			app.highestCardID+=1;
 
 			cardData.ID = app.repos.length;
@@ -218,9 +219,12 @@ async function downloadBotCard(repo, repoName){
 			cardData.is_installed = false;
 			cardData.safe=repoName!='localRepo'&&repoName!='unferifiedCommunity'
 			cardData.error=true;
+			cardData.deleted=false;
 
 			app.repos.push(cardData);
 	}
+
+	return cardData;
 }
 
 function reloadCards(){
@@ -260,7 +264,7 @@ function reloadCards(){
 		}
 
 		//display or hide cards
-		if (repoFilterPass && gamemodeNotFoundCount === 0 && repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())!==-1) {
+		if (!repo.deleted && repoFilterPass && gamemodeNotFoundCount === 0 && repo.name.toLowerCase().indexOf(document.getElementById('searchBotName').value.toLowerCase())!==-1) {
 			app.repos[i].display=true;
 		}
 		else{
