@@ -205,6 +205,7 @@
                         <md-dialog-content>
                             <md-switch v-model="matchSettings.skip_replays">Skip Replays</md-switch>
 							<md-switch v-model="matchSettings.instant_start">Instant Start</md-switch>
+							<md-switch v-model="matchSettings.enable_lockstep">Enable lockstep</md-switch>
 							<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
                         </md-dialog-content>
 
