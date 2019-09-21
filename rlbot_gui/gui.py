@@ -23,6 +23,8 @@ BOTPACK_FOLDER = 'RLBotPackDeletable'
 OLD_BOTPACK_FOLDER = 'RLBotPack'
 CREATED_BOTS_FOLDER = 'MyBots'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
+MATCH_SETTINGS_KEY = 'match_settings'
+TEAM_SETTINGS_KEY = 'team_settings'
 settings = QSettings('rlbotgui', 'preferences')
 
 bot_folder_settings = settings.value(BOT_FOLDER_SETTINGS_KEY, type=dict)
@@ -100,6 +102,47 @@ def save_folder_settings(folder_settings):
     bot_folder_settings = folder_settings
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
+
+
+def validate_bots(bots):
+    '''Reload rlbot controlled bot bundles and remove invalid ones'''
+    valid_bots = []
+
+    for bot in bots:
+        if bot["type"] in ('rlbot', 'party_member_bot'):
+            valid_bots += load_bundle(bot["path"])
+        else:
+            valid_bots.append(bot)
+
+    return valid_bots
+
+
+@eel.expose
+def get_match_settings():
+    match_settings = settings.value(MATCH_SETTINGS_KEY, type=dict)
+    return match_settings if match_settings else None
+
+
+@eel.expose
+def get_team_settings():
+    team_settings = settings.value(TEAM_SETTINGS_KEY, type=dict)
+    if not team_settings:
+        return None
+
+    return {
+        "blue_team": validate_bots(team_settings["blue_team"]),
+        "orange_team": validate_bots(team_settings["orange_team"])
+    }
+
+
+@eel.expose
+def save_match_settings(match_settings):
+    settings.setValue(MATCH_SETTINGS_KEY, match_settings)
+
+
+@eel.expose
+def save_team_settings(blue_bots, orange_bots):
+    settings.setValue(TEAM_SETTINGS_KEY, {"blue_team" : blue_bots, "orange_team": orange_bots})
 
 
 def pick_bot_location(is_folder):

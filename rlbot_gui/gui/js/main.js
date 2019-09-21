@@ -69,6 +69,9 @@ const app = new Vue({
     },
     methods: {
         startMatch: function (event) {
+            eel.save_match_settings(this.matchSettings);
+            eel.save_team_settings(this.blueTeam, this.orangeTeam);
+
             const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
             const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
             eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
@@ -97,6 +100,17 @@ const app = new Vue({
                 const mutatorName = mutator.replace('_types', '');
                 self.matchSettings.mutators[mutatorName] = self.matchOptions.mutators[mutator][0];
             });
+        },
+        resetMatchSettingsToDefault: function() {
+            this.matchSettings.map = this.matchOptions.map_types[0];
+            this.matchSettings.game_mode = this.matchOptions.game_modes[0];
+            this.matchSettings.match_behavior = this.matchOptions.match_behaviours[0];
+            this.matchSettings.skip_replays = false;
+            this.matchSettings.instant_start = false;
+            this.matchSettings.enable_lockstep = false;
+            this.resetMutatorsToDefault();
+        
+            this.updateBGImage(this.matchSettings.map);
         },
         updateBGImage: function(mapName) {
             this.bodyStyle = { backgroundImage: "url(../imgs/arenas/" + mapName + ".jpg)" };
@@ -142,6 +156,8 @@ const app = new Vue({
 eel.get_folder_settings()(folderSettingsReceived);
 eel.scan_for_bots()(botsReceived);
 eel.get_match_options()(matchOptionsReceived);
+eel.get_match_settings()(matchSettingsReceived);
+eel.get_team_settings()(teamSettingsReceived);
 
 eel.get_language_support()((support) => {
     app.languageSupport = support;
@@ -196,14 +212,22 @@ function applyLanguageWarnings() {
 
 function matchOptionsReceived(matchOptions) {
     app.matchOptions = matchOptions;
+}
 
-    app.matchSettings.map = app.matchOptions.map_types[0];
-    app.matchSettings.game_mode = app.matchOptions.game_modes[0];
-    app.matchSettings.match_behavior = app.matchOptions.match_behaviours[0];
+function matchSettingsReceived(matchSettings) {
+    if (matchSettings) {
+        app.matchSettings = matchSettings;
+        app.updateBGImage(app.matchSettings.map);
+    } else {
+        app.resetMatchSettingsToDefault();
+    }
+}
 
-    app.updateBGImage(app.matchSettings.map);
-
-    app.resetMutatorsToDefault();
+function teamSettingsReceived(teamSettings) {
+    if (teamSettings) {
+        app.blueTeam = teamSettings.blue_team;
+        app.orangeTeam = teamSettings.orange_team;
+    }
 }
 
 function folderSettingsReceived(folderSettings) {
