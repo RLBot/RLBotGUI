@@ -260,6 +260,11 @@
 				<span>{{snackbarContent}}</span>
 			</md-snackbar>
 
+			<md-snackbar md-position="center" :md-active="showBotpackUpdateSnackbar" md-persistent md-duration="10000">
+				<span>Bot Pack update available!</span>
+				<md-button class="md-accent" @click="downloadBotPack()">Download</md-button>
+			</md-snackbar>
+
 			<md-dialog v-if="activeBot && activeBot.info" :md-active.sync="showBotInfo">
 				<md-dialog-title>
 					{{activeBot.name}}
@@ -355,6 +360,22 @@
 					<md-button class="md-raised md-primary" @click="applyFolderSettings()">Apply</md-button>
 					<md-button @click="showFolderSettingsDialog = false">Close</md-button>
 				</md-dialog-actions>
+			</md-dialog>
+
+			<md-dialog :md-active.sync="showDownloadProgressDialog"
+					   :md-close-on-esc="false"
+					   :md-click-outside-to-close="false">
+				<md-dialog-title>Downloading Bot Pack</md-dialog-title>
+
+				<md-dialog-content>
+					<div class="md-layout md-gutter" :class="`md-alignment-center-center`">
+						<md-icon class="md-size-4x">cloud_download</md-icon>
+					</div>
+					<md-progress-bar class="md-accent" md-mode="determinate" :md-value="downloadProgressPercent">
+					</md-progress-bar>
+					<p>{{ downloadStatus }}</p>
+				</md-dialog-content>
+				
 			</md-dialog>
 
 		</div>
