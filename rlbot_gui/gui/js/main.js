@@ -113,7 +113,7 @@ const app = new Vue({
             this.matchSettings.instant_start = false;
             this.matchSettings.enable_lockstep = false;
             this.resetMutatorsToDefault();
-        
+
             this.updateBGImage(this.matchSettings.map);
         },
         updateBGImage: function(mapName) {
@@ -256,7 +256,7 @@ function onInstallationComplete(result) {
     app.showProgressSpinner = false;
 }
 
-eel.expose(updateDownloadProgress)
+eel.expose(updateDownloadProgress);
 function updateDownloadProgress(progress, status) {
     app.downloadStatus = status;
     app.downloadProgressPercent = progress;

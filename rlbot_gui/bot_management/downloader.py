@@ -49,14 +49,13 @@ def get_repo_size(repo_full_name):
         return 0
 
 
-
 class BotpackDownloader:
     """
     Downloads the botpack while updating the progress bar and status text.
     """
 
-    PROGRESSBAR_UPDATE_INTERVAL = 0.1 # How often to update the progress bar (seconds)
-    ZIP_PORTION = 0.6 # How much of total progress should the zip file take
+    PROGRESSBAR_UPDATE_INTERVAL = 0.1  # How often to update the progress bar (seconds)
+    ZIP_PORTION = 0.6  # How much of total progress should the zip file take
 
     def __init__(self):
         self.status = ''
@@ -69,7 +68,6 @@ class BotpackDownloader:
         self.lfs_files_completed = 0
         self.one_lfs_file_portion = 0
         self.last_progressbar_update_time = 0
-
 
     def update_progressbar_and_status(self):
         # it's not necessary to update on every callback, so update
@@ -84,17 +82,14 @@ class BotpackDownloader:
 
             eel.updateDownloadProgress(total_progress_percent, status)
 
-
     def zip_download_callback(self, block_count, block_size, _):
         self.current_file_bytes_downloaded += block_size
         self.current_progress = min(self.current_file_bytes_downloaded / self.estimated_zip_size, 1.0)
         self.total_progress = self.current_progress * self.ZIP_PORTION
         self.update_progressbar_and_status()
 
-
     def unzip_callback(self):
         eel.updateDownloadProgress(int(self.ZIP_PORTION * 100), 'Extracting ZIP file')
-
 
     def lfs_download_callback(self, block_count, block_size, total_size):
         self.current_file_bytes_downloaded += block_size
@@ -103,7 +98,6 @@ class BotpackDownloader:
         self.total_progress = prev_files_progress + self.current_progress * self.one_lfs_file_portion
         self.update_progressbar_and_status()
 
-
     def download(self, repo_owner: str, repo_name: str, branch_name: str, checkout_folder: Path):
         repo_full_name = repo_owner + '/' + repo_name
         repo_url = 'https://github.com/' + repo_full_name
@@ -111,7 +105,8 @@ class BotpackDownloader:
 
         self.status = f'Downloading {repo_full_name}-{branch_name}'
         print(self.status)
-        self.progress = 0
+        self.current_progress = 0
+        self.total_progress = 0
 
         # Unfortunately we can't know the size of the zip file before downloading it,
         # so we have to get the size from the GitHub API.
