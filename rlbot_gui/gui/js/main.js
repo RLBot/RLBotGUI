@@ -65,7 +65,11 @@ const app = new Vue({
             folders: []
         },
         showFolderSettingsDialog: false,
-        showExtraOptions: false
+        showExtraOptions: false,
+        showDownloadProgressDialog: false,
+        downloadProgressPercent: 0,
+        downloadStatus: '',
+        showBotpackUpdateSnackbar: false
     },
     methods: {
         startMatch: function (event) {
@@ -109,7 +113,7 @@ const app = new Vue({
             this.matchSettings.instant_start = false;
             this.matchSettings.enable_lockstep = false;
             this.resetMutatorsToDefault();
-        
+
             this.updateBGImage(this.matchSettings.map);
         },
         updateBGImage: function(mapName) {
@@ -120,7 +124,10 @@ const app = new Vue({
             eel.install_package(this.packageString)(onInstallationComplete);
         },
         downloadBotPack: function() {
-            this.showProgressSpinner = true;
+            this.showBotpackUpdateSnackbar = false;
+            this.showDownloadProgressDialog = true;
+            this.downloadStatus = "Starting"
+            this.downloadProgressPercent = 0;
             eel.download_bot_pack()(botPackDownloaded);
         },
         showBotInExplorer: function (botPath) {
@@ -164,9 +171,16 @@ eel.get_language_support()((support) => {
     applyLanguageWarnings();
 });
 
+eel.is_botpack_up_to_date()(botpackUpdateChecked);
+
+function botpackUpdateChecked(isBotpackUpToDate) {
+    app.showBotpackUpdateSnackbar = !isBotpackUpToDate;
+}
+
 function botPackDownloaded(response) {
     app.snackbarContent = 'Downloaded Bot Pack!';
     app.showSnackbar = true;
+    app.showDownloadProgressDialog = false;
     eel.get_folder_settings()(folderSettingsReceived);
     eel.scan_for_bots()(botsReceived);
 }
@@ -240,6 +254,12 @@ function onInstallationComplete(result) {
     app.snackbarContent = message;
     app.showSnackbar = true;
     app.showProgressSpinner = false;
+}
+
+eel.expose(updateDownloadProgress);
+function updateDownloadProgress(progress, status) {
+    app.downloadStatus = status;
+    app.downloadProgressPercent = progress;
 }
 
 Vue.component('mutator-field', {

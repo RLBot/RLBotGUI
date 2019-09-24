@@ -15,16 +15,20 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     existing_match_behavior_types
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, convert_to_filename
-from rlbot_gui.bot_management.downloader import download_gitlfs
+from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from_url
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
 OLD_BOTPACK_FOLDER = 'RLBotPack'
+BOTPACK_REPO_OWNER = 'RLBot'
+BOTPACK_REPO_NAME = 'RLBotPack'
+BOTPACK_REPO_BRANCH = 'master'
 CREATED_BOTS_FOLDER = 'MyBots'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 MATCH_SETTINGS_KEY = 'match_settings'
 TEAM_SETTINGS_KEY = 'team_settings'
+COMMIT_ID_KEY = 'latest_botpack_commit_id'
 settings = QSettings('rlbotgui', 'preferences')
 
 bot_folder_settings = settings.value(BOT_FOLDER_SETTINGS_KEY, type=dict)
@@ -258,13 +262,33 @@ def install_package(package_string):
     return {'exitCode': exit_code, 'package': package_string}
 
 
+def get_last_botpack_commit_id():
+    url = f'https://api.github.com/repos/{BOTPACK_REPO_OWNER}/{BOTPACK_REPO_NAME}/branches/{BOTPACK_REPO_BRANCH}'
+    try:
+        return get_json_from_url(url)['commit']['sha']
+    except:
+        return 'unknown'
+
+
+@eel.expose
+def is_botpack_up_to_date():
+    local_commit_id = settings.value(COMMIT_ID_KEY, type=str)
+
+    if not local_commit_id:
+        return False
+
+    github_commit_id = get_last_botpack_commit_id()
+
+    if github_commit_id == 'unknown':
+        return True
+
+    return github_commit_id == local_commit_id
+
+
 @eel.expose
 def download_bot_pack():
     # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
-    download_gitlfs(
-        repo_url="https://github.com/RLBot/RLBotPack",
-        checkout_folder=BOTPACK_FOLDER,
-        branch_name='master')
+    BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, BOTPACK_FOLDER)
 
     # Configure the folder settings.
     bot_folder_settings['folders'][os.path.abspath(BOTPACK_FOLDER)] = {'visible': True}
@@ -274,6 +298,7 @@ def download_bot_pack():
         bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)] = {'visible': False}
 
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
+    settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
     settings.sync()
 
 
