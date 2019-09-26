@@ -21,7 +21,7 @@ from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, star
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 CREATED_BOTS_FOLDER = 'MyBots'
-HUB_FOLDER = 'RLBotPackDeletable'
+HUB_FOLDER = 'repos'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 settings = QSettings('rlbotgui', 'preferences')
 
