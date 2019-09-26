@@ -248,3 +248,17 @@ Vue.component('mutator-field', {
         `
     }
 );
+
+function showHub(){
+    document.getElementById('menuHub').style.textDecoration = "underline solid white"; 
+    document.getElementById('menuRLBot').style.textDecoration = "none"; 
+    document.getElementById('hub').style.left = '0vw';
+}
+
+function hideHub(){
+    eel.get_folder_settings()(folderSettingsReceived);
+    eel.scan_for_bots()(botsReceived);
+    document.getElementById('menuHub').style.textDecoration = "none"; 
+    document.getElementById('menuRLBot').style.textDecoration = "underline solid white"; 
+    document.getElementById('hub').style.left = '100vw';
+}

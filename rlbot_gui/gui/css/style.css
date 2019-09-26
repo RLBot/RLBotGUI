@@ -206,3 +206,18 @@ body {
 .menuActive:not(:hover) {
   text-decoration: underline solid white !important;
 }
+
+#hub{
+  position: fixed;
+  top: 64px;
+  z-index: 999;
+  left: 100vw;
+  width: 100vw;
+  height: 100vh !important;
+  transition-property: left;
+  transition-duration: 1s;
+}
+
+#menuRLBot{
+  text-decoration: underline solid white;
+}

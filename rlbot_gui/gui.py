@@ -20,10 +20,8 @@ from rlbot_gui.bot_management.downloader import download_botfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
-BOTPACK_FOLDER = 'RLBotPackDeletable'
-OLD_BOTPACK_FOLDER = 'RLBotPack'
 CREATED_BOTS_FOLDER = 'MyBots'
-HUB_FOLDER = 'repos'
+HUB_FOLDER = 'RLBotPackDeletable'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 settings = QSettings('rlbotgui', 'preferences')
 
@@ -344,7 +342,7 @@ def launch_eel(use_chrome):
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
-    eel.start('main.html', size=(1000, 800), block=False, callback=on_websocket_close, options=options,
+    eel.start('main.html', size=(1000, 830), block=False, callback=on_websocket_close, options=options,
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 
