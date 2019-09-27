@@ -216,7 +216,7 @@ html, body {
   width: 100vw;
   height: 100vh !important;
   transition-property: left;
-  transition-duration: 1s;
+  transition-duration: 0.7s;
 }
 
 #menuRLBot{
