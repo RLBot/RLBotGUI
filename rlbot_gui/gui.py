@@ -18,6 +18,7 @@ from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot
 from rlbot_gui.bot_management.downloader import download_gitlfs
 from rlbot_gui.bot_management.downloader import download_botfs
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
+import getpass
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 CREATED_BOTS_FOLDER = 'MyBots'
@@ -148,6 +149,10 @@ def scan_for_bots():
             bots = load_bundle(file)  # Returns a list of size 1
             for bot in bots:
                 bot_hash[bot['path']] = bot
+
+    bots = get_bots_from_directory("C:/Users/"+getpass.getuser()+"/AppData/Local/RLBotGUI/repos")
+    for bot in bots:
+        bot_hash[bot['path']] = bot
 
     return list(bot_hash.values())
 
