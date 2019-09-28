@@ -19,18 +19,12 @@
 		overflow-y: auto;
 		width: 80vw;
 	}
-	.botinfo{
-		width: 100%;
+	.botinfo-short{
+		width: 10vw;
 	}
-
-	#main > .md-card{
-		display: inline-block;
-		width: 32%;
+	.botinfo-long{
+		width: 25vw;
 	}
-}
-
-aside{
-	background-color: #00000054;
 }
 
 .md-title > small {
@@ -53,30 +47,4 @@ aside{
 .md-card-content{
 	height: 100%;
 	overflow-y: auto;
-}
-
-.botCardInfo{
-	display: flex;
-	margin-left: 0px !important;
-}
-
-.managerInfo{
-	height: 3em;
-}
-
-#main > div > .md-card-content{
-	padding-bottom: 0
-}
-
-.botName{
-	display: inline;
-}
-
-.botCardButton{
-	float: right;
-	margin-right: 0 !important;
-}
-
-#app{
-	background: lightblue !important
 }

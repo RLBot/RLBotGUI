@@ -105,49 +105,54 @@
 
 			<div v-for="repo in repos" class="md-card settings-card md-theme-default" :key="repo.ID" v-if="repo.display">
 				<div class="md-card-header">
-					<div class="md-title botName">{{repo.name}}
+					<div class="md-title">{{repo.name}}
 						<small v-if="!repo.is_installed || repo.is_installed && repo.localVersion === repo.onlineVersion" >Version {{repo.onlineVersion}}</small>
 						<small v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion" >Version {{repo.localVersion}}, an update to version Version {{repo.onlineVersion}} is available</small>
 					</div>
-					<button type="button" class="md-button md-primary md-raised md-theme-default botCardButton">
-						<div class="md-ripple">
-							<div v-if="!repo.is_installed" class="md-button-content"
-								 @click="downloadBot(repo)">
-								Download
-							</div>
-							<div v-if="repo.is_installed && repo.localVersion === repo.onlineVersion"
-								 class="md-button-content"
-								 @click="deleteBot(repo)">
-								Delete
-							</div>
-							<div v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion"
-								 class="md-button-content"
-								 @click="updateBot(repo)">
-								Update
-							</div>
-						</div>
-					</button>
 				</div>
-				<div class="md-card-content" style="height: 10em">
+				<div class="md-card-content">
 					<div class="center-flex">
-						<div class="md-layout md-gutter botCardInfo">
-							<div class="md-layout-item botinfo"><label for="type-0"><b>Categories</b></label>
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item botinfo-short"><label for="gamemodes-0"><b>Gamemode</b></label>
+								<p id="gamemodes-0" class="managerInfo">
+									<span class="gamemode" v-for="mode in repo.gamemodes">{{mode.name}} </span>
+								</p>
+							</div>
+							<div class="md-layout-item botinfo-short"><label for="type-0"><b>Categories</b></label>
 								<p id="type-0" class="managerInfo">
 									<span class="category" v-for="category in repo.categories">{{category.name}} </span>
 								</p>
 							</div>
-							<div class="md-layout-item botinfo"><label for="type-0"><b>Description</b></label>
+							<div class="md-layout-item botinfo-long"><label for="type-0"><b>Description</b></label>
 								<p id="type-0" class="managerInfo">
 									<span>{{repo.description}} </span>
 								</p>
 							</div>
-							<div class="md-layout-item botinfo"><label for="type-0"><b>Source</b></label>
+							<div class="md-layout-item botinfo-short"><label for="type-0"><b>Source</b></label>
 								<p id="type-0" class="managerInfo">
 									<span>{{repo.repoName}} </span>
 								</p>
 							</div>
 						</div>
 						<span style="flex-grow: 1;"></span>
+						<button type="button" class="md-button md-primary md-raised md-theme-default">
+							<div class="md-ripple">
+								<div v-if="!repo.is_installed" class="md-button-content"
+									 @click="downloadBot(repo)">
+									Download
+								</div>
+								<div v-if="repo.is_installed && repo.localVersion === repo.onlineVersion"
+									 class="md-button-content"
+									 @click="deleteBot(repo)">
+									Delete
+								</div>
+								<div v-if="repo.is_installed && repo.localVersion !== repo.onlineVersion"
+									 class="md-button-content"
+									 @click="updateBot(repo)">
+									Update
+								</div>
+							</div>
+						</button>
 					</div>
 				</div>
 			</div>
