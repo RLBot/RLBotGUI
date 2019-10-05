@@ -193,3 +193,6 @@ RLBotPack/
 RLBotPackDeletable/
 MyBots/
 rlbot_gui/gui/imgs/logos
+
+# Hello! If you're adding something here, consider also adding it to MANIFEST.in!
+# See the README.md for details.

@@ -40,6 +40,14 @@ https://github.com/RLBot/RLBot/wiki/Deploying-Changes#first-time-setup
 1. Look in setup.py and increment the version number.
 1. Run `publish-to-pypi-prod.bat`
 
+#### Note
+When deploying to pypi, the files which get included are controlled by the MANIFEST.in file.
+You may wish to exclude anything which does not belong in the initial install, e.g.
+bot logos which get copied in to the GUI folder as you use the program.
+
+As a rule of thumb, if you add something to .gitignore, it may also belong in MANIFEST.in
+as a prune line.
+
 ### Building the Installer
 
 You can build an installer executable for users to download. You will rarely need
