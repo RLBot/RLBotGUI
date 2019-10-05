@@ -135,9 +135,20 @@ body {
   display: inline-flex;
 }
 
+.bot-pool .bot-filter {
+  margin-top: -10px;
+  margin-bottom: -20px;
+  min-width: 150px;
+  margin-left: 20px;
+}
+
 .bot-card img {
   height: 1.5rem;
   margin: 3px;
+}
+
+.filtered {
+  opacity: 0.2;
 }
 
 .bot-card img.darkened {
