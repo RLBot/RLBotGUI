@@ -69,7 +69,8 @@ const app = new Vue({
         showDownloadProgressDialog: false,
         downloadProgressPercent: 0,
         downloadStatus: '',
-        showBotpackUpdateSnackbar: false
+        showBotpackUpdateSnackbar: false,
+        botNameFilter: ''
     },
     methods: {
         startMatch: function (event) {
@@ -156,6 +157,9 @@ const app = new Vue({
             eel.save_folder_settings(app.folderSettings);
             app.botPool = STARTING_BOT_POOL;
             eel.scan_for_bots()(botsReceived);
+        },
+        passesFilter: function(botName) {
+            return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
         }
     }
 });

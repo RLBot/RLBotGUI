@@ -94,10 +94,18 @@
 						<md-icon>settings</md-icon>
 						<md-tooltip md-direction="top">Manage bot folders</md-tooltip>
 					</md-button>
+
+					<div class="bot-filter">
+						<md-field md-inline md-clearable>
+							<label>Filter</label>
+							<md-input v-model="botNameFilter"></md-input>
+						</md-field>
+					</div>
+
 				</md-card-header>
 
 				<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-					<md-card class="bot-card md-elevation-3" v-for="bot in botPool" >
+					<md-card class="bot-card md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
 						<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
 							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 							<img v-if="bot.logo" v-bind:src="bot.logo">
