@@ -31,15 +31,11 @@ BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 MATCH_SETTINGS_KEY = 'match_settings'
 TEAM_SETTINGS_KEY = 'team_settings'
 COMMIT_ID_KEY = 'latest_botpack_commit_id'
-settings = QSettings('rlbotgui', 'preferences')
+bot_folder_settings = None
 
-bot_folder_settings = settings.value(BOT_FOLDER_SETTINGS_KEY, type=dict)
 
-if not bot_folder_settings:
-    bot_folder_settings = {'files': {}, 'folders': {}}
-    default_folder = settings.value(DEFAULT_BOT_FOLDER, type=str)
-    if default_folder:
-        bot_folder_settings['folders'][default_folder] = {'visible': True}
+def load_settings() -> QSettings:
+    return QSettings('rlbotgui', 'preferences')
 
 
 @eel.expose
@@ -57,7 +53,9 @@ def pick_bot_folder():
     filename = pick_bot_location(True)
 
     if filename:
+        global bot_folder_settings
         bot_folder_settings['folders'][filename] = {'visible': True}
+        settings = QSettings('rlbotgui', 'preferences')
         settings.setValue(DEFAULT_BOT_FOLDER, filename)
         settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
         settings.sync()
@@ -93,6 +91,7 @@ def load_bundle(filename):
 def pick_bot_config():
     filename = pick_bot_location(False)
     bot_folder_settings['files'][filename] = {'visible': True}
+    settings = QSettings('rlbotgui', 'preferences')
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
     return load_bundle(filename)
@@ -107,6 +106,7 @@ def get_folder_settings():
 def save_folder_settings(folder_settings):
     global bot_folder_settings
     bot_folder_settings = folder_settings
+    settings = QSettings('rlbotgui', 'preferences')
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
@@ -126,12 +126,14 @@ def validate_bots(bots):
 
 @eel.expose
 def get_match_settings():
+    settings = load_settings()
     match_settings = settings.value(MATCH_SETTINGS_KEY, type=dict)
     return match_settings if match_settings else None
 
 
 @eel.expose
 def get_team_settings():
+    settings = load_settings()
     team_settings = settings.value(TEAM_SETTINGS_KEY, type=dict)
     if not team_settings:
         return None
@@ -144,12 +146,14 @@ def get_team_settings():
 
 @eel.expose
 def save_match_settings(match_settings):
+    settings = load_settings()
     settings.setValue(MATCH_SETTINGS_KEY, match_settings)
 
 
 @eel.expose
 def save_team_settings(blue_bots, orange_bots):
-    settings.setValue(TEAM_SETTINGS_KEY, {"blue_team" : blue_bots, "orange_team": orange_bots})
+    settings = load_settings()
+    settings.setValue(TEAM_SETTINGS_KEY, {"blue_team": blue_bots, "orange_team": orange_bots})
 
 
 def pick_bot_location(is_folder):
@@ -315,6 +319,7 @@ def get_last_botpack_commit_id():
 
 @eel.expose
 def is_botpack_up_to_date():
+    settings = load_settings()
     local_commit_id = settings.value(COMMIT_ID_KEY, type=str)
 
     if not local_commit_id:
@@ -340,6 +345,7 @@ def download_bot_pack():
         # Toggle off the old one since it's been replaced.
         bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)] = {'visible': False}
 
+    settings = load_settings()
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
     settings.sync()
@@ -363,6 +369,7 @@ def ensure_bot_directory():
         os.mkdir(bot_directory)
 
     bot_folder_settings['folders'][os.path.abspath(CREATED_BOTS_FOLDER)] = {'visible': True}
+    settings = load_settings()
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
 
@@ -436,7 +443,20 @@ def launch_eel(use_chrome):
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 
+def init_settings():
+    settings = load_settings()
+    global bot_folder_settings
+    bot_folder_settings = settings.value(BOT_FOLDER_SETTINGS_KEY, type=dict)
+
+    if not bot_folder_settings:
+        bot_folder_settings = {'files': {}, 'folders': {}}
+        default_folder = settings.value(DEFAULT_BOT_FOLDER, type=str)
+        if default_folder:
+            bot_folder_settings['folders'][default_folder] = {'visible': True}
+
+
 def start():
+    init_settings()
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
