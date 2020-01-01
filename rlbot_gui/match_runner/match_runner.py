@@ -3,6 +3,7 @@ from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorCon
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
 from rlbot.utils.structures.bot_input_struct import PlayerInput
+from rlbot.utils.game_state_util import GameState, CarState, Physics, Vector3, Rotator
 
 sm: SetupManager = None
 
@@ -37,6 +38,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int):
     match_config.player_configs = [bot_config]
     match_config.mutators = MutatorConfig()
     match_config.mutators.boost_amount = 'Unlimited'
+    match_config.mutators.match_length = 'Unlimited'
 
     global sm
     if sm is None:
@@ -49,6 +51,12 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int):
     player_input.throttle = 1
     player_input.steer = 1
     sm.game_interface.update_player_input(player_input, 0)
+    sm.game_interface.set_game_state(GameState(cars={0: CarState(physics=Physics(
+        location=Vector3(0, -1136, 0),
+        velocity=Vector3(2300, 0, 0),
+        angular_velocity=Vector3(0, 0, 3),
+        rotation=Rotator(0, 0, 0)
+    ))}))
 
 
 def start_match_helper(bot_list, match_settings):
