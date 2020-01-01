@@ -1,3 +1,4 @@
+from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
 from rlbot.parsing.incrementing_integer import IncrementingInteger
@@ -26,6 +27,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int):
     match_config.game_map = 'Mannfield'
     match_config.instant_start = True
     match_config.existing_match_behavior = 'Continue And Spawn'
+    match_config.networking_role = NetworkingRole.none
 
     bot_config = PlayerConfig()
     bot_config.bot = True
