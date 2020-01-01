@@ -217,6 +217,9 @@ const app = new Vue({
             this.showBotInfo = true;
             eel.save_looks(this.appearanceEditor.config, this.appearanceEditor.path)();
         },
+        spawnCarForViewing: function(botPath, team) {
+            eel.spawn_car_for_viewing(this.appearanceEditor.config, team);
+        },
         blueColors: i => { return {
             h: (i % 10) / 20.5 + .33,
             s: .8,

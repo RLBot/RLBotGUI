@@ -1,6 +1,8 @@
+from rlbot.matchconfig.loadout_config import LoadoutConfig
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
+from rlbot.utils.structures.bot_input_struct import PlayerInput
 
 sm: SetupManager = None
 
@@ -16,6 +18,37 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     if 'path' in bot and bot['path']:
         player_config.config_path = bot['path']
     return player_config
+
+
+def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int):
+    match_config = MatchConfig()
+    match_config.game_mode = 'Soccer'
+    match_config.game_map = 'Mannfield'
+    match_config.instant_start = True
+    match_config.existing_match_behavior = 'Continue And Spawn'
+
+    bot_config = PlayerConfig()
+    bot_config.bot = True
+    bot_config.rlbot_controlled = True
+    bot_config.team = team
+    bot_config.name = "Showroom"
+    bot_config.loadout_config = loadout_config
+
+    match_config.player_configs = [bot_config]
+    match_config.mutators = MutatorConfig()
+    match_config.mutators.boost_amount = 'Unlimited'
+
+    global sm
+    if sm is None:
+        sm = SetupManager()
+    sm.connect_to_game()
+    sm.load_match_config(match_config)
+    sm.start_match()
+    player_input = PlayerInput()
+    player_input.boost = True
+    player_input.throttle = 1
+    player_input.steer = 1
+    sm.game_interface.update_player_input(player_input, 0)
 
 
 def start_match_helper(bot_list, match_settings):
