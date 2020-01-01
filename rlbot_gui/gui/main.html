@@ -386,10 +386,9 @@
 					</md-progress-bar>
 					<p>{{ downloadStatus }}</p>
 				</md-dialog-content>
-				
 			</md-dialog>
 
-			<md-dialog :md-active.sync="appearanceEditor.show" id="appearance-editor-dialog">
+			<md-dialog v-if="activeBot" :md-active.sync="appearanceEditor.show" id="appearance-editor-dialog">
 				<md-dialog-title style="margin-bottom: 0px;" v-if="activeBot">
 					Appearance loadout of {{ activeBot.name }}
 					<md-button class="md-icon-button" @click="appearanceEditor.show = false;" style="float: right;">
@@ -440,6 +439,18 @@
 							<td class="orange-team">
 								<item-field :name="item.name" :items="appearanceEditor.items" v-model="appearanceEditor.config.orange"
 								:item-key="item.itemKey" :paint-key="item.paintKey"></item-field>
+							</td>
+						</tr>
+						<tr v-if="activeBot.path">
+							<td class="blue-team">
+								<md-button class="md-raised md-accent" @click="spawnCarForViewing(0)">
+									View blue car in game
+								</md-button>
+							</td>
+							<td class="orange-team">
+								<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
+									View orange car in game
+								</md-button>
 							</td>
 						</tr>
 					</table>

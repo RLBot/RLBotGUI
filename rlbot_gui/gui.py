@@ -5,10 +5,11 @@ import eel
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
+from rlbot.parsing.agent_config_parser import create_looks_configurations, BOT_CONFIG_LOADOUT_HEADER, \
+    BOT_CONFIG_LOADOUT_ORANGE_HEADER, BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER, BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER, \
+    load_bot_appearance
 from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
-from rlbot.parsing.agent_config_parser import create_looks_configurations, BOT_CONFIG_LOADOUT_HEADER, \
-    BOT_CONFIG_LOADOUT_ORANGE_HEADER, BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER, BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
     boost_amount_mutator_types, match_length_types, max_score_types, overtime_mutator_types, \
     series_length_mutator_types, game_speed_mutator_types, ball_max_speed_mutator_types, ball_type_mutator_types, \
@@ -18,7 +19,8 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, convert_to_filename
 from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from_url
-from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, do_infinite_loop_content
+from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
+    do_infinite_loop_content, spawn_car_in_showroom
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
@@ -199,7 +201,8 @@ def get_looks(path: str) -> dict:
     def serialize_category(target: dict, header_name: str):
         header = looks_config.get_header(header_name)
         for key in header.values.keys():
-            target[key] = str(header.get(key))
+            if header.get(key) is not None:
+                target[key] = str(header.get(key))
 
     serialize_category(looks['blue'], BOT_CONFIG_LOADOUT_HEADER)
     serialize_category(looks['orange'], BOT_CONFIG_LOADOUT_ORANGE_HEADER)
@@ -209,8 +212,7 @@ def get_looks(path: str) -> dict:
     return looks
 
 
-@eel.expose
-def save_looks(looks: dict, path: str):
+def convert_to_looks_config(looks: dict):
     looks_config = create_looks_configurations()
 
     def deserialize_category(source: dict, header_name: str):
@@ -218,17 +220,28 @@ def save_looks(looks: dict, path: str):
         for key in header.values.keys():
             if key in source:
                 header.set_value(key, source[key])
-            else:
-                header.set_value(key, '')
 
     deserialize_category(looks['blue'], BOT_CONFIG_LOADOUT_HEADER)
     deserialize_category(looks['orange'], BOT_CONFIG_LOADOUT_ORANGE_HEADER)
     deserialize_category(looks['blue'], BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER)
     deserialize_category(looks['orange'], BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER)
 
+    return looks_config
+
+@eel.expose
+def save_looks(looks: dict, path: str):
+    looks_config = convert_to_looks_config(looks)
+
     with open(path, 'w', encoding='utf8') as f:
         f.write(str(looks_config))
         print(f'Saved appearance to {path}')
+
+
+@eel.expose
+def spawn_car_for_viewing(looks: dict, team: int):
+    looks_config = convert_to_looks_config(looks)
+    loadout_config = load_bot_appearance(looks_config, team)
+    spawn_car_in_showroom(loadout_config, team)
 
 
 @eel.expose
@@ -439,7 +452,7 @@ def launch_eel(use_chrome):
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
-    eel.start('main.html', size=(1000, 865), block=False, callback=on_websocket_close, options=options,
+    eel.start('main.html', size=(1000, 935), block=False, callback=on_websocket_close, options=options,
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 
