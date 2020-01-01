@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QApplication, QFileDialog
 from pip._internal import main as pipmain
 from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
+from rlbot.parsing.agent_config_parser import create_looks_configurations, BOT_CONFIG_LOADOUT_HEADER, \
+    BOT_CONFIG_LOADOUT_ORANGE_HEADER, BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER, BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
     boost_amount_mutator_types, match_length_types, max_score_types, overtime_mutator_types, \
     series_length_mutator_types, game_speed_mutator_types, ball_max_speed_mutator_types, ball_type_mutator_types, \
@@ -71,6 +73,7 @@ def serialize_bundle(bundle):
         'skill': 1,
         'image': 'imgs/rlbot.png',
         'path': bundle.config_path,
+        'looks_path': bundle.looks_path,
         'info': read_info(bundle),
         'logo': try_copy_logo(bundle)
     }
@@ -182,6 +185,46 @@ def read_info(bundle: BotConfigBundle):
             'language': bundle.base_agent_config.get(details_header, 'language'),
         }
     return None
+
+
+@eel.expose
+def get_looks(path: str) -> dict:
+    looks_config = create_looks_configurations().parse_file(path)
+    looks = {'blue': {}, 'orange': {}}
+
+    def serialize_category(target: dict, header_name: str):
+        header = looks_config.get_header(header_name)
+        for key in header.values.keys():
+            target[key] = str(header.get(key))
+
+    serialize_category(looks['blue'], BOT_CONFIG_LOADOUT_HEADER)
+    serialize_category(looks['orange'], BOT_CONFIG_LOADOUT_ORANGE_HEADER)
+    serialize_category(looks['blue'], BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER)
+    serialize_category(looks['orange'], BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER)
+
+    return looks
+
+
+@eel.expose
+def save_looks(looks: dict, path: str):
+    looks_config = create_looks_configurations()
+
+    def deserialize_category(source: dict, header_name: str):
+        header = looks_config.get_header(header_name)
+        for key in header.values.keys():
+            if key in source:
+                header.set_value(key, source[key])
+            else:
+                header.set_value(key, '')
+
+    deserialize_category(looks['blue'], BOT_CONFIG_LOADOUT_HEADER)
+    deserialize_category(looks['orange'], BOT_CONFIG_LOADOUT_ORANGE_HEADER)
+    deserialize_category(looks['blue'], BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER)
+    deserialize_category(looks['orange'], BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER)
+
+    with open(path, 'w', encoding='utf8') as f:
+        f.write(str(looks_config))
+        print(f'Saved appearance to {path}')
 
 
 @eel.expose
@@ -389,7 +432,7 @@ def launch_eel(use_chrome):
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
-    eel.start('main.html', size=(1000, 830), block=False, callback=on_websocket_close, options=options,
+    eel.start('main.html', size=(1000, 865), block=False, callback=on_websocket_close, options=options,
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 

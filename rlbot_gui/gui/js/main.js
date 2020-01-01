@@ -70,7 +70,35 @@ const app = new Vue({
         downloadProgressPercent: 0,
         downloadStatus: '',
         showBotpackUpdateSnackbar: false,
-        botNameFilter: ''
+        botNameFilter: '',
+        appearanceEditor: {
+            show: false,
+            path: '',
+            config: {
+                blue: {},
+                orange: {},
+            },
+            itemsLoaded: false,
+            items: [],
+            itemTypes: [
+                {name: 'Body', itemKey: 'car_id', paintKey: 'car_paint_id'},
+                {name: 'Decal', itemKey: 'decal_id', paintKey: 'decal_paint_id'},
+                {name: 'Wheels', itemKey: 'wheels_id', paintKey: 'wheels_paint_id'},
+                {name: 'Rocket Boost', itemKey: 'boost_id', paintKey: 'boost_paint_id'},
+                {name: 'Antenna', itemKey: 'antenna_id', paintKey: 'antenna_paint_id'},
+                {name: 'Topper', itemKey: 'hat_id', paintKey: 'hat_paint_id'},
+                {name: 'Paint Finish', itemKey: 'paint_finish_id', paintKey: null},
+                {name: 'Accent Paint Finish', itemKey: 'custom_finish_id', paintKey: null},
+                {name: 'Engine Audio', itemKey: 'engine_audio_id', paintKey: null},
+                {name: 'Trail', itemKey: 'trails_id', paintKey: 'trails_paint_id'},
+                {name: 'Goal Explosion', itemKey: 'goal_explosion_id', paintKey: 'goal_explosion_paint_id'},
+            ],
+            teams: ['blue', 'orange'],
+            colorTypes: [
+                {primary: true, name: 'Primary Color', key: 'team_color_id', rows: 7, columns: 10},
+                {primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
+            ]
+        }
     },
     methods: {
         startMatch: function (event) {
@@ -160,6 +188,68 @@ const app = new Vue({
         },
         passesFilter: function(botName) {
             return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
+        },
+        getAndParseItems: async function(url) {
+            let response = await fetch(url);
+            let data = await response.json();
+            this.appearanceEditor.items = data.Slots;
+        },
+        showAppearanceEditor: async function(lookPath) {
+            this.showBotInfo = false;
+
+            if (!this.appearanceEditor.itemsLoaded) {
+                try {
+                    // try to fetch latest items from alphaconsole github
+                    await this.getAndParseItems('https://raw.githubusercontent.com/AlphaConsole/AlphaConsoleElectron/public/items.json');
+                } catch (error) {
+                    // otherwise use local version
+                    await this.getAndParseItems('json/items.json');
+                }
+                this.appearanceEditor.itemsLoaded = true;
+            }
+
+            this.appearanceEditor.path = lookPath;
+            this.appearanceEditor.config = await eel.get_looks(lookPath)();
+            this.appearanceEditor.show = true;
+        },
+        saveAppearance: function() {
+            this.appearanceEditor.show = false;
+            this.showBotInfo = true;
+            eel.save_looks(this.appearanceEditor.config, this.appearanceEditor.path)();
+        },
+        blueColors: i => { return {
+            h: (i % 10) / 20.5 + .33,
+            s: .8,
+            v: .75 - (Math.floor(i / 10) / 10)
+        }},
+        orangeColors: i => { return {
+            h: 0.2 - ((i % 10) / 35),
+            s: 1,
+            v: .79 - (Math.floor(i / 10) / 10)
+        }},
+        accentColors: i => { return {
+            h: ((i % 15) / 13) - .12,
+            s: i % 15 === 0 ? 0 : 0.9,
+            v: i % 15 === 0 ? .75 - (Math.floor(i / 15) / 8) : .85 - (Math.floor(i / 15) / 8)
+        }},
+        colorStyleFromID: function(id, swatchFunction) {
+            let hsl = swatchFunction(parseInt(id));
+            let rgb = hslToRgb(hsl.h, hsl.s, hsl.v);
+            return 'rgb(' + rgb.toString() + ')';
+        },
+        getSwatchFunction: function(colorType, team) {
+            return colorType.primary ? (team == 'blue' ? this.blueColors : this.orangeColors) : this.accentColors;
+        },
+        getColorIDFromRowAndColumn(row, column, colorType) {
+            return (row - 1) * colorType.columns + (column - 1);
+        },
+        colorStyle: function(colorType, team) {
+            let id = this.appearanceEditor.config[team][colorType.key];
+            return this.colorStyleFromID(id, this.getSwatchFunction(colorType, team));
+        },
+        colorStyleFromRowAndColumn: function (colorType, team, row, column) {
+            let id = this.getColorIDFromRowAndColumn(row, column, colorType);
+            return this.colorStyleFromID(id, this.getSwatchFunction(colorType, team));
         }
     }
 });
