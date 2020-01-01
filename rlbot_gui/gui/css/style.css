@@ -228,3 +228,94 @@ body {
 .md-dialog{
   width:80%;
 }
+
+
+#appearance-editor-dialog {
+  z-index: 5;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.appearance-editor-table .md-field {
+  margin: 4px 0 -9px;
+}
+
+.appearance-editor-table {
+  width: 100%;
+  border-spacing: 10px;
+}
+
+.appearance-editor-table td {
+  width: 50%;
+}
+
+.appearance-editor-table .md-field {
+  padding-left: 15px;
+  border-radius: 3px 3px 0 0;
+}
+
+.black input.md-input {-webkit-text-fill-color: rgb(221, 221, 221) !important;}
+.burntsienna input.md-input {-webkit-text-fill-color: #882104 !important;}
+.cobalt input.md-input {-webkit-text-fill-color: #3f51b5 !important;}
+.crimson input.md-input {-webkit-text-fill-color: #d50000 !important;}
+.forestgreen input.md-input {-webkit-text-fill-color: #199e1e !important;}
+.grey input.md-input {-webkit-text-fill-color: rgb(61, 61, 61) !important;}
+.lime input.md-input {-webkit-text-fill-color: #5ebd00 !important;}
+.orange input.md-input {-webkit-text-fill-color: #ff9d00 !important;}
+.pink input.md-input {-webkit-text-fill-color: #ff4081 !important;}
+.purple input.md-input {-webkit-text-fill-color: #9c27b0 !important;}
+.saffron input.md-input {-webkit-text-fill-color: #ffd000 !important;}
+.skyblue input.md-input {-webkit-text-fill-color: #03a9f4 !important;}
+.titaniumwhite input.md-input {-webkit-text-fill-color: rgb(146, 146, 146) !important;}
+
+.black {background-color: #111;}
+.black span {color: rgb(221, 221, 221); font-weight: bold;}
+.burntsienna {background-color: #ffc2b1;}
+.burntsienna span {color: #882104; font-weight: bold;}
+.cobalt {background-color: #ccd3ff;}
+.cobalt span {color: #3f51b5; font-weight: bold;}
+.crimson {background-color: #ffcece;}
+.crimson span {color: #d50000; font-weight: bold;}
+.forestgreen {background-color: #aae7ac;}
+.forestgreen span {color: #199e1e; font-weight: bold;}
+.grey {background-color: rgb(202, 202, 202);}
+.grey span {color: rgb(61, 61, 61); font-weight: bold;}
+.lime {background-color: #f3ffd2;}
+.lime span {color: #5ebd00; font-weight: bold;}
+.orange {background-color: #fff3d3;}
+.orange span {color: #ff9d00; font-weight: bold;}
+.pink {background-color: #ffcdde;}
+.pink span {color: #ff4081; font-weight: bold;}
+.purple {background-color: #e2b4eb;}
+.purple span {color: #9c27b0; font-weight: bold;}
+.saffron {background-color: #fffce2;}
+.saffron span {color: #ffd000; font-weight: bold;}
+.skyblue {background-color: #c4ecff;}
+.skyblue span {color: #03a9f4; font-weight: bold;}
+.titaniumwhite {background-color: #fff;}
+.titaniumwhite span {color: rgb(146, 146, 146); font-weight: bold;}
+
+.colorpicker-menu {
+  max-width: 1000px;
+}
+
+.colorpicker-menu .md-list {
+  padding: 5px;
+}
+
+.colorpicker-menu td {
+  padding: 0;
+}
+
+.colorpicker-color {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.colorpicker-color:hover {
+  filter: opacity(80%)
+}

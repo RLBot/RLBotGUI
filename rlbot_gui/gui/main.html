@@ -97,7 +97,7 @@
 
 					<div class="bot-filter">
 						<md-field md-inline md-clearable>
-							<label>Filter</label>
+							<label><md-icon>search</md-icon>Filter</label>
 							<md-input v-model="botNameFilter"></md-input>
 						</md-field>
 					</div>
@@ -268,7 +268,7 @@
 				<span>{{snackbarContent}}</span>
 			</md-snackbar>
 
-			<md-snackbar md-position="center" :md-active="showBotpackUpdateSnackbar" md-persistent md-duration="10000">
+			<md-snackbar md-position="center" :md-active="showBotpackUpdateSnackbar" md-persistent :md-duration="10000">
 				<span>Bot Pack update available!</span>
 				<md-button class="md-accent" @click="downloadBotPack()">Download</md-button>
 			</md-snackbar>
@@ -289,8 +289,11 @@
 				</md-dialog-content>
 
 				<md-dialog-actions>
+					<md-button @click="showAppearanceEditor(activeBot.looks_path)">
+						<md-icon>palette</md-icon> Edit Appearance
+					</md-button>
 					<md-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
-						Show Files
+						<md-icon>folder</md-icon> Show Files
 					</md-button>
 					<md-button @click="showBotInfo = false">Close</md-button>
 				</md-dialog-actions>
@@ -386,6 +389,68 @@
 				
 			</md-dialog>
 
+			<md-dialog :md-active.sync="appearanceEditor.show" id="appearance-editor-dialog">
+				<md-dialog-title style="margin-bottom: 0px;" v-if="activeBot">
+					Appearance loadout of {{ activeBot.name }}
+					<md-button class="md-icon-button" @click="appearanceEditor.show = false;" style="float: right;">
+						<md-icon>close</md-icon>
+					</md-button>
+				</md-dialog-title>
+
+				<md-dialog-content>
+					<table class="appearance-editor-table">
+						<tr>
+							<td style="height: 5px; background-color: rgb(0, 153, 255);"></td>
+							<td style="height: 5px; background-color: orange;"></td>
+						</tr>
+						<tr>
+							<td v-for="team in appearanceEditor.teams">
+								<div class="md-layout md-gutter">
+									<div v-for="color in appearanceEditor.colorTypes" class="md-layout-item md-size-50">
+										<label>{{ color.name }}</label>
+										<md-avatar style="margin-left: 20px;"
+											:style="{'background-color': colorStyle(color, team)}">
+										</md-avatar>
+										<md-menu md-size="auto" style="vertical-align: top;">
+											<md-button md-menu-trigger class="md-icon-button">
+												<md-icon>edit</md-icon>
+											</md-button>
+											<md-menu-content class="colorpicker-menu">
+												<table style="border-spacing: 0;">
+													<tr v-for="i in color.rows">
+														<td v-for="j in color.columns">
+															<div class="colorpicker-color"
+																:style="{'background-color': colorStyleFromRowAndColumn(color, team, i, j)}"
+																@click="appearanceEditor.config[team][color.key] = getColorIDFromRowAndColumn(i, j, color);">
+															</div>
+														</td>
+													</tr>
+												</table>
+											</md-menu-content>
+										</md-menu>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr v-for="item in appearanceEditor.itemTypes">
+							<td class="blue-team">
+								<item-field :name="item.name" :items="appearanceEditor.items" v-model="appearanceEditor.config.blue"
+								:item-key="item.itemKey" :paint-key="item.paintKey"></item-field>
+							</td>
+							<td class="orange-team">
+								<item-field :name="item.name" :items="appearanceEditor.items" v-model="appearanceEditor.config.orange"
+								:item-key="item.itemKey" :paint-key="item.paintKey"></item-field>
+							</td>
+						</tr>
+					</table>
+				</md-dialog-content>
+
+				<md-dialog-actions>
+					<md-button class="md-primary md-raised" @click="saveAppearance">Save and close</md-button>
+					<md-button @click="showAppearanceEditor(appearanceEditor.path)">Discard changes</md-button>
+				</md-dialog-actions>
+			</md-dialog>
+
 		</div>
 	</div>
 
@@ -394,6 +459,8 @@
     <script type="text/javascript" src="js/vue-material.min.js"></script>
     <script type="text/javascript" src="js/Sortable.min.js"></script>
     <script type="text/javascript" src="js/vuedraggable.min.js"></script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/item-field.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
