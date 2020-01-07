@@ -192,10 +192,24 @@ const app = new Vue({
         getAndParseItems: async function(url) {
             let response = await fetch(url);
             let data = await response.json();
+
+            // rename duplicate item names
+            for (let category of data.Slots) {
+                let nameCounts = {};
+                for (let item of category.Items) {
+                    if (nameCounts[item.Name]) {
+                        nameCounts[item.Name]++;
+                        item.Name = `${item.Name} (${nameCounts[item.Name]})`;
+                    } else {
+                        nameCounts[item.Name] = 1;
+                    }
+                }
+            }
             this.appearanceEditor.items = data.Slots;
         },
         showAppearanceEditor: async function(lookPath) {
             this.showBotInfo = false;
+            this.showProgressSpinner = true;
 
             if (!this.appearanceEditor.itemsLoaded) {
                 try {
@@ -210,6 +224,7 @@ const app = new Vue({
 
             this.appearanceEditor.path = lookPath;
             this.appearanceEditor.config = await eel.get_looks(lookPath)();
+            this.showProgressSpinner = false;
             this.appearanceEditor.show = true;
         },
         saveAppearance: function() {

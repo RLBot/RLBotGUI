@@ -237,6 +237,7 @@ body {
   width: 100%;
   max-width: 100%;
   max-height: 100%;
+  overflow: scroll;
 }
 
 .appearance-editor-table .md-field {
@@ -257,7 +258,7 @@ body {
   border-radius: 3px 3px 0 0;
 }
 
-.black input.md-input {-webkit-text-fill-color: rgb(221, 221, 221) !important;}
+.black input.md-input {-webkit-text-fill-color: #dddddd !important;}
 .burntsienna input.md-input {-webkit-text-fill-color: #882104 !important;}
 .cobalt input.md-input {-webkit-text-fill-color: #3f51b5 !important;}
 .crimson input.md-input {-webkit-text-fill-color: #d50000 !important;}
@@ -269,10 +270,10 @@ body {
 .purple input.md-input {-webkit-text-fill-color: #9c27b0 !important;}
 .saffron input.md-input {-webkit-text-fill-color: #ffd000 !important;}
 .skyblue input.md-input {-webkit-text-fill-color: #03a9f4 !important;}
-.titaniumwhite input.md-input {-webkit-text-fill-color: rgb(146, 146, 146) !important;}
+.titaniumwhite input.md-input {-webkit-text-fill-color: #929292 !important;}
 
 .black {background-color: #111;}
-.black span {color: rgb(221, 221, 221); font-weight: bold;}
+.black span {color: #dddddd; font-weight: bold;}
 .burntsienna {background-color: #ffc2b1;}
 .burntsienna span {color: #882104; font-weight: bold;}
 .cobalt {background-color: #ccd3ff;}
@@ -281,8 +282,8 @@ body {
 .crimson span {color: #d50000; font-weight: bold;}
 .forestgreen {background-color: #aae7ac;}
 .forestgreen span {color: #199e1e; font-weight: bold;}
-.grey {background-color: rgb(202, 202, 202);}
-.grey span {color: rgb(61, 61, 61); font-weight: bold;}
+.grey {background-color: #cacaca;}
+.grey span {color: #3d3d3d; font-weight: bold;}
 .lime {background-color: #f3ffd2;}
 .lime span {color: #5ebd00; font-weight: bold;}
 .orange {background-color: #fff3d3;}
@@ -296,7 +297,7 @@ body {
 .skyblue {background-color: #c4ecff;}
 .skyblue span {color: #03a9f4; font-weight: bold;}
 .titaniumwhite {background-color: #fff;}
-.titaniumwhite span {color: rgb(146, 146, 146); font-weight: bold;}
+.titaniumwhite span {color: #929292; font-weight: bold;}
 
 .colorpicker-menu {
   max-width: 1000px;
@@ -317,5 +318,9 @@ body {
 }
 
 .colorpicker-color:hover {
-  filter: opacity(80%)
+  border: 2px solid rgba(255, 255, 255, 0.74);
+}
+
+.selected-color {
+  border: 2px dashed rgba(255, 255, 255, 0.897);
 }
