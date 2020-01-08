@@ -177,7 +177,7 @@
 
 					<div class="center-flex">
 
-						<div class="md-layout md-gutter">
+						<div class="md-layout md-gutter" style="max-width: 400px;">
 							<div class="md-layout-item">
 								<md-field>
 									<label for="map_selection">Map</label>
@@ -268,9 +268,12 @@
 				<span>{{snackbarContent}}</span>
 			</md-snackbar>
 
-			<md-snackbar md-position="center" :md-active="showBotpackUpdateSnackbar" md-persistent :md-duration="10000">
+			<md-snackbar md-position="center" :md-active="showBotpackUpdateSnackbar" :md-duration="10000">
 				<span>Bot Pack update available!</span>
-				<md-button class="md-accent" @click="downloadBotPack()">Download</md-button>
+				<md-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</md-button>
+				<md-button class="md-icon-button" @click="showBotpackUpdateSnackbar = false;">
+					<md-icon style="color: #ffffffb4;">close</md-icon>
+				</md-button>
 			</md-snackbar>
 
 			<md-dialog v-if="activeBot && activeBot.info" :md-active.sync="showBotInfo">
@@ -388,7 +391,7 @@
 				</md-dialog-content>
 			</md-dialog>
 
-			<md-dialog v-if="activeBot" :md-active.sync="appearanceEditor.show" id="appearance-editor-dialog">
+			<md-dialog :md-active.sync="appearanceEditor.show" id="appearance-editor-dialog">
 				<md-dialog-title style="margin-bottom: 0px;" v-if="activeBot">
 					Appearance loadout of {{ activeBot.name }}
 					<md-button class="md-icon-button" @click="appearanceEditor.show = false;" style="float: right;">
@@ -396,7 +399,7 @@
 					</md-button>
 				</md-dialog-title>
 
-				<md-dialog-content>
+				<md-dialog-content style="padding-bottom: 0px;">
 					<table class="appearance-editor-table">
 						<tr>
 							<td style="height: 5px; background-color: rgb(0, 153, 255);"></td>
@@ -405,10 +408,10 @@
 						<tr>
 							<td v-for="team in appearanceEditor.teams">
 								<div class="md-layout md-gutter">
-									<div v-for="color in appearanceEditor.colorTypes" class="md-layout-item md-size-50">
-										<label>{{ color.name }}</label>
+									<div v-for="colorType in appearanceEditor.colorTypes" class="md-layout-item md-size-50">
+										<label>{{ colorType.name }}</label>
 										<md-avatar style="margin-left: 20px;"
-											:style="{'background-color': colorStyle(color, team)}">
+											:style="{'background-color': colorStyle(colorType, team)}">
 										</md-avatar>
 										<md-menu md-size="auto" style="vertical-align: top;">
 											<md-button md-menu-trigger class="md-icon-button">
@@ -416,11 +419,13 @@
 											</md-button>
 											<md-menu-content class="colorpicker-menu">
 												<table style="border-spacing: 0;">
-													<tr v-for="i in color.rows">
-														<td v-for="j in color.columns">
+													<tr v-for="i in colorType.rows">
+														<td v-for="j in colorType.columns">
 															<div class="colorpicker-color"
-																:style="{'background-color': colorStyleFromRowAndColumn(color, team, i, j)}"
-																@click="appearanceEditor.config[team][color.key] = getColorIDFromRowAndColumn(i, j, color);">
+																:style="{'background-color': colorStyleFromRowAndColumn(colorType, team, i, j)}"
+																:class="{'selected-color':
+																	appearanceEditor.config[team][colorType.key] == getColorIDFromRowAndColumn(i, j, colorType)}"
+																@click="appearanceEditor.config[team][colorType.key] = getColorIDFromRowAndColumn(i, j, colorType);">
 															</div>
 														</td>
 													</tr>
@@ -441,24 +446,26 @@
 								:item-key="item.itemKey" :paint-key="item.paintKey"></item-field>
 							</td>
 						</tr>
-						<tr v-if="activeBot.path">
-							<td class="blue-team">
-								<md-button class="md-raised md-accent" @click="spawnCarForViewing(0)">
-									View blue car in game
-								</md-button>
-							</td>
-							<td class="orange-team">
-								<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
-									View orange car in game
-								</md-button>
-							</td>
-						</tr>
 					</table>
 				</md-dialog-content>
 
 				<md-dialog-actions>
-					<md-button class="md-primary md-raised" @click="saveAppearance">Save and close</md-button>
-					<md-button @click="showAppearanceEditor(appearanceEditor.path)">Discard changes</md-button>
+					<md-button class="md-raised md-accent" @click="spawnCarForViewing(0)">
+						<md-icon>remove_red_eye</md-icon>
+						View blue car in game
+					</md-button>
+					<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)" style="margin-right: auto;">
+						<md-icon>remove_red_eye</md-icon>
+						View orange car in game
+					</md-button>
+					<md-button class="md-primary md-raised" @click="saveAppearance">
+						<md-icon>check</md-icon>
+						Save and close
+					</md-button>
+					<md-button @click="showAppearanceEditor(appearanceEditor.path)">
+						<md-icon>clear</md-icon>
+						Revert changes
+					</md-button>
 				</md-dialog-actions>
 			</md-dialog>
 
