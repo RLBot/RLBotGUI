@@ -19,9 +19,9 @@ Vue.component('item-field', {
             </div>
             <div class="md-layout-item md-size-30">
 
-                <md-field v-if="paintable" :class="selectedPaintColorClass">
+                <md-field v-if="paintable" :class="selectedPaintColorClass" class="paint-color">
                     <md-select v-model="selectedPaint">
-                        <md-option v-for="color in paintColors" :value="color.id" :class="color.class">{{ color.name }}</md-option>
+                        <md-option v-for="color in paintColors" :value="color.id" :class="color.class" class="paint-color">{{ color.name }}</md-option>
                     </md-select>
                 </md-field>
 
