@@ -206,7 +206,7 @@ const app = new Vue({
             }
             this.appearanceEditor.items = data.Slots;
         },
-        showAppearanceEditor: async function(lookPath) {
+        showAppearanceEditor: async function(looksPath) {
             this.showBotInfo = false;
             this.showProgressSpinner = true;
 
@@ -221,10 +221,15 @@ const app = new Vue({
                 this.appearanceEditor.itemsLoaded = true;
             }
 
-            this.appearanceEditor.path = lookPath;
-            this.appearanceEditor.config = await eel.get_looks(lookPath)();
+            this.appearanceEditor.path = looksPath;
+            this.appearanceEditor.config = await eel.get_looks(looksPath)();
             this.showProgressSpinner = false;
             this.appearanceEditor.show = true;
+        },
+        pickAndEditAppearanceFile: async function() {
+            let path = await eel.pick_location(false)();
+            this.activeBot = null;
+            if (path) this.showAppearanceEditor(path);
         },
         saveAppearance: function() {
             this.appearanceEditor.show = false;

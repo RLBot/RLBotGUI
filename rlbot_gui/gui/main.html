@@ -37,6 +37,9 @@
 							<md-menu-item @click="resetMatchSettingsToDefault()">
 								Reset match settings
 							</md-menu-item>
+							<md-menu-item @click="pickAndEditAppearanceFile()">
+								Edit appearance config file
+							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
 				</div>
@@ -302,7 +305,7 @@
 				</md-dialog-actions>
 			</md-dialog>
 
-			<md-dialog v-if="activeBot" :md-active.sync="showLanguageWarning">
+			<md-dialog v-if="activeBot && activeBot.warn" :md-active.sync="showLanguageWarning">
 				<md-dialog-title>Compatibility Warning</md-dialog-title>
 
 				<md-dialog-content>
@@ -392,8 +395,9 @@
 			</md-dialog>
 
 			<md-dialog :md-active.sync="appearanceEditor.show" id="appearance-editor-dialog">
-				<md-dialog-title style="margin-bottom: 0px;" v-if="activeBot">
-					Appearance loadout of {{ activeBot.name }}
+				<md-dialog-title style="margin-bottom: 0px;">
+					<span v-if="activeBot && activeBot.name">Appearance loadout of {{ activeBot.name }}</span>
+					<span v-else>{{ appearanceEditor.path }}</span>
 					<md-button class="md-icon-button" @click="appearanceEditor.show = false;" style="float: right;">
 						<md-icon>close</md-icon>
 					</md-button>

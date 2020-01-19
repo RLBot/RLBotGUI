@@ -52,7 +52,7 @@ def kill_bots():
 
 @eel.expose
 def pick_bot_folder():
-    filename = pick_bot_location(True)
+    filename = pick_location(True)
 
     if filename:
         global bot_folder_settings
@@ -91,7 +91,7 @@ def load_bundle(filename):
 
 @eel.expose
 def pick_bot_config():
-    filename = pick_bot_location(False)
+    filename = pick_location(False)
     bot_folder_settings['files'][filename] = {'visible': True}
     settings = QSettings('rlbotgui', 'preferences')
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
@@ -158,7 +158,8 @@ def save_team_settings(blue_bots, orange_bots):
     settings.setValue(TEAM_SETTINGS_KEY, {"blue_team": blue_bots, "orange_team": orange_bots})
 
 
-def pick_bot_location(is_folder):
+@eel.expose
+def pick_location(is_folder):
     """
     We're using python for file picking because only python (not javascript) can retrieve
     an actual path on the file system which is what we need.
