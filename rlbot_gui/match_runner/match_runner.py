@@ -98,7 +98,7 @@ def start_match_helper(bot_list, match_settings):
     global sm
     if sm is not None:
         try:
-            sm.shut_down()
+            sm.shut_down(kill_all_pids=True)
         except Exception as e:
             print(e)
 
