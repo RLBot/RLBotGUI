@@ -12,8 +12,10 @@ const STARTING_BOT_POOL = [
 ];
 
 const Main = httpVueLoader('main.vue');
+const Sandbox = httpVueLoader('sandbox.vue');
 const routes = [
     { path: '/', component: Main },
+    { path: '/sandbox', component: Sandbox },
 ];
 
 const router = new VueRouter({

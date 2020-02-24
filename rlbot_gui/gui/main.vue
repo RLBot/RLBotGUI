@@ -24,6 +24,9 @@
 						<md-menu-item @click="pickAndEditAppearanceFile()">
 							Edit appearance config file
 						</md-menu-item>
+						<md-menu-item @click="$router.replace('/sandbox')">
+							Sandbox!
+						</md-menu-item>
 					</md-menu-content>
 				</md-menu>
 			</div>
