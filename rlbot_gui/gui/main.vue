@@ -528,10 +528,8 @@
 			},
 			showAppearanceEditor: function(looksPath) {
 				this.showBotInfo = false;
-				this.showProgressSpinner = true;
 				this.appearancePath = looksPath;
 				this.appearanceEditorVisible = true;
-				this.showProgressSpinner = false;
 			},
 			pickAndEditAppearanceFile: async function() {
 				let path = await eel.pick_location(false)();
