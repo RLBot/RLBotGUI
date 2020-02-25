@@ -80,8 +80,13 @@
 </template>
 
 <script>
+	const ItemField = httpVueLoader('item-field.vue');
+
 	module.exports = {
 		name: 'appearance-editor',
+		components: {
+			'item-field': ItemField
+		},
 		props: ['active', 'path', 'activeBot'],
 		data () {
 			return {
