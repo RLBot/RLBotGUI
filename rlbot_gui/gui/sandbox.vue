@@ -16,6 +16,7 @@
             <div class="md-layout">
                 <div class="md-layout-item">
                     <md-card class="settings-card">
+<!--                        This v-stage thing comes from here: https://konvajs.org/docs/vue/index.html-->
                         <v-stage ref="stage" :config="configKonva" class="arena-background">
                             <v-layer ref="layer">
                                 <v-circle :config="ball" @dragend="handleBallDragEnd" @dragstart="handleDragStart"></v-circle>
@@ -53,11 +54,13 @@
 </style>
 <script>
 
+    // https://konvajs.org/docs/vue/index.html
     Vue.use(VueKonva);
 
     const PIXEL_HEIGHT = 580;
 
     module.exports = {
+        name: 'sandbox',
         data() {
             return {
                 watching: false,

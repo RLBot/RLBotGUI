@@ -19,7 +19,10 @@
 <body id="rlbotgui">
 	<div id="app" :style="bodyStyle">
 
-		<router-view></router-view>
+<!--		https://stackoverflow.com/a/55296309/280852-->
+		<keep-alive include="match-setup,sandbox">
+			<router-view></router-view>
+		</keep-alive>
 
 	</div>
 
