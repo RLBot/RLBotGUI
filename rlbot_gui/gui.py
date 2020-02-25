@@ -21,6 +21,7 @@ from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstra
 from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from_url
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
+from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
@@ -229,6 +230,7 @@ def convert_to_looks_config(looks: dict):
 
     return looks_config
 
+
 @eel.expose
 def save_looks(looks: dict, path: str):
     looks_config = convert_to_looks_config(looks)
@@ -412,49 +414,22 @@ def begin_scratch_bot(bot_name):
     except FileExistsError as e:
         return {'error': str(e)}
 
+
 @eel.expose
 def set_state(state):
     set_game_state(state)
 
+
 @eel.expose
 def fetch_game_tick_packet_json():
+    """
+    Here we're selectively converting parts of the game tick packet into dict format,
+    which will automatically get serialized into json by eel. We're skipping over parts
+    that are currently not needed by the GUI, e.g. boost pad state.
+    """
     ctypes_packet = fetch_game_tick_packet()
-    dict_version = {}
-    dict_version['game_ball'] = getdict(ctypes_packet.game_ball)
-    dict_version['game_info'] = getdict(ctypes_packet.game_info)
-    cars = []
-    for i in range(ctypes_packet.num_cars):
-        cars.append(getdict(ctypes_packet.game_cars[i]))
-    dict_version['game_cars'] = cars
-    return dict_version
-
-def getdict(struct):
-    result = {}
-    def get_value(value):
-        if (type(value) not in [int, float, bool]) and not bool(value):
-            # it's a null pointer
-            value = None
-        elif hasattr(value, "_length_") and hasattr(value, "_type_"):
-            # Probably an array
-            #print value
-            value = get_array(value)
-        elif hasattr(value, "_fields_"):
-            # Probably another struct
-            value = getdict(value)
-        return value
-    def get_array(array):
-        ar = []
-        for value in array:
-            value = get_value(value)
-            ar.append(value)
-        return ar
-    for f in struct._fields_:
-        field = f[0]
-        value = getattr(struct, field)
-        # if the type is not a primitive and it evaluates to False ...
-        value = get_value(value)
-        result[field] = value
-    return result
+    dict_version = convert_packet_to_dict(ctypes_packet)
+    return dict_version  # This gets converted to json automatically.
 
 
 should_quit = False

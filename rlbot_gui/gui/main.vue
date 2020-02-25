@@ -25,7 +25,7 @@
 							Edit appearance config file
 						</md-menu-item>
 						<md-menu-item @click="$router.replace('/sandbox')">
-							Sandbox!
+							Sandbox (experimental)
 						</md-menu-item>
 					</md-menu-content>
 				</md-menu>
@@ -403,6 +403,7 @@
 	const MutatorField = httpVueLoader('mutator-field.vue');
 
 	module.exports = {
+		name: 'match-setup',
 		components: {
 			'appearance-editor': AppearanceEditor,
 			'mutator-field': MutatorField
@@ -483,12 +484,12 @@
 				eel.kill_bots();
 			},
 			pickBotFolder: function (event) {
-				eel.pick_bot_folder()(botsReceived);
-				eel.get_folder_settings()(folderSettingsReceived);
+				eel.pick_bot_folder()(this.botsReceived);
+				eel.get_folder_settings()(this.folderSettingsReceived);
 			},
 			pickBotConfig: function (event) {
-				eel.pick_bot_config()(botsReceived);
-				eel.get_folder_settings()(folderSettingsReceived);
+				eel.pick_bot_config()(this.botsReceived);
+				eel.get_folder_settings()(this.folderSettingsReceived);
 			},
 			addToTeam: function(bot, team) {
 				if (team === 'orange') {
@@ -551,18 +552,18 @@
 
 				if (language === 'python') {
 					this.showProgressSpinner = true;
-					eel.begin_python_bot(bot_name)(botLoadHandler);
+					eel.begin_python_bot(bot_name)(this.botLoadHandler);
 				}
 
 				if (language === 'scratch') {
 					this.showProgressSpinner = true;
-					eel.begin_scratch_bot(bot_name)(botLoadHandler);
+					eel.begin_scratch_bot(bot_name)(this.botLoadHandler);
 				}
 			},
 			applyFolderSettings: function() {
 				eel.save_folder_settings(this.folderSettings);
 				this.botPool = STARTING_BOT_POOL;
-				eel.scan_for_bots()(botsReceived);
+				eel.scan_for_bots()(this.botsReceived);
 			},
 			passesFilter: function(botName) {
 				return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
