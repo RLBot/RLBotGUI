@@ -6,7 +6,7 @@
                 <h3 class="md-title" style="flex: 1">RLBot Sandbox</h3>
 
                 <div class="md-toolbar-section-end">
-                    <md-button @click="$router.replace('/')">
+                    <md-button @click="watching = false; $router.replace('/')">
                         Back
                     </md-button>
                 </div>
@@ -117,7 +117,9 @@
                     }
                 }
                 if (this.watching) {
-                    eel.fetch_game_tick_packet_json()(this.gameTickPacketReceived)
+                    setTimeout(function() {
+                        eel.fetch_game_tick_packet_json()(this.gameTickPacketReceived)
+                    }.bind(this), 50);  // Delay 50 milliseconds to avoid hurting the CPU
                 }
             },
             toCanvasVec: function(packetVec) {
