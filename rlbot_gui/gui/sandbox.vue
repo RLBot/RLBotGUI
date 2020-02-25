@@ -34,6 +34,10 @@
                             <md-checkbox v-model="frozen">
                                 Freeze Game
                             </md-checkbox>
+                            <div>
+                                <md-radio v-model="gravity" value="normal">Normal gravity</md-radio>
+                                <md-radio v-model="gravity" value="zero">Zero gravity</md-radio>
+                            </div>
                             <p>
                                 You can drag and drop to move objects around in the game!
                             </p>
@@ -65,6 +69,7 @@
             return {
                 watching: false,
                 frozen: false,
+                gravity: 'normal',
                 gameTickPacket: null,
                 configKonva: {
                     width: 410,
@@ -162,6 +167,15 @@
             frozen: {
                 handler: function (newVal) {
                     eel.set_state({game_info: {paused: newVal}});
+                }
+            },
+            gravity: {
+                handler: function (newVal) {
+                    if (newVal === 'zero') {
+                        eel.set_state({game_info: {world_gravity_z: -0.000001}});
+                    } else {
+                        eel.set_state({game_info: {world_gravity_z: -650}});
+                    }
                 }
             }
         }
