@@ -339,20 +339,27 @@
 			</md-dialog-actions>
 		</md-dialog>
 
-		<md-dialog :md-active.sync="showFolderSettingsDialog">
+		<md-dialog :md-active.sync="showFolderSettingsDialog" style="overflow: scroll;">
 			<md-dialog-title>Folder Settings</md-dialog-title>
 
 			<md-dialog-content>
 
 				<md-list>
 					<md-list-item v-for="(settings, path) in folderSettings.folders">
-						<md-switch v-model="settings.visible">{{path}}</md-switch>
+						<md-switch v-model="settings.visible" style="overflow:hidden;">
+							{{ path }}
+						</md-switch>
+
 						<md-button class="md-icon-button" @click="delete folderSettings.folders[path]">
 							<md-icon>close</md-icon>
 						</md-button>
 					</md-list-item>
+
 					<md-list-item v-for="(settings, path) in folderSettings.files">
-						<md-switch v-model="settings.visible">{{path}}</md-switch>
+						<md-switch v-model="settings.visible" style="overflow: hidden;">
+							{{ path }}
+						</md-switch>
+						
 						<md-button class="md-icon-button" @click="delete folderSettings.files[path]">
 							<md-icon>close</md-icon>
 						</md-button>
