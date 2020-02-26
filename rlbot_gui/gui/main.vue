@@ -80,7 +80,7 @@
 						</md-menu-item>
 					</md-menu-content>
 				</md-menu>
-				<md-button class="md-fab md-mini bot-pool-adder" @click="showFolderSettingsDialog = true">
+				<md-button class="md-fab md-mini bot-pool-adder" @click="openFolderSettingsDialog">
 					<md-icon>settings</md-icon>
 					<md-tooltip md-direction="top">Manage bot folders</md-tooltip>
 				</md-button>
@@ -359,7 +359,7 @@
 						<md-switch v-model="settings.visible" style="overflow: hidden;">
 							{{ path }}
 						</md-switch>
-						
+
 						<md-button class="md-icon-button" @click="delete folderSettings.files[path]">
 							<md-icon>close</md-icon>
 						</md-button>
@@ -564,6 +564,10 @@
 					this.showProgressSpinner = true;
 					eel.begin_scratch_bot(bot_name)(this.botLoadHandler);
 				}
+			},
+			openFolderSettingsDialog: function() {
+				eel.get_folder_settings()(this.folderSettingsReceived);
+				this.showFolderSettingsDialog = true;
 			},
 			applyFolderSettings: function() {
 				eel.save_folder_settings(this.folderSettings);
