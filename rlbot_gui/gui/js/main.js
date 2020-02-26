@@ -33,6 +33,12 @@ const app = new Vue({
     router: router,
     el: '#app',
     data: {
+        bodyStyle: null
+    },
+    methods: {
+        changeBackgroundImage: function(bodyStyle) {
+            this.bodyStyle = bodyStyle;
+        }
     }
 });
 

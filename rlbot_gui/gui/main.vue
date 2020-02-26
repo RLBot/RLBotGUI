@@ -453,7 +453,6 @@
 				packageString: null,
 				showSnackbar: false,
 				snackbarContent: null,
-				bodyStyle: null,
 				showProgressSpinner: false,
 				languageSupport: null,
 				activeBot: null,
@@ -524,7 +523,8 @@
 				this.updateBGImage(this.matchSettings.map);
 			},
 			updateBGImage: function(mapName) {
-				this.bodyStyle = { backgroundImage: "url(../imgs/arenas/" + mapName + ".jpg)" };
+				let bodyStyle = {backgroundImage: 'url(../imgs/arenas/' + mapName + '.jpg)'};
+				this.$emit('background-change', bodyStyle);
 			},
 			downloadBotPack: function() {
 				this.showBotpackUpdateSnackbar = false;
