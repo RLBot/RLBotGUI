@@ -80,7 +80,7 @@
 						</md-menu-item>
 					</md-menu-content>
 				</md-menu>
-				<md-button class="md-fab md-mini bot-pool-adder" @click="showFolderSettingsDialog = true">
+				<md-button class="md-fab md-mini bot-pool-adder" @click="openFolderSettingsDialog">
 					<md-icon>settings</md-icon>
 					<md-tooltip md-direction="top">Manage bot folders</md-tooltip>
 				</md-button>
@@ -339,20 +339,27 @@
 			</md-dialog-actions>
 		</md-dialog>
 
-		<md-dialog :md-active.sync="showFolderSettingsDialog">
+		<md-dialog :md-active.sync="showFolderSettingsDialog" style="overflow: scroll;">
 			<md-dialog-title>Folder Settings</md-dialog-title>
 
 			<md-dialog-content>
 
 				<md-list>
 					<md-list-item v-for="(settings, path) in folderSettings.folders">
-						<md-switch v-model="settings.visible">{{path}}</md-switch>
+						<md-switch v-model="settings.visible" style="overflow:hidden;">
+							{{ path }}
+						</md-switch>
+
 						<md-button class="md-icon-button" @click="delete folderSettings.folders[path]">
 							<md-icon>close</md-icon>
 						</md-button>
 					</md-list-item>
+
 					<md-list-item v-for="(settings, path) in folderSettings.files">
-						<md-switch v-model="settings.visible">{{path}}</md-switch>
+						<md-switch v-model="settings.visible" style="overflow: hidden;">
+							{{ path }}
+						</md-switch>
+
 						<md-button class="md-icon-button" @click="delete folderSettings.files[path]">
 							<md-icon>close</md-icon>
 						</md-button>
@@ -446,7 +453,6 @@
 				packageString: null,
 				showSnackbar: false,
 				snackbarContent: null,
-				bodyStyle: null,
 				showProgressSpinner: false,
 				languageSupport: null,
 				activeBot: null,
@@ -517,7 +523,8 @@
 				this.updateBGImage(this.matchSettings.map);
 			},
 			updateBGImage: function(mapName) {
-				this.bodyStyle = { backgroundImage: "url(../imgs/arenas/" + mapName + ".jpg)" };
+				let bodyStyle = {backgroundImage: 'url(../imgs/arenas/' + mapName + '.jpg)'};
+				this.$emit('background-change', bodyStyle);
 			},
 			downloadBotPack: function() {
 				this.showBotpackUpdateSnackbar = false;
@@ -557,6 +564,10 @@
 					this.showProgressSpinner = true;
 					eel.begin_scratch_bot(bot_name)(this.botLoadHandler);
 				}
+			},
+			openFolderSettingsDialog: function() {
+				eel.get_folder_settings()(this.folderSettingsReceived);
+				this.showFolderSettingsDialog = true;
 			},
 			applyFolderSettings: function() {
 				eel.save_folder_settings(this.folderSettings);
