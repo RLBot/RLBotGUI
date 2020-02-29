@@ -38,6 +38,19 @@
                                 <md-radio v-model="gravity" value="normal">Normal gravity</md-radio>
                                 <md-radio v-model="gravity" value="zero">Zero gravity</md-radio>
                             </div>
+                            <div>
+                                <div class="md-layout md-alignment-center-left">
+                                    <div class="md-layout-item">
+                                        <md-field>
+                                            <label>Console Command</label>
+                                            <md-input v-model="command"></md-input>
+                                        </md-field>
+                                    </div>
+                                    <div class="md-layout-item">
+                                        <md-button class="md-raised md-alternative" @click="executeCommand()">Execute</md-button>
+                                    </div>
+                                </div>
+                            </div>
                             <p>
                                 You can drag and drop to move objects around in the game!
                             </p>
@@ -70,6 +83,7 @@
                 watching: false,
                 frozen: false,
                 gravity: 'normal',
+                command: null,
                 gameTickPacket: null,
                 configKonva: {
                     width: 410,
@@ -154,6 +168,9 @@
                 eel.set_state({
                     cars: cars
                 });
+            },
+            executeCommand: function() {
+                eel.set_state({console_commands: [this.command]});
             }
         },
         watch: {

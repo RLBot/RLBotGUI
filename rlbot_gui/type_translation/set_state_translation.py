@@ -20,6 +20,8 @@ def dict_to_game_state(state_dict):
             gs.game_info.paused = state_dict['game_info']['paused']
         if 'world_gravity_z' in state_dict['game_info']:
             gs.game_info.world_gravity_z = state_dict['game_info']['world_gravity_z']
+    if 'console_commands' in state_dict:
+        gs.console_commands = state_dict['console_commands']
     return gs
 
 
