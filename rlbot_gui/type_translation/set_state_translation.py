@@ -13,6 +13,8 @@ def dict_to_game_state(state_dict):
             car_state = CarState()
             if 'physics' in car:
                 car_state.physics = dict_to_physics(car['physics'])
+            if 'boost_amount' in car:
+                car_state.boost_amount = car['boost_amount']
             gs.cars[int(index)] = car_state
     if 'game_info' in state_dict:
         gs.game_info = GameInfoState()
