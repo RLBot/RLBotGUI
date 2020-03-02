@@ -39,6 +39,11 @@
                                 <md-radio v-model="gravity" value="zero">Zero gravity</md-radio>
                             </div>
                             <div>
+                                <md-button class="md-raised md-alternative" @click="rewind()"  :disabled="!hasPacketHistory">
+                                    Rewind 5 Seconds
+                                </md-button>
+                            </div>
+                            <div>
                                 <div class="md-layout md-alignment-center-left">
                                     <div class="md-layout-item">
                                         <md-field>
@@ -75,6 +80,10 @@
     Vue.use(VueKonva);
 
     const PIXEL_HEIGHT = 580;
+    const HISTORY_SECONDS = 5;
+    const HISTORY_INCREMENT_SECONDS = 0.1;
+
+    let packetHistory = [];
 
     module.exports = {
         name: 'sandbox',
@@ -98,7 +107,8 @@
                     strokeWidth: 2,
                     draggable: true
                 },
-                cars: []
+                cars: [],
+                hasPacketHistory: false
             };
         },
         methods: {
@@ -135,6 +145,21 @@
                         this.cars.push(car);
                     }
                 }
+
+                if (packetHistory.length) {
+                    const tail = packetHistory[packetHistory.length - 1];
+                    const tailTime = tail.game_info.seconds_elapsed;
+                    if (result.game_info.seconds_elapsed - tailTime > HISTORY_INCREMENT_SECONDS) {
+                        packetHistory.push(result);
+                        if (packetHistory.length > HISTORY_SECONDS / HISTORY_INCREMENT_SECONDS) {
+                            packetHistory.shift();
+                        }
+                    }
+                } else {
+                    packetHistory.push(result);
+                }
+                this.hasPacketHistory = true;
+
                 if (this.watching) {
                     setTimeout(function() {
                         eel.fetch_game_tick_packet_json()(this.gameTickPacketReceived)
@@ -171,6 +196,38 @@
             },
             executeCommand: function() {
                 eel.set_state({console_commands: [this.command]});
+            },
+            rewind: function () {
+                // Rewinds to the earliest point in recorded history. In many cases this will be 5 seconds ago,
+                // assuming HISTORY_SECONDS is still configured as 5. However, due to low amount of history data or
+                // interruptions in recording, this can vary.
+
+                // The rewinding is not perfect because state setting cannot actually change the clock or change
+                // the state of boost pads. Also state setting is a little mushy in general, so consider this to be
+                // "best effort".
+
+                if (packetHistory.length > 0) {
+                    firstPacket = packetHistory[0];
+                    lastPacket = packetHistory[packetHistory.length - 1];
+
+                    // Doctor the time on the first packet. It will remain in the packet history array.
+                    // With the new time, it will be representative of what's about to happen due to state setting.
+                    // This will prevent any "bad history" from leaking in due to latency before the state setting takes effect.
+                    firstPacket.game_info.seconds_elapsed = lastPacket.game_info.seconds_elapsed;
+
+                    // Truncate the packet history
+                    packetHistory.length = 1;
+
+                    cars = {};
+                    firstPacket.game_cars.forEach(function (car, index) {
+                        cars[index] = {physics: car.physics, boost_amount: car.boost}
+                    });
+                    eel.set_state({
+                        cars: cars,
+                        ball: {physics: firstPacket.game_ball.physics}
+                    });
+                }
+                this.hasPacketHistory = false;
             }
         },
         watch: {
