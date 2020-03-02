@@ -93,11 +93,15 @@ def load_bundle(filename):
 @eel.expose
 def pick_bot_config():
     filename = pick_location(False)
-    bot_folder_settings['files'][filename] = {'visible': True}
-    settings = QSettings('rlbotgui', 'preferences')
-    settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
-    settings.sync()
-    return load_bundle(filename)
+    bundle = load_bundle(filename)
+
+    if bundle:
+        bot_folder_settings["files"][filename] = {"visible": True}
+        settings = QSettings("rlbotgui", "preferences")
+        settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
+        settings.sync()
+
+    return bundle
 
 
 @eel.expose
