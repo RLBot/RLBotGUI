@@ -10,7 +10,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     # It actually requires 'gevent', 'eel', 'PyQt5', but that messes up the install for some people and we're
     # already bundling those in the pynsist installer.
-    install_requires=[],
+    install_requires=['numba'],
     version=__version__,
     description='A streamlined user interface for RLBot.',
     long_description=long_description,
