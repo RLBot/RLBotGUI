@@ -200,6 +200,13 @@
 					<md-button @click="killBots()" class="md-raised">Stop</md-button>
 				</div>
 
+				<div style="margin-top: -10px; margin-bottom: -15px;">
+					<md-switch v-model="matchSettings.randomizeMap" style="margin: 0;">
+						Randomize Map
+						<md-tooltip md-direction="right">Select a random standard map when you click Start Match</md-tooltip>
+					</md-switch>
+				</div>
+
 				<md-dialog :md-active.sync="showExtraOptions">
 					<md-dialog-title>Extra Options</md-dialog-title>
 
@@ -453,8 +460,10 @@
 						gravity: null,
 						demolish: null,
 						respawn_time: null
-					}
+					},
+					randomizeMap: false,
 				},
+				randomMapPool: [],
 				showMutatorDialog: false,
 				showPackageInstaller: false,
 				packageString: null,
@@ -485,7 +494,9 @@
 		},
 
 		methods: {
-			startMatch: function (event) {
+			startMatch: async function (event) {
+				if (this.matchSettings.randomizeMap) await this.setRandomMap();
+
 				eel.save_match_settings(this.matchSettings);
 				eel.save_team_settings(this.blueTeam, this.orangeTeam);
 
@@ -511,6 +522,16 @@
 					this.blueTeam.push(bot);
 				}
 			},
+			setRandomMap: async function() {
+				if (this.randomMapPool.length == 0) {
+					let response = await fetch("json/standard-maps.json");
+					this.randomMapPool = await response.json();
+				}
+
+				let randomMapIndex = Math.floor(Math.random() * this.randomMapPool.length);
+				this.matchSettings.map = this.randomMapPool.splice(randomMapIndex, 1)[0];
+				this.updateBGImage(this.matchSettings.map);
+			},
 			resetMutatorsToDefault: function() {
 				const self = this;
 				Object.keys(this.matchOptions.mutators).forEach(function (mutator) {
@@ -525,6 +546,7 @@
 				this.matchSettings.skip_replays = false;
 				this.matchSettings.instant_start = false;
 				this.matchSettings.enable_lockstep = false;
+				this.matchSettings.randomizeMap = false;
 				this.resetMutatorsToDefault();
 
 				this.updateBGImage(this.matchSettings.map);
