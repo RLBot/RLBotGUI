@@ -502,7 +502,11 @@
 
 				const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
 				const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-				eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
+
+				// start match asynchronously, so it doesn't block things like updating the background image
+				setTimeout(() => {
+					eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
+				}, 0);
 			},
 			killBots: function(event) {
 				eel.kill_bots();
