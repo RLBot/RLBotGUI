@@ -126,9 +126,11 @@
 					{primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
 				],
 				showcaseTypes: [
-					{id: "static", name: "Static"},
-					{id: "throttle", name: "Throttle"},
-					{id: "boost", name: "Boost"},
+					{id: "back-center-kickoff-blue", name: "Static (Back-center kickoff - Blue)"},
+					{id: "back-center-kickoff-orange", name: "Static (Back-center kickoff - Orange)"},
+					{id: "static", name: "Static (Center)"},
+					{id: "throttle", name: "Drive around center"},
+					{id: "boost", name: "Boost around center"},
 				],
 				selectedShowcaseType: "boost"
 			}

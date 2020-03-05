@@ -1,3 +1,5 @@
+from math import pi
+
 from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
@@ -80,6 +82,14 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
         game_state.cars[0].physics.location.y = -1140
         game_state.cars[0].physics.velocity.x = 1410
         game_state.cars[0].physics.angular_velocity.z = 1.5
+
+    elif showcase_type == "back-center-kickoff-blue":
+        game_state.cars[0].physics.location.y = -4608
+        game_state.cars[0].physics.rotation.yaw = 0.5 * pi
+
+    elif showcase_type == "back-center-kickoff-orange":
+        game_state.cars[0].physics.location.y = 4608
+        game_state.cars[0].physics.rotation.yaw = -0.5 * pi
 
     sm.game_interface.update_player_input(player_input, 0)
     sm.game_interface.set_game_state(game_state)
