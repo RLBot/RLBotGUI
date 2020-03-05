@@ -15,9 +15,9 @@
 					<td style="height: 5px; background-color: orange;"></td>
 				</tr>
 				<tr>
-					<td v-for="team in appearanceEditor.teams">
+					<td v-for="team in teams">
 						<div class="md-layout md-gutter">
-							<div v-for="colorType in appearanceEditor.colorTypes" class="md-layout-item md-size-50">
+							<div v-for="colorType in colorTypes" class="md-layout-item md-size-50">
 								<label>{{ colorType.name }}</label>
 								<md-avatar style="margin-left: 20px;"
 									:style="{'background-color': colorStyle(colorType, team)}">
@@ -33,8 +33,8 @@
 													<div class="colorpicker-color"
 														:style="{'background-color': colorStyleFromRowAndColumn(colorType, team, i, j)}"
 														:class="{'selected-color':
-															appearanceEditor.config[team][colorType.key] == getColorIDFromRowAndColumn(i, j, colorType)}"
-														@click="appearanceEditor.config[team][colorType.key] = getColorIDFromRowAndColumn(i, j, colorType);">
+															config[team][colorType.key] == getColorIDFromRowAndColumn(i, j, colorType)}"
+														@click="config[team][colorType.key] = getColorIDFromRowAndColumn(i, j, colorType);">
 													</div>
 												</td>
 											</tr>
@@ -45,13 +45,13 @@
 						</div>
 					</td>
 				</tr>
-				<tr v-for="item in appearanceEditor.itemTypes">
+				<tr v-for="item in itemTypes">
 					<td class="blue-team">
-						<item-field :name="item.name" :items="appearanceEditor.items" v-model="appearanceEditor.config.blue"
+						<item-field :name="item.name" :items="items" v-model="config.blue"
 						:item-key="item.itemKey" :paint-key="item.paintKey"></item-field>
 					</td>
 					<td class="orange-team">
-						<item-field :name="item.name" :items="appearanceEditor.items" v-model="appearanceEditor.config.orange"
+						<item-field :name="item.name" :items="items" v-model="config.orange"
 						:item-key="item.itemKey" :paint-key="item.paintKey"></item-field>
 					</td>
 				</tr>
@@ -63,10 +63,21 @@
 				<md-icon>remove_red_eye</md-icon>
 				View blue car in game
 			</md-button>
-			<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)" style="margin-right: auto;">
+			<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
 				<md-icon>remove_red_eye</md-icon>
 				View orange car in game
 			</md-button>
+
+			<div class="showcase-select-wrapper">
+				<md-field style="margin: 0;">
+					<md-select v-model="selectedShowcaseType">
+						<md-option v-for="showcaseType in showcaseTypes" :value="showcaseType.id">
+							{{ showcaseType.name }}
+						</md-option>
+					</md-select>
+				</md-field>
+			</div>
+
 			<md-button class="md-primary md-raised" @click="saveAppearance">
 				<md-icon>check</md-icon>
 				Save and close
@@ -90,32 +101,38 @@
 		props: ['active', 'path', 'activeBot'],
 		data () {
 			return {
-				appearanceEditor: {
-					config: {
-						blue: {},
-						orange: {},
-					},
-					itemsLoaded: false,
-					items: [],
-					itemTypes: [
-						{name: 'Body', itemKey: 'car_id', paintKey: 'car_paint_id'},
-						{name: 'Decal', itemKey: 'decal_id', paintKey: 'decal_paint_id'},
-						{name: 'Wheels', itemKey: 'wheels_id', paintKey: 'wheels_paint_id'},
-						{name: 'Rocket Boost', itemKey: 'boost_id', paintKey: 'boost_paint_id'},
-						{name: 'Antenna', itemKey: 'antenna_id', paintKey: 'antenna_paint_id'},
-						{name: 'Topper', itemKey: 'hat_id', paintKey: 'hat_paint_id'},
-						{name: 'Paint Finish', itemKey: 'paint_finish_id', paintKey: null},
-						{name: 'Accent Paint Finish', itemKey: 'custom_finish_id', paintKey: null},
-						{name: 'Engine Audio', itemKey: 'engine_audio_id', paintKey: null},
-						{name: 'Trail', itemKey: 'trails_id', paintKey: 'trails_paint_id'},
-						{name: 'Goal Explosion', itemKey: 'goal_explosion_id', paintKey: 'goal_explosion_paint_id'},
-					],
-					teams: ['blue', 'orange'],
-					colorTypes: [
-						{primary: true, name: 'Primary Color', key: 'team_color_id', rows: 7, columns: 10},
-						{primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
-					]
-				}
+				config: {
+					blue: {},
+					orange: {},
+				},
+				itemsLoaded: false,
+				items: [],
+				itemTypes: [
+					{name: 'Body', itemKey: 'car_id', paintKey: 'car_paint_id'},
+					{name: 'Decal', itemKey: 'decal_id', paintKey: 'decal_paint_id'},
+					{name: 'Wheels', itemKey: 'wheels_id', paintKey: 'wheels_paint_id'},
+					{name: 'Rocket Boost', itemKey: 'boost_id', paintKey: 'boost_paint_id'},
+					{name: 'Antenna', itemKey: 'antenna_id', paintKey: 'antenna_paint_id'},
+					{name: 'Topper', itemKey: 'hat_id', paintKey: 'hat_paint_id'},
+					{name: 'Paint Finish', itemKey: 'paint_finish_id', paintKey: null},
+					{name: 'Accent Paint Finish', itemKey: 'custom_finish_id', paintKey: null},
+					{name: 'Engine Audio', itemKey: 'engine_audio_id', paintKey: null},
+					{name: 'Trail', itemKey: 'trails_id', paintKey: 'trails_paint_id'},
+					{name: 'Goal Explosion', itemKey: 'goal_explosion_id', paintKey: 'goal_explosion_paint_id'},
+				],
+				teams: ['blue', 'orange'],
+				colorTypes: [
+					{primary: true, name: 'Primary Color', key: 'team_color_id', rows: 7, columns: 10},
+					{primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
+				],
+				showcaseTypes: [
+					{id: "back-center-kickoff-blue", name: "Static (Back-center kickoff - Blue)"},
+					{id: "back-center-kickoff-orange", name: "Static (Back-center kickoff - Orange)"},
+					{id: "static", name: "Static (Center)"},
+					{id: "throttle", name: "Drive around center"},
+					{id: "boost", name: "Boost around center"},
+				],
+				selectedShowcaseType: "boost"
 			}
 		},
 
@@ -136,10 +153,10 @@
 						}
 					}
 				}
-				this.appearanceEditor.items = data.Slots;
+				this.items = data.Slots;
 			},
 			loadItems: async function() {
-				if (!this.appearanceEditor.itemsLoaded) {
+				if (!this.itemsLoaded) {
 					try {
 						// try to fetch latest items from alphaconsole github
 						await this.getAndParseItems('https://raw.githubusercontent.com/AlphaConsole/AlphaConsoleElectron/public/items.json');
@@ -147,15 +164,15 @@
 						// otherwise use local version
 						await this.getAndParseItems('json/items.json');
 					}
-					this.appearanceEditor.itemsLoaded = true;
+					this.itemsLoaded = true;
 				}
 			},
 			saveAppearance: function() {
-				eel.save_looks(this.appearanceEditor.config, this.path)();
+				eel.save_looks(this.config, this.path)();
 				this.$emit('appearance-editor-closed');
 			},
 			spawnCarForViewing: function(team) {
-				eel.spawn_car_for_viewing(this.appearanceEditor.config, team);
+				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType);
 			},
 			blueColors: i => { return {
 				h: (i % 10) / 20.5 + .33,
@@ -184,7 +201,7 @@
 				return (row - 1) * colorType.columns + (column - 1);
 			},
 			colorStyle: function(colorType, team) {
-				let id = this.appearanceEditor.config[team][colorType.key];
+				let id = this.config[team][colorType.key];
 				return this.colorStyleFromID(id, this.getSwatchFunction(colorType, team));
 			},
 			colorStyleFromRowAndColumn: function (colorType, team, row, column) {
@@ -192,7 +209,7 @@
 				return this.colorStyleFromID(id, this.getSwatchFunction(colorType, team));
 			},
 			loadLooks: async function (path) {
-				this.appearanceEditor.config = await eel.get_looks(path)();
+				this.config = await eel.get_looks(path)();
 			}
 		},
 
