@@ -4,7 +4,7 @@ from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorCon
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
 from rlbot.utils.structures.bot_input_struct import PlayerInput
-from rlbot.utils.game_state_util import GameState, CarState, Physics, Vector3, Rotator
+from rlbot.utils.game_state_util import GameState, CarState, BallState, Physics, Vector3, Rotator
 from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 from rlbot_gui.type_translation.set_state_translation import dict_to_game_state
@@ -25,7 +25,7 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     return player_config
 
 
-def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int):
+def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str):
     match_config = MatchConfig()
     match_config.game_mode = 'Soccer'
     match_config.game_map = 'Mannfield'
@@ -51,17 +51,38 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int):
     sm.connect_to_game()
     sm.load_match_config(match_config)
     sm.start_match()
+
+    game_state = GameState(
+        cars={0: CarState(physics=Physics(
+            location=Vector3(0, 0, 20),
+            velocity=Vector3(0, 0, 0),
+            angular_velocity=Vector3(0, 0, 0),
+            rotation=Rotator(0, 0, 0)
+        ))},
+        ball=BallState(physics=Physics(
+            location=Vector3(0, 0, -100),
+            velocity=Vector3(0, 0, 0),
+            angular_velocity=Vector3(0, 0, 0)
+        ))
+    )
     player_input = PlayerInput()
-    player_input.boost = True
-    player_input.throttle = 1
-    player_input.steer = 1
+
+    if showcase_type == "boost":
+        player_input.boost = True
+        player_input.steer = 1
+        game_state.cars[0].physics.location.y = -1140
+        game_state.cars[0].physics.velocity.x = 2300
+        game_state.cars[0].physics.angular_velocity.z = 3.5
+        
+    elif showcase_type == "throttle":
+        player_input.throttle = 1
+        player_input.steer = 0.56
+        game_state.cars[0].physics.location.y = -1140
+        game_state.cars[0].physics.velocity.x = 1410
+        game_state.cars[0].physics.angular_velocity.z = 1.5
+
     sm.game_interface.update_player_input(player_input, 0)
-    sm.game_interface.set_game_state(GameState(cars={0: CarState(physics=Physics(
-        location=Vector3(0, -1136, 0),
-        velocity=Vector3(2300, 0, 0),
-        angular_velocity=Vector3(0, 0, 3),
-        rotation=Rotator(0, 0, 0)
-    ))}))
+    sm.game_interface.set_game_state(game_state)
 
 
 def set_game_state(state):

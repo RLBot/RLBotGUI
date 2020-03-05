@@ -245,10 +245,10 @@ def save_looks(looks: dict, path: str):
 
 
 @eel.expose
-def spawn_car_for_viewing(looks: dict, team: int):
+def spawn_car_for_viewing(looks: dict, team: int, showcase_type: str):
     looks_config = convert_to_looks_config(looks)
     loadout_config = load_bot_appearance(looks_config, team)
-    spawn_car_in_showroom(loadout_config, team)
+    spawn_car_in_showroom(loadout_config, team, showcase_type)
 
 
 @eel.expose

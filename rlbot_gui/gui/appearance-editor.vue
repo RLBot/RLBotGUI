@@ -63,10 +63,21 @@
 				<md-icon>remove_red_eye</md-icon>
 				View blue car in game
 			</md-button>
-			<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)" style="margin-right: auto;">
+			<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
 				<md-icon>remove_red_eye</md-icon>
 				View orange car in game
 			</md-button>
+
+			<div class="showcase-select-wrapper">
+				<md-field style="margin: 0;">
+					<md-select v-model="selectedShowcaseType">
+						<md-option v-for="showcaseType in showcaseTypes" :value="showcaseType.id">
+							{{ showcaseType.name }}
+						</md-option>
+					</md-select>
+				</md-field>
+			</div>
+
 			<md-button class="md-primary md-raised" @click="saveAppearance">
 				<md-icon>check</md-icon>
 				Save and close
@@ -113,7 +124,13 @@
 				colorTypes: [
 					{primary: true, name: 'Primary Color', key: 'team_color_id', rows: 7, columns: 10},
 					{primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
-				]
+				],
+				showcaseTypes: [
+					{id: "static", name: "Static"},
+					{id: "throttle", name: "Throttle"},
+					{id: "boost", name: "Boost"},
+				],
+				selectedShowcaseType: "boost"
 			}
 		},
 
@@ -153,7 +170,7 @@
 				this.$emit('appearance-editor-closed');
 			},
 			spawnCarForViewing: function(team) {
-				eel.spawn_car_for_viewing(this.config, team);
+				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType);
 			},
 			blueColors: i => { return {
 				h: (i % 10) / 20.5 + .33,
