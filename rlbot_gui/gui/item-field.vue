@@ -3,21 +3,21 @@
 		<div class="md-layout-item md-size-70">
 
 			<md-autocomplete v-model="selectedItem" :md-options="itemNames">
-				<label>{{ name }}</label>
+				<label>{{ itemType.name }}</label>
 
 				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
 					<md-highlight-text :md-term="term">{{ item }}</md-highlight-text>
 				</template>
 		
 				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					No {{ name }} matching "{{ term }}" found.
+					No {{ itemType.name }} matching "{{ term }}" found.
 				</template>
 			</md-autocomplete>
 
 		</div>
-		<div class="md-layout-item md-size-30">
+		<div v-if="itemType.paintKey" class="md-layout-item md-size-30">
 
-			<md-field v-if="paintable" :class="selectedPaintColorClass" class="paint-color">
+			<md-field :class="selectedPaintColorClass" class="paint-color">
 				<md-select v-model="selectedPaint">
 					<md-option v-for="color in paintColors" :value="color.id" :class="color.class" class="paint-color">
 						{{ color.name }}
@@ -32,12 +32,10 @@
 <script>
 	module.exports = {
 		name: 'item-field',
-		props: ['value', 'items', 'name', 'itemKey', 'paintKey'],
+		props: ['value', 'items', 'itemType'],
 		data: function() {
-			let myItems = this.items.find(el => el.Name == this.name).Items;
 			return {
-				myItems: myItems,
-				itemNames: myItems.map(el => el.Name),
+				itemNames: this.items.map(el => el.name),
 				paintColors: [
 					{id: 0, class: '', name: 'No Paint'},
 					{id: 1, class: 'crimson', name: 'Crimson'},
@@ -59,27 +57,23 @@
 		computed: {
 			selectedPaint: {
 				get() {
-					return this.value[this.paintKey];
+					return this.value[this.itemType.paintKey];
 				},
 				set(val) {
-					this.value[this.paintKey] = val;
+					this.value[this.itemType.paintKey] = val;
 					this.$emit('input', this.value);
 				}
 			},
 			selectedItem: {
 				get() {
-					let item = this.myItems.find(el => el.ItemID == this.value[this.itemKey]);
-					return item ? item.Name : '';
+					let item = this.items.find(el => el.id == this.value[this.itemType.itemKey]);
+					return item ? item.name : '';
 				},
 				set(val) {
-					let item = this.myItems.find(el => el.Name == val);
-					this.value[this.itemKey] = item ? item.ItemID : '0';
+					let item = this.items.find(el => el.name == val);
+					this.value[this.itemType.itemKey] = item ? item.id : '0';
 					this.$emit('input', this.value);
 				}
-			},
-			paintable: function() {
-				let item = this.myItems.find(el => el.ItemID == this.value[this.itemKey]);
-				return item ? item.Paintable == 'true' : false;
 			},
 			selectedPaintColorClass: function() {
 				let color = this.paintColors.find(el => el.id == this.selectedPaint);
