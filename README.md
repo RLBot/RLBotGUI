@@ -62,3 +62,10 @@ because you don't want to run around bugging users to reinstall.
 3. Run `pynsist installer.cfg`
 
 Find the resulting executable in build\nsis.
+
+### How to update items in the appearance editor
+1. Install and run [BakkesMod](http://www.bakkesmod.com/)
+2. In Rocket League, press F6 to open the BakkesMod console, and enter the `dumpitems` command
+3. Find the output `items.csv` in the folder where your `RocketLeague.exe` is
+4. Replace `rlbot_gui/gui/csv/items.csv` with the new file
+5. Don't forget to bump the version number in `setup.py`
