@@ -43,17 +43,26 @@
                                     Rewind 5 Seconds
                                 </md-button>
                             </div>
-                            <div>
-                                <div class="md-layout md-alignment-center-left">
-                                    <div class="md-layout-item">
-                                        <md-field>
-                                            <label>Console Command</label>
-                                            <md-input v-model="command"></md-input>
-                                        </md-field>
-                                    </div>
-                                    <div class="md-layout-item">
-                                        <md-button class="md-raised md-alternative" @click="executeCommand()">Execute</md-button>
-                                    </div>
+                            <div class="md-layout md-alignment-center-left">
+                                <div class="md-layout-item">
+                                    <md-field>
+                                        <label>Game Speed</label>
+                                        <md-input v-model="gamespeed" type="number"></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item">
+                                    <md-button class="md-raised md-alternative" @click="setGamespeed()">Set</md-button>
+                                </div>
+                            </div>
+                            <div class="md-layout md-alignment-center-left">
+                                <div class="md-layout-item">
+                                    <md-field>
+                                        <label>Console Command</label>
+                                        <md-input v-model="command"></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item">
+                                    <md-button class="md-raised md-alternative" @click="executeCommand()">Execute</md-button>
                                 </div>
                             </div>
                             <p>
@@ -93,6 +102,7 @@
                 frozen: false,
                 gravity: 'normal',
                 command: null,
+                gamespeed: 1,
                 gameTickPacket: null,
                 configKonva: {
                     width: 410,
@@ -196,6 +206,9 @@
             },
             executeCommand: function() {
                 eel.set_state({console_commands: [this.command]});
+            },
+            setGamespeed: function() {
+                eel.set_state({game_info: {game_speed: parseFloat(this.gamespeed)}});
             },
             rewind: function () {
                 // Rewinds to the earliest point in recorded history. In many cases this will be 5 seconds ago,
