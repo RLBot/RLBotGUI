@@ -8,6 +8,9 @@
 			<h3 class="md-title" style="flex: 1">RLBot</h3>
 
 			<div class="md-toolbar-section-end">
+				<md-button @click="$router.replace('/sandbox')">
+					State Setting Sandbox
+				</md-button>
 				<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
 				<md-menu md-direction="bottom-start">
 					<md-button md-menu-trigger class="md-icon-button">
@@ -23,9 +26,6 @@
 						</md-menu-item>
 						<md-menu-item @click="pickAndEditAppearanceFile()">
 							Edit appearance config file
-						</md-menu-item>
-						<md-menu-item @click="$router.replace('/sandbox')">
-							Sandbox (experimental)
 						</md-menu-item>
 					</md-menu-content>
 				</md-menu>
