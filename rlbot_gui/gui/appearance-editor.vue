@@ -96,7 +96,7 @@
 		components: {
 			'item-field': ItemField
 		},
-		props: ['active', 'path', 'activeBot'],
+		props: ['active', 'path', 'activeBot', 'map'],
 		data () {
 			return {
 				config: {
@@ -173,7 +173,7 @@
 				this.$emit('appearance-editor-closed');
 			},
 			spawnCarForViewing: function(team) {
-				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType);
+				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType, this.map);
 			},
 			blueColors: i => { return {
 				h: (i % 10) / 20.5 + .33,
