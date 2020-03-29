@@ -384,6 +384,7 @@
 				v-bind:active="appearanceEditorVisible"
 				v-bind:active-bot="activeBot"
 				v-bind:path="appearancePath"
+				v-bind:map="matchSettings.map"
 				v-on:appearance-editor-closed="appearanceEditorVisible = false"
 				id="appearance-editor-dialog" />
 

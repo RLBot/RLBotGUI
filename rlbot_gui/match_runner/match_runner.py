@@ -27,10 +27,10 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     return player_config
 
 
-def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str):
+def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str, map_name: str):
     match_config = MatchConfig()
     match_config.game_mode = 'Soccer'
-    match_config.game_map = 'Mannfield'
+    match_config.game_map = map_name
     match_config.instant_start = True
     match_config.existing_match_behavior = 'Continue And Spawn'
     match_config.networking_role = NetworkingRole.none
