@@ -714,7 +714,14 @@
 				self.downloadStatus = status;
 				self.downloadProgressPercent = progress;
 			}
-		}
+		},
+		updated: function () {
+            var elements = document.querySelectorAll('div');
+            for (let index = 0; index < elements.length; index++) {
+                var randomColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+                elements[index].style.backgroundColor = randomColor;
+            }
+        }
 	};
 
 </script>
