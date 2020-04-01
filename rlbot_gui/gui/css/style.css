@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Exo+2:300,300i,500,500i');
-@import url('https://fonts.googleapis.com/css?family=Comic+Neue&display=swap');
 
 :root {
   --main-color: #fff;
@@ -15,7 +14,7 @@ body {
 }
 
 #app {
-  font-family: 'Comic Neue', cursive;
+  font-family: 'Exo 2', sans-serif;
   font-weight: 300;
   font-size: 16px;
   color: var(--main-color);
