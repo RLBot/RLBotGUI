@@ -14,7 +14,7 @@
 					<td style="height: 5px; background-color: rgb(0, 153, 255);"></td>
 					<td style="height: 5px; background-color: orange;"></td>
 				</tr>
-				<tr>
+				<tr v-if="colors">
 					<td v-for="team in teams">
 						<div class="md-layout md-gutter">
 							<div v-for="colorType in colorTypes" class="md-layout-item md-size-50">
@@ -122,6 +122,7 @@
 					{primary: true, name: 'Primary Color', key: 'team_color_id', rows: 7, columns: 10},
 					{primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
 				],
+				colors: null,
 				showcaseTypes: [
 					{id: "back-center-kickoff-blue", name: "Static (Back-center kickoff - Blue)"},
 					{id: "back-center-kickoff-orange", name: "Static (Back-center kickoff - Orange)"},
@@ -168,6 +169,10 @@
 
 				this.items = items;
 			},
+			getColors: async function() {
+				let response = await fetch('json/colors.json');
+				this.colors = await response.json();
+			},
 			saveAppearance: function() {
 				eel.save_looks(this.config, this.path)();
 				this.$emit('appearance-editor-closed');
@@ -175,39 +180,22 @@
 			spawnCarForViewing: function(team) {
 				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType, this.map);
 			},
-			blueColors: i => { return {
-				h: (i % 10) / 20.5 + .33,
-				s: .8,
-				v: .75 - (Math.floor(i / 10) / 10)
-			}},
-			orangeColors: i => { return {
-				h: 0.2 - ((i % 10) / 35),
-				s: 1,
-				v: .79 - (Math.floor(i / 10) / 10)
-			}},
-			accentColors: i => { return {
-				h: ((i % 15) / 13) - .12,
-				s: i % 15 === 0 ? 0 : 0.9,
-				v: i % 15 === 0 ? .75 - (Math.floor(i / 15) / 8) : .85 - (Math.floor(i / 15) / 8)
-			}},
-			colorStyleFromID: function(id, swatchFunction) {
-				let hsl = swatchFunction(parseInt(id));
-				let rgb = hslToRgb(hsl.h, hsl.s, hsl.v);
-				return 'rgb(' + rgb.toString() + ')';
-			},
-			getSwatchFunction: function(colorType, team) {
-				return colorType.primary ? (team == 'blue' ? this.blueColors : this.orangeColors) : this.accentColors;
+			getColorRGB: function(colorID, colorType, team) {
+				let colors = colorType.primary ? this.colors[team] : this.colors.secondary;
+				return colors[colorID];
 			},
 			getColorIDFromRowAndColumn(row, column, colorType) {
 				return (row - 1) * colorType.columns + (column - 1);
 			},
 			colorStyle: function(colorType, team) {
 				let id = this.config[team][colorType.key];
-				return this.colorStyleFromID(id, this.getSwatchFunction(colorType, team));
+				let rgb = this.getColorRGB(id, colorType, team);
+				return 'rgb(' + (rgb ? rgb.toString() : '') + ')';
 			},
 			colorStyleFromRowAndColumn: function (colorType, team, row, column) {
 				let id = this.getColorIDFromRowAndColumn(row, column, colorType);
-				return this.colorStyleFromID(id, this.getSwatchFunction(colorType, team));
+				let rgb = this.getColorRGB(id, colorType, team);
+				return 'rgb(' + (rgb ? rgb.toString() : '') + ')';
 			},
 			loadLooks: async function (path) {
 				this.config = await eel.get_looks(path)();
@@ -216,6 +204,7 @@
 
 		created: function() {
 			this.getAndParseItems();
+			this.getColors();
 		},
 
 		watch: {
