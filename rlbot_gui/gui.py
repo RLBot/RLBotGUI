@@ -22,6 +22,7 @@ from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
 from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
+from rlbot_gui.upgrade.upgrade_replacer import replace_upgrade_file
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
@@ -494,6 +495,7 @@ def init_settings():
 
 def start():
     init_settings()
+    replace_upgrade_file()
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
