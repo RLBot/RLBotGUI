@@ -7,8 +7,13 @@ const HISTORY_INCREMENT_SECONDS = 0.1;
 
 let packetHistory = [];
 
+import VelocityArrow from "./velocity-arrow-vue.js"
+
 export default {
     name: 'sandbox',
+    components: {
+        'velocity-arrow': VelocityArrow
+    },
     template: `
     <div>
         <b-navbar class="navbar">
@@ -29,8 +34,30 @@ export default {
 <!--                        This v-stage thing comes from here: https://konvajs.org/docs/vue/index.html-->
                         <v-stage ref="stage" :config="configKonva" class="arena-background">
                             <v-layer ref="layer">
-                                <v-circle :config="ball" @dragend="handleBallDragEnd" @dragstart="handleDragStart"></v-circle>
-                                <v-rect v-for="car in cars" :config="car" @dragend="handleCarDragEnd" @dragstart="handleDragStart"></v-rect>
+                                <!-- Order of elements here matters - they will be rendered in that order -->
+                                <velocity-arrow :object="ball"
+                                                color="grey"
+                                                :maxradius="6000"
+                                                @dragstart="dragging = true"
+                                                @dragend="handleBallDragEnd">
+                                </velocity-arrow>
+                                <velocity-arrow v-for="car in cars"
+                                                :object="car"
+                                                :color="car.fill"
+                                                :maxradius="2300"
+                                                @dragstart="dragging = true"
+                                                @dragend="handleCarVelocityDragEnd">
+                                </velocity-arrow>
+                                <v-circle :config="ball"
+                                          @dragstart="handleDragStart"
+                                          @dragend="handleBallDragEnd"
+                                          @dragmove="handleBallDragMove">
+                                </v-circle>
+                                <v-rect v-for="car in cars" :config="car"
+                                        @dragstart="handleDragStart"
+                                        @dragend="handleCarDragEnd"
+                                        @dragmove="handleCarDragMove">
+                                </v-rect>
                             </v-layer>
                         </v-stage>
                     </b-card>
@@ -76,12 +103,14 @@ export default {
     `,
     data() {
             return {
+                dragging: false,
                 watching: false,
                 frozen: false,
                 gravity: 'normal',
                 command: null,
                 gamespeed: 1,
                 gameTickPacket: null,
+                previousSecondsElapsed: 0,
                 configKonva: {
                     width: 410,
                     height: PIXEL_HEIGHT
@@ -101,15 +130,21 @@ export default {
         },
     methods: {
             startWatching: function () {
-                eel.fetch_game_tick_packet_json()(this.gameTickPacketReceived)
+                eel.fetch_game_tick_packet_json()(this.gameTickPacketReceived);
+                this.previousSecondsElapsed = 0;
             },
             gameTickPacketReceived: function (result) {
                 this.gameTickPacket = result;
-                if (!this.dragging) {
+                if (!this.dragging && result.game_info.seconds_elapsed > this.previousSecondsElapsed) {
+                    this.previousSecondsElapsed = result.game_info.seconds_elapsed;
+
                     const ballLoc = this.toCanvasVec(result.game_ball.physics.location);
+                    const ballVel = result.game_ball.physics.velocity;
                     this.ball.x = ballLoc.x;
                     this.ball.y = ballLoc.y;
-                    this.ball.z = ballLoc.z;
+                    this.ball.vx = ballVel.x;
+                    this.ball.vy = ballVel.y;
+
                     this.cars = [];
                     for (let i = 0; i < result.game_cars.length; i++) {
 
@@ -122,6 +157,8 @@ export default {
                                 x: 8,
                                 y: 5
                             },
+                            stroke: 'black',
+                            strokeWidth: 2,
                             playerIndex: i
                         };
 
@@ -129,6 +166,8 @@ export default {
                         const carLoc = this.toCanvasVec(phys.location);
                         car.x = carLoc.x;
                         car.y = carLoc.y;
+                        car.vx = phys.velocity.x;
+                        car.vy = phys.velocity.y;
                         car.rotation = phys.rotation.yaw * 180 / Math.PI;
                         this.cars.push(car);
                     }
@@ -165,22 +204,41 @@ export default {
             handleDragStart: function (evt) {
                 this.dragging = true;
             },
+            handleBallDragMove: function(evt) {
+                this.ball.x = evt.target.x();
+                this.ball.y = evt.target.y();
+            },
+            handleCarDragMove: function(evt) {
+                const index = evt.target.attrs.playerIndex;
+                this.cars[index].x = evt.target.x();
+                this.cars[index].y = evt.target.y();
+            },
             handleBallDragEnd: function (evt) {
                 this.dragging = false;
-                const packetVec = this.toPacketVec({x: evt.target.x(), y: evt.target.y(), z: 10});
+                const packetVec = this.toPacketVec({x: this.ball.x, y: this.ball.y, z: 10});
                 eel.set_state({
-                    ball:{physics:{location:packetVec, velocity: {x: 0, y: 0, z: 0}}}
+                    ball:{physics:{location:packetVec, velocity: {x: this.ball.vx, y: this.ball.vy, z: 0}}}
                 });
             },
             handleCarDragEnd: function (evt) {
                 const index = evt.target.attrs.playerIndex;
                 this.dragging = false;
-                const packetVec = this.toPacketVec({x: evt.target.x(), y: evt.target.y(), z: 10});
+                const packetVec = this.toPacketVec({x: evt.target.x(), y: evt.target.y(), z: 1});
                 let cars = {};
-                cars[index] = {physics:{location:packetVec, velocity: {x: 0, y: 0, z: 0}}};
+                cars[index] = {physics: {location: packetVec}};
                 eel.set_state({
                     cars: cars
                 });
+            },
+            handleCarVelocityDragEnd: function(car) {
+                this.dragging = false;
+                let cars = {};
+                cars[car.playerIndex] = {physics: {
+                    location: this.toPacketVec({x: car.x, y: car.y, z: 1}),
+                    velocity: {x: car.vx, y: car.vy, z: 0},
+                    rotation: {pitch: 0, yaw: car.rotation / 180 * Math.PI, roll: 0}
+                }};
+                eel.set_state({cars: cars});
             },
             executeCommand: function() {
                 eel.set_state({console_commands: [this.command]});
