@@ -12,8 +12,7 @@ It works on Windows only.
 
 ## Installation
 
-If you just want to use this GUI, you can go download the installer from
-https://drive.google.com/drive/folders/1LZdTVPQeqO0ZGtelQE3yPyBlvC_pqsGT?usp=sharing
+If you just want to use this GUI, you can go download the installer from http://www.rlbot.org/
 
 It will put "RLBotGUI" in your Windows start menu.
 
