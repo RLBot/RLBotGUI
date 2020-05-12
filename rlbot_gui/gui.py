@@ -17,7 +17,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
 
-from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, convert_to_filename
+from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, bootstrap_python_hivemind, convert_to_filename
 from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from_url
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
@@ -414,6 +414,17 @@ def begin_scratch_bot(bot_name):
     try:
         config_file = bootstrap_scratch_bot(bot_name, bot_directory)
         install_package('webdriver_manager')  # Scratch bots need this, and the GUI's python doesn't have it by default.
+        return {'bots': load_bundle(config_file)}
+    except FileExistsError as e:
+        return {'error': str(e)}
+
+
+@eel.expose
+def begin_python_hivemind(hive_name):
+    bot_directory = ensure_bot_directory()
+
+    try:
+        config_file = bootstrap_python_hivemind(hive_name, bot_directory)
         return {'bots': load_bundle(config_file)}
     except FileExistsError as e:
         return {'error': str(e)}
