@@ -337,6 +337,7 @@
 				<div>
 					<md-radio v-model="newBotLanguageChoice" value="python">Python</md-radio>
 					<md-radio v-model="newBotLanguageChoice" value="scratch">Scratch</md-radio>
+					<md-radio v-model="newBotLanguageChoice" value="python_hive">Python Hivemind</md-radio>
 				</div>
 			</md-dialog-content>
 
@@ -587,16 +588,15 @@
 				if (!bot_name) {
 					this.snackbarContent = "Please choose a proper name!";
 					this.showSnackbar = true;
-				}
-
-				if (language === 'python') {
+				} else if (language === 'python') {
 					this.showProgressSpinner = true;
 					eel.begin_python_bot(bot_name)(this.botLoadHandler);
-				}
-
-				if (language === 'scratch') {
+				} else if (language === 'scratch') {
 					this.showProgressSpinner = true;
 					eel.begin_scratch_bot(bot_name)(this.botLoadHandler);
+				} else if (language === 'python_hive') {
+					this.showProgressSpinner = true;
+					eel.begin_python_hivemind(bot_name)(this.botLoadHandler);
 				}
 			},
 			openFolderSettingsDialog: function() {

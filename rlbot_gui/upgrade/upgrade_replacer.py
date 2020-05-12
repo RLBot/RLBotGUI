@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from env.Lib import os
+import os
 
 
 def replace_upgrade_file():

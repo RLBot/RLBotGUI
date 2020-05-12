@@ -105,3 +105,37 @@ def bootstrap_scratch_bot(bot_name, directory):
     replace_all(config_file, r'port = .*$', 'port = ' + str(random.randint(20000, 65000)))
 
     return config_file
+
+
+def bootstrap_python_hivemind(hive_name, directory):
+    sanitized_name = convert_to_filename(hive_name)
+    bot_directory = Path(directory or '.')
+    top_dir = bot_directory / sanitized_name
+    if os.path.exists(top_dir):
+        raise FileExistsError(f'There is already a bot named {sanitized_name}, please choose a different name!')
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        tmpdir = Path(tmpdirname)
+        print('created temporary directory', tmpdir)
+
+        download_and_extract_zip(
+            download_url='https://github.com/ViliamVadocz/RLBotPythonHivemindExample/archive/master.zip',
+            local_folder_path=tmpdir)
+
+        safe_move(tmpdir / 'RLBotPythonHivemindExample-master', top_dir)
+
+
+    config_file = top_dir / 'config.cfg'
+    drone_file = top_dir / 'src' / 'drone.py'
+    hive_file = top_dir / 'src' / 'hive.py'
+
+    replace_all(config_file, r'name = .*$', f'name = {hive_name}')
+    replace_all(drone_file, r'hive_name = .*$', f'hive_name = "{hive_name} Hivemind"')
+    replace_all(drone_file, r'hive_key = .*$', f'hive_key = "{random.randint(100000, 999999) + hash(hive_name)}"')
+    replace_all(hive_file, r'class .*\(PythonHivemind\)', f'class {hive_name}Hivemind(PythonHivemind)')
+
+    # This is intended to open the example python file in the default system editor for .py files.
+    # Hopefully this will be VS Code or notepad++ or something. If it gets executed as a python script, no harm done.
+    os.startfile(hive_file)
+
+    return config_file
