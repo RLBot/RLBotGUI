@@ -119,7 +119,7 @@ def bootstrap_python_hivemind(hive_name, directory):
         print('created temporary directory', tmpdir)
 
         download_and_extract_zip(
-            download_url='https://github.com/ViliamVadocz/RLBotPythonHivemindExample/archive/master.zip',
+            download_url='https://github.com/RLBot/RLBotPythonHivemindExample/archive/master.zip',
             local_folder_path=tmpdir)
 
         safe_move(tmpdir / 'RLBotPythonHivemindExample-master', top_dir)
