@@ -75,7 +75,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
         game_state.cars[0].physics.location.y = -1140
         game_state.cars[0].physics.velocity.x = 2300
         game_state.cars[0].physics.angular_velocity.z = 3.5
-        
+
     elif showcase_type == "throttle":
         player_input.throttle = 1
         player_input.steer = 0.56
@@ -124,6 +124,9 @@ def start_match_helper(bot_list, match_settings):
     match_config.skip_replays = match_settings['skip_replays']
     match_config.instant_start = match_settings['instant_start']
     match_config.enable_lockstep = match_settings['enable_lockstep']
+    match_config.enable_rendering = match_settings['enable_rendering']
+    match_config.enable_state_setting = match_settings['enable_state_setting']
+    match_config.auto_save_replay = match_settings['auto_save_replay']
     match_config.existing_match_behavior = match_settings['match_behavior']
     match_config.mutators = MutatorConfig()
 
