@@ -8,6 +8,9 @@
 			<h3 class="md-title" style="flex: 1">RLBot</h3>
 
 			<div class="md-toolbar-section-end">
+				<span v-if="!matchSettings.enable_state_setting">
+					<md-icon class="warning-icon">warning</md-icon><md-tooltip md-direction="bottom">State setting is turned off, sandbox won't work!</md-tooltip>
+				</span>
 				<md-button @click="$router.replace('/sandbox')">
 					State Setting Sandbox
 				</md-button>
@@ -211,9 +214,18 @@
 					<md-dialog-title>Extra Options</md-dialog-title>
 
 					<md-dialog-content>
-						<md-switch v-model="matchSettings.skip_replays">Skip Replays</md-switch>
-						<md-switch v-model="matchSettings.instant_start">Instant Start</md-switch>
-						<md-switch v-model="matchSettings.enable_lockstep">Enable lockstep</md-switch>
+						<div class="md-layout">
+							<div class="md-layout-item">
+								<div><md-switch v-model="matchSettings.skip_replays">Skip Replays</md-switch></div>
+								<div><md-switch v-model="matchSettings.instant_start">Instant Start</md-switch></div>
+								<div><md-switch v-model="matchSettings.enable_lockstep">Enable Lockstep</md-switch></div>
+							</div>
+							<div class="md-layout-item">
+								<div><md-switch v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</md-switch></div>
+								<div><md-switch v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</md-switch></div>
+								<div><md-switch v-model="matchSettings.auto_save_replay">Auto Save Replay</md-switch></div>
+							</div>
+						</div>
 						<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
 					</md-dialog-content>
 
@@ -464,6 +476,9 @@
 						respawn_time: null
 					},
 					randomizeMap: false,
+					enable_rendering: false,
+					enable_state_setting: false,
+					auto_save_replay: false,
 				},
 				randomMapPool: [],
 				showMutatorDialog: false,
@@ -553,6 +568,9 @@
 				this.matchSettings.instant_start = false;
 				this.matchSettings.enable_lockstep = false;
 				this.matchSettings.randomizeMap = false;
+				this.matchSettings.enable_rendering = false;
+				this.matchSettings.enable_state_setting = true;
+				this.matchSettings.auto_save_replay = false;
 				this.resetMutatorsToDefault();
 
 				this.updateBGImage(this.matchSettings.map);
@@ -654,7 +672,7 @@
 
 			matchSettingsReceived: function (matchSettings) {
 				if (matchSettings) {
-					this.matchSettings = matchSettings;
+					Object.assign(this.matchSettings, matchSettings);
 					this.updateBGImage(this.matchSettings.map);
 				} else {
 					this.resetMatchSettingsToDefault();
