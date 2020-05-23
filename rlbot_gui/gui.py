@@ -135,9 +135,6 @@ def validate_bots(bots):
 def get_match_settings():
     settings = load_settings()
     match_settings = settings.value(MATCH_SETTINGS_KEY, type=dict)
-    if 'enable_state_setting' not in match_settings:
-        # Set this to true by default for backwards compatiblity with state setting sandbox, snek, and sniper
-        match_settings['enable_state_setting'] = True
     return match_settings if match_settings else None
 
 
