@@ -98,7 +98,7 @@
 			</md-card-header>
 
 			<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-				<md-card class="bot-card md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
+				<md-card class="bot-card draggable md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
 					<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
 						<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 						<img v-if="bot.logo" v-bind:src="bot.logo">
@@ -114,6 +114,13 @@
 					</button>
 				</md-card>
 			</draggable>
+			<md-card class="bot-card md-elevation-3" v-for="script in scriptPool">
+				<md-switch v-model="script.enabled">{{script.name}}</md-switch>
+				<md-button class="md-icon-button md-dense bot-hover-reveal" v-if="script.info"
+						   @click.stop="activeBot = script; showBotInfo = true;">
+					<md-icon>blur_on</md-icon>
+				</md-button>
+			</md-card>
 		</md-card>
 
 		<div id="teamSwitcher" style="text-align: center;">
@@ -130,7 +137,7 @@
 						<div class="md-title">Blue Team</div>
 					</md-card-header>
 					<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
-						<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
+						<md-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
 							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 							<img v-if="bot.logo" v-bind:src="bot.logo">
 							<span class="bot-name">{{ bot.name }}</span>
@@ -148,7 +155,7 @@
 						<div class="md-title">Orange Team</div>
 					</md-card-header>
 					<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
-						<md-card class="bot-card center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
+						<md-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
 							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 							<img v-if="bot.logo" v-bind:src="bot.logo">
 							<span class="bot-name">{{ bot.name }}</span>
@@ -301,7 +308,7 @@
 			</md-dialog-content>
 
 			<md-dialog-actions>
-				<md-button @click="showAppearanceEditor(activeBot.looks_path)">
+				<md-button v-if="activeBot.type !== 'script'" @click="showAppearanceEditor(activeBot.looks_path)">
 					<md-icon>palette</md-icon> Edit Appearance
 				</md-button>
 				<md-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
@@ -446,6 +453,7 @@
 		data () {
 			return {
 				botPool: STARTING_BOT_POOL,
+				scriptPool: [],
 				blueTeam: [],
 				orangeTeam: [],
 				teamSelection: "blue",
@@ -479,6 +487,7 @@
 					enable_rendering: false,
 					enable_state_setting: false,
 					auto_save_replay: false,
+					scripts: [],
 				},
 				randomMapPool: [],
 				showMutatorDialog: false,
@@ -514,6 +523,7 @@
 			startMatch: async function (event) {
 				if (this.matchSettings.randomizeMap) await this.setRandomMap();
 
+				this.matchSettings.scripts = this.scriptPool.filter((val) => { return val.enabled });
 				eel.save_match_settings(this.matchSettings);
 				eel.save_team_settings(this.blueTeam, this.orangeTeam);
 
@@ -571,6 +581,7 @@
 				this.matchSettings.enable_rendering = false;
 				this.matchSettings.enable_state_setting = true;
 				this.matchSettings.auto_save_replay = false;
+				this.matchSettings.scripts = [];
 				this.resetMutatorsToDefault();
 
 				this.updateBGImage(this.matchSettings.map);
@@ -625,6 +636,7 @@
 				eel.save_folder_settings(this.folderSettings);
 				this.botPool = STARTING_BOT_POOL;
 				eel.scan_for_bots()(this.botsReceived);
+				eel.scan_for_scripts()(this.scriptsReceived);
 			},
 			passesFilter: function(botName) {
 				return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
@@ -651,6 +663,16 @@
 				this.showProgressSpinner = false;
 			},
 
+			scriptsReceived: function (scripts) {
+				const freshScripts = scripts.filter( (script) =>
+						!this.scriptPool.find( (element) => element.path === script.path ));
+				freshScripts.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
+
+				this.scriptPool = this.scriptPool.concat(freshScripts).sort((a, b) => a.name.localeCompare(b.name));
+
+				this.showProgressSpinner = false;
+			},
+
 	 		applyLanguageWarnings: function () {
 				if (this.languageSupport) {
 					this.botPool.forEach((bot) => {
@@ -674,6 +696,7 @@
 				if (matchSettings) {
 					Object.assign(this.matchSettings, matchSettings);
 					this.updateBGImage(this.matchSettings.map);
+					this.scriptPool.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
 				} else {
 					this.resetMatchSettingsToDefault();
 				}
@@ -715,6 +738,7 @@
 		created: function () {
 			eel.get_folder_settings()(this.folderSettingsReceived);
 			eel.scan_for_bots()(this.botsReceived);
+			eel.scan_for_scripts()(this.scriptsReceived);
 			eel.get_match_options()(this.matchOptionsReceived);
 			eel.get_match_settings()(this.matchSettingsReceived);
 			eel.get_team_settings()(this.teamSettingsReceived);

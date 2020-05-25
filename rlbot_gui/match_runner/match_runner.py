@@ -2,7 +2,7 @@ from math import pi
 
 from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
-from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig
+from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, ScriptConfig
 from rlbot.parsing.incrementing_integer import IncrementingInteger
 from rlbot.setup_manager import SetupManager
 from rlbot.utils.structures.bot_input_struct import PlayerInput
@@ -25,6 +25,9 @@ def create_player_config(bot, human_index_tracker: IncrementingInteger):
     if 'path' in bot and bot['path']:
         player_config.config_path = bot['path']
     return player_config
+
+def create_script_config(script):
+    return ScriptConfig(script['path'])
 
 
 def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str, map_name: str):
@@ -150,6 +153,7 @@ def start_match_helper(bot_list, match_settings):
 
     human_index_tracker = IncrementingInteger(0)
     match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
+    match_config.script_configs = [create_script_config(script) for script in match_settings['scripts']]
 
     global sm
     if sm is not None:

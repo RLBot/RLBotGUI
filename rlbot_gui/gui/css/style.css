@@ -68,9 +68,16 @@ body {
   opacity: 0.4;
 }
 
+.draggable {
+  cursor: move;
+}
+
 .bot-card {
   margin: 5px;
-  cursor: move;
+}
+
+.bot-card .md-switch {
+  margin: 5px 5px;
 }
 
 .center-flex {

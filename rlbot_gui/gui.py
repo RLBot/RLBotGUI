@@ -8,8 +8,8 @@ from pip._internal import main as pipmain
 from rlbot.parsing.agent_config_parser import create_looks_configurations, BOT_CONFIG_LOADOUT_HEADER, \
     BOT_CONFIG_LOADOUT_ORANGE_HEADER, BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER, BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER, \
     load_bot_appearance
-from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, BotConfigBundle
-from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs
+from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, get_script_config_bundle, RunnableConfigBundle
+from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs, scan_directory_for_script_configs
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
     boost_amount_mutator_types, match_length_types, max_score_types, overtime_mutator_types, \
     series_length_mutator_types, game_speed_mutator_types, ball_max_speed_mutator_types, ball_type_mutator_types, \
@@ -17,7 +17,8 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
 
-from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, bootstrap_python_hivemind, convert_to_filename
+from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
+    bootstrap_python_hivemind, convert_to_filename
 from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from_url
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
@@ -80,10 +81,31 @@ def serialize_bundle(bundle):
     }
 
 
+def serialize_script_bundle(bundle):
+    return {
+        'name': bundle.name,
+        'type': 'script',
+        'image': 'imgs/rlbot.png',
+        'path': bundle.config_path,
+        'info': read_info(bundle),
+        'logo': try_copy_logo(bundle)
+    }
+
+
 def load_bundle(filename):
     try:
         bundle = get_bot_config_bundle(filename)
         return [serialize_bundle(bundle)]
+    except Exception as e:
+        print(e)
+
+    return []
+
+
+def load_script_bundle(filename):
+    try:
+        bundle = get_script_config_bundle(filename)
+        return [serialize_script_bundle(bundle)]
     except Exception as e:
         print(e)
 
@@ -186,7 +208,7 @@ def pick_location(is_folder):
     return filename
 
 
-def read_info(bundle: BotConfigBundle):
+def read_info(bundle: RunnableConfigBundle):
     details_header = 'Details'
     if bundle.base_agent_config.has_section(details_header):
         return {
@@ -270,7 +292,26 @@ def scan_for_bots():
     return list(bot_hash.values())
 
 
-def try_copy_logo(bundle: BotConfigBundle):
+@eel.expose
+def scan_for_scripts():
+    script_hash = {}
+
+    for folder, props in bot_folder_settings['folders'].items():
+        if props['visible']:
+            bots = get_scripts_from_directory(folder)
+            for bot in bots:
+                script_hash[bot['path']] = bot
+
+    for file, props in bot_folder_settings['files'].items():
+        if props['visible']:
+            bots = load_script_bundle(file)  # Returns a list of size 1
+            for bot in bots:
+                script_hash[bot['path']] = bot
+
+    return list(script_hash.values())
+
+
+def try_copy_logo(bundle: RunnableConfigBundle):
     logo_path = bundle.get_logo_file()
     if logo_path is not None and os.path.exists(logo_path):
         web_url = 'imgs/logos/' + convert_to_filename(bundle.name) + '/' + convert_to_filename(logo_path)
@@ -283,6 +324,10 @@ def try_copy_logo(bundle: BotConfigBundle):
 
 def get_bots_from_directory(bot_directory):
     return [serialize_bundle(bundle) for bundle in scan_directory_for_bot_configs(bot_directory)]
+
+
+def get_scripts_from_directory(bot_directory):
+    return [serialize_script_bundle(bundle) for bundle in scan_directory_for_script_configs(bot_directory)]
 
 
 @eel.expose
