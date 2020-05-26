@@ -11,6 +11,7 @@ if %ERRORLEVEL% GTR 0 (
   rem Download a python installer from python.org.
 
   if not exist python-install.exe (
+    mkdir %LocalAppData%\RLBotGUIX\
     powershell -Command "Invoke-WebRequest https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe -OutFile %LocalAppData%\RLBotGUIX\python-installer.exe"
   )
 
