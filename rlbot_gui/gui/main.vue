@@ -632,9 +632,10 @@
 				eel.get_folder_settings()(this.folderSettingsReceived);
 				this.showFolderSettingsDialog = true;
 			},
-			applyFolderSettings: function() {
-				eel.save_folder_settings(this.folderSettings);
+			applyFolderSettings: async function() {
+				await eel.save_folder_settings(this.folderSettings)();
 				this.botPool = STARTING_BOT_POOL;
+				this.scriptPool = [];
 				eel.scan_for_bots()(this.botsReceived);
 				eel.scan_for_scripts()(this.scriptsReceived);
 			},
@@ -710,6 +711,8 @@
 
 			folderSettingsReceived: function (folderSettings) {
 				this.folderSettings = folderSettings;
+				eel.scan_for_bots()(this.botsReceived);
+				eel.scan_for_scripts()(this.scriptsReceived);
 			},
 			botpackUpdateChecked: function (isBotpackUpToDate) {
 				this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
@@ -720,7 +723,6 @@
 				this.showSnackbar = true;
 				this.showDownloadProgressDialog = false;
 				eel.get_folder_settings()(this.folderSettingsReceived);
-				eel.scan_for_bots()(this.botsReceived);
 			},
 
 			onInstallationComplete: function (result) {
@@ -737,8 +739,6 @@
 		},
 		created: function () {
 			eel.get_folder_settings()(this.folderSettingsReceived);
-			eel.scan_for_bots()(this.botsReceived);
-			eel.scan_for_scripts()(this.scriptsReceived);
 			eel.get_match_options()(this.matchOptionsReceived);
 			eel.get_match_settings()(this.matchSettingsReceived);
 			eel.get_team_settings()(this.teamSettingsReceived);
