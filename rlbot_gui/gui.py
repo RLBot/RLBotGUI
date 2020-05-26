@@ -92,7 +92,7 @@ def serialize_script_bundle(bundle):
     }
 
 
-def load_bundle(filename):
+def load_bot_bundle(filename):
     try:
         bundle = get_bot_config_bundle(filename)
         return [serialize_bundle(bundle)]
@@ -115,7 +115,7 @@ def load_script_bundle(filename):
 @eel.expose
 def pick_bot_config():
     filename = pick_location(False)
-    bundle = load_bundle(filename)
+    bundle = load_script_bundle(filename) or load_bot_bundle(filename)
 
     if bundle:
         bot_folder_settings["files"][filename] = {"visible": True}
@@ -146,7 +146,7 @@ def validate_bots(bots):
 
     for bot in bots:
         if bot["type"] in ('rlbot', 'party_member_bot'):
-            valid_bots += load_bundle(bot["path"])
+            valid_bots += load_bot_bundle(bot["path"])
         else:
             valid_bots.append(bot)
 
@@ -285,7 +285,7 @@ def scan_for_bots():
 
     for file, props in bot_folder_settings['files'].items():
         if props['visible']:
-            bots = load_bundle(file)  # Returns a list of size 1
+            bots = load_bot_bundle(file)  # Returns a list of size 1
             for bot in bots:
                 bot_hash[bot['path']] = bot
 
@@ -447,7 +447,7 @@ def begin_python_bot(bot_name):
 
     try:
         config_file = bootstrap_python_bot(bot_name, bot_directory)
-        return {'bots': load_bundle(config_file)}
+        return {'bots': load_bot_bundle(config_file)}
     except FileExistsError as e:
         return {'error': str(e)}
 
@@ -459,7 +459,7 @@ def begin_scratch_bot(bot_name):
     try:
         config_file = bootstrap_scratch_bot(bot_name, bot_directory)
         install_package('webdriver_manager')  # Scratch bots need this, and the GUI's python doesn't have it by default.
-        return {'bots': load_bundle(config_file)}
+        return {'bots': load_bot_bundle(config_file)}
     except FileExistsError as e:
         return {'error': str(e)}
 
@@ -470,7 +470,7 @@ def begin_python_hivemind(hive_name):
 
     try:
         config_file = bootstrap_python_hivemind(hive_name, bot_directory)
-        return {'bots': load_bundle(config_file)}
+        return {'bots': load_bot_bundle(config_file)}
     except FileExistsError as e:
         return {'error': str(e)}
 
