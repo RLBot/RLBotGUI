@@ -1,5 +1,6 @@
 import os
 import shutil
+from pathlib import Path
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -8,7 +9,8 @@ from pip._internal import main as pipmain
 from rlbot.parsing.agent_config_parser import create_looks_configurations, BOT_CONFIG_LOADOUT_HEADER, \
     BOT_CONFIG_LOADOUT_ORANGE_HEADER, BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER, BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER, \
     load_bot_appearance
-from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, get_script_config_bundle, RunnableConfigBundle
+from rlbot.parsing.bot_config_bundle import get_bot_config_bundle, get_script_config_bundle, RunnableConfigBundle, \
+    BotConfigBundle
 from rlbot.parsing.directory_scanner import scan_directory_for_bot_configs, scan_directory_for_script_configs
 from rlbot.parsing.match_settings_config_parser import map_types, game_mode_types, \
     boost_amount_mutator_types, match_length_types, max_score_types, overtime_mutator_types, \
@@ -16,6 +18,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
+from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
     bootstrap_python_hivemind, convert_to_filename
@@ -68,7 +71,7 @@ def pick_bot_folder():
     return []
 
 
-def serialize_bundle(bundle):
+def serialize_bundle(bundle: BotConfigBundle):
     return {
         'name': bundle.name,
         'type': 'rlbot',
@@ -77,7 +80,8 @@ def serialize_bundle(bundle):
         'path': bundle.config_path,
         'looks_path': bundle.looks_path,
         'info': read_info(bundle),
-        'logo': try_copy_logo(bundle)
+        'logo': try_copy_logo(bundle),
+        'missing_python_packages': [r.name for r in bundle.get_missing_python_packages()],
     }
 
 
@@ -88,7 +92,8 @@ def serialize_script_bundle(bundle):
         'image': 'imgs/rlbot.png',
         'path': bundle.config_path,
         'info': read_info(bundle),
-        'logo': try_copy_logo(bundle)
+        'logo': try_copy_logo(bundle),
+        'missing_python_packages': [r.name for r in bundle.get_missing_python_packages()],
     }
 
 
@@ -372,6 +377,20 @@ def install_package(package_string):
     exit_code = pipmain(['install', package_string])
     print(exit_code)
     return {'exitCode': exit_code, 'package': package_string}
+
+
+@eel.expose
+def install_requirements(config_path):
+    try:
+        bundle = get_bot_config_bundle(config_path)
+    except Exception:
+        bundle = get_script_config_bundle(config_path)
+
+    if bundle.requirements_file:
+        exit_code = install_requirements_file(bundle.requirements_file)
+        return {'exitCode': exit_code, 'package': bundle.requirements_file}
+    else:
+        return {'exitCode': 1, 'package': None}
 
 
 def get_last_botpack_commit_id():

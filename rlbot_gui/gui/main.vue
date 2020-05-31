@@ -116,6 +116,10 @@
 			</draggable>
 			<md-card class="bot-card md-elevation-3" v-for="script in scriptPool">
 				<md-switch v-model="script.enabled">{{script.name}}</md-switch>
+				<md-button class="md-icon-button md-dense warning-icon" v-if="script.warn"
+						   @click.stop="activeBot = script; showLanguageWarning = true;">
+					<md-icon>warning</md-icon>
+				</md-button>
 				<md-button class="md-icon-button md-dense bot-hover-reveal" v-if="script.info"
 						   @click.stop="activeBot = script; showBotInfo = true;">
 					<md-icon>blur_on</md-icon>
@@ -337,6 +341,14 @@
 						you don't have it installed! You can
 						<a href="https://www.google.com/chrome/" target="_blank">download it here</a>.
 					</p>
+				</div>
+				<div v-if="activeBot.warn === 'pythonpkg'">
+					<p>
+						This bot needs some python packages you haven't installed yet:
+						<code><span v-for="missing in activeBot.missing_python_packages">{{missing}} </span></code>
+					</p>
+					<md-button @click="installRequirements(activeBot.path)"
+							   class="md-primary md-raised">Install Now</md-button>
 				</div>
 			</md-dialog-content>
 
@@ -675,13 +687,13 @@
 				freshScripts.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
 
 				this.scriptPool = this.scriptPool.concat(freshScripts).sort((a, b) => a.name.localeCompare(b.name));
-
+				this.applyLanguageWarnings();
 				this.showProgressSpinner = false;
 			},
 
 	 		applyLanguageWarnings: function () {
 				if (this.languageSupport) {
-					this.botPool.forEach((bot) => {
+					this.botPool.concat(this.scriptPool).forEach((bot) => {
 						if (bot.info && bot.info.language) {
 							const language = bot.info.language.toLowerCase();
 							if (!this.languageSupport.java && language.match(/java|kotlin|scala/)) {
@@ -690,6 +702,10 @@
 							if (!this.languageSupport.chrome && language.match(/scratch/)) {
 								bot.warn = 'chrome';
 							}
+						}
+						console.log(bot);
+						if (bot.missing_python_packages && bot.missing_python_packages.length > 0) {
+							bot.warn = 'pythonpkg';
 						}
 					});
 				}
@@ -741,6 +757,10 @@
 				this.showProgressSpinner = true;
 				eel.install_package(this.packageString)(this.onInstallationComplete);
 			},
+			installRequirements: function (configPath) {
+				this.showProgressSpinner = true;
+				eel.install_requirements(configPath)(this.onInstallationComplete);
+			}
 		},
 		created: function () {
 			eel.get_folder_settings()(this.folderSettingsReceived);
