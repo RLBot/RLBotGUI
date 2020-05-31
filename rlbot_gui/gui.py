@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 from pathlib import Path
 
 import eel
@@ -342,6 +343,7 @@ def get_language_support():
     return {
         'java': java_return_code == 0,
         'chrome': is_chrome_installed(),  # Scratch bots need chrome to auto-run
+        'fullpython': is_full_python(),
     }
 
 
@@ -533,6 +535,15 @@ def is_chrome_installed():
             return chm.get_instance_path() is not None
 
         return chm.find_path() is not None
+
+
+def is_full_python():
+    # As opposed to embedded python. A full python installation is better at package management,
+    # has access to tkinter, etc. This logic might be brittle; it's based on the historical fact that
+    # our embedded installer always put python within the RLBotGUI directory.
+    if 'RLBotGUI' in Path(sys.executable).parts:
+        return False
+    return True
 
 
 def launch_eel(use_chrome):

@@ -349,6 +349,10 @@
 					</p>
 					<md-button @click="installRequirements(activeBot.path)"
 							   class="md-primary md-raised">Install Now</md-button>
+					<p v-if="!languageSupport.fullpython">
+						If the installation fails, try downloading our <a href="http://www.rlbot.org/install/RLBotGUI.exe">new launcher script</a>
+						which makes RLBotGUI better with package management.
+					</p>
 				</div>
 			</md-dialog-content>
 
