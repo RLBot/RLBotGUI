@@ -280,7 +280,7 @@
 			</md-card-content>
 		</md-card>
 
-		<md-snackbar md-position="center" :md-active.sync="showSnackbar" md-persistent>
+		<md-snackbar md-position="center" :md-active.sync="showSnackbar" :md-duration="5000" md-persistent>
 			<span>{{snackbarContent}}</span>
 		</md-snackbar>
 
@@ -529,6 +529,11 @@
 
 				const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
 				const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
+
+				const renderingMsg = this.matchSettings.enable_rendering ? "🎨 Rendering is ON." : "🚫 Rendering is OFF.";
+				const stateSettingMsg = this.matchSettings.enable_state_setting ? "✨ State Setting is ON." : "🚫 State Setting is OFF.";
+				this.snackbarContent = renderingMsg + " " + stateSettingMsg + " See EXTRA to change.";
+				this.showSnackbar = true;
 
 				// start match asynchronously, so it doesn't block things like updating the background image
 				setTimeout(() => {
