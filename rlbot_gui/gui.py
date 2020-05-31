@@ -419,17 +419,35 @@ def is_botpack_up_to_date():
     return github_commit_id == local_commit_id
 
 
+def get_content_folder():
+    if Path(os.getcwd()).name == 'RLBotGUI':
+        # This is the classic case where we're using embedded python, and our current working directory is already
+        # something like C:\Users\tareh\AppData\Local\RLBotGUI. It will also match if you have cloned RLBotGUI.
+        return Path(os.getcwd())
+
+    # If we get here, we're likely using system python or something along those lines.
+    local_app_data = os.getenv('LOCALAPPDATA')
+    if local_app_data:
+        # We appear to be on Windows platform. This is where the new Windows launch script puts things.
+        guix_path = Path(os.getenv('LOCALAPPDATA')) / 'RLBotGUIX'
+        guix_path.mkdir(exist_ok=True)
+        return guix_path
+
+    # Probably on linux or mac at this point. Go with CWD again, because that's what they've used historically.
+    return Path(os.getcwd())
+
+
+
 @eel.expose
 def download_bot_pack():
+    content_folder = get_content_folder()
+    botpack_location = content_folder / BOTPACK_FOLDER
+
     # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
-    BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, BOTPACK_FOLDER)
+    BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
 
     # Configure the folder settings.
-    bot_folder_settings['folders'][os.path.abspath(BOTPACK_FOLDER)] = {'visible': True}
-
-    if os.path.abspath(OLD_BOTPACK_FOLDER) in bot_folder_settings['folders']:
-        # Toggle off the old one since it's been replaced.
-        bot_folder_settings['folders'][os.path.abspath(OLD_BOTPACK_FOLDER)] = {'visible': False}
+    bot_folder_settings['folders'][str(botpack_location)] = {'visible': True}
 
     settings = load_settings()
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
@@ -450,11 +468,11 @@ def hot_reload_python_bots():
 
 
 def ensure_bot_directory():
-    bot_directory = CREATED_BOTS_FOLDER
-    if not os.path.exists(bot_directory):
-        os.mkdir(bot_directory)
+    content_folder = get_content_folder()
+    bot_directory = content_folder / CREATED_BOTS_FOLDER
+    bot_directory.mkdir(exist_ok=True)
 
-    bot_folder_settings['folders'][os.path.abspath(CREATED_BOTS_FOLDER)] = {'visible': True}
+    bot_folder_settings['folders'][str(bot_directory)] = {'visible': True}
     settings = load_settings()
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.sync()
