@@ -9,7 +9,7 @@
   --blue-color: #0054a6;
 }
 
-body {
+body, html {
   height: 100%;
 }
 
@@ -19,12 +19,17 @@ body {
   font-size: 16px;
   color: var(--main-color);
   margin: 0;
+  padding-bottom: 10px;
   background-image: url(../imgs/arenas/DFHStadium.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   transition: background-image 0.5s ease-in-out;
   min-height: 100%;
+}
+
+.card-body {
+  padding: 5px;
 }
 
 ::-webkit-scrollbar {
@@ -39,22 +44,22 @@ body {
 }
 
 .logo {
-  width: 4rem;
-  height: 4rem;
-  padding: 0.5rem;
+  width: 3rem;
+  margin-top: -30px;
+  margin-bottom: -30px;
   filter: drop-shadow(0 0 0.5rem rgba(0,0,0,0.6));
 }
 
-.title {
+.rlbot-brand {
+  color: white;
   font-size: 1.5rem;
-  position: absolute;
-  top: 0.5rem;
-  left: 5rem;
+  font-weight: bold;
 }
 
 .team-entries {
-  min-height: 180px;
+  min-height: 160px;
   padding: 5px;
+  margin-bottom: 20px;
 }
 
 .team-card {
@@ -63,9 +68,9 @@ body {
 
 .team-label {
   position: absolute;
-  bottom: 10px;
+  bottom: 3px;
   color: white;
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 .draggable {
@@ -73,7 +78,12 @@ body {
 }
 
 .bot-card {
-  margin: 5px;
+  margin: 2px;
+  box-shadow: 1px 1px 7px #0000002e;
+}
+
+.bot-card .card-body {
+  padding: 2px 5px;
 }
 
 .bot-card .md-switch {
@@ -93,7 +103,7 @@ body {
   padding-right: 10px;
 }
 
-.secret-button {
+#app .secret-button {
   background: none;
   color: inherit;
   border: none;
@@ -127,11 +137,12 @@ body {
   background-color: var(--hover)
 }
 
-.md-card.bot-pool, .md-card.team-card, .md-card.settings-card {
+.card.bot-pool, .card.team-card, .card.settings-card {
   margin: 10px;
+  color: #333333;
 }
 
-#app .md-card .md-card-header {
+#app .card .md-card-header {
   padding: 5px;
 }
 
@@ -144,9 +155,6 @@ body {
 }
 
 .bot-pool .bot-filter {
-  margin-top: -10px;
-  margin-bottom: -20px;
-  min-width: 150px;
   margin-left: 20px;
 }
 

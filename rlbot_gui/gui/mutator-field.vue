@@ -1,10 +1,9 @@
 <template>
-	<md-field>
-		<label :for="id">{{label}}</label>
-		<md-select v-model="model" :id="id" v-on:md-selected="$emit('input', $event)">
-			<md-option v-for="opt in options" :key="opt" :value="opt">{{opt}}</md-option>
-		</md-select>
-	</md-field>
+	<b-form-group :label="label">
+		<b-form-select v-model="model" :id="id" v-on:change="$emit('input', $event)">
+			<b-form-select-option v-for="opt in options" :key="opt" :value="opt">{{opt}}</b-form-select-option>
+		</b-form-select>
+	</b-form-group>
 </template>
 
 <script>

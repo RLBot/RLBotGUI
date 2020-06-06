@@ -7,10 +7,12 @@
 
 	<link rel="icon" type="image/png" sizes="192x192" href="imgs/rlbot_logo.png">
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-	<link rel="stylesheet" href="css/vue-material.min.css"/>
-	<link rel="stylesheet" href="css/vue-fonts.css"/>
-	<link rel="stylesheet" href="css/black-green-light.css"/>
+	<!-- Load required Bootstrap and BootstrapVue CSS -->
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" />
+	<link type="text/css" rel="stylesheet" href="css/bootstrap-vue.min.css" />
+
+
+
 	<link rel="stylesheet" href="css/style.css"/>
 	<link rel="stylesheet" href="css/appearance-editor.css"/>
 
@@ -28,10 +30,14 @@
 	</div>
 
     <script type="text/javascript" src="/eel.js"></script>
-    <script type="text/javascript" src="js/vue.js"></script>
+	<!-- Load Vue followed by BootstrapVue -->
+	<script src="js/vue.min.js"></script>
+	<script src="js/bootstrap-vue.min.js"></script>
+
+	<!-- Load the following for BootstrapVueIcons support -->
+	<script src="js/bootstrap-vue-icons.min.js"></script>
 	<script type="text/javascript" src="js/vue-router.js"></script>
 	<script type="text/javascript" src="js/httpVueLoader.js"></script>
-    <script type="text/javascript" src="js/vue-material.min.js"></script>
     <script type="text/javascript" src="js/Sortable.min.js"></script>
     <script type="text/javascript" src="js/vuedraggable.min.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
