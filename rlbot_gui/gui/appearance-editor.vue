@@ -1,91 +1,79 @@
 <template>
-	<md-dialog :md-active.sync="active" id="appearance-editor-dialog">
-		<md-dialog-title style="margin-bottom: 0px;">
+	<b-modal id="appearance-editor-dialog" size="xl" v-model="appearanceModalActive" hide-footer>
+		<template v-slot:modal-title>
 			<span v-if="activeBot && activeBot.name">Appearance loadout of {{ activeBot.name }}</span>
 			<span v-else>{{ path }}</span>
-			<md-button class="md-icon-button" @click="$emit('appearance-editor-closed')" style="float: right;">
-				<md-icon>close</md-icon>
-			</md-button>
-		</md-dialog-title>
+		</template>
 
-		<md-dialog-content style="padding-bottom: 0px;">
-			<table class="appearance-editor-table">
-				<tr>
-					<td style="height: 5px; background-color: rgb(0, 153, 255);"></td>
-					<td style="height: 5px; background-color: orange;"></td>
-				</tr>
-				<tr v-if="colors">
-					<td v-for="team in teams">
-						<div class="md-layout md-gutter">
-							<div v-for="colorType in colorTypes" class="md-layout-item md-size-50">
-								<label>{{ colorType.name }}</label>
-								<md-avatar style="margin-left: 20px;"
-									:style="{'background-color': colorStyle(colorType, team)}">
-								</md-avatar>
-								<md-menu md-size="auto" style="vertical-align: top;">
-									<md-button md-menu-trigger class="md-icon-button">
-										<md-icon>edit</md-icon>
-									</md-button>
-									<md-menu-content class="colorpicker-menu">
-										<table style="border-spacing: 0;">
-											<tr v-for="i in colorType.rows">
-												<td v-for="j in colorType.columns">
-													<div class="colorpicker-color"
-														:style="{'background-color': colorStyleFromRowAndColumn(colorType, team, i, j)}"
-														:class="{'selected-color':
-															config[team][colorType.key] == getColorIDFromRowAndColumn(i, j, colorType)}"
-														@click="config[team][colorType.key] = getColorIDFromRowAndColumn(i, j, colorType);">
-													</div>
-												</td>
-											</tr>
-										</table>
-									</md-menu-content>
-								</md-menu>
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr v-for="itemType in itemTypes">
-					<td class="blue-team">
-						<item-field :item-type="itemType" :items="items[itemType.category]" v-model="config.blue"></item-field>
-					</td>
-					<td class="orange-team">
-						<item-field :item-type="itemType" :items="items[itemType.category]" v-model="config.orange"></item-field>
-					</td>
-				</tr>
-			</table>
-		</md-dialog-content>
+		<b-row>
+			<b-col>
+				<div style="height: 5px; background-color: rgb(0, 153, 255);"></div>
+			</b-col>
+			<b-col>
+				<div style="height: 5px; background-color: orange;"></div>
+			</b-col>
+		</b-row>
+		<b-row v-if="colors">
+			<b-col v-for="team in teams">
+				<span v-for="colorType in colorTypes">
+					<b-dropdown :text="colorType.name">
+						<b-dropdown-item>
+							<table style="border-spacing: 0;">
+								<tr v-for="i in colorType.rows">
+									<td v-for="j in colorType.columns" :style="{'background-color': colorStyleFromRowAndColumn(colorType, team, i, j)}">
+										<div class="colorpicker-color"
+											 :class="{'selected-color':
+												config[team][colorType.key] == getColorIDFromRowAndColumn(i, j, colorType)}"
+											 @click="config[team][colorType.key] = getColorIDFromRowAndColumn(i, j, colorType);">
+										</div>
+									</td>
+								</tr>
+							</table>
+						</b-dropdown-item>
+					</b-dropdown>
+					<span class="color-indicator" :style="{'background-color': colorStyle(colorType, team)}"></span>
+				</span>
+			</b-col>
+		</b-row>
+		<b-row v-if="Object.keys(config.blue).length">
+			<b-col class="blue-team">
+				<div v-for="itemType in itemTypes">
+					<item-field :item-type="itemType" :items="items[itemType.category]" team="blue" v-model="config.blue"></item-field>
+				</div>
+			</b-col>
+			<b-col class="orange-team">
+				<div v-for="itemType in itemTypes">
+					<item-field :item-type="itemType" :items="items[itemType.category]" team="orange" v-model="config.orange"></item-field>
+				</div>
+			</b-col>
+		</b-row>
 
-		<md-dialog-actions>
-			<md-button class="md-raised md-accent" @click="spawnCarForViewing(0)">
-				<md-icon>remove_red_eye</md-icon>
-				View blue car in game
-			</md-button>
-			<md-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
-				<md-icon>remove_red_eye</md-icon>
-				View orange car in game
-			</md-button>
-
-			<div class="showcase-select-wrapper">
-				<md-field style="margin: 0;">
-					<md-select v-model="selectedShowcaseType">
-						<md-option v-for="showcaseType in showcaseTypes" :value="showcaseType.id">
-							{{ showcaseType.name }}
-						</md-option>
-					</md-select>
-				</md-field>
-			</div>
-
-			<md-button class="md-primary md-raised" @click="saveAppearance">
-				<md-icon>check</md-icon>
-				Save and close
-			</md-button>
-			<md-button @click="loadLooks(path)">
-				<md-icon>clear</md-icon>
-				Revert changes
-			</md-button>
-		</md-dialog-actions>
-	</md-dialog>
+		<div>
+			<b-form inline>
+				<b-button class="md-raised md-accent" @click="spawnCarForViewing(0)">
+					<b-icon icon="eye"></b-icon>
+					View blue car in game
+				</b-button>
+				<b-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
+					<b-icon icon="eye"></b-icon>
+					View orange car in game
+				</b-button>
+				<b-form-select v-model="selectedShowcaseType">
+					<b-form-select-option v-for="showcaseType in showcaseTypes" :value="showcaseType.id">
+						{{ showcaseType.name }}
+					</b-form-select-option>
+				</b-form-select>
+				<b-button class="md-primary md-raised" @click="saveAppearance">
+					<b-icon icon="check"></b-icon>
+					Save and close
+				</b-button>
+				<b-button @click="loadLooks(path)">
+					<b-icon icon="clear"></b-icon>
+					Revert changes
+				</b-button>
+			</b-form>
+		</div>
+	</b-modal>
 </template>
 
 <script>
@@ -96,9 +84,10 @@
 		components: {
 			'item-field': ItemField
 		},
-		props: ['active', 'path', 'activeBot', 'map'],
+		props: ['path', 'activeBot', 'map'],
 		data () {
 			return {
+				appearanceModalActive: false,
 				config: {
 					blue: {},
 					orange: {},
@@ -208,7 +197,7 @@
 		},
 
 		watch: {
-			active: {
+			appearanceModalActive: {
 				handler: function(val) {
 					if (val && this.path) {
 						this.loadLooks(this.path);

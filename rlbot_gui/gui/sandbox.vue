@@ -1,21 +1,20 @@
 <template>
     <div>
-        <md-toolbar class="md-primary">
-            <div class="md-toolbar-row">
+        <b-navbar variant="dark">
+            <b-navbar-brand>
                 <img class="logo" src="imgs/rlbot_logo.png">
-                <h3 class="md-title" style="flex: 1">RLBot Sandbox</h3>
-
-                <div class="md-toolbar-section-end">
-                    <md-button @click="watching = false; $router.replace('/')">
-                        Back
-                    </md-button>
-                </div>
-            </div>
-        </md-toolbar>
+                <span class="rlbot-brand" style="flex: 1">RLBot Sandbox</span>
+            </b-navbar-brand>
+            <b-navbar-nav class="ml-auto">
+                <b-button @click="watching = false; $router.replace('/')">
+                    Back
+                </b-button>
+            </b-navbar-nav>
+        </b-navbar>
         <div>
-            <div class="md-layout">
-                <div class="md-layout-item">
-                    <md-card class="settings-card">
+            <b-row>
+                <b-col>
+                    <b-card class="settings-card">
 <!--                        This v-stage thing comes from here: https://konvajs.org/docs/vue/index.html-->
                         <v-stage ref="stage" :config="configKonva" class="arena-background">
                             <v-layer ref="layer">
@@ -23,55 +22,44 @@
                                 <v-rect v-for="car in cars" :config="car" @dragend="handleCarDragEnd" @dragstart="handleDragStart"></v-rect>
                             </v-layer>
                         </v-stage>
-                    </md-card>
-                </div>
-                <div class="md-layout-item">
-                    <md-card class="settings-card">
-                        <md-card-content>
-                            <md-checkbox v-model="watching">
+                    </b-card>
+                </b-col>
+                <b-col>
+                    <b-card class="settings-card" title="Commands">
+                        <b-form inline>
+                            <b-form-checkbox v-model="watching">
                                 Watch Game
-                            </md-checkbox>
-                            <md-checkbox v-model="frozen">
+                            </b-form-checkbox>
+                            <b-form-checkbox v-model="frozen">
                                 Freeze Game
-                            </md-checkbox>
-                            <div>
-                                <md-radio v-model="gravity" value="normal">Normal gravity</md-radio>
-                                <md-radio v-model="gravity" value="zero">Zero gravity</md-radio>
-                            </div>
-                            <div>
-                                <md-button class="md-raised md-alternative" @click="rewind()"  :disabled="!hasPacketHistory">
-                                    Rewind 5 Seconds
-                                </md-button>
-                            </div>
-                            <div class="md-layout md-alignment-center-left">
-                                <div class="md-layout-item">
-                                    <md-field>
-                                        <label>Game Speed</label>
-                                        <md-input v-model="gamespeed" type="number"></md-input>
-                                    </md-field>
-                                </div>
-                                <div class="md-layout-item">
-                                    <md-button class="md-raised md-alternative" @click="setGamespeed()">Set</md-button>
-                                </div>
-                            </div>
-                            <div class="md-layout md-alignment-center-left">
-                                <div class="md-layout-item">
-                                    <md-field>
-                                        <label>Console Command</label>
-                                        <md-input v-model="command"></md-input>
-                                    </md-field>
-                                </div>
-                                <div class="md-layout-item">
-                                    <md-button class="md-raised md-alternative" @click="executeCommand()">Execute</md-button>
-                                </div>
-                            </div>
-                            <p>
-                                You can drag and drop to move objects around in the game!
-                            </p>
-                        </md-card-content>
-                    </md-card>
-                </div>
-            </div>
+                            </b-form-checkbox>
+                        </b-form>
+
+                        <b-form inline>
+                            <b-form-radio v-model="gravity" name="gravity-radios" value="normal">Normal gravity</b-form-radio>
+                            <b-form-radio v-model="gravity" name="gravity-radios" value="zero">Zero gravity</b-form-radio>
+                        </b-form>
+                        <div>
+                            <b-button class="md-raised md-alternative" @click="rewind()"  :disabled="!hasPacketHistory">
+                                Rewind 5 Seconds
+                            </b-button>
+                        </div>
+                        <b-form inline>
+                            <label>Game Speed</label>
+                            <b-form-input v-model="gamespeed" type="number"></b-form-input>
+                            <b-button class="md-raised md-alternative" @click="setGamespeed()">Set</b-button>
+                        </b-form>
+                        <b-form inline>
+                            <label>Console Command</label>
+                            <b-form-input v-model="command"></b-form-input>
+                            <b-button class="md-raised md-alternative" @click="executeCommand()">Execute</b-button>
+                        </b-form>
+                        <p>
+                            You can drag and drop to move objects around in the game!
+                        </p>
+                    </b-card>
+                </b-col>
+            </b-row>
         </div>
     </div>
 </template>

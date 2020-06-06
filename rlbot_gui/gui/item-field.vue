@@ -1,41 +1,30 @@
 <template>
-	<div class="md-layout md-gutter">
-		<div class="md-layout-item md-size-70">
-
-			<md-autocomplete v-model="selectedItem" :md-options="itemNames">
-				<label>{{ itemType.name }}</label>
-
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<md-highlight-text :md-term="term">{{ item }}</md-highlight-text>
-				</template>
-		
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					No {{ itemType.name }} matching "{{ term }}" found.
-				</template>
-			</md-autocomplete>
-
-		</div>
-		<div v-if="itemType.paintKey" class="md-layout-item md-size-30">
-
+	<b-row>
+		<b-col>
+			<b-form-group :label="itemType.name" label-cols="5">
+				<b-form-input v-model="itemSelection" :list="'list' + itemType.name + team" autocomplete="off"></b-form-input>
+				<b-form-datalist :id="'list' + itemType.name + team" :options="items" value-field="itemKey" text-field="name"></b-form-datalist>
+			</b-form-group>
+		</b-col>
+		<b-col cols="3">
 			<md-field :class="selectedPaintColorClass" class="paint-color">
-				<md-select v-model="selectedPaint">
-					<md-option v-for="color in paintColors" :value="color.id" :class="color.class" class="paint-color">
+				<b-form-select v-model="selectedPaint">
+					<b-form-select-option v-for="color in paintColors" :value="color.id" :class="color.class" class="paint-color">
 						{{ color.name }}
-					</md-option>
-				</md-select>
+					</b-form-select-option>
+				</b-form-select>
 			</md-field>
-
-		</div>
-	</div>
+		</b-col>
+	</b-row>
 </template>
 
 <script>
 	module.exports = {
 		name: 'item-field',
-		props: ['value', 'items', 'itemType'],
+		props: ['value', 'items', 'itemType', 'team'],
 		data: function() {
 			return {
-				itemNames: this.items.map(el => el.name),
+				itemSelection: null,
 				paintColors: [
 					{id: 0, class: '', name: 'No Paint'},
 					{id: 1, class: 'crimson', name: 'Crimson'},
@@ -54,6 +43,22 @@
 				]
 			}
 		},
+		created: function() {
+			let id = this.value[this.itemType.itemKey];
+			let item = this.items.find(el => el.id === id);
+			if (item) {
+				this.itemSelection = item.name;
+			}
+		},
+		watch: {
+			itemSelection: {
+				handler: function(val) {
+					let item = this.items.find(el => el.name == val);
+					this.value[this.itemType.itemKey] = item ? item.id : '0';
+					this.$emit('input', this.value);
+				}
+			},
+		},
 		computed: {
 			selectedPaint: {
 				get() {
@@ -61,17 +66,6 @@
 				},
 				set(val) {
 					this.value[this.itemType.paintKey] = val;
-					this.$emit('input', this.value);
-				}
-			},
-			selectedItem: {
-				get() {
-					let item = this.items.find(el => el.id == this.value[this.itemType.itemKey]);
-					return item ? item.name : '';
-				},
-				set(val) {
-					let item = this.items.find(el => el.name == val);
-					this.value[this.itemType.itemKey] = item ? item.id : '0';
 					this.$emit('input', this.value);
 				}
 			},

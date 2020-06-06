@@ -10,7 +10,7 @@ function updateDownloadProgress(progress, status) {}
 // otherwise python will think it doesn't exist
 // you can then expose the actual function later
 
-Vue.use(VueMaterial.default);
+// Vue.use(VueMaterial.default);
 
 const Main = httpVueLoader('main.vue');
 const Sandbox = httpVueLoader('sandbox.vue');

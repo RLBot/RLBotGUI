@@ -1,450 +1,361 @@
 <template>
 
-	<div>
+	<b-container fluid>
 
-	<md-toolbar class="md-primary">
-		<div class="md-toolbar-row">
+	<b-navbar variant="dark">
+		<b-navbar-brand>
 			<img class="logo" src="imgs/rlbot_logo.png">
-			<h3 class="md-title" style="flex: 1">RLBot</h3>
+			<span class="rlbot-brand" style="flex: 1">RLBot</span>
+		</b-navbar-brand>
 
-			<div class="md-toolbar-section-end">
-				<span v-if="!matchSettings.enable_state_setting">
-					<md-icon class="warning-icon">warning</md-icon><md-tooltip md-direction="bottom">State setting is turned off, sandbox won't work!</md-tooltip>
-				</span>
-				<md-button @click="$router.replace('/sandbox')">
-					State Setting Sandbox
-				</md-button>
-				<md-progress-spinner v-if="showProgressSpinner" class="md-accent" :md-diameter="30" md-mode="indeterminate"></md-progress-spinner>
-				<md-menu md-direction="bottom-start">
-					<md-button md-menu-trigger class="md-icon-button">
-						<md-icon>more_vert</md-icon>
-					</md-button>
 
-					<md-menu-content>
-						<md-menu-item @click="showPackageInstaller = true;">
-							Install missing python package
-						</md-menu-item>
-						<md-menu-item @click="resetMatchSettingsToDefault()">
-							Reset match settings
-						</md-menu-item>
-						<md-menu-item @click="pickAndEditAppearanceFile()">
-							Edit appearance config file
-						</md-menu-item>
-					</md-menu-content>
-				</md-menu>
-			</div>
-		</div>
-	</md-toolbar>
+		<b-navbar-nav class="ml-auto">
+			<span v-if="!matchSettings.enable_state_setting">
+				<md-icon class="warning-icon">warning</md-icon><md-tooltip md-direction="bottom">State setting is turned off, sandbox won't work!</md-tooltip>
+			</span>
+			<b-button @click="$router.replace('/sandbox')">
+				State Setting Sandbox
+			</b-button>
+			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning"></b-spinner>
+			<b-dropdown right>
+				<template v-slot:button-content>
+					Menu
+				</template>
 
-	<md-dialog :md-active.sync="showPackageInstaller">
-		<md-dialog-title>Install Package</md-dialog-title>
+				<b-dropdown-item v-b-modal.package-installer>
+					Install missing python package
+				</b-dropdown-item>
+				<b-dropdown-item @click="resetMatchSettingsToDefault()">
+					Reset match settings
+				</b-dropdown-item>
+				<b-dropdown-item @click="pickAndEditAppearanceFile()">
+					Edit appearance config file
+				</b-dropdown-item>
+			</b-dropdown>
+		</b-navbar-nav>
+	</b-navbar>
 
-		<md-dialog-content>
+	<b-modal title="Install Package" id="package-installer">
 
-			<md-field>
-				<label>Package Name</label>
-				<md-input v-model="packageString"></md-input>
-			</md-field>
-		</md-dialog-content>
+		<b-form-group label="Package Name" label-for="package-name">
+			<b-form-input id="package-name" v-model="packageString"></b-form-input>
+		</b-form-group>
 
-		<md-dialog-actions>
-			<md-button @click="installPackage()" class="md-raised md-primary">Install Package</md-button>
-			<md-button @click="showPackageInstaller = false">Close</md-button>
-		</md-dialog-actions>
-	</md-dialog>
+		<template v-slot:modal-footer>
+			<b-button @click="installPackage()" class="md-raised md-primary">Install Package</b-button>
+		</template>
+	</b-modal>
 
-	<div>
 
-		<md-card class="bot-pool">
-			<md-card-header class="center-flex">
-				<div class="md-title" style="display:inline-block">Player Types</div>
-				<md-menu md-direction="bottom-start" class="bot-pool-adder">
-					<md-button class="md-fab md-mini" md-menu-trigger>
-						<md-icon>add</md-icon>
-						<md-tooltip md-direction="top">Load more player types</md-tooltip>
-					</md-button>
-
-					<md-menu-content>
-						<md-menu-item  @click="downloadBotPack()">
-							<span>Download Bot Pack</span>
-							<md-icon>cloud_download</md-icon>
-						</md-menu-item>
-						<md-menu-item  @click="showNewBotDialog = true">
-							<span>Start Your Own Bot!</span>
-							<md-icon>create</md-icon>
-						</md-menu-item>
-						<md-menu-item  @click="pickBotFolder()">
-							<span>Load Folder</span>
-							<md-icon>folder_open</md-icon>
-						</md-menu-item>
-						<md-menu-item @click="pickBotConfig()">
-							<span>Load Cfg File</span>
-							<md-icon>file_copy</md-icon>
-						</md-menu-item>
-					</md-menu-content>
-				</md-menu>
-				<md-button class="md-fab md-mini bot-pool-adder" @click="openFolderSettingsDialog">
-					<md-icon>settings</md-icon>
-					<md-tooltip md-direction="top">Manage bot folders</md-tooltip>
-				</md-button>
-
+		<b-card class="bot-pool">
+			<div class="center-flex">
+				<span>Player Types</span>
+				<b-dropdown text="Add">
+					<b-dropdown-item  @click="downloadBotPack()">
+						<span>Download Bot Pack</span>
+						<b-icon icon="cloud_download"></b-icon>
+					</b-dropdown-item>
+					<b-dropdown-item v-b-modal.new-bot-modal>
+						<span>Start Your Own Bot!</span>
+						<b-icon icon="create"></b-icon>
+					</b-dropdown-item>
+					<b-dropdown-item  @click="pickBotFolder()">
+						<span>Load Folder</span>
+						<b-icon icon="folder_open"></b-icon>
+					</b-dropdown-item>
+					<b-dropdown-item @click="pickBotConfig()">
+						<span>Load Cfg File</span>
+						<b-icon icon="file_copy"></b-icon>
+					</b-dropdown-item>
+				</b-dropdown>
+				<b-button @click="prepareFolderSettingsDialog" v-b-modal.folder-settings-modal>
+					Manage bot folders
+				</b-button>
 				<div class="bot-filter">
-					<md-field md-inline md-clearable>
-						<label><md-icon>search</md-icon>Filter</label>
-						<md-input v-model="botNameFilter"></md-input>
-					</md-field>
+					<b-form inline>
+						<label for="filter-text-input"><b-icon icon="search"></b-icon>Filter</label>
+						<b-input id="filter-text-input" v-model="botNameFilter"></b-input>
+					</b-form>
 				</div>
-
-			</md-card-header>
+			</div>
 
 			<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-				<md-card class="bot-card draggable md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
+				<b-card class="bot-card draggable md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
 					<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
 						<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 						<img v-if="bot.logo" v-bind:src="bot.logo">
 						<span class="bot-name">{{ bot.name }}</span>
-						<md-button class="md-icon-button md-dense warning-icon" v-if="bot.warn"
-								   @click.stop="activeBot = bot; showLanguageWarning = true;">
-							<md-icon>warning</md-icon>
-						</md-button>
-						<md-button class="md-icon-button md-dense bot-hover-reveal" v-if="bot.info"
-								   @click.stop="activeBot = bot; showBotInfo = true;">
-							<md-icon>blur_on</md-icon>
-						</md-button>
+						<b-button class="md-icon-button md-dense warning-icon" v-if="bot.warn"
+								   @click.stop="activeBot = bot;" v-b-modal.language-warning-modal>
+							<b-icon icon="warning"></b-icon>
+						</b-button>
+						<b-button size="sm" variant="outline-primary" class="bot-hover-reveal" v-if="bot.info"
+								   @click.stop="activeBot = bot;" v-b-modal.bot-info-modal>
+							<b-icon icon="info-circle"></b-icon>
+						</b-button>
 					</button>
-				</md-card>
+				</b-card>
 			</draggable>
-			<md-card class="bot-card md-elevation-3" v-for="script in scriptPool">
-				<md-switch v-model="script.enabled">{{script.name}}</md-switch>
-				<md-button class="md-icon-button md-dense warning-icon" v-if="script.warn"
-						   @click.stop="activeBot = script; showLanguageWarning = true;">
-					<md-icon>warning</md-icon>
-				</md-button>
-				<md-button class="md-icon-button md-dense bot-hover-reveal" v-if="script.info"
-						   @click.stop="activeBot = script; showBotInfo = true;">
-					<md-icon>blur_on</md-icon>
-				</md-button>
-			</md-card>
-		</md-card>
+			<b-card class="bot-card md-elevation-3" v-for="script in scriptPool">
+				<b-form inline>
+					<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
+					<b-button class="md-icon-button md-dense warning-icon" v-if="script.warn"
+							   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
+						<b-icon icon="warning"></b-icon>
+					</b-button>
+					<b-button size="sm" variant="outline-primary" class="md-icon-button md-dense bot-hover-reveal" v-if="script.info"
+							   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
+						<b-icon icon="info-circle"></b-icon>
+					</b-button>
+				</b-form>
+			</b-card>
+		</b-card>
 
-		<div id="teamSwitcher" style="text-align: center;">
-			<div style="display: inline-block">
-				<md-switch v-model="teamSelection" v-bind:class="[teamSelection]" value="orange" style="margin:1px 0"></md-switch>
-				<md-tooltip md-direction="top">Toggle which team gets bots when you click them</md-tooltip>
-			</div>
-		</div>
-
-		<div class="md-layout">
-			<div class="md-layout-item">
-				<md-card class="blu team-card md-elevation-8">
-					<md-card-header class="team-label">
-						<div class="md-title">Blue Team</div>
-					</md-card-header>
-					<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
-						<md-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
-							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-							<img v-if="bot.logo" v-bind:src="bot.logo">
-							<span class="bot-name">{{ bot.name }}</span>
-							<md-button class="md-icon-button" @click="blueTeam.splice(index, 1)">
-								<md-icon>close</md-icon>
-							</md-button>
-						</md-card>
-					</draggable>
-				</md-card>
-			</div>
-
-			<div class="md-layout-item">
-				<md-card class="org team-card md-elevation-8">
-					<md-card-header class="team-label">
-						<div class="md-title">Orange Team</div>
-					</md-card-header>
-					<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
-						<md-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
-							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-							<img v-if="bot.logo" v-bind:src="bot.logo">
-							<span class="bot-name">{{ bot.name }}</span>
-							<md-button class="md-icon-button" @click="orangeTeam.splice(index, 1)">
-								<md-icon>close</md-icon>
-							</md-button>
-						</md-card>
-					</draggable>
-				</md-card>
-			</div>
-		</div>
-
-		<md-card v-if="matchOptions" class="settings-card">
-			<md-card-header>
-				<div class="md-title">Match Settings</div>
-			</md-card-header>
-
-			<md-card-content>
-
-				<div class="center-flex">
-
-					<div class="md-layout md-gutter" style="max-width: 400px;">
-						<div class="md-layout-item">
-							<md-field>
-								<label for="map_selection">Map</label>
-								<md-select v-model="matchSettings.map" id="map_selection" @md-closed="updateBGImage(matchSettings.map)">
-									<md-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</md-option>
-								</md-select>
-							</md-field>
-						</div>
-						<div class="md-layout-item">
-							<md-field>
-								<label for="mode_selection">Mode</label>
-								<md-select v-model="matchSettings.game_mode" id="mode_selection">
-									<md-option v-for="mode in matchOptions.game_modes" :key="mode" v-bind:value="mode">{{mode}}</md-option>
-								</md-select>
-							</md-field>
-						</div>
+		<b-row>
+			<b-col>
+				<b-card class="blu team-card md-elevation-8">
+					<div class="team-label">
+						<b-form-radio v-model="teamSelection" name="team-radios" value="blue">Add to Blue Team</b-form-radio>
 					</div>
+					<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
+						<b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
+							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+							<img v-if="bot.logo" v-bind:src="bot.logo">
+							<span class="bot-name">{{ bot.name }}</span>
+							<b-button size="sm" variant="outline-primary" class="icon-button" @click="blueTeam.splice(index, 1)">
+								<b-icon icon="x"></b-icon>
+							</b-button>
+						</b-card>
+					</draggable>
+				</b-card>
+			</b-col>
 
-					<md-button class="md-raised" style="margin-left: 20px" @click="showMutatorDialog = true">Mutators</md-button>
+			<b-col>
+				<b-card class="org team-card md-elevation-8">
+					<div class="team-label">
+						<b-form-radio v-model="teamSelection" name="team-radios" value="orange">Add to Orange Team</b-form-radio>
+					</div>
+					<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
+						<b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
+							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+							<img v-if="bot.logo" v-bind:src="bot.logo">
+							<span class="bot-name">{{ bot.name }}</span>
+							<b-button size="sm" variant="outline-primary" class="icon-button" @click="orangeTeam.splice(index, 1)">
+								<b-icon icon="x"></b-icon>
+							</b-button>
+						</b-card>
+					</draggable>
+				</b-card>
+			</b-col>
+		</b-row>
 
-					<md-button class="md-raised" @click="showExtraOptions = true">Extra</md-button>
+		<b-card v-if="matchOptions" class="settings-card" title="Match Settings">
+			<div class="center-flex">
 
-					<span style="flex-grow: 1"></span>
+				<b-row style="max-width: 400px;">
+					<b-col>
+						<label for="map_selection">Map</label>
+						<b-form-select v-model="matchSettings.map" id="map_selection" @md-closed="updateBGImage(matchSettings.map)">
+							<b-form-select-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</b-form-select-option>
+						</b-form-select>
+					</b-col>
+					<b-col>
+						<label for="mode_selection">Mode</label>
+						<b-form-select v-model="matchSettings.game_mode" id="mode_selection">
+							<b-form-select-option v-for="mode in matchOptions.game_modes" :key="mode" v-bind:value="mode">{{mode}}</b-form-select-option>
+						</b-form-select>
+					</b-col>
+				</b-row>
 
-					<md-button @click="hotReload()" class="md-icon-button">
-						<md-icon>loop</md-icon>
-						<md-tooltip md-direction="top">Hot-reload python bots</md-tooltip>
-					</md-button>
-					<md-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" class="md-primary md-raised">Start Match</md-button>
-					<md-button @click="killBots()" class="md-raised">Stop</md-button>
-				</div>
+				<b-form-group>
+					<b-button style="margin-left: 20px" v-b-modal.mutators-modal>Mutators</b-button>
+					<b-button v-b-modal.extra-modal>Extra</b-button>
+				</b-form-group>
 
-				<div style="margin-top: -10px; margin-bottom: -15px;">
-					<md-switch v-model="matchSettings.randomizeMap" style="margin: 0;">
-						Randomize Map
-						<md-tooltip md-direction="right">Select a random standard map when you click Start Match</md-tooltip>
-					</md-switch>
-				</div>
+				<span style="flex-grow: 1"></span>
 
-				<md-dialog :md-active.sync="showExtraOptions">
-					<md-dialog-title>Extra Options</md-dialog-title>
 
-					<md-dialog-content>
-						<div class="md-layout">
-							<div class="md-layout-item">
-								<div><md-switch v-model="matchSettings.skip_replays">Skip Replays</md-switch></div>
-								<div><md-switch v-model="matchSettings.instant_start">Instant Start</md-switch></div>
-								<div><md-switch v-model="matchSettings.enable_lockstep">Enable Lockstep</md-switch></div>
-							</div>
-							<div class="md-layout-item">
-								<div><md-switch v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</md-switch></div>
-								<div><md-switch v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</md-switch></div>
-								<div><md-switch v-model="matchSettings.auto_save_replay">Auto Save Replay</md-switch></div>
-							</div>
-						</div>
-						<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
-					</md-dialog-content>
+				<b-form-group>
+					<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
+					<b-button @click="killBots()" class="md-raised">Stop</b-button>
+				</b-form-group>
+			</div>
 
-					<md-dialog-actions>
-						<md-button @click="showExtraOptions = false">Close</md-button>
-					</md-dialog-actions>
-				</md-dialog>
+			<div>
+				<b-form-checkbox v-model="matchSettings.randomizeMap" style="margin: 0;">
+					Randomize Map
+				</b-form-checkbox>
+			</div>
 
-				<md-dialog :md-active.sync="showMutatorDialog">
-					<md-dialog-title>Mutators</md-dialog-title>
+			<b-modal title="Extra Options" id="extra-modal" size="xl" hide-footer>
+				<b-row>
+					<b-col>
+						<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
+						<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
+						<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
+					</b-col>
+					<b-col>
+						<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
+						<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
+						<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
+					</b-col>
+				</b-row>
+				<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
+			</b-modal>
 
-					<md-dialog-content>
+			<b-modal id="mutators-modal" title="Mutators" size="xl" hide-footer>
 
-						<div class="md-layout md-gutter">
-							<div class="md-layout-item">
-								<mutator-field label="Match Length" :options="matchOptions.mutators.match_length_types" v-model="matchSettings.mutators.match_length"></mutator-field>
-								<mutator-field label="Max Score" :options="matchOptions.mutators.max_score_types" v-model="matchSettings.mutators.max_score"></mutator-field>
-								<mutator-field label="Overtime Type" :options="matchOptions.mutators.overtime_types" v-model="matchSettings.mutators.overtime"></mutator-field>
-								<mutator-field label="Game Speed" :options="matchOptions.mutators.game_speed_types" v-model="matchSettings.mutators.game_speed"></mutator-field>
-								<mutator-field label="Respawn Time" :options="matchOptions.mutators.respawn_time_types" v-model="matchSettings.mutators.respawn_time"></mutator-field>
-							</div>
-							<div class="md-layout-item">
-								<mutator-field label="Max Ball Speed" :options="matchOptions.mutators.ball_max_speed_types" v-model="matchSettings.mutators.ball_max_speed"></mutator-field>
-								<mutator-field label="Ball Type" :options="matchOptions.mutators.ball_type_types" v-model="matchSettings.mutators.ball_type"></mutator-field>
-								<mutator-field label="Ball Weight" :options="matchOptions.mutators.ball_weight_types" v-model="matchSettings.mutators.ball_weight"></mutator-field>
-								<mutator-field label="Ball Size" :options="matchOptions.mutators.ball_size_types" v-model="matchSettings.mutators.ball_size"></mutator-field>
-								<mutator-field label="Ball Bounciness" :options="matchOptions.mutators.ball_bounciness_types" v-model="matchSettings.mutators.ball_bounciness"></mutator-field>
-							</div>
-							<div class="md-layout-item">
-								<mutator-field label="Boost Amount" :options="matchOptions.mutators.boost_amount_types" v-model="matchSettings.mutators.boost_amount"></mutator-field>
-								<mutator-field label="Rumble Type" :options="matchOptions.mutators.rumble_types" v-model="matchSettings.mutators.rumble"></mutator-field>
-								<mutator-field label="Boost Strength" :options="matchOptions.mutators.boost_strength_types" v-model="matchSettings.mutators.boost_strength"></mutator-field>
-								<mutator-field label="Gravity" :options="matchOptions.mutators.gravity_types" v-model="matchSettings.mutators.gravity"></mutator-field>
-								<mutator-field label="Demolition" :options="matchOptions.mutators.demolish_types" v-model="matchSettings.mutators.demolish"></mutator-field>
-							</div>
-						</div>
-					</md-dialog-content>
+				<b-row>
+					<b-col>
+						<mutator-field label="Match Length" :options="matchOptions.mutators.match_length_types" v-model="matchSettings.mutators.match_length"></mutator-field>
+						<mutator-field label="Max Score" :options="matchOptions.mutators.max_score_types" v-model="matchSettings.mutators.max_score"></mutator-field>
+						<mutator-field label="Overtime Type" :options="matchOptions.mutators.overtime_types" v-model="matchSettings.mutators.overtime"></mutator-field>
+						<mutator-field label="Game Speed" :options="matchOptions.mutators.game_speed_types" v-model="matchSettings.mutators.game_speed"></mutator-field>
+						<mutator-field label="Respawn Time" :options="matchOptions.mutators.respawn_time_types" v-model="matchSettings.mutators.respawn_time"></mutator-field>
+					</b-col>
+					<b-col>
+						<mutator-field label="Max Ball Speed" :options="matchOptions.mutators.ball_max_speed_types" v-model="matchSettings.mutators.ball_max_speed"></mutator-field>
+						<mutator-field label="Ball Type" :options="matchOptions.mutators.ball_type_types" v-model="matchSettings.mutators.ball_type"></mutator-field>
+						<mutator-field label="Ball Weight" :options="matchOptions.mutators.ball_weight_types" v-model="matchSettings.mutators.ball_weight"></mutator-field>
+						<mutator-field label="Ball Size" :options="matchOptions.mutators.ball_size_types" v-model="matchSettings.mutators.ball_size"></mutator-field>
+						<mutator-field label="Ball Bounciness" :options="matchOptions.mutators.ball_bounciness_types" v-model="matchSettings.mutators.ball_bounciness"></mutator-field>
+					</b-col>
+					<b-col>
+						<mutator-field label="Boost Amount" :options="matchOptions.mutators.boost_amount_types" v-model="matchSettings.mutators.boost_amount"></mutator-field>
+						<mutator-field label="Rumble Type" :options="matchOptions.mutators.rumble_types" v-model="matchSettings.mutators.rumble"></mutator-field>
+						<mutator-field label="Boost Strength" :options="matchOptions.mutators.boost_strength_types" v-model="matchSettings.mutators.boost_strength"></mutator-field>
+						<mutator-field label="Gravity" :options="matchOptions.mutators.gravity_types" v-model="matchSettings.mutators.gravity"></mutator-field>
+						<mutator-field label="Demolition" :options="matchOptions.mutators.demolish_types" v-model="matchSettings.mutators.demolish"></mutator-field>
+					</b-col>
+				</b-row>
 
-					<md-dialog-actions>
-						<md-button @click="resetMutatorsToDefault()">Reset Defaults</md-button>
-						<md-button @click="showMutatorDialog = false">Close</md-button>
-					</md-dialog-actions>
-				</md-dialog>
 
-			</md-card-content>
-		</md-card>
+				<b-button @click="resetMutatorsToDefault()">Reset Defaults</b-button>
+
+			</b-modal>
+		</b-card>
 
 		<md-snackbar md-position="center" :md-active.sync="showSnackbar" :md-duration="5000" md-persistent>
 			<span>{{snackbarContent}}</span>
 		</md-snackbar>
 
-		<md-snackbar md-position="center" :md-active="showBotpackUpdateSnackbar" :md-duration="10000">
-			<span>Bot Pack update available!</span>
-			<md-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</md-button>
-			<md-button class="md-icon-button" @click="showBotpackUpdateSnackbar = false;">
-				<md-icon style="color: #ffffffb4;">close</md-icon>
-			</md-button>
-		</md-snackbar>
+		<b-toast id="bot-pack-available-toast" title="Bot Pack Update Available!" static>
+			<b-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
+		</b-toast>
 
-		<md-dialog v-if="activeBot && activeBot.info" :md-active.sync="showBotInfo">
-			<md-dialog-title>
-				{{activeBot.name}}
-			</md-dialog-title>
-			<md-dialog-content>
-				<img v-if="activeBot.logo" class="bot-logo" v-bind:src="activeBot.logo">
-				<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
-				<p><span class="bot-info-key">Description:</span> {{activeBot.info.description}}</p>
-				<p><span class="bot-info-key">Fun Fact:</span> {{activeBot.info.fun_fact}}</p>
-				<p><span class="bot-info-key">GitHub:</span>
-					<a :href="activeBot.info.github" target="_blank">{{activeBot.info.github}}</a></p>
-				<p><span class="bot-info-key">Language:</span> {{activeBot.info.language}}</p>
-				<p class="bot-file-path">{{activeBot.path}}</p>
-			</md-dialog-content>
+		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer>
+
+			<img v-if="activeBot.logo" class="bot-logo" v-bind:src="activeBot.logo">
+			<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
+			<p><span class="bot-info-key">Description:</span> {{activeBot.info.description}}</p>
+			<p><span class="bot-info-key">Fun Fact:</span> {{activeBot.info.fun_fact}}</p>
+			<p><span class="bot-info-key">GitHub:</span>
+				<a :href="activeBot.info.github" target="_blank">{{activeBot.info.github}}</a></p>
+			<p><span class="bot-info-key">Language:</span> {{activeBot.info.language}}</p>
+			<p class="bot-file-path">{{activeBot.path}}</p>
 
 			<md-dialog-actions>
-				<md-button v-if="activeBot.type !== 'script'" @click="showAppearanceEditor(activeBot.looks_path)">
-					<md-icon>palette</md-icon> Edit Appearance
-				</md-button>
-				<md-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
-					<md-icon>folder</md-icon> Show Files
-				</md-button>
-				<md-button @click="showBotInfo = false">Close</md-button>
+				<b-button v-if="activeBot.type !== 'script'" @click="showAppearanceEditor(activeBot.looks_path)" v-b-modal.appearance-editor-dialog>
+					<b-icon icon="card-image"></b-icon> Edit Appearance
+				</b-button>
+				<b-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
+					<b-icon icon="folder"></b-icon> Show Files
+				</b-button>
 			</md-dialog-actions>
-		</md-dialog>
+		</b-modal>
 
-		<md-dialog v-if="activeBot && activeBot.warn" :md-active.sync="showLanguageWarning">
-			<md-dialog-title>Compatibility Warning</md-dialog-title>
+		<b-modal id="language-warning-modal" v-if="activeBot && activeBot.warn" title="Compatibility Warning" hide-footer>
+			<div v-if="activeBot.warn === 'java'">
+				<p><b>{{activeBot.name}}</b> requires Java and it looks like you don't have it installed!</p>
+				To play with it, you'll need to:
+				<ol>
+					<li>Download Java from <a href="https://java.com" target="_blank">java.com</a></li>
+					<li>Install it</li>
+					<li>Reboot your computer</li>
+				</ol>
+			</div>
+			<div v-if="activeBot.warn === 'chrome'">
+				<p>
+					This bot requires Google Chrome for its auto-run feature, and it looks like
+					you don't have it installed! You can
+					<a href="https://www.google.com/chrome/" target="_blank">download it here</a>.
+				</p>
+			</div>
+			<div v-if="activeBot.warn === 'pythonpkg'">
+				<p>
+					This bot needs some python packages you haven't installed yet:
+					<code><span v-for="missing in activeBot.missing_python_packages">{{missing}} </span></code>
+				</p>
+				<b-button @click="installRequirements(activeBot.path)"
+						   class="md-primary md-raised">Install Now</b-button>
+				<p v-if="!languageSupport.fullpython">
+					If the installation fails, try downloading our <a href="http://www.rlbot.org/install/RLBotGUI.exe">new launcher script</a>
+					which makes RLBotGUI better with package management.
+				</p>
+			</div>
+		</b-modal>
 
-			<md-dialog-content>
-				<div v-if="activeBot.warn === 'java'">
-					<p><b>{{activeBot.name}}</b> requires Java and it looks like you don't have it installed!</p>
-					To play with it, you'll need to:
-					<ol>
-						<li>Download Java from <a href="https://java.com" target="_blank">java.com</a></li>
-						<li>Install it</li>
-						<li>Reboot your computer</li>
-					</ol>
-				</div>
-				<div v-if="activeBot.warn === 'chrome'">
-					<p>
-						This bot requires Google Chrome for its auto-run feature, and it looks like
-						you don't have it installed! You can
-						<a href="https://www.google.com/chrome/" target="_blank">download it here</a>.
-					</p>
-				</div>
-				<div v-if="activeBot.warn === 'pythonpkg'">
-					<p>
-						This bot needs some python packages you haven't installed yet:
-						<code><span v-for="missing in activeBot.missing_python_packages">{{missing}} </span></code>
-					</p>
-					<md-button @click="installRequirements(activeBot.path)"
-							   class="md-primary md-raised">Install Now</md-button>
-					<p v-if="!languageSupport.fullpython">
-						If the installation fails, try downloading our <a href="http://www.rlbot.org/install/RLBotGUI.exe">new launcher script</a>
-						which makes RLBotGUI better with package management.
-					</p>
-				</div>
-			</md-dialog-content>
+		<b-modal id="new-bot-modal" title="Create New Bot" hide-footer>
+			<b-form inline>
+				<label>Bot Name</label>
+				<b-form-input v-model="newBotName"></b-form-input>
+			</b-form>
+			<div>
+				<b-form-group label="Language Choice">
+					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="python">Python</b-form-radio>
+					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="python_hive">Python Hivemind</b-form-radio>
+					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="scratch">Scratch</b-form-radio>
+				</b-form-group>
+			</div>
 
-			<md-dialog-actions>
-				<md-button @click="showLanguageWarning = false">Close</md-button>
-			</md-dialog-actions>
-		</md-dialog>
+			<b-button class="md-raised md-primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</b-button>
+		</b-modal>
 
-		<md-dialog :md-active.sync="showNewBotDialog">
-			<md-dialog-title>Create New Bot</md-dialog-title>
+		<b-modal id="folder-settings-modal" title="Folder Settings" size="xl" hide-footer>
+			<b-form inline v-for="(settings, path) in folderSettings.folders">
+				<b-form-checkbox v-model="settings.visible" style="overflow:hidden;">
+					{{ path }}
+				</b-form-checkbox>
 
-			<md-dialog-content>
-				<md-field>
-					<label>Bot Name</label>
-					<md-input v-model="newBotName"></md-input>
-				</md-field>
-				<div>
-					<md-radio v-model="newBotLanguageChoice" value="python">Python</md-radio>
-					<md-radio v-model="newBotLanguageChoice" value="scratch">Scratch</md-radio>
-					<md-radio v-model="newBotLanguageChoice" value="python_hive">Python Hivemind</md-radio>
-				</div>
-			</md-dialog-content>
+				<b-button size="sm" variant="outline-primary" class="icon-button" @click="Vue.delete(folderSettings.folders, path)">
+					<b-icon icon="x"></b-icon>
+				</b-button>
+			</b-form>
 
-			<md-dialog-actions>
-				<md-button class="md-raised md-primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</md-button>
-				<md-button @click="showNewBotDialog = false">Close</md-button>
-			</md-dialog-actions>
-		</md-dialog>
+			<b-form inline v-for="(settings, path) in folderSettings.files">
+				<b-form-checkbox v-model="settings.visible" style="overflow: hidden;">
+					{{ path }}
+				</b-form-checkbox>
 
-		<md-dialog :md-active.sync="showFolderSettingsDialog" style="overflow: scroll;">
-			<md-dialog-title>Folder Settings</md-dialog-title>
+				<b-button size="sm" variant="outline-primary" class="icon-button" @click="Vue.delete(folderSettings.files, path)">
+					<b-icon icon="x"></b-icon>
+				</b-button>
+			</b-form>
 
-			<md-dialog-content>
+			<b-button class="md-raised md-primary" @click="applyFolderSettings()">Apply</b-button>
 
-				<md-list>
-					<md-list-item v-for="(settings, path) in folderSettings.folders">
-						<md-switch v-model="settings.visible" style="overflow:hidden;">
-							{{ path }}
-						</md-switch>
-
-						<md-button class="md-icon-button" @click="delete folderSettings.folders[path]">
-							<md-icon>close</md-icon>
-						</md-button>
-					</md-list-item>
-
-					<md-list-item v-for="(settings, path) in folderSettings.files">
-						<md-switch v-model="settings.visible" style="overflow: hidden;">
-							{{ path }}
-						</md-switch>
-
-						<md-button class="md-icon-button" @click="delete folderSettings.files[path]">
-							<md-icon>close</md-icon>
-						</md-button>
-					</md-list-item>
-				</md-list>
-			</md-dialog-content>
-
-			<md-dialog-actions>
-				<md-button class="md-raised md-primary" @click="applyFolderSettings()">Apply</md-button>
-				<md-button @click="showFolderSettingsDialog = false">Close</md-button>
-			</md-dialog-actions>
-		</md-dialog>
+		</b-modal>
 
 		<appearance-editor
-				v-bind:active="appearanceEditorVisible"
 				v-bind:active-bot="activeBot"
 				v-bind:path="appearancePath"
 				v-bind:map="matchSettings.map"
-				v-on:appearance-editor-closed="appearanceEditorVisible = false"
 				id="appearance-editor-dialog" />
 
 	</div>
 
 	<div>
 
-		<md-dialog :md-active.sync="showDownloadProgressDialog"
-				   :md-close-on-esc="false"
-				   :md-click-outside-to-close="false">
-			<md-dialog-title>Downloading Bot Pack</md-dialog-title>
-
-			<md-dialog-content>
-				<div class="md-layout md-gutter" :class="`md-alignment-center-center`">
-					<md-icon class="md-size-4x">cloud_download</md-icon>
-				</div>
-				<md-progress-bar class="md-accent" md-mode="determinate" :md-value="downloadProgressPercent">
-				</md-progress-bar>
-				<p>{{ downloadStatus }}</p>
-			</md-dialog-content>
-		</md-dialog>
+		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack">
+			<div class="md-layout md-gutter" :class="`md-alignment-center-center`">
+				<md-icon class="md-size-4x">cloud_download</md-icon>
+			</div>
+			<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
+			<p>{{ downloadStatus }}</p>
+		</b-modal>
 	</div>
 
-	</div>
+	</b-container>
 
 </template>
 
@@ -514,23 +425,15 @@
 				showProgressSpinner: false,
 				languageSupport: null,
 				activeBot: null,
-				showBotInfo: false,
-				showLanguageWarning: false,
-				showNewBotDialog: false,
 				newBotName: '',
 				newBotLanguageChoice: 'python',
 				folderSettings: {
 					files: [],
 					folders: []
 				},
-				showFolderSettingsDialog: false,
-				showExtraOptions: false,
-				showDownloadProgressDialog: false,
 				downloadProgressPercent: 0,
 				downloadStatus: '',
-				showBotpackUpdateSnackbar: false,
 				botNameFilter: '',
-				appearanceEditorVisible: false,
 				appearancePath: ''
 			}
 		},
@@ -612,16 +515,17 @@
 				this.$emit('background-change', bodyStyle);
 			},
 			downloadBotPack: function() {
-				this.showBotpackUpdateSnackbar = false;
-				this.showDownloadProgressDialog = true;
-				this.downloadStatus = "Starting"
+				this.$bvModal.hide('bot-pack-available-toast');
+				debugger;
+				this.$bvModal.show('bot-pack-download-modal');
+				this.downloadStatus = "Starting";
 				this.downloadProgressPercent = 0;
 				eel.download_bot_pack()(this.botPackDownloaded);
 			},
 			showAppearanceEditor: function(looksPath) {
-				this.showBotInfo = false;
 				this.appearancePath = looksPath;
-				this.appearanceEditorVisible = true;
+				this.appearancePath = looksPath;
+				this.$bvModal.show('appearance-editor-dialog');
 			},
 			pickAndEditAppearanceFile: async function() {
 				let path = await eel.pick_location(false)();
@@ -649,9 +553,8 @@
 					eel.begin_python_hivemind(bot_name)(this.botLoadHandler);
 				}
 			},
-			openFolderSettingsDialog: function() {
+			prepareFolderSettingsDialog: function() {
 				eel.get_folder_settings()(this.folderSettingsReceived);
-				this.showFolderSettingsDialog = true;
 			},
 			applyFolderSettings: async function() {
 				await eel.save_folder_settings(this.folderSettings)();
@@ -664,7 +567,7 @@
 				return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
 			},
 			botLoadHandler: function (response) {
-				this.showNewBotDialog = false;
+				this.$bvModal.hide('new-bot-modal');
 				this.showProgressSpinner = false;
 				if (response.error) {
 					this.snackbarContent = response.error;
@@ -707,7 +610,6 @@
 								bot.warn = 'chrome';
 							}
 						}
-						console.log(bot);
 						if (bot.missing_python_packages && bot.missing_python_packages.length > 0) {
 							bot.warn = 'pythonpkg';
 						}
@@ -740,13 +642,17 @@
 				eel.scan_for_scripts()(this.scriptsReceived);
 			},
 			botpackUpdateChecked: function (isBotpackUpToDate) {
-				this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
+				if (isBotpackUpToDate) {
+					this.$bvModal.hide('bot-pack-available-toast');
+				} else {
+					this.$bvModal.show('bot-pack-available-toast');
+				}
 			},
 
 			botPackDownloaded: function (response) {
 				this.snackbarContent = 'Downloaded Bot Pack!';
 				this.showSnackbar = true;
-				this.showDownloadProgressDialog = false;
+				this.$bvModal.hide('bot-pack-download-modal');
 				eel.get_folder_settings()(this.folderSettingsReceived);
 			},
 
