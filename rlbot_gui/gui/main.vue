@@ -235,11 +235,11 @@
 			</b-modal>
 		</b-card>
 
-		<md-snackbar md-position="center" :md-active.sync="showSnackbar" :md-duration="5000" md-persistent>
-			<span>{{snackbarContent}}</span>
-		</md-snackbar>
+		<b-toast id="snackbar-toast" v-model="showSnackbar" toaster="b-toaster-bottom-center">
+			{{snackbarContent}}
+		</b-toast>
 
-		<b-toast id="bot-pack-available-toast" title="Bot Pack Update Available!" static>
+		<b-toast id="bot-pack-available-toast" title="Bot Pack Update Available!" toaster="b-toaster-bottom-center">
 			<b-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
 		</b-toast>
 
@@ -344,16 +344,14 @@
 
 	</div>
 
-	<div>
 
-		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack">
-			<div class="md-layout md-gutter" :class="`md-alignment-center-center`">
-				<md-icon class="md-size-4x">cloud_download</md-icon>
-			</div>
-			<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
-			<p>{{ downloadStatus }}</p>
-		</b-modal>
-	</div>
+	<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack">
+		<div class="text-center">
+			<md-icon class="md-size-4x">cloud_download</md-icon>
+		</div>
+		<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
+		<p>{{ downloadStatus }}</p>
+	</b-modal>
 
 	</b-container>
 
@@ -417,8 +415,6 @@
 					scripts: [],
 				},
 				randomMapPool: [],
-				showMutatorDialog: false,
-				showPackageInstaller: false,
 				packageString: null,
 				showSnackbar: false,
 				snackbarContent: null,
@@ -433,6 +429,7 @@
 				},
 				downloadProgressPercent: 0,
 				downloadStatus: '',
+				showBotpackUpdateSnackbar: false,
 				botNameFilter: '',
 				appearancePath: ''
 			}
@@ -515,8 +512,7 @@
 				this.$emit('background-change', bodyStyle);
 			},
 			downloadBotPack: function() {
-				this.$bvModal.hide('bot-pack-available-toast');
-				debugger;
+				this.showBotpackUpdateSnackbar = false;
 				this.$bvModal.show('bot-pack-download-modal');
 				this.downloadStatus = "Starting";
 				this.downloadProgressPercent = 0;
@@ -642,17 +638,13 @@
 				eel.scan_for_scripts()(this.scriptsReceived);
 			},
 			botpackUpdateChecked: function (isBotpackUpToDate) {
-				if (isBotpackUpToDate) {
-					this.$bvModal.hide('bot-pack-available-toast');
-				} else {
-					this.$bvModal.show('bot-pack-available-toast');
-				}
+				this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
 			},
 
 			botPackDownloaded: function (response) {
 				this.snackbarContent = 'Downloaded Bot Pack!';
 				this.showSnackbar = true;
-				this.$bvModal.hide('bot-pack-download-modal');
+				this.showDownloadProgressDialog = false;
 				eel.get_folder_settings()(this.folderSettingsReceived);
 			},
 
