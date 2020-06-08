@@ -35,6 +35,7 @@ set rlbotpy=%LocalAppData%\RLBotGUIX\venv\Scripts\python.exe
 rem Install and / or upgrade RLBot components
 
 %rlbotpy% -m pip install --upgrade pip
+%rlbotpy% -m pip install wheel
 %rlbotpy% -m pip install eel
 %rlbotpy% -m pip install --upgrade rlbot_gui rlbot
 
