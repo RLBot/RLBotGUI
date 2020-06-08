@@ -1,4 +1,12 @@
-<template>
+import ItemField from './item-field-vue.js';
+
+export default {
+	name: 'appearance-editor',
+	components: {
+		'item-field': ItemField
+	},
+	props: ['path', 'activeBot', 'map'],
+	template: `
 	<b-modal id="appearance-editor-dialog" size="xl" v-model="appearanceModalActive" hide-footer>
 		<template v-slot:modal-title>
 			<span v-if="activeBot && activeBot.name">Appearance loadout of {{ activeBot.name }}</span>
@@ -74,18 +82,8 @@
 			</b-form>
 		</div>
 	</b-modal>
-</template>
-
-<script>
-	const ItemField = httpVueLoader('item-field.vue');
-
-	module.exports = {
-		name: 'appearance-editor',
-		components: {
-			'item-field': ItemField
-		},
-		props: ['path', 'activeBot', 'map'],
-		data () {
+	`,
+	data () {
 			return {
 				appearanceModalActive: false,
 				config: {
@@ -123,7 +121,7 @@
 			}
 		},
 
-		methods: {
+	methods: {
 			getAndParseItems: async function() {
 				let response = await fetch('csv/items.csv');
 				let csv = await response.text();
@@ -191,12 +189,12 @@
 			}
 		},
 
-		created: function() {
+	created: function() {
 			this.getAndParseItems();
 			this.getColors();
 		},
 
-		watch: {
+	watch: {
 			appearanceModalActive: {
 				handler: function(val) {
 					if (val && this.path) {
@@ -204,6 +202,5 @@
 					}
 				}
 			}
-		}
-	}
-</script>
+		},
+}

@@ -1,4 +1,16 @@
-<template>
+import AppearanceEditor from './appearance-editor-vue.js'
+import MutatorField from './mutator-field-vue.js'
+
+const STARTING_BOT_POOL = [
+	{'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
+	{'name': 'Psyonix Allstar', 'type': 'psyonix', 'skill': 1, 'image': 'imgs/psyonix.png'},
+	{'name': 'Psyonix Pro', 'type': 'psyonix', 'skill': 0.5, 'image': 'imgs/psyonix.png'},
+	{'name': 'Psyonix Rookie', 'type': 'psyonix', 'skill': 0, 'image': 'imgs/psyonix.png'}
+];
+
+export default {
+	name: 'match-setup',
+	template: `
 
 	<b-container fluid>
 
@@ -354,336 +366,318 @@
 	</b-modal>
 
 	</b-container>
-
-</template>
-
-<script>
-
-	const AppearanceEditor = httpVueLoader('appearance-editor.vue');
-	const MutatorField = httpVueLoader('mutator-field.vue');
-
-	const STARTING_BOT_POOL = [
-		{'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
-		{'name': 'Psyonix Allstar', 'type': 'psyonix', 'skill': 1, 'image': 'imgs/psyonix.png'},
-		{'name': 'Psyonix Pro', 'type': 'psyonix', 'skill': 0.5, 'image': 'imgs/psyonix.png'},
-		{'name': 'Psyonix Rookie', 'type': 'psyonix', 'skill': 0, 'image': 'imgs/psyonix.png'}
-	];
-
-	module.exports = {
-		name: 'match-setup',
-		components: {
-			'appearance-editor': AppearanceEditor,
-			'mutator-field': MutatorField
-		},
-		data () {
-			return {
-				botPool: STARTING_BOT_POOL,
-				scriptPool: [],
-				blueTeam: [],
-				orangeTeam: [],
-				teamSelection: "blue",
-				matchOptions: null,
-				matchSettings: {
-					map: null,
-					game_mode: null,
-					skip_replays: false,
-					instant_start: false,
-					enable_lockstep: false,
-					match_behavior: null,
-					mutators: {
-						match_length: null,
-						max_score: null,
-						overtime: null,
-						series_length: null,
-						game_speed: null,
-						ball_max_speed: null,
-						ball_type: null,
-						ball_weight: null,
-						ball_size: null,
-						ball_bounciness: null,
-						boost_amount: null,
-						rumble: null,
-						boost_strength: null,
-						gravity: null,
-						demolish: null,
-						respawn_time: null
-					},
-					randomizeMap: false,
-					enable_rendering: false,
-					enable_state_setting: false,
-					auto_save_replay: false,
-					scripts: [],
+	`,
+	components: {
+		'appearance-editor': AppearanceEditor,
+		'mutator-field': MutatorField
+	},
+	data () {
+		return {
+			botPool: STARTING_BOT_POOL,
+			scriptPool: [],
+			blueTeam: [],
+			orangeTeam: [],
+			teamSelection: "blue",
+			matchOptions: null,
+			matchSettings: {
+				map: null,
+				game_mode: null,
+				skip_replays: false,
+				instant_start: false,
+				enable_lockstep: false,
+				match_behavior: null,
+				mutators: {
+					match_length: null,
+					max_score: null,
+					overtime: null,
+					series_length: null,
+					game_speed: null,
+					ball_max_speed: null,
+					ball_type: null,
+					ball_weight: null,
+					ball_size: null,
+					ball_bounciness: null,
+					boost_amount: null,
+					rumble: null,
+					boost_strength: null,
+					gravity: null,
+					demolish: null,
+					respawn_time: null
 				},
-				randomMapPool: [],
-				packageString: null,
-				showSnackbar: false,
-				snackbarContent: null,
-				showProgressSpinner: false,
-				languageSupport: null,
-				activeBot: null,
-				newBotName: '',
-				newBotLanguageChoice: 'python',
-				folderSettings: {
-					files: [],
-					folders: []
-				},
-				downloadProgressPercent: 0,
-				downloadStatus: '',
-				showBotpackUpdateSnackbar: false,
-				botNameFilter: '',
-				appearancePath: ''
-			}
-		},
-
-		methods: {
-			startMatch: async function (event) {
-				if (this.matchSettings.randomizeMap) await this.setRandomMap();
-
-				this.matchSettings.scripts = this.scriptPool.filter((val) => { return val.enabled });
-				eel.save_match_settings(this.matchSettings);
-				eel.save_team_settings(this.blueTeam, this.orangeTeam);
-
-				const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-				const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-
-				const renderingMsg = this.matchSettings.enable_rendering ? "🎨 Rendering is ON." : "🚫 Rendering is OFF.";
-				const stateSettingMsg = this.matchSettings.enable_state_setting ? "✨ State Setting is ON." : "🚫 State Setting is OFF.";
-				this.snackbarContent = renderingMsg + " " + stateSettingMsg + " See EXTRA to change.";
-				this.showSnackbar = true;
-
-				// start match asynchronously, so it doesn't block things like updating the background image
-				setTimeout(() => {
-					eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
-				}, 0);
+				randomizeMap: false,
+				enable_rendering: false,
+				enable_state_setting: false,
+				auto_save_replay: false,
+				scripts: [],
 			},
-			killBots: function(event) {
-				eel.kill_bots();
+			randomMapPool: [],
+			packageString: null,
+			showSnackbar: false,
+			snackbarContent: null,
+			showProgressSpinner: false,
+			languageSupport: null,
+			activeBot: null,
+			newBotName: '',
+			newBotLanguageChoice: 'python',
+			folderSettings: {
+				files: [],
+				folders: []
 			},
-			pickBotFolder: function (event) {
-				eel.pick_bot_folder()(this.botsReceived);
-				eel.get_folder_settings()(this.folderSettingsReceived);
-			},
-			pickBotConfig: function (event) {
-				eel.pick_bot_config()(this.botsReceived);
-				eel.get_folder_settings()(this.folderSettingsReceived);
-			},
-			addToTeam: function(bot, team) {
-				if (team === 'orange') {
-					this.orangeTeam.push(bot);
-				} else {
-					this.blueTeam.push(bot);
-				}
-			},
-			setRandomMap: async function() {
-				if (this.randomMapPool.length == 0) {
-					let response = await fetch("json/standard-maps.json");
-					this.randomMapPool = await response.json();
-				}
-
-				let randomMapIndex = Math.floor(Math.random() * this.randomMapPool.length);
-				this.matchSettings.map = this.randomMapPool.splice(randomMapIndex, 1)[0];
-				this.updateBGImage(this.matchSettings.map);
-			},
-			resetMutatorsToDefault: function() {
-				const self = this;
-				Object.keys(this.matchOptions.mutators).forEach(function (mutator) {
-					const mutatorName = mutator.replace('_types', '');
-					self.matchSettings.mutators[mutatorName] = self.matchOptions.mutators[mutator][0];
-				});
-			},
-			resetMatchSettingsToDefault: function() {
-				this.matchSettings.map = this.matchOptions.map_types[0];
-				this.matchSettings.game_mode = this.matchOptions.game_modes[0];
-				this.matchSettings.match_behavior = this.matchOptions.match_behaviours[0];
-				this.matchSettings.skip_replays = false;
-				this.matchSettings.instant_start = false;
-				this.matchSettings.enable_lockstep = false;
-				this.matchSettings.randomizeMap = false;
-				this.matchSettings.enable_rendering = false;
-				this.matchSettings.enable_state_setting = true;
-				this.matchSettings.auto_save_replay = false;
-				this.matchSettings.scripts = [];
-				this.resetMutatorsToDefault();
-
-				this.updateBGImage(this.matchSettings.map);
-			},
-			updateBGImage: function(mapName) {
-				let bodyStyle = {backgroundImage: 'url(../imgs/arenas/' + mapName + '.jpg)'};
-				this.$emit('background-change', bodyStyle);
-			},
-			downloadBotPack: function() {
-				this.showBotpackUpdateSnackbar = false;
-				this.$bvModal.show('bot-pack-download-modal');
-				this.downloadStatus = "Starting";
-				this.downloadProgressPercent = 0;
-				eel.download_bot_pack()(this.botPackDownloaded);
-			},
-			showAppearanceEditor: function(looksPath) {
-				this.appearancePath = looksPath;
-				this.appearancePath = looksPath;
-				this.$bvModal.show('appearance-editor-dialog');
-			},
-			pickAndEditAppearanceFile: async function() {
-				let path = await eel.pick_location(false)();
-				this.activeBot = null;
-				if (path) this.showAppearanceEditor(path);
-			},
-			showBotInExplorer: function (botPath) {
-				eel.show_bot_in_explorer(botPath);
-			},
-			hotReload: function() {
-				eel.hot_reload_python_bots();
-			},
-			beginNewBot: function (language, bot_name) {
-				if (!bot_name) {
-					this.snackbarContent = "Please choose a proper name!";
-					this.showSnackbar = true;
-				} else if (language === 'python') {
-					this.showProgressSpinner = true;
-					eel.begin_python_bot(bot_name)(this.botLoadHandler);
-				} else if (language === 'scratch') {
-					this.showProgressSpinner = true;
-					eel.begin_scratch_bot(bot_name)(this.botLoadHandler);
-				} else if (language === 'python_hive') {
-					this.showProgressSpinner = true;
-					eel.begin_python_hivemind(bot_name)(this.botLoadHandler);
-				}
-			},
-			prepareFolderSettingsDialog: function() {
-				eel.get_folder_settings()(this.folderSettingsReceived);
-			},
-			applyFolderSettings: async function() {
-				await eel.save_folder_settings(this.folderSettings)();
-				this.botPool = STARTING_BOT_POOL;
-				this.scriptPool = [];
-				eel.scan_for_bots()(this.botsReceived);
-				eel.scan_for_scripts()(this.scriptsReceived);
-			},
-			passesFilter: function(botName) {
-				return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
-			},
-			botLoadHandler: function (response) {
-				this.$bvModal.hide('new-bot-modal');
-				this.showProgressSpinner = false;
-				if (response.error) {
-					this.snackbarContent = response.error;
-					this.showSnackbar = true;
-				} else {
-					this.botsReceived(response.bots);
-				}
-			},
-			botsReceived: function (bots) {
-
-				const freshBots = bots.filter( (bot) =>
-						!this.botPool.find( (element) => element.path === bot.path ));
-
-				freshBots.forEach((bot) => bot.warn = false);
-
-				this.botPool = this.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
-				this.applyLanguageWarnings();
-				this.showProgressSpinner = false;
-			},
-
-			scriptsReceived: function (scripts) {
-				const freshScripts = scripts.filter( (script) =>
-						!this.scriptPool.find( (element) => element.path === script.path ));
-				freshScripts.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
-
-				this.scriptPool = this.scriptPool.concat(freshScripts).sort((a, b) => a.name.localeCompare(b.name));
-				this.applyLanguageWarnings();
-				this.showProgressSpinner = false;
-			},
-
-	 		applyLanguageWarnings: function () {
-				if (this.languageSupport) {
-					this.botPool.concat(this.scriptPool).forEach((bot) => {
-						if (bot.info && bot.info.language) {
-							const language = bot.info.language.toLowerCase();
-							if (!this.languageSupport.java && language.match(/java|kotlin|scala/)) {
-								bot.warn = 'java';
-							}
-							if (!this.languageSupport.chrome && language.match(/scratch/)) {
-								bot.warn = 'chrome';
-							}
-						}
-						if (bot.missing_python_packages && bot.missing_python_packages.length > 0) {
-							bot.warn = 'pythonpkg';
-						}
-					});
-				}
-			},
-			matchOptionsReceived: function(matchOptions) {
-				this.matchOptions = matchOptions;
-			},
-
-			matchSettingsReceived: function (matchSettings) {
-				if (matchSettings) {
-					Object.assign(this.matchSettings, matchSettings);
-					this.updateBGImage(this.matchSettings.map);
-					this.scriptPool.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
-				} else {
-					this.resetMatchSettingsToDefault();
-				}
-			},
-			teamSettingsReceived: function (teamSettings) {
-				if (teamSettings) {
-					this.blueTeam = teamSettings.blue_team;
-					this.orangeTeam = teamSettings.orange_team;
-				}
-			},
-
-			folderSettingsReceived: function (folderSettings) {
-				this.folderSettings = folderSettings;
-				eel.scan_for_bots()(this.botsReceived);
-				eel.scan_for_scripts()(this.scriptsReceived);
-			},
-			botpackUpdateChecked: function (isBotpackUpToDate) {
-				this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
-			},
-
-			botPackDownloaded: function (response) {
-				this.snackbarContent = 'Downloaded Bot Pack!';
-				this.showSnackbar = true;
-				this.showDownloadProgressDialog = false;
-				eel.get_folder_settings()(this.folderSettingsReceived);
-			},
-
-			onInstallationComplete: function (result) {
-				let message = result.exitCode === 0 ? 'Successfully installed ' : 'Failed to install ';
-				message += result.package;
-				this.snackbarContent = message;
-				this.showSnackbar = true;
-				this.showProgressSpinner = false;
-			},
-			installPackage: function () {
-				this.showProgressSpinner = true;
-				eel.install_package(this.packageString)(this.onInstallationComplete);
-			},
-			installRequirements: function (configPath) {
-				this.showProgressSpinner = true;
-				eel.install_requirements(configPath)(this.onInstallationComplete);
-			}
-		},
-		created: function () {
-			eel.get_folder_settings()(this.folderSettingsReceived);
-			eel.get_match_options()(this.matchOptionsReceived);
-			eel.get_match_settings()(this.matchSettingsReceived);
-			eel.get_team_settings()(this.teamSettingsReceived);
-
-			eel.get_language_support()((support) => {
-				this.languageSupport = support;
-				this.applyLanguageWarnings();
-			});
-
-			eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
-
-			const self = this;
-			eel.expose(updateDownloadProgress);
-			function updateDownloadProgress(progress, status) {
-				self.downloadStatus = status;
-				self.downloadProgressPercent = progress;
-			}
+			downloadProgressPercent: 0,
+			downloadStatus: '',
+			showBotpackUpdateSnackbar: false,
+			botNameFilter: '',
+			appearancePath: ''
 		}
-	};
+	},
 
-</script>
+	methods: {
+		startMatch: async function (event) {
+			if (this.matchSettings.randomizeMap) await this.setRandomMap();
+
+			this.matchSettings.scripts = this.scriptPool.filter((val) => { return val.enabled });
+			eel.save_match_settings(this.matchSettings);
+			eel.save_team_settings(this.blueTeam, this.orangeTeam);
+
+			const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
+			const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
+
+			const renderingMsg = this.matchSettings.enable_rendering ? "🎨 Rendering is ON." : "🚫 Rendering is OFF.";
+			const stateSettingMsg = this.matchSettings.enable_state_setting ? "✨ State Setting is ON." : "🚫 State Setting is OFF.";
+			this.snackbarContent = renderingMsg + " " + stateSettingMsg + " See EXTRA to change.";
+			this.showSnackbar = true;
+
+			// start match asynchronously, so it doesn't block things like updating the background image
+			setTimeout(() => {
+				eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
+			}, 0);
+		},
+		killBots: function(event) {
+			eel.kill_bots();
+		},
+		pickBotFolder: function (event) {
+			eel.pick_bot_folder()(this.botsReceived);
+			eel.get_folder_settings()(this.folderSettingsReceived);
+		},
+		pickBotConfig: function (event) {
+			eel.pick_bot_config()(this.botsReceived);
+			eel.get_folder_settings()(this.folderSettingsReceived);
+		},
+		addToTeam: function(bot, team) {
+			if (team === 'orange') {
+				this.orangeTeam.push(bot);
+			} else {
+				this.blueTeam.push(bot);
+			}
+		},
+		setRandomMap: async function() {
+			if (this.randomMapPool.length == 0) {
+				let response = await fetch("json/standard-maps.json");
+				this.randomMapPool = await response.json();
+			}
+
+			let randomMapIndex = Math.floor(Math.random() * this.randomMapPool.length);
+			this.matchSettings.map = this.randomMapPool.splice(randomMapIndex, 1)[0];
+			this.updateBGImage(this.matchSettings.map);
+		},
+		resetMutatorsToDefault: function() {
+			const self = this;
+			Object.keys(this.matchOptions.mutators).forEach(function (mutator) {
+				const mutatorName = mutator.replace('_types', '');
+				self.matchSettings.mutators[mutatorName] = self.matchOptions.mutators[mutator][0];
+			});
+		},
+		resetMatchSettingsToDefault: function() {
+			this.matchSettings.map = this.matchOptions.map_types[0];
+			this.matchSettings.game_mode = this.matchOptions.game_modes[0];
+			this.matchSettings.match_behavior = this.matchOptions.match_behaviours[0];
+			this.matchSettings.skip_replays = false;
+			this.matchSettings.instant_start = false;
+			this.matchSettings.enable_lockstep = false;
+			this.matchSettings.randomizeMap = false;
+			this.matchSettings.enable_rendering = false;
+			this.matchSettings.enable_state_setting = true;
+			this.matchSettings.auto_save_replay = false;
+			this.matchSettings.scripts = [];
+			this.resetMutatorsToDefault();
+
+			this.updateBGImage(this.matchSettings.map);
+		},
+		updateBGImage: function(mapName) {
+			let bodyStyle = {backgroundImage: 'url(../imgs/arenas/' + mapName + '.jpg)'};
+			this.$emit('background-change', bodyStyle);
+		},
+		downloadBotPack: function() {
+			this.showBotpackUpdateSnackbar = false;
+			this.$bvModal.show('bot-pack-download-modal');
+			this.downloadStatus = "Starting";
+			this.downloadProgressPercent = 0;
+			eel.download_bot_pack()(this.botPackDownloaded);
+		},
+		showAppearanceEditor: function(looksPath) {
+			this.appearancePath = looksPath;
+			this.appearancePath = looksPath;
+			this.$bvModal.show('appearance-editor-dialog');
+		},
+		pickAndEditAppearanceFile: async function() {
+			let path = await eel.pick_location(false)();
+			this.activeBot = null;
+			if (path) this.showAppearanceEditor(path);
+		},
+		showBotInExplorer: function (botPath) {
+			eel.show_bot_in_explorer(botPath);
+		},
+		hotReload: function() {
+			eel.hot_reload_python_bots();
+		},
+		beginNewBot: function (language, bot_name) {
+			if (!bot_name) {
+				this.snackbarContent = "Please choose a proper name!";
+				this.showSnackbar = true;
+			} else if (language === 'python') {
+				this.showProgressSpinner = true;
+				eel.begin_python_bot(bot_name)(this.botLoadHandler);
+			} else if (language === 'scratch') {
+				this.showProgressSpinner = true;
+				eel.begin_scratch_bot(bot_name)(this.botLoadHandler);
+			} else if (language === 'python_hive') {
+				this.showProgressSpinner = true;
+				eel.begin_python_hivemind(bot_name)(this.botLoadHandler);
+			}
+		},
+		prepareFolderSettingsDialog: function() {
+			eel.get_folder_settings()(this.folderSettingsReceived);
+		},
+		applyFolderSettings: async function() {
+			await eel.save_folder_settings(this.folderSettings)();
+			this.botPool = STARTING_BOT_POOL;
+			this.scriptPool = [];
+			eel.scan_for_bots()(this.botsReceived);
+			eel.scan_for_scripts()(this.scriptsReceived);
+		},
+		passesFilter: function(botName) {
+			return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
+		},
+		botLoadHandler: function (response) {
+			this.$bvModal.hide('new-bot-modal');
+			this.showProgressSpinner = false;
+			if (response.error) {
+				this.snackbarContent = response.error;
+				this.showSnackbar = true;
+			} else {
+				this.botsReceived(response.bots);
+			}
+		},
+		botsReceived: function (bots) {
+
+			const freshBots = bots.filter( (bot) =>
+					!this.botPool.find( (element) => element.path === bot.path ));
+
+			freshBots.forEach((bot) => bot.warn = false);
+
+			this.botPool = this.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
+			this.applyLanguageWarnings();
+			this.showProgressSpinner = false;
+		},
+
+		scriptsReceived: function (scripts) {
+			const freshScripts = scripts.filter( (script) =>
+					!this.scriptPool.find( (element) => element.path === script.path ));
+			freshScripts.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
+
+			this.scriptPool = this.scriptPool.concat(freshScripts).sort((a, b) => a.name.localeCompare(b.name));
+			this.applyLanguageWarnings();
+			this.showProgressSpinner = false;
+		},
+
+		applyLanguageWarnings: function () {
+			if (this.languageSupport) {
+				this.botPool.concat(this.scriptPool).forEach((bot) => {
+					if (bot.info && bot.info.language) {
+						const language = bot.info.language.toLowerCase();
+						if (!this.languageSupport.java && language.match(/java|kotlin|scala/)) {
+							bot.warn = 'java';
+						}
+						if (!this.languageSupport.chrome && language.match(/scratch/)) {
+							bot.warn = 'chrome';
+						}
+					}
+					if (bot.missing_python_packages && bot.missing_python_packages.length > 0) {
+						bot.warn = 'pythonpkg';
+					}
+				});
+			}
+		},
+		matchOptionsReceived: function(matchOptions) {
+			this.matchOptions = matchOptions;
+		},
+
+		matchSettingsReceived: function (matchSettings) {
+			if (matchSettings) {
+				Object.assign(this.matchSettings, matchSettings);
+				this.updateBGImage(this.matchSettings.map);
+				this.scriptPool.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
+			} else {
+				this.resetMatchSettingsToDefault();
+			}
+		},
+		teamSettingsReceived: function (teamSettings) {
+			if (teamSettings) {
+				this.blueTeam = teamSettings.blue_team;
+				this.orangeTeam = teamSettings.orange_team;
+			}
+		},
+
+		folderSettingsReceived: function (folderSettings) {
+			this.folderSettings = folderSettings;
+			eel.scan_for_bots()(this.botsReceived);
+			eel.scan_for_scripts()(this.scriptsReceived);
+		},
+		botpackUpdateChecked: function (isBotpackUpToDate) {
+			this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
+		},
+
+		botPackDownloaded: function (response) {
+			this.snackbarContent = 'Downloaded Bot Pack!';
+			this.showSnackbar = true;
+			this.showDownloadProgressDialog = false;
+			eel.get_folder_settings()(this.folderSettingsReceived);
+		},
+
+		onInstallationComplete: function (result) {
+			let message = result.exitCode === 0 ? 'Successfully installed ' : 'Failed to install ';
+			message += result.package;
+			this.snackbarContent = message;
+			this.showSnackbar = true;
+			this.showProgressSpinner = false;
+		},
+		installPackage: function () {
+			this.showProgressSpinner = true;
+			eel.install_package(this.packageString)(this.onInstallationComplete);
+		},
+		installRequirements: function (configPath) {
+			this.showProgressSpinner = true;
+			eel.install_requirements(configPath)(this.onInstallationComplete);
+		}
+	},
+	created: function () {
+		eel.get_folder_settings()(this.folderSettingsReceived);
+		eel.get_match_options()(this.matchOptionsReceived);
+		eel.get_match_settings()(this.matchSettingsReceived);
+		eel.get_team_settings()(this.teamSettingsReceived);
+
+		eel.get_language_support()((support) => {
+			this.languageSupport = support;
+			this.applyLanguageWarnings();
+		});
+
+		eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
+
+		const self = this;
+		eel.expose(updateDownloadProgress);
+		function updateDownloadProgress(progress, status) {
+			self.downloadStatus = status;
+			self.downloadProgressPercent = progress;
+		}
+	},
+};
