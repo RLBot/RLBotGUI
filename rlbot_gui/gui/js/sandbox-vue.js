@@ -1,4 +1,15 @@
-<template>
+// https://konvajs.org/docs/vue/index.html
+Vue.use(VueKonva);
+
+const PIXEL_HEIGHT = 580;
+const HISTORY_SECONDS = 5;
+const HISTORY_INCREMENT_SECONDS = 0.1;
+
+let packetHistory = [];
+
+export default {
+    name: 'sandbox',
+    template: `
     <div>
         <b-navbar variant="dark">
             <b-navbar-brand>
@@ -62,29 +73,16 @@
             </b-row>
         </div>
     </div>
-</template>
-<style>
+    `,
+    style: `
     .arena-background {
         background: url('imgs/arena_diagram.png');
         background-size: contain;
         background-repeat: no-repeat;
         margin: 10px;
     }
-</style>
-<script>
-
-    // https://konvajs.org/docs/vue/index.html
-    Vue.use(VueKonva);
-
-    const PIXEL_HEIGHT = 580;
-    const HISTORY_SECONDS = 5;
-    const HISTORY_INCREMENT_SECONDS = 0.1;
-
-    let packetHistory = [];
-
-    module.exports = {
-        name: 'sandbox',
-        data() {
+    `,
+    data() {
             return {
                 watching: false,
                 frozen: false,
@@ -109,7 +107,7 @@
                 hasPacketHistory: false
             };
         },
-        methods: {
+    methods: {
             startWatching: function () {
                 eel.fetch_game_tick_packet_json()(this.gameTickPacketReceived)
             },
@@ -123,7 +121,7 @@
                     this.cars = [];
                     for (let i = 0; i < result.game_cars.length; i++) {
 
-                        car = {
+                        let car = {
                             draggable: true,
                             fill: result.game_cars[i].team === 0 ? 'blue' : 'orange',
                             width: 16,
@@ -186,7 +184,7 @@
                 const index = evt.target.attrs.playerIndex;
                 this.dragging = false;
                 const packetVec = this.toPacketVec({x: evt.target.x(), y: evt.target.y(), z: 10});
-                cars = {};
+                let cars = {};
                 cars[index] = {physics:{location:packetVec, velocity: {x: 0, y: 0, z: 0}}};
                 eel.set_state({
                     cars: cars
@@ -208,8 +206,8 @@
                 // "best effort".
 
                 if (packetHistory.length > 0) {
-                    firstPacket = packetHistory[0];
-                    lastPacket = packetHistory[packetHistory.length - 1];
+                    let firstPacket = packetHistory[0];
+                    let lastPacket = packetHistory[packetHistory.length - 1];
 
                     // Doctor the time on the first packet. It will remain in the packet history array.
                     // With the new time, it will be representative of what's about to happen due to state setting.
@@ -219,7 +217,7 @@
                     // Truncate the packet history
                     packetHistory.length = 1;
 
-                    cars = {};
+                    let cars = {};
                     firstPacket.game_cars.forEach(function (car, index) {
                         cars[index] = {physics: car.physics, boost_amount: car.boost}
                     });
@@ -231,7 +229,7 @@
                 this.hasPacketHistory = false;
             }
         },
-        watch: {
+    watch: {
             watching: {
                 handler: function (newVal) {
                     if (newVal) {
@@ -253,7 +251,5 @@
                     }
                 }
             }
-        }
-    };
-
-</script>
+        },
+};

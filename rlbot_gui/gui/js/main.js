@@ -12,8 +12,8 @@ function updateDownloadProgress(progress, status) {}
 
 // Vue.use(VueMaterial.default);
 
-const Main = httpVueLoader('main.vue');
-const Sandbox = httpVueLoader('sandbox.vue');
+import Main from './main-vue.js'
+import Sandbox from './sandbox-vue.js'
 const routes = [
     { path: '/', component: Main },
     { path: '/sandbox', component: Sandbox },
