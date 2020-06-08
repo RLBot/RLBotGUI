@@ -357,9 +357,9 @@ export default {
 	</div>
 
 
-	<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack">
+	<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer>
 		<div class="text-center">
-			<md-icon class="md-size-4x">cloud_download</md-icon>
+			<b-icon icon="cloud-download"></b-icon>
 		</div>
 		<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
 		<p>{{ downloadStatus }}</p>
@@ -640,7 +640,7 @@ export default {
 		botPackDownloaded: function (response) {
 			this.snackbarContent = 'Downloaded Bot Pack!';
 			this.showSnackbar = true;
-			this.showDownloadProgressDialog = false;
+			this.$bvModal.hide('bot-pack-download-modal');
 			eel.get_folder_settings()(this.folderSettingsReceived);
 		},
 

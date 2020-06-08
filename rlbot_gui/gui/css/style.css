@@ -244,3 +244,10 @@ body, html {
 .md-dialog{
   width:80%;
 }
+
+.arena-background {
+  background: url('/imgs/arena_diagram.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 10px;
+}
