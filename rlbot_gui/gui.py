@@ -1,12 +1,12 @@
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
 import eel
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QApplication, QFileDialog
-from pip._internal import main as pipmain
 from rlbot.parsing.agent_config_parser import create_looks_configurations, BOT_CONFIG_LOADOUT_HEADER, \
     BOT_CONFIG_LOADOUT_ORANGE_HEADER, BOT_CONFIG_LOADOUT_PAINT_BLUE_HEADER, BOT_CONFIG_LOADOUT_PAINT_ORANGE_HEADER, \
     load_bot_appearance
@@ -376,7 +376,7 @@ def get_match_options():
 
 @eel.expose
 def install_package(package_string):
-    exit_code = pipmain(['install', package_string])
+    exit_code = subprocess.call([sys.executable, "-m", "pip", "install", '--upgrade', package_string])
     print(exit_code)
     return {'exitCode': exit_code, 'package': package_string}
 
