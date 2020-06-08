@@ -74,14 +74,6 @@ export default {
         </div>
     </div>
     `,
-    style: `
-    .arena-background {
-        background: url('imgs/arena_diagram.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        margin: 10px;
-    }
-    `,
     data() {
             return {
                 watching: false,
