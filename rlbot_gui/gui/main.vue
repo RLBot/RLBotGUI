@@ -289,7 +289,7 @@
 				<b-button @click="installRequirements(activeBot.path)"
 						   class="md-primary md-raised">Install Now</b-button>
 				<p v-if="!languageSupport.fullpython">
-					If the installation fails, try downloading our <a href="http://www.rlbot.org/install/RLBotGUI.exe">new launcher script</a>
+					If the installation fails, try downloading our <a href="https://github.com/RLBot/RLBotGUI/releases/download/v1.0/RLBotGUI.exe">new launcher script</a>
 					which makes RLBotGUI better with package management.
 				</p>
 			</div>
