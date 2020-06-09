@@ -280,3 +280,12 @@ button.icon-button {
 .navbar-nav {
   align-items: center;
 }
+
+.form-group-inline .col {
+  display: flex;
+}
+
+.form-group-inline .form-control {
+  display: inline-block;
+  width: initial;
+}
