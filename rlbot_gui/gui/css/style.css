@@ -276,3 +276,7 @@ button.icon-button {
 .btn.btn-success {
   box-shadow: 0 3px 0 green;
 }
+
+.navbar-nav {
+  align-items: center;
+}
