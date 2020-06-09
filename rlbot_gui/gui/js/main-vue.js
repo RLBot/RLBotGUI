@@ -85,8 +85,8 @@ export default {
 				</b-button>
 				<div class="ml-4">
 					<b-form inline>
-						<label for="filter-text-input" class="mr-2"><b-icon icon="search"></b-icon>Filter</label>
-						<b-input id="filter-text-input" v-model="botNameFilter"></b-input>
+						<label for="filter-text-input" class="mr-2"><b-icon icon="search"></b-icon></label>
+						<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Filter..."></b-form-input>
 					</b-form>
 				</div>
 			</div>
@@ -165,35 +165,28 @@ export default {
 
 		<b-card v-if="matchOptions" class="settings-card">
 			<span class="rlbot-card-header">Match Settings</span>
-			<div class="center-flex">
+			<div style="display:flex; align-items: flex-end">
 
-				<b-row style="max-width: 400px;">
-					<b-col>
-						<label for="map_selection">Map</label>
-						<b-form-select v-model="matchSettings.map" id="map_selection" @change="updateBGImage(matchSettings.map)">
-							<b-form-select-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</b-form-select-option>
-						</b-form-select>
-					</b-col>
-					<b-col>
-						<label for="mode_selection">Mode</label>
-						<b-form-select v-model="matchSettings.game_mode" id="mode_selection">
-							<b-form-select-option v-for="mode in matchOptions.game_modes" :key="mode" v-bind:value="mode">{{mode}}</b-form-select-option>
-						</b-form-select>
-					</b-col>
-				</b-row>
+				<div>
+					<label for="map_selection">Map</label>
+					<b-form-select v-model="matchSettings.map" id="map_selection" @change="updateBGImage(matchSettings.map)">
+						<b-form-select-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</b-form-select-option>
+					</b-form-select>
+				</div>
+				<div class="ml-2">
+					<label for="mode_selection">Mode</label>
+					<b-form-select v-model="matchSettings.game_mode" id="mode_selection">
+						<b-form-select-option v-for="mode in matchOptions.game_modes" :key="mode" v-bind:value="mode">{{mode}}</b-form-select-option>
+					</b-form-select>
+				</div>
 
-				<b-form-group>
-					<b-button style="margin-left: 20px" v-b-modal.mutators-modal>Mutators</b-button>
-					<b-button v-b-modal.extra-modal>Extra</b-button>
-				</b-form-group>
+				<b-button class="ml-4" v-b-modal.mutators-modal>Mutators</b-button>
+				<b-button class="ml-2" v-b-modal.extra-modal>Extra</b-button>
 
 				<span style="flex-grow: 1"></span>
 
-
-				<b-form-group>
-					<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
-					<b-button @click="killBots()" variant="secondary" size="lg">Stop</b-button>
-				</b-form-group>
+				<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
+				<b-button @click="killBots()" variant="secondary" size="lg" class="ml-2">Stop</b-button>
 			</div>
 
 			<div>
