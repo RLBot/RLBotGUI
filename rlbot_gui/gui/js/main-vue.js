@@ -348,6 +348,14 @@ export default {
 
 		</b-modal>
 
+		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer>
+			<div class="text-center">
+				<b-icon icon="cloud-download"></b-icon>
+			</div>
+			<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
+			<p>{{ downloadStatus }}</p>
+		</b-modal>
+
 		<appearance-editor
 				v-bind:active-bot="activeBot"
 				v-bind:path="appearancePath"
@@ -355,15 +363,6 @@ export default {
 				id="appearance-editor-dialog" />
 
 	</div>
-
-
-	<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer>
-		<div class="text-center">
-			<b-icon icon="cloud-download"></b-icon>
-		</div>
-		<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
-		<p>{{ downloadStatus }}</p>
-	</b-modal>
 
 	</b-container>
 	</div>
