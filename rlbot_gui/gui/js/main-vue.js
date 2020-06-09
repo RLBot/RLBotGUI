@@ -11,9 +11,7 @@ const STARTING_BOT_POOL = [
 export default {
 	name: 'match-setup',
 	template: `
-
-	<b-container fluid>
-
+	<div>
 	<b-navbar variant="dark">
 		<b-navbar-brand>
 			<img class="logo" src="imgs/rlbot_logo.png">
@@ -47,6 +45,9 @@ export default {
 			</b-dropdown>
 		</b-navbar-nav>
 	</b-navbar>
+	<b-container fluid>
+
+	
 
 	<b-modal title="Install Package" id="package-installer">
 
@@ -98,7 +99,7 @@ export default {
 						<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 						<img v-if="bot.logo" v-bind:src="bot.logo">
 						<span class="bot-name">{{ bot.name }}</span>
-						<b-button class="icon-button warning-icon" v-if="bot.warn"
+						<b-button size="sm" class="icon-button warning-icon" v-if="bot.warn" variant="outline-warning"
 								   @click.stop="activeBot = bot;" v-b-modal.language-warning-modal>
 						    <b-icon icon="exclamation-triangle-fill"></b-icon>
 						</b-button>
@@ -113,7 +114,7 @@ export default {
 				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool">
 					<b-form inline>
 						<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
-						<b-button class="icon-button md-dense warning-icon" v-if="script.warn"
+						<b-button size="sm" class="icon-button warning-icon" v-if="script.warn" variant="outline-warning"
 								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
 							<b-icon icon="exclamation-triangle-fill"></b-icon>
 						</b-button>
@@ -244,8 +245,10 @@ export default {
 			</b-modal>
 		</b-card>
 
-		<b-toast id="snackbar-toast" v-model="showSnackbar" toaster="b-toaster-bottom-center">
-			{{snackbarContent}}
+		<b-toast id="snackbar-toast" v-model="showSnackbar" toaster="b-toaster-bottom-center" body-class="d-none">
+			<template v-slot:toast-title>
+				{{snackbarContent}}
+		    </template>
 		</b-toast>
 
 		<b-toast id="bot-pack-available-toast" title="Bot Pack Update Available!" toaster="b-toaster-bottom-center">
@@ -363,6 +366,7 @@ export default {
 	</b-modal>
 
 	</b-container>
+	</div>
 	`,
 	components: {
 		'appearance-editor': AppearanceEditor,

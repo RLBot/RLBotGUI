@@ -37,6 +37,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
     match_config.instant_start = True
     match_config.existing_match_behavior = 'Continue And Spawn'
     match_config.networking_role = NetworkingRole.none
+    match_config.enable_state_setting = True
 
     bot_config = PlayerConfig()
     bot_config.bot = True
