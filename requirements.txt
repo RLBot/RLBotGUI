@@ -6,5 +6,5 @@ rlbot==1.*
 pip
 
 gevent
-eel
+eel>=0.12
 PyQt5
