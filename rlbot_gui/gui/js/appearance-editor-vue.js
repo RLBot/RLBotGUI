@@ -25,7 +25,7 @@ export default {
 			<b-col v-for="team in teams">
 				<span v-for="colorType in colorTypes">
 					<b-dropdown :text="colorType.name">
-						<b-dropdown-item>
+						<b-dropdown-text>
 							<table style="border-spacing: 0;">
 								<tr v-for="i in colorType.rows">
 									<td v-for="j in colorType.columns" :style="{'background-color': colorStyleFromRowAndColumn(colorType, team, i, j)}">
@@ -37,7 +37,7 @@ export default {
 									</td>
 								</tr>
 							</table>
-						</b-dropdown-item>
+						</b-dropdown-text>
 					</b-dropdown>
 					<span class="color-indicator" :style="{'background-color': colorStyle(colorType, team)}"></span>
 				</span>
