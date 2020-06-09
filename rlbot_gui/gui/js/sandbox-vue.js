@@ -37,34 +37,34 @@ export default {
                 </b-col>
                 <b-col>
                     <b-card class="settings-card" title="Commands">
-                        <b-form inline>
-                            <b-form-checkbox v-model="watching">
+                        <b-form inline class="mb-2">
+                            <b-form-checkbox class="mr-4" v-model="watching">
                                 Watch Game
                             </b-form-checkbox>
                             <b-form-checkbox v-model="frozen">
                                 Freeze Game
                             </b-form-checkbox>
                         </b-form>
-
-                        <b-form inline>
+                        <b-form-radio-group class="mb-2">
                             <b-form-radio v-model="gravity" name="gravity-radios" value="normal">Normal gravity</b-form-radio>
                             <b-form-radio v-model="gravity" name="gravity-radios" value="zero">Zero gravity</b-form-radio>
-                        </b-form>
-                        <div>
+                        </b-form-radio-group>
+                        <div class="mb-4">
                             <b-button class="md-raised md-alternative" @click="rewind()"  :disabled="!hasPacketHistory">
                                 Rewind 5 Seconds
                             </b-button>
                         </div>
-                        <b-form inline>
-                            <label>Game Speed</label>
+                        
+                        <b-form-group label-cols="3" label-align="right" label="Game Speed" class="form-group-inline">
                             <b-form-input v-model="gamespeed" type="number"></b-form-input>
-                            <b-button class="md-raised md-alternative" @click="setGamespeed()">Set</b-button>
-                        </b-form>
-                        <b-form inline>
-                            <label>Console Command</label>
+                            <b-button @click="setGamespeed()" class="ml-2">Set</b-button>
+                        </b-form-group>
+                        
+                        <b-form-group label-cols="3" label-align="right" label="Console Command" class="form-group-inline">
                             <b-form-input v-model="command"></b-form-input>
-                            <b-button class="md-raised md-alternative" @click="executeCommand()">Execute</b-button>
-                        </b-form>
+                            <b-button @click="executeCommand()" class="ml-2">Execute</b-button>
+                        </b-form-group>
+                        
                         <p>
                             You can drag and drop to move objects around in the game!
                         </p>
