@@ -12,7 +12,7 @@ export default {
 	name: 'match-setup',
 	template: `
 	<div>
-	<b-navbar variant="dark">
+	<b-navbar class="navbar">
 		<b-navbar-brand>
 			<img class="logo" src="imgs/rlbot_logo.png">
 			<span class="rlbot-brand" style="flex: 1">RLBot</span>
@@ -25,10 +25,10 @@ export default {
 				<b-icon class="warning-icon" icon="exclamation-triangle-fill"></b-icon>
 				State setting is turned off, sandbox won't work!
 			</span>
-			<b-button @click="$router.replace('/sandbox')">
+			<b-button @click="$router.replace('/sandbox')" variant="dark">
 				State Setting Sandbox
 			</b-button>
-			<b-dropdown right class="ml-4">
+			<b-dropdown right class="ml-4" variant="dark">
 				<template v-slot:button-content>
 					Menu
 				</template>

@@ -36,6 +36,10 @@ body, html {
   display: none;
 }
 
+.navbar {
+  background-color: rgb(17, 18, 19);
+}
+
 .control-bar {
   background-color: var(--green-color);
   height: 2.5rem;
