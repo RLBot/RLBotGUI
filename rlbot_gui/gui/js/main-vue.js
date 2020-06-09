@@ -29,7 +29,7 @@ export default {
 				State Setting Sandbox
 			</b-button>
 			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning"></b-spinner>
-			<b-dropdown right>
+			<b-dropdown right class="ml-4">
 				<template v-slot:button-content>
 					Menu
 				</template>
@@ -60,32 +60,32 @@ export default {
 
 
 		<b-card class="bot-pool">
-			<div class="center-flex">
-				<span>Player Types</span>
-				<b-dropdown text="Add">
+			<div class="center-flex mb-3">
+				<span class="rlbot-card-header">Player Types</span>
+				<b-dropdown text="Add" class="ml-2 mr-2">
 					<b-dropdown-item  @click="downloadBotPack()">
+						<b-icon icon="cloud-download"></b-icon>
 						<span>Download Bot Pack</span>
-						<b-icon icon="cloud_download"></b-icon>
 					</b-dropdown-item>
 					<b-dropdown-item v-b-modal.new-bot-modal>
+						<b-icon icon="pencil-square"></b-icon>
 						<span>Start Your Own Bot!</span>
-						<b-icon icon="create"></b-icon>
 					</b-dropdown-item>
 					<b-dropdown-item  @click="pickBotFolder()">
+						<b-icon icon="folder-plus"></b-icon>
 						<span>Load Folder</span>
-						<b-icon icon="folder_open"></b-icon>
 					</b-dropdown-item>
 					<b-dropdown-item @click="pickBotConfig()">
+						<b-icon icon="file-earmark-plus"></b-icon>
 						<span>Load Cfg File</span>
-						<b-icon icon="file_copy"></b-icon>
 					</b-dropdown-item>
 				</b-dropdown>
 				<b-button @click="prepareFolderSettingsDialog" v-b-modal.folder-settings-modal>
 					Manage bot folders
 				</b-button>
-				<div class="bot-filter">
+				<div class="ml-4">
 					<b-form inline>
-						<label for="filter-text-input"><b-icon icon="search"></b-icon>Filter</label>
+						<label for="filter-text-input" class="mr-2"><b-icon icon="search"></b-icon>Filter</label>
 						<b-input id="filter-text-input" v-model="botNameFilter"></b-input>
 					</b-form>
 				</div>
@@ -97,11 +97,11 @@ export default {
 						<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 						<img v-if="bot.logo" v-bind:src="bot.logo">
 						<span class="bot-name">{{ bot.name }}</span>
-						<b-button class="md-icon-button md-dense warning-icon" v-if="bot.warn"
+						<b-button class="icon-button warning-icon" v-if="bot.warn"
 								   @click.stop="activeBot = bot;" v-b-modal.language-warning-modal>
 							<b-icon icon="warning"></b-icon>
 						</b-button>
-						<b-button size="sm" variant="outline-primary" class="bot-hover-reveal" v-if="bot.info"
+						<b-button size="sm" variant="outline-primary" class="bot-hover-reveal icon-button" v-if="bot.info"
 								   @click.stop="activeBot = bot;" v-b-modal.bot-info-modal>
 							<b-icon icon="info-circle"></b-icon>
 						</b-button>
@@ -111,11 +111,11 @@ export default {
 			<b-card class="bot-card md-elevation-3" v-for="script in scriptPool">
 				<b-form inline>
 					<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
-					<b-button class="md-icon-button md-dense warning-icon" v-if="script.warn"
+					<b-button class="icon-button md-dense warning-icon" v-if="script.warn"
 							   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
 						<b-icon icon="warning"></b-icon>
 					</b-button>
-					<b-button size="sm" variant="outline-primary" class="md-icon-button md-dense bot-hover-reveal" v-if="script.info"
+					<b-button size="sm" variant="outline-primary" class="icon-button bot-hover-reveal" v-if="script.info"
 							   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
 						<b-icon icon="info-circle"></b-icon>
 					</b-button>
@@ -134,7 +134,7 @@ export default {
 							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 							<img v-if="bot.logo" v-bind:src="bot.logo">
 							<span class="bot-name">{{ bot.name }}</span>
-							<b-button size="sm" variant="outline-primary" class="icon-button" @click="blueTeam.splice(index, 1)">
+							<b-button size="sm" variant="outline-danger" class="icon-button" @click="blueTeam.splice(index, 1)">
 								<b-icon icon="x"></b-icon>
 							</b-button>
 						</b-card>
@@ -161,7 +161,8 @@ export default {
 			</b-col>
 		</b-row>
 
-		<b-card v-if="matchOptions" class="settings-card" title="Match Settings">
+		<b-card v-if="matchOptions" class="settings-card">
+			<span class="rlbot-card-header">Match Settings</span>
 			<div class="center-flex">
 
 				<b-row style="max-width: 400px;">
@@ -189,12 +190,12 @@ export default {
 
 				<b-form-group>
 					<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
-					<b-button @click="killBots()" class="md-raised">Stop</b-button>
+					<b-button @click="killBots()" variant="outline-secondary" size="lg">Stop</b-button>
 				</b-form-group>
 			</div>
 
 			<div>
-				<b-form-checkbox v-model="matchSettings.randomizeMap" style="margin: 0;">
+				<b-form-checkbox v-model="matchSettings.randomizeMap" class="mt-1 mb-1">
 					Randomize Map
 				</b-form-checkbox>
 			</div>
@@ -309,18 +310,18 @@ export default {
 
 		<b-modal id="new-bot-modal" title="Create New Bot" hide-footer>
 			<b-form inline>
-				<label>Bot Name</label>
+				<label class="mr-3">Bot Name</label>
 				<b-form-input v-model="newBotName"></b-form-input>
 			</b-form>
 			<div>
-				<b-form-group label="Language Choice">
+				<b-form-group>
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="python">Python</b-form-radio>
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="python_hive">Python Hivemind</b-form-radio>
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="scratch">Scratch</b-form-radio>
 				</b-form-group>
 			</div>
 
-			<b-button class="md-raised md-primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</b-button>
+			<b-button variant="primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</b-button>
 		</b-modal>
 
 		<b-modal id="folder-settings-modal" title="Folder Settings" size="xl" hide-footer>
@@ -329,7 +330,7 @@ export default {
 					{{ path }}
 				</b-form-checkbox>
 
-				<b-button size="sm" variant="outline-primary" class="icon-button" @click="Vue.delete(folderSettings.folders, path)">
+				<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(folderSettings.folders, path)">
 					<b-icon icon="x"></b-icon>
 				</b-button>
 			</b-form>
@@ -339,12 +340,12 @@ export default {
 					{{ path }}
 				</b-form-checkbox>
 
-				<b-button size="sm" variant="outline-primary" class="icon-button" @click="Vue.delete(folderSettings.files, path)">
+				<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(folderSettings.files, path)">
 					<b-icon icon="x"></b-icon>
 				</b-button>
 			</b-form>
 
-			<b-button class="md-raised md-primary" @click="applyFolderSettings()">Apply</b-button>
+			<b-button variant="primary" class="mt-3" @click="applyFolderSettings()">Apply</b-button>
 
 		</b-modal>
 
