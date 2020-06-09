@@ -13,15 +13,15 @@ export default {
 			<span v-else>{{ path }}</span>
 		</template>
 
-		<b-row>
+		<b-row class="mb-2">
 			<b-col>
-				<div style="height: 5px; background-color: rgb(0, 153, 255);"></div>
+				<div style="height: 7px; background-color: rgb(0, 153, 255);"></div>
 			</b-col>
 			<b-col>
-				<div style="height: 5px; background-color: orange;"></div>
+				<div style="height: 7px; background-color: orange;"></div>
 			</b-col>
 		</b-row>
-		<b-row v-if="colors">
+		<b-row v-if="colors" class="mb-3">
 			<b-col v-for="team in teams">
 				<span v-for="colorType in colorTypes">
 					<b-dropdown :text="colorType.name">
@@ -43,7 +43,7 @@ export default {
 				</span>
 			</b-col>
 		</b-row>
-		<b-row v-if="Object.keys(config.blue).length">
+		<b-row v-if="Object.keys(config.blue).length" class="mb-4">
 			<b-col class="blue-team">
 				<div v-for="itemType in itemTypes">
 					<item-field :item-type="itemType" :items="items[itemType.category]" team="blue" v-model="config.blue"></item-field>
@@ -58,11 +58,11 @@ export default {
 
 		<div>
 			<b-form inline>
-				<b-button class="md-raised md-accent" @click="spawnCarForViewing(0)">
+				<b-button @click="spawnCarForViewing(0)" class="mr-1">
 					<b-icon icon="eye"></b-icon>
 					View blue car in game
 				</b-button>
-				<b-button class="md-raised md-accent" @click="spawnCarForViewing(1)">
+				<b-button @click="spawnCarForViewing(1)" class="mr-1">
 					<b-icon icon="eye"></b-icon>
 					View orange car in game
 				</b-button>
@@ -71,12 +71,12 @@ export default {
 						{{ showcaseType.name }}
 					</b-form-select-option>
 				</b-form-select>
-				<b-button class="md-primary md-raised" @click="saveAppearance">
+				<span style="flex-grow: 1"></span>
+				<b-button variant="primary" @click="saveAppearance" class="mr-1">
 					<b-icon icon="check"></b-icon>
 					Save and close
 				</b-button>
 				<b-button @click="loadLooks(path)">
-					<b-icon icon="clear"></b-icon>
 					Revert changes
 				</b-button>
 			</b-form>

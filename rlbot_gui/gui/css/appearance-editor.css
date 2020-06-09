@@ -95,3 +95,8 @@
 #appearance-editor-dialog .form-group {
   margin-bottom: 5px;
 }
+
+#appearance-editor-dialog .modal-body {
+  margin-bottom: 5px;
+  padding-top: 0;
+}
