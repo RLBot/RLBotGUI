@@ -10,7 +10,7 @@ export default {
 			</b-form-group>
 		</b-col>
 		<b-col cols="3">
-			<md-field :class="selectedPaintColorClass" class="paint-color">
+			<md-field :class="selectedPaintColorClass" class="paint-color" v-if="itemType.paintKey">
 				<b-form-select v-model="selectedPaint">
 					<b-form-select-option v-for="color in paintColors" :value="color.id" :class="color.class" class="paint-color">
 						{{ color.name }}
