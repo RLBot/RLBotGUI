@@ -170,7 +170,7 @@ export default {
 				<b-row style="max-width: 400px;">
 					<b-col>
 						<label for="map_selection">Map</label>
-						<b-form-select v-model="matchSettings.map" id="map_selection" @md-closed="updateBGImage(matchSettings.map)">
+						<b-form-select v-model="matchSettings.map" id="map_selection" @change="updateBGImage(matchSettings.map)">
 							<b-form-select-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</b-form-select-option>
 						</b-form-select>
 					</b-col>
