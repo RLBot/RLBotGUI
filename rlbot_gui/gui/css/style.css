@@ -56,6 +56,12 @@ body, html {
   font-weight: bold;
 }
 
+.rlbot-card-header {
+  font-size: 1.3rem;
+  margin-right: 20px;
+  font-weight: bold;
+}
+
 .team-entries {
   min-height: 160px;
   padding: 5px;
@@ -84,6 +90,9 @@ body, html {
 
 .bot-card .card-body {
   padding: 2px 5px;
+  display: flex;
+  width: 100%;
+  align-items: center;
 }
 
 .bot-card .md-switch {
@@ -148,14 +157,11 @@ body, html {
 
 #app .bot-pool, #app .settings-card {
   background-color: #eee;
+  padding: 2px 5px;
 }
 
 .bot-pool .bot-card {
   display: inline-flex;
-}
-
-.bot-pool .bot-filter {
-  margin-left: 20px;
 }
 
 .bot-card img {
@@ -217,6 +223,11 @@ body, html {
   color: #f5b700;
 }
 
+button.icon-button {
+  border: none;
+  margin-left: 6px;
+}
+
 #rlbotgui a {
   color: #4691af;
 }
@@ -229,7 +240,6 @@ body, html {
 
 .bot-file-path {
   color: #939393;
-  font-size: 9pt;
   font-weight: normal;
 }
 
