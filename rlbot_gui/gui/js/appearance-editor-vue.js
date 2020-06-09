@@ -7,7 +7,7 @@ export default {
 	},
 	props: ['path', 'activeBot', 'map'],
 	template: `
-	<b-modal id="appearance-editor-dialog" size="xl" v-model="appearanceModalActive" hide-footer>
+	<b-modal id="appearance-editor-dialog" size="xl" v-model="appearanceModalActive" hide-footer centered>
 		<template v-slot:modal-title>
 			<span v-if="activeBot && activeBot.name">Appearance loadout of {{ activeBot.name }}</span>
 			<span v-else>{{ path }}</span>
