@@ -22,13 +22,14 @@ export default {
 
 
 		<b-navbar-nav class="ml-auto">
-			<span v-if="!matchSettings.enable_state_setting">
-				<md-icon class="warning-icon">warning</md-icon><md-tooltip md-direction="bottom">State setting is turned off, sandbox won't work!</md-tooltip>
+			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning" class="mr-2"></b-spinner>
+			<span v-if="!matchSettings.enable_state_setting" class="mr-2">
+				<b-icon class="warning-icon" icon="exclamation-triangle-fill"></b-icon>
+				State setting is turned off, sandbox won't work!
 			</span>
 			<b-button @click="$router.replace('/sandbox')">
 				State Setting Sandbox
 			</b-button>
-			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning"></b-spinner>
 			<b-dropdown right class="ml-4">
 				<template v-slot:button-content>
 					Menu
@@ -99,7 +100,7 @@ export default {
 						<span class="bot-name">{{ bot.name }}</span>
 						<b-button class="icon-button warning-icon" v-if="bot.warn"
 								   @click.stop="activeBot = bot;" v-b-modal.language-warning-modal>
-							<b-icon icon="warning"></b-icon>
+						    <b-icon icon="exclamation-triangle-fill"></b-icon>
 						</b-button>
 						<b-button size="sm" variant="outline-primary" class="bot-hover-reveal icon-button" v-if="bot.info"
 								   @click.stop="activeBot = bot;" v-b-modal.bot-info-modal>
@@ -114,7 +115,7 @@ export default {
 						<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
 						<b-button class="icon-button md-dense warning-icon" v-if="script.warn"
 								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
-							<b-icon icon="warning"></b-icon>
+							<b-icon icon="exclamation-triangle-fill"></b-icon>
 						</b-button>
 						<b-button size="sm" variant="outline-primary" class="icon-button bot-hover-reveal" v-if="script.info"
 								   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
