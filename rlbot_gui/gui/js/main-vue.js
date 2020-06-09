@@ -348,11 +348,11 @@ export default {
 
 		</b-modal>
 
-		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer centered>
+		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer centered no-close-on-backdrop no-close-on-esc hide-header-close>
 			<div class="text-center">
-				<b-icon icon="cloud-download"></b-icon>
+				<b-icon icon="cloud-download" font-scale="3"></b-icon>
 			</div>
-			<b-progress variant="success" :value="downloadProgressPercent" animated></b-progress>
+			<b-progress variant="success" :value="downloadProgressPercent" animated class="mt-2 mb-2"></b-progress>
 			<p>{{ downloadStatus }}</p>
 		</b-modal>
 
