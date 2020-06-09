@@ -41,21 +41,29 @@ export default {
 			]
 		}
 	},
+	methods: {
+		loadItemSelection: function() {
+			let id = this.value[this.itemType.itemKey];
+			let item = this.items.find(el => el.id === id);
+			this.itemSelection = item ? item.name : '';
+		},
+	},
 	created: function() {
-		let id = this.value[this.itemType.itemKey];
-		let item = this.items.find(el => el.id === id);
-		if (item) {
-			this.itemSelection = item.name;
-		}
+		this.loadItemSelection();
 	},
 	watch: {
 		itemSelection: {
 			handler: function(val) {
-				let item = this.items.find(el => el.name == val);
+				let item = this.items.find(el => el.name === val);
 				this.value[this.itemType.itemKey] = item ? item.id : '0';
 				this.$emit('input', this.value);
 			}
 		},
+		value: {
+			handler: function() {
+				this.loadItemSelection();
+			}
+		}
 	},
 	computed: {
 		selectedPaint: {
@@ -68,7 +76,7 @@ export default {
 			}
 		},
 		selectedPaintColorClass: function() {
-			let color = this.paintColors.find(el => el.id == this.selectedPaint);
+			let color = this.paintColors.find(el => el.id === this.selectedPaint);
 			return color ? color.class : '';
 		}
 	}

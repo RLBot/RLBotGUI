@@ -111,7 +111,7 @@ export default {
 				</b-card>
 			</draggable>
 			<div class="mt-2">
-				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool">
+				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool" :class="{'filtered': !passesFilter(script.name)}">
 					<b-form inline>
 						<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
 						<b-button size="sm" class="icon-button warning-icon" v-if="script.warn" variant="outline-warning"

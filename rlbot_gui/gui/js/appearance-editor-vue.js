@@ -125,7 +125,7 @@ export default {
 			getAndParseItems: async function() {
 				let response = await fetch('csv/items.csv');
 				let csv = await response.text();
-				let lines = csv.split('\n');
+				let lines = csv.split(/\r?\n/);
 
 				let items = {};
 				for (const key in this.itemTypes) {
