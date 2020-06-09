@@ -108,19 +108,21 @@ export default {
 					</button>
 				</b-card>
 			</draggable>
-			<b-card class="bot-card md-elevation-3" v-for="script in scriptPool">
-				<b-form inline>
-					<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
-					<b-button class="icon-button md-dense warning-icon" v-if="script.warn"
-							   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
-						<b-icon icon="warning"></b-icon>
-					</b-button>
-					<b-button size="sm" variant="outline-primary" class="icon-button bot-hover-reveal" v-if="script.info"
-							   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
-						<b-icon icon="info-circle"></b-icon>
-					</b-button>
-				</b-form>
-			</b-card>
+			<div class="mt-2">
+				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool">
+					<b-form inline>
+						<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
+						<b-button class="icon-button md-dense warning-icon" v-if="script.warn"
+								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
+							<b-icon icon="warning"></b-icon>
+						</b-button>
+						<b-button size="sm" variant="outline-primary" class="icon-button bot-hover-reveal" v-if="script.info"
+								   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
+							<b-icon icon="info-circle"></b-icon>
+						</b-button>
+					</b-form>
+				</b-card>
+			</div>
 		</b-card>
 
 		<b-row>
@@ -152,7 +154,7 @@ export default {
 							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
 							<img v-if="bot.logo" v-bind:src="bot.logo">
 							<span class="bot-name">{{ bot.name }}</span>
-							<b-button size="sm" variant="outline-primary" class="icon-button" @click="orangeTeam.splice(index, 1)">
+							<b-button size="sm" variant="outline-danger" class="icon-button" @click="orangeTeam.splice(index, 1)">
 								<b-icon icon="x"></b-icon>
 							</b-button>
 						</b-card>
@@ -190,7 +192,7 @@ export default {
 
 				<b-form-group>
 					<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
-					<b-button @click="killBots()" variant="outline-secondary" size="lg">Stop</b-button>
+					<b-button @click="killBots()" variant="secondary" size="lg">Stop</b-button>
 				</b-form-group>
 			</div>
 
