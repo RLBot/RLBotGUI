@@ -95,8 +95,8 @@ body, html {
   align-items: center;
 }
 
-.bot-card .md-switch {
-  margin: 5px 8px;
+.script-card {
+  background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.34) 50%)
 }
 
 .center-flex {
@@ -228,10 +228,6 @@ button.icon-button {
   margin-left: 6px;
 }
 
-#rlbotgui a {
-  color: #4691af;
-}
-
 #rlbotgui .bot-pool-adder {
   vertical-align: top;
   margin-left: 20px;
@@ -260,4 +256,23 @@ button.icon-button {
   background-size: contain;
   background-repeat: no-repeat;
   margin: 10px;
+}
+
+.btn.btn-secondary {
+  background-color: white;
+  color: black;
+  border-color: #aeaeae;
+  box-shadow: 0 2px 0 #989898cf;
+}
+
+.btn.btn-primary {
+  box-shadow: 0 2px 0 rgba(0, 3, 49, 0.8);
+}
+
+.btn.btn-secondary:hover {
+  background-color: #d9d9d9;
+}
+
+.btn.btn-success {
+  box-shadow: 0 3px 0 green;
 }
