@@ -49,7 +49,7 @@ export default {
 
 	
 
-	<b-modal title="Install Package" id="package-installer">
+	<b-modal title="Install Package" id="package-installer" centered>
 
 		<b-form-group label="Package Name" label-for="package-name">
 			<b-form-input id="package-name" v-model="packageString"></b-form-input>
@@ -197,7 +197,7 @@ export default {
 				</b-form-checkbox>
 			</div>
 
-			<b-modal title="Extra Options" id="extra-modal" size="xl" hide-footer>
+			<b-modal title="Extra Options" id="extra-modal" size="xl" hide-footer centered>
 				<b-row>
 					<b-col>
 						<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
@@ -213,7 +213,7 @@ export default {
 				<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
 			</b-modal>
 
-			<b-modal id="mutators-modal" title="Mutators" size="xl" hide-footer>
+			<b-modal id="mutators-modal" title="Mutators" size="xl" hide-footer centered>
 
 				<b-row>
 					<b-col>
@@ -255,7 +255,7 @@ export default {
 			<b-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
 		</b-toast>
 
-		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer>
+		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer centered>
 
 			<img v-if="activeBot.logo" class="bot-logo" v-bind:src="activeBot.logo">
 			<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
@@ -276,7 +276,7 @@ export default {
 			</md-dialog-actions>
 		</b-modal>
 
-		<b-modal id="language-warning-modal" v-if="activeBot && activeBot.warn" title="Compatibility Warning" hide-footer>
+		<b-modal id="language-warning-modal" v-if="activeBot && activeBot.warn" title="Compatibility Warning" hide-footer centered>
 			<div v-if="activeBot.warn === 'java'">
 				<p><b>{{activeBot.name}}</b> requires Java and it looks like you don't have it installed!</p>
 				To play with it, you'll need to:
@@ -307,7 +307,7 @@ export default {
 			</div>
 		</b-modal>
 
-		<b-modal id="new-bot-modal" title="Create New Bot" hide-footer>
+		<b-modal id="new-bot-modal" title="Create New Bot" hide-footer centered>
 			<b-form inline>
 				<label class="mr-3">Bot Name</label>
 				<b-form-input v-model="newBotName"></b-form-input>
@@ -323,7 +323,7 @@ export default {
 			<b-button variant="primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</b-button>
 		</b-modal>
 
-		<b-modal id="folder-settings-modal" title="Folder Settings" size="xl" hide-footer>
+		<b-modal id="folder-settings-modal" title="Folder Settings" size="xl" hide-footer centered>
 			<b-form inline v-for="(settings, path) in folderSettings.folders">
 				<b-form-checkbox v-model="settings.visible" style="overflow:hidden;">
 					{{ path }}
@@ -348,7 +348,7 @@ export default {
 
 		</b-modal>
 
-		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer>
+		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer centered>
 			<div class="text-center">
 				<b-icon icon="cloud-download"></b-icon>
 			</div>
