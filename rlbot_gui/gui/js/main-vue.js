@@ -110,7 +110,7 @@ export default {
 					</button>
 				</b-card>
 			</draggable>
-			<div class="mt-2 d-flex">
+			<div class="mt-2 d-flex flex-wrap">
 				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool" :class="{'filtered': !passesFilter(script.name)}">
 					<b-form inline>
 						<b-form-checkbox v-model="script.enabled">
