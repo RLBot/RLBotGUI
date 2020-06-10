@@ -110,10 +110,13 @@ export default {
 					</button>
 				</b-card>
 			</draggable>
-			<div class="mt-2">
+			<div class="mt-2 d-flex">
 				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool" :class="{'filtered': !passesFilter(script.name)}">
 					<b-form inline>
-						<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
+						<b-form-checkbox v-model="script.enabled">
+							<img v-if="script.logo" v-bind:src="script.logo">
+							{{script.name}}
+						</b-form-checkbox>
 						<b-button size="sm" class="icon-button warning-icon" v-if="script.warn" variant="outline-warning"
 								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
 							<b-icon icon="exclamation-triangle-fill"></b-icon>
