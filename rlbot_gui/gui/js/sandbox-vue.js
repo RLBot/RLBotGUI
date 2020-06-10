@@ -11,13 +11,13 @@ export default {
     name: 'sandbox',
     template: `
     <div>
-        <b-navbar variant="dark">
+        <b-navbar class="navbar">
             <b-navbar-brand>
                 <img class="logo" src="imgs/rlbot_logo.png">
                 <span class="rlbot-brand" style="flex: 1">RLBot Sandbox</span>
             </b-navbar-brand>
             <b-navbar-nav class="ml-auto">
-                <b-button @click="watching = false; $router.replace('/')">
+                <b-button @click="watching = false; $router.replace('/')" variant="dark">
                     Back
                 </b-button>
             </b-navbar-nav>
