@@ -200,23 +200,17 @@ export default {
 				</b-form-checkbox>
 			</div>
 
-			<b-modal title="Extra Options" id="extra-modal" size="xl" hide-footer centered>
-				<b-row>
-					<b-col>
-						<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
-					</b-col>
-					<b-col>
-						<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
-					</b-col>
-				</b-row>
-				<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
+			<b-modal title="Extra Options" id="extra-modal" size="md" hide-footer centered>
+			<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
+			<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
 			</b-modal>
 
-			<b-modal id="mutators-modal" title="Mutators" size="xl" hide-footer centered>
+			<b-modal id="mutators-modal" title="Mutators" size="lg" hide-footer centered>
 
 				<b-row>
 					<b-col>
