@@ -173,6 +173,10 @@ body, html {
   margin: 3px;
 }
 
+.script-card img {
+  margin: 0 3px 0 0;
+}
+
 .filtered {
   opacity: 0.2;
 }

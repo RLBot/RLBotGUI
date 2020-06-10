@@ -110,10 +110,13 @@ export default {
 					</button>
 				</b-card>
 			</draggable>
-			<div class="mt-2">
+			<div class="mt-2 d-flex flex-wrap">
 				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool" :class="{'filtered': !passesFilter(script.name)}">
 					<b-form inline>
-						<b-form-checkbox v-model="script.enabled">{{script.name}}</b-form-checkbox>
+						<b-form-checkbox v-model="script.enabled">
+							<img v-if="script.logo" v-bind:src="script.logo">
+							{{script.name}}
+						</b-form-checkbox>
 						<b-button size="sm" class="icon-button warning-icon" v-if="script.warn" variant="outline-warning"
 								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
 							<b-icon icon="exclamation-triangle-fill"></b-icon>
@@ -197,23 +200,17 @@ export default {
 				</b-form-checkbox>
 			</div>
 
-			<b-modal title="Extra Options" id="extra-modal" size="xl" hide-footer centered>
-				<b-row>
-					<b-col>
-						<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
-					</b-col>
-					<b-col>
-						<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
-						<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
-					</b-col>
-				</b-row>
-				<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior"></mutator-field>
+			<b-modal title="Extra Options" id="extra-modal" size="md" hide-footer centered>
+			<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
+			<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
+			<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
 			</b-modal>
 
-			<b-modal id="mutators-modal" title="Mutators" size="xl" hide-footer centered>
+			<b-modal id="mutators-modal" title="Mutators" size="lg" hide-footer centered>
 
 				<b-row>
 					<b-col>
