@@ -25,8 +25,8 @@ export default {
 				<b-icon class="warning-icon" icon="exclamation-triangle-fill"></b-icon>
 				State setting is turned off, sandbox won't work!
 			</span>
-			<b-button @click="$router.replace('/sandbox')" variant="dark">
-				State Setting Sandbox
+			<b-button @click="$router.replace('/story')" variant="dark">
+				Story Mode
 			</b-button>
 			<b-dropdown right class="ml-4" variant="dark">
 				<template v-slot:button-content>
