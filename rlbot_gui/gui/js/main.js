@@ -14,9 +14,12 @@ function updateDownloadProgress(progress, status) {}
 
 import Main from './main-vue.js'
 import Sandbox from './sandbox-vue.js'
+import Story from './story-mode.js'
+
 const routes = [
     { path: '/', component: Main },
     { path: '/sandbox', component: Sandbox },
+    { path: '/story', component: Story }
 ];
 
 const router = new VueRouter({
