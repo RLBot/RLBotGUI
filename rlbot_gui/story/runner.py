@@ -224,7 +224,7 @@ def launch_intro_1():
     print("In launch_intro_1")
 
     human_index_tracker = IncrementingInteger(0)
-    players = [STARTING_BOT_POOL[0], NON_PSYONIX_BOTS[1].copy()]
+    players = [STARTING_BOT_POOL[0], STARTING_BOT_POOL[1].copy()]
     players[0]["team"] = 0
     players[1]["team"] = 1
     match_players = [
