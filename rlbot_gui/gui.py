@@ -28,6 +28,10 @@ from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, star
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
 from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
 
+#### LOAD JUST TO EXPOSE STORY_MODE
+from rlbot_gui.story import story_runner
+####
+
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
 OLD_BOTPACK_FOLDER = 'RLBotPack'
