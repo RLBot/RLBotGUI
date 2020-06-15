@@ -1,6 +1,18 @@
 Rocket League Story Mode
 =========================
 
+# Status
+
+- First match works end to end
+- Post-first match UI is being fleshed out
+    - A map is shown! 
+    - Lock/open/done status can be shown and calculated
+    - A side bar is created to show details but needs to be populated
+- Remaining:
+    - We need to come up with descriptions of each challenge and implement each match's setup
+    - Need to implement "upgrades"
+    - Need to implement teammates
+
 
 # Developer notes
 
