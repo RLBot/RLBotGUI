@@ -292,7 +292,7 @@ export default {
 			</div>
 			<div v-if="activeBot.warn === 'pythonpkg'">
 				<p>
-					This bot needs some python packages you haven't installed yet:
+					This bot needs some python package versions you haven't installed yet:
 					<code><span v-for="missing in activeBot.missing_python_packages">{{missing}} </span></code>
 				</p>
 				<b-button @click="installRequirements(activeBot.path)"

@@ -82,7 +82,7 @@ def serialize_bundle(bundle: BotConfigBundle):
         'looks_path': bundle.looks_path,
         'info': read_info(bundle),
         'logo': try_copy_logo(bundle),
-        'missing_python_packages': [r.name for r in bundle.get_missing_python_packages()],
+        'missing_python_packages': [r.line for r in bundle.get_missing_python_packages() + bundle.get_python_packages_needing_upgrade()],
     }
 
 
@@ -94,7 +94,7 @@ def serialize_script_bundle(bundle):
         'path': bundle.config_path,
         'info': read_info(bundle),
         'logo': try_copy_logo(bundle),
-        'missing_python_packages': [r.name for r in bundle.get_missing_python_packages()],
+        'missing_python_packages': [r.line for r in bundle.get_missing_python_packages() + bundle.get_python_packages_needing_upgrade()],
     }
 
 
