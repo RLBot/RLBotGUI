@@ -1,0 +1,6 @@
+Sources:
+
+Lock image: https://commons.wikimedia.org/wiki/File:Lock_font_awesome.svg (cc license)
+Checkmark: https://en.wikipedia.org/wiki/File:Checkmark_green.svg (public domain)
+
+Map: https://azgaar.github.io/Fantasy-Map-Generator/ (MIT license)
