@@ -1,0 +1,17 @@
+
+.story-card-text {
+    color: #333333;
+}
+
+.story-map-icon {
+    position: absolute;
+    height: 5%;
+}
+
+.clicky {
+    cursor: pointer;
+}
+
+.dark-bg {
+    background-color: #343a40
+}
