@@ -1,6 +1,8 @@
 """
 Manages the story
 """
+from dataclasses import dataclass
+
 import eel
 
 from PyQt5.QtCore import QSettings
@@ -52,16 +54,18 @@ def story_story_test():
     print("In story_story_test()")
     eel.spawn(story_test)
 
+
 @eel.expose
 def story_load_save():
     """Loads a previous save if available."""
     global CURRENT_STATE
-    settings = QSettings('rlbotgui', 'story_save')
+    settings = QSettings("rlbotgui", "story_save")
     state = settings.value("save")
     if state:
         print(f"Save state: {state}")
         CURRENT_STATE = StoryState.from_dict(state)
     return state
+
 
 @eel.expose
 def story_new_save(name, color_secondary):
@@ -74,33 +78,35 @@ def story_new_save(name, color_secondary):
 def story_delete_save():
     global CURRENT_STATE
     CURRENT_STATE = None
-    QSettings('rlbotgui', 'story_save').remove("save")
+    QSettings("rlbotgui", "story_save").remove("save")
 
 
 @eel.expose
 def story_save_state():
-    settings = QSettings('rlbotgui', 'story_save')
+    settings = QSettings("rlbotgui", "story_save")
     serialized = CURRENT_STATE.__dict__
     settings.setValue("save", serialized)
     return serialized
+
 
 @eel.expose
 def launch_challenge(challenge_id):
     if challenge_id == "INTRO-1":
         launch_intro_1()
 
-#################################
 
+##### Reverse eel's
+
+def flush_save_state():
+    serialized = story_save_state()
+    eel.loadUpdatedSaveState(serialized)
+
+#################################
 
 
 sm: SetupManager = None
 STARTING_BOT_POOL = [
-    {
-        "name": "Human",
-        "type": "human",
-        "image": "imgs/human.png",
-        "skill": 1,
-    },
+    {"name": "Human", "type": "human", "image": "imgs/human.png", "skill": 1,},
     {
         "name": "Psyonix Allstar",
         "type": "psyonix",
@@ -135,7 +141,6 @@ NON_PSYONIX_BOTS = [
         "path": "C:\\Users\\Triton\\Projects\\RLBotGUI\\RLBotPackDeletable\\RLBotPack-master\\RLBotPack\\ReliefBotFamily\\README\\relief_bot.cfg",
     },
 ]
-
 
 
 def start_match_helper(player_configs, match_settings):
@@ -197,6 +202,22 @@ def start_match_helper(player_configs, match_settings):
     return sm
 
 
+@dataclass
+class PlayerStats:
+    """Represents score_info and some basic identifying info"""
+    """We just create a dict that looks like this, so this is just documentation"""
+    name: str
+    team: int
+    spawn_id: int
+    score: int
+    goals: int
+    own_goals: int
+    assists: int
+    saves: int
+    shots: int
+    demolitions: int
+
+
 class StoryState:
     """Represents users game state"""
 
@@ -204,15 +225,65 @@ class StoryState:
         self.version = 1
         self.team_info = {"name": "", "color_secondary": ""}
         self.teammates = []
-        self.cities = []
+        self.challenges_attempts = {} # many entries per challenge
+        self.challenges_completed = {} # one entry per challenge
+
+    def add_match_result(
+        self, challenge_id: str, challenge_completed: bool, game_results
+    ):
+        """game_results should be the output of packet_to_game_results.
+        You have to call it anyways to figure out if the player 
+        completed the challenge so that's why we don't call it again here.
+        """
+        if challenge_id not in self.challenges_attempts:
+            # no defaultdict because we serialize the data
+            self.challenges_attempts[challenge_id] = []
+        self.challenges_attempts[challenge_id].append({
+            'game_results': game_results,
+            "challenge_completed": challenge_completed
+        }) 
+
+        if challenge_completed:
+            self.challenges_completed[challenge_id] = game_results
+
+    def packet_to_game_results(self, game_tick_packet: GameTickPacket):
+        """Take the final game_tick_packet and 
+        returns the info related to the final game results
+        """
+        players = game_tick_packet.game_cars
+        human_player = next(p for p in players if not p.is_bot)
+
+        # these are 0'd out
+        player_stats = [{
+            "name": p.name,
+            "team": p.team,
+            "spawn_id": p.spawn_id,
+            "score": p.score_info.score,
+            "goals": p.score_info.goals,
+            "own_goals": p.score_info.own_goals,
+            "assists": p.score_info.assists,
+            "saves": p.score_info.saves,
+            "shots": p.score_info.shots,
+            "demolitions": p.score_info.demolitions
+        } for p in players if p.name]
+
+        scores_sorted = [
+            {"team_index": t.team_index, "score": t.score} for t in game_tick_packet.teams
+        ]
+        scores_sorted.sort(key=lambda x: x["score"], reverse=True)
+        human_won = scores_sorted[0]["team_index"] == human_player.team
+
+        return {
+            "human_team": human_player.team,
+            "score": scores_sorted,  # [{team_index, score}]
+            "stats": player_stats,
+            "human_won": human_won,
+        }
 
     @staticmethod
     def new(name, color_secondary):
         s = StoryState()
-        s.team_info = {
-            "name": name,
-            "color_secondary": color_secondary
-        }
+        s.team_info = {"name": name, "color_secondary": color_secondary}
         return s
 
     @staticmethod
@@ -220,6 +291,7 @@ class StoryState:
         """No validation done here."""
         s = StoryState()
         s.__dict__.update(source)
+        return s
 
 
 def launch_intro_1():
@@ -229,13 +301,11 @@ def launch_intro_1():
     players = [STARTING_BOT_POOL[0], STARTING_BOT_POOL[1].copy()]
     players[0]["team"] = 0
     players[1]["team"] = 1
-    match_players = [
-        create_player_config(bot, human_index_tracker) for bot in players
-    ]
+    match_players = [create_player_config(bot, human_index_tracker) for bot in players]
 
     match_settings = {
         "game_mode": game_mode_types[0],
-        "map": map_types[0],
+        "map": map_types[4],  # BeckwithPark
         "skip_replays": False,
         "instant_start": False,
         "enable_lockstep": False,
@@ -245,7 +315,7 @@ def launch_intro_1():
         "match_behavior": existing_match_behavior_types[0],
         "mutators": {
             "match_length": match_length_types[0],
-            "max_score": max_score_types[0],  # 1 goal max
+            "max_score": max_score_types[2],  # 3 goal max
             "overtime": overtime_mutator_types[0],
             "series_length": series_length_mutator_types[0],
             "game_speed": game_speed_mutator_types[0],
@@ -254,7 +324,7 @@ def launch_intro_1():
             "ball_weight": ball_weight_mutator_types[0],
             "ball_size": ball_size_mutator_types[0],
             "ball_bounciness": ball_bounciness_mutator_types[0],
-            "boost_amount": boost_amount_mutator_types[0],
+            "boost_amount": boost_amount_mutator_types[4],  # No Boost
             "rumble": rumble_mutator_types[0],
             "boost_strength": boost_strength_mutator_types[0],
             "gravity": gravity_mutator_types[0],
@@ -266,29 +336,17 @@ def launch_intro_1():
     setup_manager = start_match_helper(match_players, match_settings)
 
     while True:
-        eel.sleep(1.0 / 120)  # does RL support faster?
         game_tick_packet = GameTickPacket()
         packet = setup_manager.game_interface.fresh_live_data_packet(
             game_tick_packet, 1000, 324532
         )
 
-        game_state = GameState.create_from_gametickpacket(packet)
-        changed = False
-        for _, car in game_state.cars.items():
-            if car.boost_amount > 0:
-                car.boost_amount = 0
-                changed = True
-            # if car.jumped:
-            #     car.double_jumped = True
-            #     changed = True
-
-        if changed:
-            setup_manager.game_interface.set_game_state(game_state)
-        # print([t.score for t in packet.teams])
         if packet.game_info.is_match_ended:
-            print("Donezo")
-            #TODO: UPDATE STATE!
+            results = CURRENT_STATE.packet_to_game_results(packet)
+            CURRENT_STATE.add_match_result('INTRO-1', results["human_won"], results)
             break
+
+    flush_save_state()
 
 
 def story_test():
@@ -301,9 +359,7 @@ def story_test():
     players.extend(NON_PSYONIX_BOTS)
     players[2]["team"] = 1
     players[3]["team"] = 1
-    match_players = [
-        create_player_config(bot, human_index_tracker) for bot in players
-    ]
+    match_players = [create_player_config(bot, human_index_tracker) for bot in players]
     for player in match_players:
         if player.loadout_config is None:
             print("Creating fresh loadout for player.name")
