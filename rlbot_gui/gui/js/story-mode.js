@@ -21,6 +21,7 @@ export default {
 
         <story-challenges
             v-on:launch_challenge="launchChallenge"
+            v-on:purchase_upgrade="purchaseUpgrade"
             v-bind:saveState="saveState"
             v-bind:game_in_progress="game_in_progress"
             v-bind:gameCompleted="gameCompleted"
@@ -80,6 +81,11 @@ export default {
             }
             console.log(this.game_in_progress)
             eel.launch_challenge(name)
+        },
+        purchaseUpgrade: function({id, currentCurrency}) {
+            // Send eel a message to add id to purchases and reduce currency
+            console.log("Will purchase: ", id);
+            eel.purchase_upgrade(id, currentCurrency);
         }
     },
     created: async function () {

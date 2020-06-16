@@ -37,7 +37,8 @@ export default {
             <b-button v-if="!upgrade.purchased"
                 v-bind:id="upgrade.id"
                 variant="success"
-                v-bind:disabled="!upgrade.available">
+                v-bind:disabled="!upgrade.available"
+                @click="purchase(upgrade.id)">
                 Purchase
             </b-button>
         </b-list-group-item>
@@ -64,4 +65,13 @@ export default {
             return result
         },
     },
+    methods: {
+        purchase: function(id) {
+            console.log("In purchases", id)
+            this.$emit('purchase_upgrade', {
+                id,
+                currentCurrency: this.upgradeSaveState.currency
+            })
+        }
+    }
 }
