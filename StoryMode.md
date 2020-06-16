@@ -8,9 +8,10 @@ Rocket League Story Mode
     - A map is shown! 
     - Lock/open/done status can be shown and calculated
     - A side bar is created to show details but needs to be populated
+    - Upgrades are listed and respect save state
 - Remaining:
     - We need to come up with descriptions of each challenge and implement each match's setup
-    - Need to implement "upgrades"
+    - Need to implement actual purchases and usages of save state
     - Need to implement teammates
 
 
