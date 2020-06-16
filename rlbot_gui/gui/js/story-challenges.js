@@ -68,7 +68,7 @@ const UPGRADES = [
 
 export default {
     name: 'story-challenges',
-    props: { saveState: Object , game_in_progress: Object},
+    props: { saveState: Object, game_in_progress: Object },
     template: `
     <div class="pt-2">
         <b-overlay :show="game_in_progress.name" rounded="sm" variant="dark">
@@ -167,7 +167,7 @@ export default {
         }
     },
     computed: {
-        upgrades_ui: function() {
+        upgrades_ui: function () {
             let currency = this.saveState.upgrades.currency;
             let result = UPGRADES.map((item) => ({
                 id: item.id,
@@ -188,18 +188,18 @@ export default {
         },
     },
     methods: {
-        getCityStateTooltip: function(city) {
+        getCityStateTooltip: function (city) {
             let state = this.getCityState(city)
             let displayName = DISPLAY_CITY_NAMES[city]
 
             const suffix = [
                 'is still locked.',
-                'is open to challenge!', 
+                'is open to challenge!',
                 'has been completed!'
             ]
             return displayName + ' ' + suffix[state]
         },
-        handleCityClick: function(event) {
+        handleCityClick: function (event) {
             // strip -area from id
             let city = event.target.id.substring(0, event.target.id.length - 5).toUpperCase()
             console.log(DISPLAY_CITY_NAMES[city])
@@ -207,7 +207,7 @@ export default {
         showIntroPopup: function () {
             return !this.saveState.challenges_completed["INTRO-1"]
         },
-        getCityState: function(city) {
+        getCityState: function (city) {
             let state = CITY_STATE.LOCKED
 
             let prereqs = OPEN_PREREQS[city]
@@ -223,7 +223,7 @@ export default {
             console.log(city, state)
             return state;
         },
-        getImageForCity: function(city) {
+        getImageForCity: function (city) {
             return CITY_ICON_MAP[this.getCityState(city)]
         }
     },

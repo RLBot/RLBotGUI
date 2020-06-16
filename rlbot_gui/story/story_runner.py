@@ -97,9 +97,11 @@ def launch_challenge(challenge_id):
 
 ##### Reverse eel's
 
+
 def flush_save_state():
     serialized = story_save_state()
     eel.loadUpdatedSaveState(serialized)
+
 
 #################################
 
@@ -209,8 +211,8 @@ class StoryState:
         self.version = 1
         self.team_info = {"name": "", "color_secondary": ""}
         self.teammates = []
-        self.challenges_attempts = {} # many entries per challenge
-        self.challenges_completed = {} # one entry per challenge
+        self.challenges_attempts = {}  # many entries per challenge
+        self.challenges_completed = {}  # one entry per challenge
 
         self.upgrades = {"currency": 0}
 
@@ -224,14 +226,13 @@ class StoryState:
         if challenge_id not in self.challenges_attempts:
             # no defaultdict because we serialize the data
             self.challenges_attempts[challenge_id] = []
-        self.challenges_attempts[challenge_id].append({
-            'game_results': game_results,
-            "challenge_completed": challenge_completed
-        }) 
+        self.challenges_attempts[challenge_id].append(
+            {"game_results": game_results, "challenge_completed": challenge_completed}
+        )
 
         if challenge_completed:
-            index = len(self.challenges_attempts[challenge_id]) - 1 
-            self.challenges_completed[challenge_id] = index 
+            index = len(self.challenges_attempts[challenge_id]) - 1
+            self.challenges_completed[challenge_id] = index
             self.upgrades["currency"] += 1
 
     def packet_to_game_results(self, game_tick_packet: GameTickPacket):
@@ -241,22 +242,27 @@ class StoryState:
         players = game_tick_packet.game_cars
         human_player = next(p for p in players if not p.is_bot)
 
-        player_stats = [{
-            "name": p.name,
-            "team": p.team,
-            # these are always 0, so we don't add them
-            # "spawn_id": p.spawn_id,
-            # "score": p.score_info.score,
-            # "goals": p.score_info.goals,
-            # "own_goals": p.score_info.own_goals,
-            # "assists": p.score_info.assists,
-            # "saves": p.score_info.saves,
-            # "shots": p.score_info.shots,
-            # "demolitions": p.score_info.demolitions
-        } for p in players if p.name]
+        player_stats = [
+            {
+                "name": p.name,
+                "team": p.team,
+                # these are always 0, so we don't add them
+                # "spawn_id": p.spawn_id,
+                # "score": p.score_info.score,
+                # "goals": p.score_info.goals,
+                # "own_goals": p.score_info.own_goals,
+                # "assists": p.score_info.assists,
+                # "saves": p.score_info.saves,
+                # "shots": p.score_info.shots,
+                # "demolitions": p.score_info.demolitions
+            }
+            for p in players
+            if p.name
+        ]
 
         scores_sorted = [
-            {"team_index": t.team_index, "score": t.score} for t in game_tick_packet.teams
+            {"team_index": t.team_index, "score": t.score}
+            for t in game_tick_packet.teams
         ]
         scores_sorted.sort(key=lambda x: x["score"], reverse=True)
         human_won = scores_sorted[0]["team_index"] == human_player.team
@@ -266,7 +272,7 @@ class StoryState:
             "score": scores_sorted,  # [{team_index, score}]
             "stats": player_stats,
             "human_won": human_won,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
     @staticmethod
@@ -332,7 +338,7 @@ def launch_intro_1():
 
         if packet.game_info.is_match_ended:
             results = CURRENT_STATE.packet_to_game_results(packet)
-            CURRENT_STATE.add_match_result('INTRO-1', results["human_won"], results)
+            CURRENT_STATE.add_match_result("INTRO-1", results["human_won"], results)
             break
 
     flush_save_state()

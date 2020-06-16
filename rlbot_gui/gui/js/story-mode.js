@@ -11,8 +11,8 @@ const DEBUG_STORY_STATE = true; // only changes the UI state
 
 let JsonToTextArea = {
     'name': 'json-to-text',
-    'props': {'value': Object},
-    'template':`
+    'props': { 'value': Object },
+    'template': `
     <div>
         <textarea v-bind:value="JSON.stringify(value, null, 2)" v-on:input="handleInput"></textarea>
         <b-button @click="sendJSON">Update</textarea>
@@ -22,10 +22,10 @@ let JsonToTextArea = {
         "text": ''
     },
     methods: {
-        handleInput: function(event) {
+        handleInput: function (event) {
             this.text = event.target.value;
         },
-        sendJSON: function(){
+        sendJSON: function () {
             console.log(this.text)
             this.$emit('input', JSON.parse(this.text))
         }
@@ -94,14 +94,14 @@ export default {
             this.saveState = state
             this.storyStateMachine(UI_STATES.CITY_MAP)
         },
-        deleteSave: async function() {
+        deleteSave: async function () {
             await eel.story_delete_save()()
             this.saveState = null
             this.storyStateMachine(UI_STATES.START_SCREEN)
         },
-        launchChallenge: function(name) {
+        launchChallenge: function (name) {
             console.log(name)
-            let attempts = this.saveState.challenges_attempts[name] 
+            let attempts = this.saveState.challenges_attempts[name]
             this.game_in_progress = {
                 name: name,
                 target_count: (attempts ? attempts.length : 0) + 1
