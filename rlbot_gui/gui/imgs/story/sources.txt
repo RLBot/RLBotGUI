@@ -4,3 +4,8 @@ Lock image: https://commons.wikimedia.org/wiki/File:Lock_font_awesome.svg (cc li
 Checkmark: https://en.wikipedia.org/wiki/File:Checkmark_green.svg (public domain)
 
 Map: https://azgaar.github.io/Fantasy-Map-Generator/ (MIT license)
+
+Coin: 2D Game Art Bundle - Casual Game UI - Purchased
+    https://www.gamedevmarket.net/asset/2d-game-art-bundle-2018/ (royalty free)
+
+Money: Gui Icons - Purchased - https://www.gamedevmarket.net/asset/gui-icons-8656/ (royalty free)
