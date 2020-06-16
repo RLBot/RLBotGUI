@@ -1,7 +1,7 @@
 """
 Manages the story
 """
-from dataclasses import dataclass
+from datetime import datetime
 
 import eel
 
@@ -202,22 +202,6 @@ def start_match_helper(player_configs, match_settings):
     return sm
 
 
-@dataclass
-class PlayerStats:
-    """Represents score_info and some basic identifying info"""
-    """We just create a dict that looks like this, so this is just documentation"""
-    name: str
-    team: int
-    spawn_id: int
-    score: int
-    goals: int
-    own_goals: int
-    assists: int
-    saves: int
-    shots: int
-    demolitions: int
-
-
 class StoryState:
     """Represents users game state"""
 
@@ -227,6 +211,8 @@ class StoryState:
         self.teammates = []
         self.challenges_attempts = {} # many entries per challenge
         self.challenges_completed = {} # one entry per challenge
+
+        self.upgrades = {"currency": 0}
 
     def add_match_result(
         self, challenge_id: str, challenge_completed: bool, game_results
@@ -244,7 +230,9 @@ class StoryState:
         }) 
 
         if challenge_completed:
-            self.challenges_completed[challenge_id] = game_results
+            index = len(self.challenges_attempts[challenge_id]) - 1 
+            self.challenges_completed[challenge_id] = index 
+            self.upgrades["currency"] += 1
 
     def packet_to_game_results(self, game_tick_packet: GameTickPacket):
         """Take the final game_tick_packet and 
@@ -253,18 +241,18 @@ class StoryState:
         players = game_tick_packet.game_cars
         human_player = next(p for p in players if not p.is_bot)
 
-        # these are 0'd out
         player_stats = [{
             "name": p.name,
             "team": p.team,
-            "spawn_id": p.spawn_id,
-            "score": p.score_info.score,
-            "goals": p.score_info.goals,
-            "own_goals": p.score_info.own_goals,
-            "assists": p.score_info.assists,
-            "saves": p.score_info.saves,
-            "shots": p.score_info.shots,
-            "demolitions": p.score_info.demolitions
+            # these are always 0, so we don't add them
+            # "spawn_id": p.spawn_id,
+            # "score": p.score_info.score,
+            # "goals": p.score_info.goals,
+            # "own_goals": p.score_info.own_goals,
+            # "assists": p.score_info.assists,
+            # "saves": p.score_info.saves,
+            # "shots": p.score_info.shots,
+            # "demolitions": p.score_info.demolitions
         } for p in players if p.name]
 
         scores_sorted = [
@@ -278,6 +266,7 @@ class StoryState:
             "score": scores_sorted,  # [{team_index, score}]
             "stats": player_stats,
             "human_won": human_won,
+            "timestamp": datetime.now().isoformat()
         }
 
     @staticmethod
