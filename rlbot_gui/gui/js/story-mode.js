@@ -2,6 +2,8 @@
 import StoryStart from './story-mode-start.js'
 import StoryChallenges from './story-challenges.js'
 
+import AlterSaveState from './story-alter-save-state.js'
+
 const UI_STATES = {
     'LOAD_SAVE': 0,
     'START_SCREEN': 1,
@@ -9,28 +11,6 @@ const UI_STATES = {
 };
 const DEBUG_STORY_STATE = true; // only changes the UI state
 
-let JsonToTextArea = {
-    'name': 'json-to-text',
-    'props': { 'value': Object },
-    'template': `
-    <div>
-        <textarea v-bind:value="JSON.stringify(value, null, 2)" v-on:input="handleInput"></textarea>
-        <b-button @click="sendJSON">Update</textarea>
-    </div>
-    `,
-    data: {
-        "text": ''
-    },
-    methods: {
-        handleInput: function (event) {
-            this.text = event.target.value;
-        },
-        sendJSON: function () {
-            console.log(this.text)
-            this.$emit('input', JSON.parse(this.text))
-        }
-    }
-};
 
 export default {
     name: 'story',
@@ -50,21 +30,13 @@ export default {
         <b-button @click="deleteSave" variant="danger" v-if="ui_state > ${UI_STATES.START_SCREEN}">Delete Save</b-button>
         <b-button @click="startMatch()" class="mt-2">Test</b-button>
 
-        <b-button id="debug-state-target" v-if="debugStoryState">
-            Alter State
-        </b-button>
-        <b-popover target="debug-state-target">
-            <template v-slot:title>
-            Update UI state
-            </template>
-            <json-to-text v-model="saveState"/>
-        </b-popover>
+        <alter-save-state v-model="saveState" v-if="debugStoryState"/>
     </b-container>
     `,
     components: {
         'story-start': StoryStart,
         'story-challenges': StoryChallenges,
-        'json-to-text': JsonToTextArea,
+        'alter-save-state': AlterSaveState,
     },
     data() {
         return {
