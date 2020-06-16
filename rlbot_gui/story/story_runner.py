@@ -95,6 +95,11 @@ def launch_challenge(challenge_id):
         launch_intro_1()
 
 
+@eel.expose
+def purchase_upgrade(id, current_currency):
+    CURRENT_STATE.add_purchase(id, current_currency)
+    flush_save_state()
+
 ##### Reverse eel's
 
 
@@ -215,6 +220,16 @@ class StoryState:
         self.challenges_completed = {}  # one entry per challenge
 
         self.upgrades = {"currency": 0}
+
+    def add_purchase(self, id, current_currency):
+        """The only validation we do is to make sure current_currency is correct.
+        This is NOT a security mechanism, this is a bug prevention mechanism to
+        avoid accidental double clicks.
+        """
+        if (self.upgrades["currency"] == current_currency):
+            self.upgrades[id] = True
+            self.upgrades["currency"] -= 1
+
 
     def add_match_result(
         self, challenge_id: str, challenge_completed: bool, game_results

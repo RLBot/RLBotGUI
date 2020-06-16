@@ -111,7 +111,9 @@ export default {
                     <b-card no-body bg-variant="dark w-100">
                         <b-tabs content-class="mt-3" fill>
                             <b-tab title="Upgrades" active class="story-card-text">
-                                <story-upgrades v-bind:upgradeSaveState="saveState.upgrades">
+                                <story-upgrades 
+                                    v-bind:upgradeSaveState="saveState.upgrades"
+                                    @purchase_upgrade="$emit('purchase_upgrade', $event)">
                                 </story-upgrades>
                             </b-tab>
                             <b-tab title="Teammates"><p>I'm the second tab</p></b-tab>
