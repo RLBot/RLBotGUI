@@ -2,6 +2,8 @@
 Manages the story
 """
 from datetime import datetime
+import json
+from os import path
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -10,6 +12,10 @@ from rlbot_gui.story.story_challenge_setup import run_challenge, configure_chall
 
 
 CURRENT_STATE = None
+CHALLENGES = None
+
+with open(path.join(path.dirname(__file__), 'challenges.json')) as c:
+    CHALLENGES = json.load(c)
 
 ##### EEL -- these are the hooks exposed to JS
 @eel.expose
@@ -133,14 +139,7 @@ class StoryState:
 def launch_intro_1():
     print("In launch_intro_1")
 
-    intro_1 = {
-        "id": "INTRO-1",
-        "humanTeamSize": 1,
-        "opponentBots": ["psyonix-pro"],
-        "max_score": "3 Goals",
-        "map": "BeckwithPark",
-        "display": "Win something so we know you can drive"
-    }
+    intro_1 = CHALLENGES["INTRO"][0]
     match_config = configure_challenge(intro_1, CURRENT_STATE, [])
     completed, results = run_challenge(match_config, intro_1, CURRENT_STATE.upgrades)
     CURRENT_STATE.add_match_result(intro_1["id"], completed, results)
