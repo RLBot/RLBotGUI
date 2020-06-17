@@ -1,0 +1,91 @@
+{
+    "INTRO": [
+        {
+            "id": "INTRO-1",
+            "humanTeamSize": 1,
+            "opponentBots": ["pysonix-pro"],
+            "max_score": "3 Goals",
+            "map": "BeckwithPark",
+            "display": "Win something so we know you can drive"
+        }
+    ],
+    "URBAN": [
+        {
+            "id": "URBAN-1",
+            "humanTeamSize": 2,
+            "opponentBots": ["pysonix-allstar-name", "psyonix-allstar-name"],
+            "map": "UrbanCentral",
+            "display": "Beat local up-and-comers in a 2v2."
+        },
+        {
+            "id": "URBAN-2",
+            "humanTeamSize": 2,
+            "opponentBots": ["pysonix-allstar-name", "psyonix-allstar-name"],
+            "completionConditionss": {
+                "win": true,
+                "scoreDifference": 3
+            },
+            "map": "UrbanCentral_Dawn",
+            "display": "Upgrade your reputation by beating your opponents by 3 or more goals"
+        }
+    ],
+    "WASTELAND": [
+        {
+            "id": "WASTELAND-1",
+            "humanTeamSize": 2,
+            "opponentBots": ["adversity", "adversity"],
+            "completionConditions": {
+                "win": true,
+                "selfDemoCount": 0
+            },
+            "map": "Wasteland"
+        },
+        {
+            "id": "WASTELAND-2",
+            "humanTeamSize": 3,
+            "opponentBots": ["adversity", "adversity", "psyonix-allstar-name"],
+            "completionConditions": {
+                "win": true,
+                "demoAchievedCount": 1
+            },
+            "map": "Wasteland"
+        }
+    ],
+    "CAMPANDSNIPE": [
+        {
+            "id": "CS-1",
+            "humanTeamSize": 3,
+            "opponentBots": ["tbd", "tbd", "tbd"],
+            "limitations": ["half-field"],
+            "map": "AquaDome"
+        },
+        {
+            "id": "CS-2",
+            "humanTeamSize": 2,
+            "opponentBots": ["tbd", "tbd"],
+            "limitations": ["half-field"],
+            "map": "AquaDome"
+        }
+
+    ],
+    "CHAMPIONSIAN": [
+        {
+            "id": "CHAMP-1",
+            "humanTeamSize": 3,
+            "opponentBots": ["tbd", "tbd", "tbd", "tbd"],
+            "map": "ChampionsField,"
+        },
+        {
+            "id": "CHAMP-2",
+            "humanTeamSize": 2,
+            "opponentBots": ["tbd", "tbd", "tbd", "tbd", "tbd"],
+            "map": "ChampionsField_Day"
+        },
+        {
+            "id": "CHAMP-3",
+            "humanTeamSize": 2,
+            "opponentBots": ["tbd", "tbd", "tbd", "tbd", "tbd", "tbd"],
+            "map": "ChampionsField"
+        }
+    ]
+}
