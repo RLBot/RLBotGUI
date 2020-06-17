@@ -61,7 +61,6 @@ export default {
                 result[1].available = false
                 result[2].available = false
             }
-            console.log(result)
             return result
         },
     },
