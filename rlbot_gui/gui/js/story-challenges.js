@@ -115,10 +115,17 @@ export default {
                 </b-col>
                 <b-col cols-xl="auto" class="story-dark-bg" style="min-width:200px; max-width:800px;">
                     <b-row class="h-50">
-                        <b-card header="City Info" bg-variant="dark" class="w-100">
-                        <b-card-text>
-                            Click on a City to get started.
-                        </b-card-text>
+                        <b-card 
+                            v-bind:header="'City: ' + cityDisplayInfo[selectedCityId].displayName"
+                            bg-variant="dark" class="w-100">
+                        <b-list-group flush v-if="selectedCityId" class="story-card-text">
+                            <b-list-group-item
+                                v-for="challenge in challenges[selectedCityId]"
+                                v-bind:variant="challengeCompleted(challenge.id) ? 'success' : 'default'"
+                                v-bind:class="challengeCompleted(challenge.id) ? 'completed-challenge' : ''">
+                                {{challenge.display}}
+                            </b-list-group-item>
+                        </b-list-group>
                         </b-card>
                     </b-row>
                     <b-row class="h-50">
@@ -146,10 +153,15 @@ export default {
             },
             game_in_progress: {},
             gameCompleted: false,
-            cityDisplayInfo: CITY_DISPLAY_INFO
+            cityDisplayInfo: CITY_DISPLAY_INFO,
+            challenges: null,
+            selectedCityId: 'INTRO',
         }
     },
     methods: {
+        challengeCompleted: function(id) {
+            return this.saveState.challenges_completed[id] != undefined;
+        },
         getCityStateTooltip: function (city) {
             let state = this.getCityState(city)
             let displayName = CITY_DISPLAY_INFO[city].displayName
@@ -163,9 +175,10 @@ export default {
         },
         handleCityClick: function (city) {
             console.log(CITY_DISPLAY_INFO[city].displayName)
+            this.selectedCityId = city;
         },
         showIntroPopup: function () {
-            return this.saveState.challenges_completed["INTRO-1"] == undefined
+            return !this.challengeCompleted("INTRO-1")
         },
         getCityState: function (city) {
             let state = CITY_STATE.LOCKED
@@ -176,7 +189,7 @@ export default {
 
                 // only need to check completion of challenges if we are open
                 let donereqs = DONE_REQS[city]
-                if (donereqs.every(c => this.saveState.challenges_completed[c] != undefined)) {
+                if (donereqs.every(c => this.challengeCompleted(c))) {
                     state = CITY_STATE.DONE
                 }
             }
@@ -187,4 +200,7 @@ export default {
             return CITY_ICON_MAP[this.getCityState(city)]
         }
     },
+    created: async function() {
+        this.challenges = await eel.get_challenges_json()()
+    }
 }
