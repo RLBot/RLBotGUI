@@ -1,0 +1,23 @@
+{
+    "psyonix-pro": {
+        "name": "Psyonix Pro",
+        "type": "psyonix",
+        "skill": 0.5
+    },
+    "psyonix-allstar-name": {
+        "name": "Psyonix Allstar",
+        "type": "psyonix",
+        "skill": 1
+    },
+    "adversity": {
+        "name": "Adversity",
+        "type": "rlbot",
+        "skill": 1,
+        "path": "C:\\Users\\Triton\\Projects\\RLBotGUI\\RLBotPackDeletable\\RLBotPack-master\\RLBotPack\\ReliefBotFamily\\README\\adversity_bot.cfg"
+    },
+    "tbd": {
+        "name": "Psyonix Allstar",
+        "type": "psyonix",
+        "skill": 1
+    }
+}
