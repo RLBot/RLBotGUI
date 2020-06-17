@@ -38,10 +38,10 @@ def make_match_config(challenge: dict, upgrades: dict, player_configs: List[Play
     match_config.mutators = MutatorConfig()
     match_config.mutators.max_score = challenge.get("max_score")
 
-    if "boost-33" in upgrades:
+    if challenge.get("disabledBoost"):
         match_config.mutators.boost_amount = boost_amount_mutator_types[4]  # No boost
 
-    if "rubmle" in upgrades:
+    if "rumble" in upgrades:
         match_config.mutators.rumble = rumble_mutator_types[3]  # Civilized
 
     match_config.player_configs = player_configs

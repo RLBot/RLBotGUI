@@ -6,6 +6,7 @@
             "opponentBots": ["pysonix-pro"],
             "max_score": "3 Goals",
             "map": "BeckwithPark",
+            "disabledBoost": true,
             "display": "Win something so we know you can drive"
         }
     ],
