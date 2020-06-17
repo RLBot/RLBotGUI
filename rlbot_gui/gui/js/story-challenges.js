@@ -165,7 +165,7 @@ export default {
             console.log(CITY_DISPLAY_INFO[city].displayName)
         },
         showIntroPopup: function () {
-            return !this.saveState.challenges_completed["INTRO-1"]
+            return this.saveState.challenges_completed["INTRO-1"] == undefined
         },
         getCityState: function (city) {
             let state = CITY_STATE.LOCKED
@@ -176,7 +176,7 @@ export default {
 
                 // only need to check completion of challenges if we are open
                 let donereqs = DONE_REQS[city]
-                if (donereqs.every(c => this.saveState.challenges_completed[c])) {
+                if (donereqs.every(c => this.saveState.challenges_completed[c] != undefined)) {
                     state = CITY_STATE.DONE
                 }
             }
