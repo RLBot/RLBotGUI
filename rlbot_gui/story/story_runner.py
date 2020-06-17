@@ -21,8 +21,12 @@ with open(path.join(path.dirname(__file__), 'challenges.json')) as c:
 @eel.expose
 def story_story_test():
     print("In story_story_test()")
-    eel.spawn(story_test)
+    # easy way to trigger python code
 
+
+@eel.expose
+def get_challenges_json():
+    return CHALLENGES
 
 @eel.expose
 def story_load_save():

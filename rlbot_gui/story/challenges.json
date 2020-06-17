@@ -39,7 +39,8 @@
                 "win": true,
                 "selfDemoCount": 0
             },
-            "map": "Wasteland"
+            "map": "Wasteland",
+            "display": "Win without getting demoed the whole game"
         },
         {
             "id": "WASTELAND-2",
@@ -49,7 +50,8 @@
                 "win": true,
                 "demoAchievedCount": 1
             },
-            "map": "Wasteland"
+            "map": "Wasteland",
+            "display": "Win and get at least one demo"
         }
     ],
     "CAMPANDSNIPE": [
