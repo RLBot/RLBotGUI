@@ -11,7 +11,7 @@ Rocket League Story Mode
     - Upgrades are listed and respect save state
 - Remaining:
     - We need to come up with descriptions of each challenge and implement each match's setup
-    - Need to implement actual purchases and usages of save state
+    - Need to implement usage of purchases
     - Need to implement teammates
 
 
