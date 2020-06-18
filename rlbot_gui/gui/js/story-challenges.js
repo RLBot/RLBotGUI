@@ -1,6 +1,7 @@
 
 import StoryUpgrades from './story-upgrades.js' 
 
+const DEBUG = false;
 const CITIES = {
     'INTRO': 1,
 }
@@ -59,16 +60,44 @@ const DONE_REQS = {
     'CHAMPIONSIAN': ['CHAMPIONSIAN-1']
 }
 
-
-
 export default {
     name: 'story-challenges',
-    props: { saveState: Object, game_in_progress: Object },
+    props: { saveState: Object },
     components:  {
         "story-upgrades": StoryUpgrades
     },
     template: /*html*/`
-    <div class="pt-2">
+    <div class="pt-2" v-if="challenges">
+        <b-button v-if="${DEBUG}" @click="$bvModal.show('game_completed_popup')">Open Modal</b-button>
+        <b-modal id="game_completed_popup" ok-only
+            v-bind:title="game_completed.completed ? 'Congratulations!' : 'Try again!'"
+            v-bind:header-bg-variant="game_completed.completed ? 'success' : 'danger'"
+            @hide="closeGameCompletedPopup"
+            header-text-variant="light">
+            <div class="d-block text-center">
+            <div v-if="game_completed.completed">
+                <b-img src="imgs/story/coin.png" />
+                <p>
+                Congrats on finishing the challenge! 
+                You have earned 1 currency!
+                </p>
+                <p>
+                You can use it to recruit previous opponents, 
+                customize teammates or purchase upgrades.
+                </p>
+            </div>
+            <div v-if="!game_completed.completed">
+                <b-img src="imgs/story/exit-160px.png" />
+                <p>
+                Whoops! Looks like you failed.
+                Try again!
+                </p>
+                <p>
+                You can also play previous matches to earn extra currency.
+                </p>
+            </div>
+            </div>
+        </b-modal>
         <b-overlay :show="game_in_progress.name" rounded="sm" variant="dark">
             <b-card v-if="showIntroPopup()" class="mx-auto story-card-text" 
                 style="width: 600px;"
@@ -82,7 +111,7 @@ export default {
                 You are going to have to earn some cred by beating some nobody's like you first.
                 </b-card-text>
 
-                <b-button block @click="$emit('launch_challenge', 'INTRO-1')" variant="primary">
+                <b-button block @click="launchChallenge('INTRO-1')" variant="primary">
                 Let's do it!
                 </b-button>
             </b-card>
@@ -113,10 +142,10 @@ export default {
                         v-bind:style="{top: city.overlayLocation[0] + 'px', left: city.overlayLocation[1] + 'px'}" 
                         v-if="getCityState(cityId) !== ${CITY_STATE.OPEN}" />
                 </b-col>
-                <b-col cols-xl="auto" class="story-dark-bg" style="min-width:200px; max-width:800px;">
+                <b-col cols-xl="auto" style="min-width:200px; max-width:800px;">
                     <b-row class="h-50">
                         <b-card 
-                            v-bind:header="'City: ' + cityDisplayInfo[selectedCityId].displayName"
+                            v-bind:title="'City: ' + cityDisplayInfo[selectedCityId].displayName"
                             bg-variant="dark" class="w-100">
                         <b-list-group flush v-if="selectedCityId" class="story-card-text">
                             <b-list-group-item
@@ -152,13 +181,50 @@ export default {
             saveState: { // python StoryState class is canonical defintion of this object
             },
             game_in_progress: {},
-            gameCompleted: false,
             cityDisplayInfo: CITY_DISPLAY_INFO,
             challenges: null,
             selectedCityId: 'INTRO',
         }
     },
+    computed: {
+        game_completed: function() {
+            let result = {};
+            if (this.game_in_progress.name) {
+                let name = this.game_in_progress.name
+                let status = this.saveState.challenges_attempts[name]
+                if (status && status.length == this.game_in_progress.target_count) {
+                    let results = status[this.game_in_progress.target_count - 1]
+                    result = {
+                        name: name,
+                        completed: results.challenge_completed
+                    }
+                    this.$bvModal.show('game_completed_popup')
+                }
+            }
+            return result
+        } 
+    },
     methods: {
+        closeGameCompletedPopup: function() {
+            this.game_in_progress = {}
+            this.switchSelectedCityToBest();
+        },
+        switchSelectedCityToBest: function() {
+            let cur = this.selectedCityId;
+            if (this.getCityState(cur) == CITY_STATE.OPEN) {
+                // current city is stll open, that's fine
+                return
+            }
+            else {
+                let open_cities = Object.keys(
+                    this.cityDisplayInfo).filter((city) =>
+                        this.getCityState(city) == CITY_STATE.OPEN)
+                
+                let random = open_cities[Math.floor(Math.random() * open_cities.length)]
+                console.log(random)
+                this.selectedCityId = random
+            }
+        },
         challengeCompleted: function(id) {
             return this.saveState.challenges_completed[id] != undefined;
         },
@@ -174,8 +240,9 @@ export default {
             return displayName + ' ' + suffix[state]
         },
         handleCityClick: function (city) {
-            console.log(CITY_DISPLAY_INFO[city].displayName)
-            this.selectedCityId = city;
+            if (this.getCityState(city) != CITY_STATE.CLOSED) {
+                this.selectedCityId = city;
+            }
         },
         showIntroPopup: function () {
             return !this.challengeCompleted("INTRO-1")
@@ -193,14 +260,26 @@ export default {
                     state = CITY_STATE.DONE
                 }
             }
-            console.log(city, state)
             return state;
         },
         getOverlayForCity: function (city) {
             return CITY_ICON_MAP[this.getCityState(city)]
+        },
+        launchChallenge: function(challengeId) { 
+            let attempts = this.saveState.challenges_attempts[challengeId]
+            this.game_in_progress = {
+                name: challengeId,
+                target_count: (attempts ? attempts.length : 0) + 1
+            }
+            this.$emit('launch_challenge', challengeId);
+            console.log(this.game_in_progress)
         }
     },
     created: async function() {
         this.challenges = await eel.get_challenges_json()()
+        this.switchSelectedCityToBest()
+    },
+    watch: {
+
     }
 }

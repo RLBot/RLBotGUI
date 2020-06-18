@@ -3,7 +3,7 @@
         {
             "id": "INTRO-1",
             "humanTeamSize": 1,
-            "opponentBots": ["pysonix-pro"],
+            "opponentBots": ["psyonix-pro"],
             "max_score": "3 Goals",
             "map": "BeckwithPark",
             "disabledBoost": true,
