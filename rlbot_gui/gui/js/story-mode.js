@@ -23,8 +23,6 @@ export default {
             v-on:launch_challenge="launchChallenge"
             v-on:purchase_upgrade="purchaseUpgrade"
             v-bind:saveState="saveState"
-            v-bind:game_in_progress="game_in_progress"
-            v-bind:gameCompleted="gameCompleted"
             v-if="ui_state == ${UI_STATES.STORY_CHALLENGES}">
         </story-challenges>
 
@@ -43,8 +41,6 @@ export default {
         return {
             ui_state: UI_STATES.LOAD_SAVE,
             saveState: null,
-            game_in_progress: {},
-            gameCompleted: false,
             debugStoryState: DEBUG_STORY_STATE,
             debugStateHelper: ''
         }
@@ -73,13 +69,6 @@ export default {
             this.storyStateMachine(UI_STATES.START_SCREEN)
         },
         launchChallenge: function (name) {
-            console.log(name)
-            let attempts = this.saveState.challenges_attempts[name]
-            this.game_in_progress = {
-                name: name,
-                target_count: (attempts ? attempts.length : 0) + 1
-            }
-            console.log(this.game_in_progress)
             eel.launch_challenge(name)
         },
         purchaseUpgrade: function({id, currentCurrency}) {
@@ -103,23 +92,6 @@ export default {
         eel.expose(loadUpdatedSaveState)
         function loadUpdatedSaveState(saveState) {
             self.saveState = saveState
-
-            if (self.game_in_progress.name) {
-                console.log("Game was in progress so will disable it")
-                let name = self.game_in_progress.name
-                let status = self.saveState.challenges_attempts[name]
-                console.log(status)
-                console.log(status.length)
-                if (status && status.length == self.game_in_progress.target_count) {
-                    console.log("New results match target count!")
-                    let results = status[self.game_in_progress.target_count - 1]
-                    self.gameCompleted = {
-                        name: name,
-                        completed: results.challenge_completed
-                    }
-                    self.game_in_progress = {}
-                }
-            }
             console.log(saveState)
         }
 
