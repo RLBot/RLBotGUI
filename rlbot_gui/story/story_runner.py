@@ -109,6 +109,14 @@ class StoryState:
             self.upgrades[id] = True
             self.upgrades["currency"] -= 1
 
+    def add_recruit(self, id, current_currency):
+        """The only validation we do is to make sure current_currency is correct.
+        This is NOT a security mechanism, this is a bug prevention mechanism to
+        avoid accidental double clicks.
+        """
+        if (self.upgrades["currency"] == current_currency):
+            self.teammates.append(id)
+            self.upgrades["currency"] -= 1
 
     def add_match_result(
         self, challenge_id: str, challenge_completed: bool, game_results

@@ -20,8 +20,9 @@ export default {
         </story-start>
 
         <story-challenges
-            v-on:launch_challenge="launchChallenge"
-            v-on:purchase_upgrade="purchaseUpgrade"
+            @launch_challenge="launchChallenge"
+            @purchase_upgrade="purchaseUpgrade"
+            @recruit="recruit"
             v-bind:saveState="saveState"
             v-if="ui_state == ${UI_STATES.STORY_CHALLENGES}">
         </story-challenges>
@@ -76,6 +77,10 @@ export default {
             // Send eel a message to add id to purchases and reduce currency
             console.log("Will purchase: ", id);
             eel.purchase_upgrade(id, currentCurrency);
+        },
+        recruit: function({id, currentCurrency}) {
+            console.log("Will recruit ", id)
+            eel.recruit(id, currentCurrency)
         }
     },
     created: async function () {
