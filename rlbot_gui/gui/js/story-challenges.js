@@ -53,14 +53,6 @@ const CITY_DISPLAY_INFO = {
     }
 }
 
-const DONE_REQS = {
-    'INTRO': ['INTRO-1'],
-    'URBAN': ['URBAN-1'],
-    'WASTELAND': ['WASTELAND-1'],
-    'CAMPANDSNIPE': ['CAMPANDSNIPE-1'],
-    'CHAMPIONSIAN': ['CHAMPIONSIAN-1']
-}
-
 export default {
     name: 'story-challenges',
     props: { saveState: Object },
@@ -285,8 +277,8 @@ export default {
                 state = CITY_STATE.OPEN
 
                 // only need to check completion of challenges if we are open
-                let donereqs = DONE_REQS[city]
-                if (donereqs.every(c => this.challengeCompleted(c))) {
+                let cityChallenges = this.challenges[city]
+                if (cityChallenges.every(c => this.challengeCompleted(c.id))) {
                     state = CITY_STATE.DONE
                 }
             }
