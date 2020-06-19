@@ -46,6 +46,11 @@ export default {
     },
     'methods': {
         show: function(challenge) {
+            // we can remove this if we show other info in this screen
+            if (challenge.humanTeamSize == 1) {
+                this.$emit('teamPicked', {id: challenge.id})
+                return
+            }
             this.challenge = challenge
             this.$bvModal.show('pick_team_popup')
         }
