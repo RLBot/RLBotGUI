@@ -24,8 +24,8 @@ export default {
             this.text = event.target.value;
         },
         sendJSON: function () {
-            console.log(this.text)
-            this.$emit('input', JSON.parse(this.text))
+            console.log(this.text);
+            this.$emit('input', JSON.parse(this.text));
         }
     }
 };

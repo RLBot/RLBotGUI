@@ -50,45 +50,45 @@ export default {
             </b-modal>
         </div>
     `,
-    'data': function() {
+    'data': function () {
         return {
             pickedTeammates: []
-        }
+        };
     },
     computed: {
-        'enoughAvailableTeammates': function() {
-            return this.teammates.length >=  (this.challenge.humanTeamSize - 1)
+        'enoughAvailableTeammates': function () {
+            return this.teammates.length >= (this.challenge.humanTeamSize - 1);
         },
-        'pickedEnough': function() {
-            return this.pickedTeammates.length == (this.challenge.humanTeamSize - 1)
+        'pickedEnough': function () {
+            return this.pickedTeammates.length == (this.challenge.humanTeamSize - 1);
         },
-        'blockOkay': function() {
-            return (!this.enoughAvailableTeammates || !this.pickedEnough)
+        'blockOkay': function () {
+            return (!this.enoughAvailableTeammates || !this.pickedEnough);
         }
     },
     'methods': {
-        ok: function(id){
+        ok: function (id) {
             // let the popup close first
             let event = {
                 id: this.challenge.id,
                 pickedTeammates: this.pickedTeammates
-            }
-            setTimeout( () => this.$emit('teamPicked', event), 50)
+            };
+            setTimeout(() => this.$emit('teamPicked', event), 50);
         },
-        show: function(challenge) {
+        show: function (challenge) {
             // we can remove this if we show other info in this screen
             if (challenge.humanTeamSize == 1) {
-                this.$emit('teamPicked', {id: challenge.id})
-                return
+                this.$emit('teamPicked', { id: challenge.id });
+                return;
             }
-            this.challenge = challenge
-            this.$bvModal.show('pick_team_popup')
+            this.challenge = challenge;
+            this.$bvModal.show('pick_team_popup');
         },
-        pick: function(id) {
-            this.pickedTeammates.push(id)
+        pick: function (id) {
+            this.pickedTeammates.push(id);
         },
-        reset: function() {
-            this.pickedTeammates = []
+        reset: function () {
+            this.pickedTeammates = [];
         }
     }
-}
+};

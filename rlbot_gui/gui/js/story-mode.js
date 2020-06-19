@@ -1,8 +1,8 @@
 
-import StoryStart from './story-mode-start.js'
-import StoryChallenges from './story-challenges.js'
+import StoryStart from './story-mode-start.js';
+import StoryChallenges from './story-challenges.js';
 
-import AlterSaveState from './story-alter-save-state.js'
+import AlterSaveState from './story-alter-save-state.js';
 
 const UI_STATES = {
     'LOAD_SAVE': 0,
@@ -44,62 +44,62 @@ export default {
             saveState: null,
             debugStoryState: DEBUG_STORY_STATE,
             debugStateHelper: ''
-        }
+        };
     },
     methods: {
         storyStateMachine(targetState) {
-            console.log(`Going from ${this.ui_state} to ${targetState}`)
+            console.log(`Going from ${this.ui_state} to ${targetState}`);
             this.ui_state = targetState;
         },
         startMatch: async function (event) {
-            console.log("startMatch")
+            console.log("startMatch");
             setTimeout(() => {
-                console.log("gonna call eel")
-                eel.story_story_test()
+                console.log("gonna call eel");
+                eel.story_story_test();
             }, 0);
         },
         startStory: async function (event) {
-            console.log(event)
-            let state = await eel.story_new_save(event.teamname, event.teamcolor)()
-            this.saveState = state
-            this.storyStateMachine(UI_STATES.CITY_MAP)
+            console.log(event);
+            let state = await eel.story_new_save(event.teamname, event.teamcolor)();
+            this.saveState = state;
+            this.storyStateMachine(UI_STATES.CITY_MAP);
         },
         deleteSave: async function () {
-            await eel.story_delete_save()()
-            this.saveState = null
-            this.storyStateMachine(UI_STATES.START_SCREEN)
+            await eel.story_delete_save()();
+            this.saveState = null;
+            this.storyStateMachine(UI_STATES.START_SCREEN);
         },
-        launchChallenge: function ({id, pickedTeammates}) {
-            console.log("Starting match", name)
-            eel.launch_challenge(id, pickedTeammates)
+        launchChallenge: function ({ id, pickedTeammates }) {
+            console.log("Starting match", name);
+            eel.launch_challenge(id, pickedTeammates);
         },
-        purchaseUpgrade: function({id, currentCurrency}) {
+        purchaseUpgrade: function ({ id, currentCurrency }) {
             // Send eel a message to add id to purchases and reduce currency
             console.log("Will purchase: ", id);
             eel.purchase_upgrade(id, currentCurrency);
         },
-        recruit: function({id, currentCurrency}) {
-            console.log("Will recruit ", id)
-            eel.recruit(id, currentCurrency)
+        recruit: function ({ id, currentCurrency }) {
+            console.log("Will recruit ", id);
+            eel.recruit(id, currentCurrency);
         }
     },
     created: async function () {
         let state = await eel.story_load_save()();
         console.log(state);
         if (!state) {
-            this.storyStateMachine(UI_STATES.START_SCREEN)
+            this.storyStateMachine(UI_STATES.START_SCREEN);
         }
         else {
-            this.saveState = state
-            this.storyStateMachine(UI_STATES.STORY_CHALLENGES)
+            this.saveState = state;
+            this.storyStateMachine(UI_STATES.STORY_CHALLENGES);
         }
 
         let self = this;
-        eel.expose(loadUpdatedSaveState)
+        eel.expose(loadUpdatedSaveState);
         function loadUpdatedSaveState(saveState) {
-            self.saveState = saveState
-            console.log(saveState)
+            self.saveState = saveState;
+            console.log(saveState);
         }
 
     },
-}
+};

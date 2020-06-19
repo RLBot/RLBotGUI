@@ -1,24 +1,24 @@
 
-import StoryUpgrades from './story-upgrades.js' 
-import StoryPickTeam from './story-pick-team.js'
-import StoryRecruitList from './story-recruit-list.js'
+import StoryUpgrades from './story-upgrades.js';
+import StoryPickTeam from './story-pick-team.js';
+import StoryRecruitList from './story-recruit-list.js';
 
 const DEBUG = false;
 const CITIES = {
     'INTRO': 1,
-}
+};
 
 const CITY_STATE = {
     'LOCKED': 0,
     'OPEN': 1,
     'DONE': 2
-}
+};
 
 const CITY_ICON_MAP = [
     'imgs/story/lock-100px.png', // LOCKED
     '',
     'imgs/story/checkmark-100px.png' // DONE
-]
+];
 
 // clickArea's generated using https://www.image-map.net/
 const CITY_DISPLAY_INFO = {
@@ -52,12 +52,12 @@ const CITY_DISPLAY_INFO = {
         clickArea: "401,92,334,176,405,285,579,217,668,125,637,4,469,21",
         prereqs: ['WASTELAND', 'CAMPANDSNIPE']
     }
-}
+};
 
 export default {
     name: 'story-challenges',
     props: { saveState: Object },
-    components:  {
+    components: {
         "story-upgrades": StoryUpgrades,
         "story-pick-team": StoryPickTeam,
         "story-recruit-list": StoryRecruitList
@@ -202,80 +202,80 @@ export default {
             cityDisplayInfo: CITY_DISPLAY_INFO,
             challenges: null,
             selectedCityId: 'INTRO',
-        }
+        };
     },
     computed: {
-        game_completed: function() {
+        game_completed: function () {
             let result = {};
             if (this.game_in_progress.name) {
-                let name = this.game_in_progress.name
-                let status = this.saveState.challenges_attempts[name]
+                let name = this.game_in_progress.name;
+                let status = this.saveState.challenges_attempts[name];
                 if (status && status.length == this.game_in_progress.target_count) {
-                    let results = status[this.game_in_progress.target_count - 1]
+                    let results = status[this.game_in_progress.target_count - 1];
                     result = {
                         name: name,
                         completed: results.challenge_completed
-                    }
-                    this.$bvModal.show('game_completed_popup')
+                    };
+                    this.$bvModal.show('game_completed_popup');
                 }
             }
-            return result
+            return result;
         },
-        recruit_list: function() {
-            const completed = this.saveState.challenges_completed
-            let recruits = {}
+        recruit_list: function () {
+            const completed = this.saveState.challenges_completed;
+            let recruits = {};
 
             for (let city of Object.keys(this.challenges)) {
                 for (let challenge of this.challenges[city]) {
                     if (completed[challenge.id] != undefined) {
                         // This challenge was completed so opponents are available
-                        const botIds = challenge.opponentBots
+                        const botIds = challenge.opponentBots;
                         for (let botId of botIds) {
-                            let bot = Object.assign({}, this.bots_config[botId]) 
-                            bot.recruited = this.saveState.teammates.includes(botId)
-                            bot.id = botId
-                            recruits[botId] = bot
+                            let bot = Object.assign({}, this.bots_config[botId]);
+                            bot.recruited = this.saveState.teammates.includes(botId);
+                            bot.id = botId;
+                            recruits[botId] = bot;
                         }
                     }
                 }
             }
-            return Object.values(recruits)
+            return Object.values(recruits);
         },
     },
     methods: {
-        closeGameCompletedPopup: function() {
-            this.game_in_progress = {}
+        closeGameCompletedPopup: function () {
+            this.game_in_progress = {};
             this.switchSelectedCityToBest();
         },
-        switchSelectedCityToBest: function() {
+        switchSelectedCityToBest: function () {
             let cur = this.selectedCityId;
             if (this.getCityState(cur) == CITY_STATE.OPEN) {
                 // current city is stll open, that's fine
-                return
+                return;
             }
             else {
                 let open_cities = Object.keys(
                     this.cityDisplayInfo).filter((city) =>
-                        this.getCityState(city) == CITY_STATE.OPEN)
-                
-                let random = open_cities[Math.floor(Math.random() * open_cities.length)]
-                console.log(random)
-                this.selectedCityId = random
+                        this.getCityState(city) == CITY_STATE.OPEN);
+
+                let random = open_cities[Math.floor(Math.random() * open_cities.length)];
+                console.log(random);
+                this.selectedCityId = random;
             }
         },
-        challengeCompleted: function(id) {
+        challengeCompleted: function (id) {
             return this.saveState.challenges_completed[id] != undefined;
         },
         getCityStateTooltip: function (city) {
-            let state = this.getCityState(city)
-            let displayName = CITY_DISPLAY_INFO[city].displayName
+            let state = this.getCityState(city);
+            let displayName = CITY_DISPLAY_INFO[city].displayName;
 
             const suffix = [
                 'is still locked.',
                 'is open to challenge!',
                 'has been completed!'
-            ]
-            return displayName + ' ' + suffix[state]
+            ];
+            return displayName + ' ' + suffix[state];
         },
         handleCityClick: function (city) {
             if (this.getCityState(city) != CITY_STATE.CLOSED) {
@@ -283,42 +283,42 @@ export default {
             }
         },
         showIntroPopup: function () {
-            return !this.challengeCompleted("INTRO-1")
+            return !this.challengeCompleted("INTRO-1");
         },
         getCityState: function (city) {
-            let state = CITY_STATE.LOCKED
+            let state = CITY_STATE.LOCKED;
 
-            let prereqs = this.cityDisplayInfo[city].prereqs
+            let prereqs = this.cityDisplayInfo[city].prereqs;
             if (prereqs.every(c => (this.getCityState(c) === CITY_STATE.DONE))) {
-                state = CITY_STATE.OPEN
+                state = CITY_STATE.OPEN;
 
                 // only need to check completion of challenges if we are open
-                let cityChallenges = this.challenges[city]
+                let cityChallenges = this.challenges[city];
                 if (cityChallenges.every(c => this.challengeCompleted(c.id))) {
-                    state = CITY_STATE.DONE
+                    state = CITY_STATE.DONE;
                 }
             }
             return state;
         },
         getOverlayForCity: function (city) {
-            return CITY_ICON_MAP[this.getCityState(city)]
+            return CITY_ICON_MAP[this.getCityState(city)];
         },
-        launchChallenge: function(challengeId, pickedTeammates=[]) { 
-            let attempts = this.saveState.challenges_attempts[challengeId]
+        launchChallenge: function (challengeId, pickedTeammates = []) {
+            let attempts = this.saveState.challenges_attempts[challengeId];
             this.game_in_progress = {
                 name: challengeId,
                 target_count: (attempts ? attempts.length : 0) + 1
-            }
-            this.$emit('launch_challenge', {id: challengeId, pickedTeammates});
-            console.log(this.game_in_progress)
+            };
+            this.$emit('launch_challenge', { id: challengeId, pickedTeammates });
+            console.log(this.game_in_progress);
         }
     },
-    created: async function() {
-        this.challenges = await eel.get_challenges_json()()
-        this.bots_config = await eel.get_bots_json()()
-        this.switchSelectedCityToBest()
+    created: async function () {
+        this.challenges = await eel.get_challenges_json()();
+        this.bots_config = await eel.get_bots_json()();
+        this.switchSelectedCityToBest();
     },
     watch: {
 
     }
-}
+};

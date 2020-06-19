@@ -19,4 +19,4 @@ export default {
         </b-list-group-item>
     </b-list-group>
     `,
-}
+};
