@@ -69,6 +69,7 @@ export default {
             this.storyStateMachine(UI_STATES.START_SCREEN)
         },
         launchChallenge: function (name) {
+            console.log("Starting match", name)
             eel.launch_challenge(name)
         },
         purchaseUpgrade: function({id, currentCurrency}) {
