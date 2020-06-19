@@ -93,8 +93,8 @@ def make_player_configs(
     player_configs.append(make_human_config(Team.BLUE))
 
     for i in range(challenge["humanTeamSize"] - 1):
-        # human_picks are indices into teammates
-        teammate = teammates[human_picks[i]]
+        print(i)
+        teammate = BOTS_CONFIG[human_picks[i]]
         config = bot_to_player(teammate, Team.BLUE)
         player_configs.append(config)
 
@@ -190,6 +190,21 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
     
     # calculate completion 
     completed = results["human_won"]
+    if ("completionConditions" in challenge): 
+        completionConditions = challenge["completionConditions"]
+        
+        if (not completionConditions.get("win", True)):
+            # the "win" requirement is explicitly off
+            completed = True
+
+        if ("scoreDifference" in completionConditions):
+            print("In score diffie")
+            # ignore the team, jsut look at the differential
+            condition = completionConditions["scoreDifference"]
+            difference = results["score"][0]["score"] - results["score"][1]["score"]
+            print(f"{difference} >= {condition}")
+            completed = completed and (difference >= condition)
+
     return completed, results
 
 
