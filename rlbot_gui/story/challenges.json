@@ -14,15 +14,15 @@
         {
             "id": "URBAN-1",
             "humanTeamSize": 2,
-            "opponentBots": ["pysonix-allstar-name", "psyonix-allstar-name"],
+            "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
             "map": "UrbanCentral",
             "display": "Beat local up-and-comers in a 2v2."
         },
         {
             "id": "URBAN-2",
             "humanTeamSize": 2,
-            "opponentBots": ["pysonix-allstar-name", "psyonix-allstar-name"],
-            "completionConditionss": {
+            "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+            "completionConditions": {
                 "win": true,
                 "scoreDifference": 3
             },
