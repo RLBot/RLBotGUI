@@ -9,18 +9,10 @@ import eel
 from PyQt5.QtCore import QSettings
 
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
+from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG, CHALLENGES, CHALLENGES_BY_ID
 
 
 CURRENT_STATE = None
-CHALLENGES = None
-
-CHALLENGES_BY_ID = None
-
-with open(path.join(path.dirname(__file__), 'challenges.json')) as c:
-    CHALLENGES = json.load(c)
-    CHALLENGES_BY_ID = {
-        challenge["id"]: challenge 
-        for city in CHALLENGES.values() for challenge in city }
 
 ##### EEL -- these are the hooks exposed to JS
 @eel.expose
@@ -32,6 +24,10 @@ def story_story_test():
 @eel.expose
 def get_challenges_json():
     return CHALLENGES
+
+@eel.expose
+def get_bots_json():
+    return BOTS_CONFIG
 
 @eel.expose
 def story_load_save():
