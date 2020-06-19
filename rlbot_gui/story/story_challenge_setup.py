@@ -3,6 +3,7 @@ from os import path
 import random
 
 from datetime import datetime
+import time
 from typing import List, Tuple
 
 from rlbot.utils.game_state_util import GameState
@@ -156,6 +157,7 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
     At the end of the game, calculate results and the challenge completion
     and return that
     """
+    tick_rate = 120
     # completion_conditions = challenge["completionConditions"]
     results = None
     max_boost = 0
@@ -164,7 +166,7 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
     elif 'boost-33' in upgrades:
         max_boost = 33
 
-    for _ in range(20*60*120): # max wait for 20 mins at 120fps, just for worst case
+    while True:
         game_tick_packet = GameTickPacket()
         packet = setup_manager.game_interface.fresh_live_data_packet(
             game_tick_packet, 1000, WITNESS_ID
@@ -187,6 +189,8 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
         if packet.game_info.is_match_ended:
             results = packet_to_game_results(packet)
             break
+        
+        time.sleep(1.0/tick_rate)
     
     # calculate completion 
     completed = results["human_won"]
