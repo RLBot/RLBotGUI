@@ -9,7 +9,11 @@ import eel
 from PyQt5.QtCore import QSettings
 
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
-from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG, CHALLENGES, CHALLENGES_BY_ID
+from rlbot_gui.story.load_story_descriptions import (
+    BOTS_CONFIG,
+    CHALLENGES,
+    CHALLENGES_BY_ID,
+)
 
 
 CURRENT_STATE = None
@@ -25,9 +29,11 @@ def story_story_test():
 def get_challenges_json():
     return CHALLENGES
 
+
 @eel.expose
 def get_bots_json():
     return BOTS_CONFIG
+
 
 @eel.expose
 def story_load_save():
@@ -73,10 +79,13 @@ def purchase_upgrade(id, current_currency):
     CURRENT_STATE.add_purchase(id, current_currency)
     flush_save_state()
 
+
 @eel.expose
 def recruit(id, current_currency):
     CURRENT_STATE.add_recruit(id, current_currency)
     flush_save_state()
+
+
 ##### Reverse eel's
 
 
@@ -105,7 +114,7 @@ class StoryState:
         This is NOT a security mechanism, this is a bug prevention mechanism to
         avoid accidental double clicks.
         """
-        if (self.upgrades["currency"] == current_currency):
+        if self.upgrades["currency"] == current_currency:
             self.upgrades[id] = True
             self.upgrades["currency"] -= 1
 
@@ -114,7 +123,7 @@ class StoryState:
         This is NOT a security mechanism, this is a bug prevention mechanism to
         avoid accidental double clicks.
         """
-        if (self.upgrades["currency"] == current_currency):
+        if self.upgrades["currency"] == current_currency:
             self.teammates.append(id)
             self.upgrades["currency"] -= 1
 
@@ -136,7 +145,6 @@ class StoryState:
             index = len(self.challenges_attempts[challenge_id]) - 1
             self.challenges_completed[challenge_id] = index
             self.upgrades["currency"] += 1
-
 
     @staticmethod
     def new(name, color_secondary):

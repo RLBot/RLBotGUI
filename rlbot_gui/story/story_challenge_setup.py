@@ -28,12 +28,14 @@ from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
 WITNESS_ID = random.randint(0, 1e5)
 
 
-def make_match_config(challenge: dict, upgrades: dict, player_configs: List[PlayerConfig]):
+def make_match_config(
+    challenge: dict, upgrades: dict, player_configs: List[PlayerConfig]
+):
     """Setup the match, following the challenge rules and user's upgrades
     """
     match_config = MatchConfig()
 
-    match_config.game_mode = game_mode_types[0] # Soccar
+    match_config.game_mode = game_mode_types[0]  # Soccar
     match_config.game_map = challenge.get("map")
     match_config.enable_state_setting = True
 
@@ -131,8 +133,7 @@ def packet_to_game_results(game_tick_packet: GameTickPacket):
     ]
 
     scores_sorted = [
-        {"team_index": t.team_index, "score": t.score}
-        for t in game_tick_packet.teams
+        {"team_index": t.team_index, "score": t.score} for t in game_tick_packet.teams
     ]
     scores_sorted.sort(key=lambda x: x["score"], reverse=True)
     human_won = scores_sorted[0]["team_index"] == human_player.team
@@ -146,7 +147,9 @@ def packet_to_game_results(game_tick_packet: GameTickPacket):
     }
 
 
-def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManager) -> Tuple[bool, dict]:
+def manage_game_state(
+    challenge: dict, upgrades: dict, setup_manager: SetupManager
+) -> Tuple[bool, dict]:
     """
     Continuously track the game and adjust state to respect challenge rules and
     upgrades.
@@ -157,9 +160,9 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
     # completion_conditions = challenge["completionConditions"]
     results = None
     max_boost = 0
-    if 'boost-100' in upgrades:
+    if "boost-100" in upgrades:
         max_boost = 100
-    elif 'boost-33' in upgrades:
+    elif "boost-33" in upgrades:
         max_boost = 33
 
     while True:
@@ -185,19 +188,19 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
         if packet.game_info.is_match_ended:
             results = packet_to_game_results(packet)
             break
-        
-        time.sleep(1.0/tick_rate)
-    
-    # calculate completion 
+
+        time.sleep(1.0 / tick_rate)
+
+    # calculate completion
     completed = results["human_won"]
-    if ("completionConditions" in challenge): 
+    if "completionConditions" in challenge:
         completionConditions = challenge["completionConditions"]
-        
-        if (not completionConditions.get("win", True)):
+
+        if not completionConditions.get("win", True):
             # the "win" requirement is explicitly off
             completed = True
 
-        if ("scoreDifference" in completionConditions):
+        if "scoreDifference" in completionConditions:
             print("In score diffie")
             # ignore the team, jsut look at the differential
             condition = completionConditions["scoreDifference"]
@@ -208,7 +211,9 @@ def manage_game_state(challenge: dict, upgrades: dict, setup_manager: SetupManag
     return completed, results
 
 
-def run_challenge(match_config: MatchConfig, challenge: dict, upgrades: dict) -> Tuple[bool, dict]:
+def run_challenge(
+    match_config: MatchConfig, challenge: dict, upgrades: dict
+) -> Tuple[bool, dict]:
     """Launch the game and keep track of the state"""
     setup_manager = SetupManager()
     setup_manager.early_start_seconds = 5
@@ -223,8 +228,11 @@ def run_challenge(match_config: MatchConfig, challenge: dict, upgrades: dict) ->
 
     return game_results
 
+
 def configure_challenge(challenge: dict, saveState, human_picks: List[int]):
-    player_configs = make_player_configs(challenge, human_picks, saveState.team_info, saveState.teammates)
+    player_configs = make_player_configs(
+        challenge, human_picks, saveState.team_info, saveState.teammates
+    )
     match_config = make_match_config(challenge, saveState.upgrades, player_configs)
 
     return match_config
