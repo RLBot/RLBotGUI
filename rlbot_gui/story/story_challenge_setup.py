@@ -172,30 +172,35 @@ def manage_game_state(
         max_boost = 33
 
     while True:
-        game_tick_packet = GameTickPacket()
-        packet = setup_manager.game_interface.fresh_live_data_packet(
-            game_tick_packet, 1000, WITNESS_ID
-        )
+        try:
+            game_tick_packet = GameTickPacket()
+            packet = setup_manager.game_interface.fresh_live_data_packet(
+                game_tick_packet, 1000, WITNESS_ID
+            )
 
-        # keep track of demo
-        # adjust boost
-        game_state = GameState.create_from_gametickpacket(packet)
-        changed = False
+            # keep track of demo
+            # adjust boost
+            game_state = GameState.create_from_gametickpacket(packet)
+            changed = False
 
-        car = game_state.cars[0]
-        if car.boost_amount > max_boost:
-            car.boost_amount = max_boost
-            changed = True
+            car = game_state.cars[0]
+            if car.boost_amount > max_boost:
+                car.boost_amount = max_boost
+                changed = True
 
-        if changed:
-            setup_manager.game_interface.set_game_state(game_state)
+            if changed:
+                setup_manager.game_interface.set_game_state(game_state)
 
-        # only handle the win condition for now
-        if packet.game_info.is_match_ended:
-            results = packet_to_game_results(packet)
-            break
+            # only handle the win condition for now
+            if packet.game_info.is_match_ended:
+                results = packet_to_game_results(packet)
+                break
 
-        time.sleep(1.0 / tick_rate)
+            time.sleep(1.0 / tick_rate)
+        except KeyError:
+            # it means that the game was interrupted by the user
+            print("Looks like the game is in a bad state")
+            return False, {}
 
     # calculate completion
     completed = results["human_won"]
