@@ -1,4 +1,3 @@
-
 from os import path
 
 import json
@@ -12,8 +11,8 @@ with open(path.join(path.dirname(__file__), "bots.json")) as botlist:
     BOTS_CONFIG = json.load(botlist)
 
 # CHALLENGES
-with open(path.join(path.dirname(__file__), 'challenges.json')) as c:
+with open(path.join(path.dirname(__file__), "challenges.json")) as c:
     CHALLENGES = json.load(c)
     CHALLENGES_BY_ID = {
-        challenge["id"]: challenge 
-        for city in CHALLENGES.values() for challenge in city }
+        challenge["id"]: challenge for city in CHALLENGES.values() for challenge in city
+    }
