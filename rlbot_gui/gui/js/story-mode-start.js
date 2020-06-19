@@ -44,16 +44,16 @@ export default {
             },
             accent_color_info: { primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15 },
             colors: null,
-        }
+        };
     },
     methods: {
         submit: function (event) {
-            console.log("Submitting story-start")
-            event.preventDefault()
+            console.log("Submitting story-start");
+            event.preventDefault();
         },
         getColors: async function () {
             let response = await fetch('json/colors.json');
-            console.log("Got colors")
+            console.log("Got colors");
             this.colors = await response.json();
         },
         getColorRGB: function (colorID) {
@@ -65,7 +65,7 @@ export default {
         },
         colorStyle: function () {
             let id = this.form.teamcolor;
-            let rgb = this.getColorRGB(id)
+            let rgb = this.getColorRGB(id);
             return 'rgb(' + (rgb ? rgb.toString() : '') + ')';
         },
         colorStyleFromRowAndColumn: function (row, column) {
@@ -75,7 +75,7 @@ export default {
         },
     },
     beforeMount: function () {
-        console.log("Getting colors")
+        console.log("Getting colors");
         this.getColors();
     }
-}
+};

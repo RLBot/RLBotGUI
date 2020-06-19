@@ -16,7 +16,7 @@ const UPGRADES = [
         "id": "rumble",
         "text": "Rumble Powerups",
     }
-]
+];
 
 export default {
     name: 'story-upgrades',
@@ -46,25 +46,25 @@ export default {
                 text: item.text,
                 purchased: Boolean(this.upgradeSaveState[item.id]),
                 available: currency > 0
-            }))
+            }));
 
             // Screw it, hard coding it is
             if (!result[0].purchased) {
                 // If boost-33 is not purchased, 
                 // boost-100, boost-recharge is disabled
-                result[1].available = false
-                result[2].available = false
+                result[1].available = false;
+                result[2].available = false;
             }
-            return result
+            return result;
         },
     },
     methods: {
-        purchase: function(id) {
-            console.log("In purchases", id)
+        purchase: function (id) {
+            console.log("In purchases", id);
             this.$emit('purchase_upgrade', {
                 id,
                 currentCurrency: this.upgradeSaveState.currency
-            })
+            });
         }
     }
-}
+};
