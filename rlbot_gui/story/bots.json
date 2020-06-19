@@ -10,7 +10,7 @@
         "skill": 1
     },
     "adversity": {
-        "name": "Adversity",
+        "name": "AdversityBot",
         "type": "rlbot",
         "skill": 1,
         "path": "C:\\Users\\Triton\\Projects\\RLBotGUI\\RLBotPackDeletable\\RLBotPack-master\\RLBotPack\\ReliefBotFamily\\README\\adversity_bot.cfg"
