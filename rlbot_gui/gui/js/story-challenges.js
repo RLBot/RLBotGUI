@@ -168,8 +168,15 @@ export default {
                         </b-list-group>
                         </b-card>
                     </b-row>
-                    <b-row class="h-50">
-                    <b-card no-body bg-variant="dark w-100">
+                    <b-row>
+                        <div show variant="primary"
+                            class="d-flex justify-content-between align-items-center w-100 mt-1 p-3 bg-info text-white">
+                            <div>Currency</div>
+                            <div>{{saveState.upgrades.currency}} <b-img src="imgs/story/coin.png" height="30px"/></div>
+                        </div>
+                    </b-row>
+                    <b-row class="mt-1 overflow-auto" style="max-height: 300px; min-height:300px">
+                    <b-card no-body class="w-100">
                         <b-tabs content-class="mt-3" fill>
                             <b-tab title="Upgrades" active class="story-card-text">
                                 <story-upgrades 

@@ -21,14 +21,8 @@ const UPGRADES = [
 export default {
     name: 'story-upgrades',
     props: { upgradeSaveState: Object },
-    template: `
+    template: /*html*/`
     <b-list-group>
-        <b-list-group-item variant="primary"
-            class="d-flex justify-content-between align-items-center">
-            <div>Currency</div>
-            <div>{{this.upgradeSaveState.currency}} <b-img src="imgs/story/coin.png" height="30px"/></div>
-        </b-list-group-item>
-
         <b-list-group-item 
             v-for="upgrade in upgrades_ui"
             class="d-flex justify-content-between align-items-center"
