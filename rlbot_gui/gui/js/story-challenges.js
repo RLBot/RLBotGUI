@@ -68,6 +68,7 @@ export default {
             ref="pickTeamPopup"
             :challenge="{}"
             :teammates="saveState.teammates"
+            :botInfo="bots_config"
             @teamPicked="launchChallenge($event.id, $event.pickedTeammates)">
         </story-pick-team>
         <b-button v-if="${DEBUG}" @click="$bvModal.show('game_completed_popup')">Open Modal</b-button>
@@ -308,7 +309,7 @@ export default {
                 name: challengeId,
                 target_count: (attempts ? attempts.length : 0) + 1
             }
-            this.$emit('launch_challenge', challengeId);
+            this.$emit('launch_challenge', {id: challengeId, pickedTeammates});
             console.log(this.game_in_progress)
         }
     },
