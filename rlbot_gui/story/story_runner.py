@@ -64,8 +64,8 @@ def story_save_state():
 
 
 @eel.expose
-def launch_challenge(challenge_id):
-    launch_challenge_with_config(challenge_id)
+def launch_challenge(challenge_id, pickedTeammates):
+    launch_challenge_with_config(challenge_id, pickedTeammates)
 
 
 @eel.expose
@@ -73,6 +73,10 @@ def purchase_upgrade(id, current_currency):
     CURRENT_STATE.add_purchase(id, current_currency)
     flush_save_state()
 
+@eel.expose
+def recruit(id, current_currency):
+    CURRENT_STATE.add_recruit(id, current_currency)
+    flush_save_state()
 ##### Reverse eel's
 
 
@@ -140,11 +144,11 @@ class StoryState:
         return s
 
 
-def launch_challenge_with_config(challenge_id):
+def launch_challenge_with_config(challenge_id, pickedTeammates):
     print(f"In launch_challenge {challenge_id}")
 
     challenge = CHALLENGES_BY_ID[challenge_id]
-    match_config = configure_challenge(challenge, CURRENT_STATE, [])
+    match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates)
     completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades)
     CURRENT_STATE.add_match_result(challenge_id, completed, results)
 

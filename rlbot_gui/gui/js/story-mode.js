@@ -68,9 +68,9 @@ export default {
             this.saveState = null
             this.storyStateMachine(UI_STATES.START_SCREEN)
         },
-        launchChallenge: function (name) {
+        launchChallenge: function ({id, pickedTeammates}) {
             console.log("Starting match", name)
-            eel.launch_challenge(name)
+            eel.launch_challenge(id, pickedTeammates)
         },
         purchaseUpgrade: function({id, currentCurrency}) {
             // Send eel a message to add id to purchases and reduce currency
