@@ -53,7 +53,13 @@ def make_match_config(
 
 
 def rlbot_to_player_config(player: dict, team: Team):
-    return PlayerConfig.bot_config(player["path"], team)
+    player_config = PlayerConfig()
+    player_config.bot = True
+    player_config.rlbot_controlled = True
+    player_config.name = player["name"]
+    player_config.team = team.value
+    player_config.config_path = player["path"]
+    return player_config
 
 
 def make_human_config(team: Team):
