@@ -1,6 +1,7 @@
 
 import StoryUpgrades from './story-upgrades.js' 
 import StoryPickTeam from './story-pick-team.js'
+import StoryRecruitList from './story-recruit-list.js'
 
 const DEBUG = false;
 const CITIES = {
@@ -58,7 +59,8 @@ export default {
     props: { saveState: Object },
     components:  {
         "story-upgrades": StoryUpgrades,
-        "story-pick-team": StoryPickTeam
+        "story-pick-team": StoryPickTeam,
+        "story-recruit-list": StoryRecruitList
     },
     template: /*html*/`
     <div class="pt-2" v-if="challenges">
@@ -169,14 +171,20 @@ export default {
                     </b-row>
                     <b-row class="mt-1 overflow-auto" style="max-height: 300px; min-height:300px">
                     <b-card no-body class="w-100">
-                        <b-tabs content-class="mt-3" fill>
-                            <b-tab title="Upgrades" active class="story-card-text">
+                        <b-tabs content-class="mt-3" fill class="story-card-text">
+                            <b-tab title="Upgrades" >
                                 <story-upgrades 
                                     v-bind:upgradeSaveState="saveState.upgrades"
                                     @purchase_upgrade="$emit('purchase_upgrade', $event)">
                                 </story-upgrades>
                             </b-tab>
-                            <b-tab title="Teammates"><p>I'm the second tab</p></b-tab>
+                            <b-tab active title="Teammates">
+                                <story-recruit-list 
+                                    v-bind:recruitables="recruit_list"
+                                    @recruit="$emit('recruit', {id: $event, currentCurrency: saveState.upgrades.currency})"
+                                >
+                                </story-recruit-list>
+                            </b-tab>
                         </b-tabs>
                     </b-card>
                     </b-row>
@@ -213,18 +221,25 @@ export default {
             return result
         },
         recruit_list: function() {
-            const completed = Object.keys(this.saveState.challenges_completed)
-            let recruits = []
+            const completed = this.saveState.challenges_completed
+            let recruits = {}
 
-            for (let challengId of completed) {
-                const botIds = this.challenges[challengId].opponentBots
-                for (let botId of botIds) {
-                    let bot = Object.assign({}, this.bots_config[botId]) 
-                    bot.recruited = this.saveState.teammates.includes(botId)
-                    recruits.push(bot)
+            for (let city of Object.keys(this.challenges)) {
+                for (let challenge of this.challenges[city]) {
+                    if (completed[challenge.id] != undefined) {
+                        // This challenge was completed so opponents are available
+                        const botIds = challenge.opponentBots
+                        for (let botId of botIds) {
+                            let bot = Object.assign({}, this.bots_config[botId]) 
+                            bot.recruited = this.saveState.teammates.includes(botId)
+                            bot.id = botId
+                            recruits[botId] = bot
+                        }
+                    }
                 }
             }
-        }
+            return Object.values(recruits)
+        },
     },
     methods: {
         closeGameCompletedPopup: function() {
@@ -299,7 +314,7 @@ export default {
     },
     created: async function() {
         this.challenges = await eel.get_challenges_json()()
-        this.bots_config = await eel.get_bots_json()
+        this.bots_config = await eel.get_bots_json()()
         this.switchSelectedCityToBest()
     },
     watch: {
