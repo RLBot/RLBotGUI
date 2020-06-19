@@ -226,16 +226,17 @@ export default {
             let recruits = {};
 
             for (let city of Object.keys(this.challenges)) {
+                if (this.getCityState(city) != CITY_STATE.DONE) {
+                    continue;
+                }
                 for (let challenge of this.challenges[city]) {
-                    if (completed[challenge.id] != undefined) {
-                        // This challenge was completed so opponents are available
-                        const botIds = challenge.opponentBots;
-                        for (let botId of botIds) {
-                            let bot = Object.assign({}, this.bots_config[botId]);
-                            bot.recruited = this.saveState.teammates.includes(botId);
-                            bot.id = botId;
-                            recruits[botId] = bot;
-                        }
+                    // This challenge was completed so opponents are available
+                    const botIds = challenge.opponentBots;
+                    for (let botId of botIds) {
+                        let bot = Object.assign({}, this.bots_config[botId]);
+                        bot.recruited = this.saveState.teammates.includes(botId);
+                        bot.id = botId;
+                        recruits[botId] = bot;
                     }
                 }
             }
