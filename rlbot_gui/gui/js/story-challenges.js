@@ -189,8 +189,7 @@ export default {
     `,
     data() {
         return {
-            saveState: { // python StoryState class is canonical defintion of this object
-            },
+            bots_config: {},
             game_in_progress: {},
             cityDisplayInfo: CITY_DISPLAY_INFO,
             challenges: null,
@@ -213,7 +212,20 @@ export default {
                 }
             }
             return result
-        } 
+        },
+        recruit_list: function() {
+            const completed = Object.keys(this.saveState.challenges_completed)
+            let recruits = []
+
+            for (let challengId of completed) {
+                const botIds = this.challenges[challengId].opponentBots
+                for (let botId of botIds) {
+                    let bot = Object.assign({}, this.bots_config[botId]) 
+                    bot.recruited = this.saveState.teammates.includes(botId)
+                    recruits.push(bot)
+                }
+            }
+        }
     },
     methods: {
         closeGameCompletedPopup: function() {
@@ -288,6 +300,7 @@ export default {
     },
     created: async function() {
         this.challenges = await eel.get_challenges_json()()
+        this.bots_config = await eel.get_bots_json()
         this.switchSelectedCityToBest()
     },
     watch: {

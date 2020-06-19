@@ -23,7 +23,8 @@ from rlbot.matchconfig.match_config import (
 )
 from rlbot.setup_manager import SetupManager
 
-BOTS_CONFIG = None
+from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
+
 WITNESS_ID = random.randint(0, 1e5)
 
 
@@ -88,11 +89,6 @@ def bot_to_player(player: dict, team: Team):
 def make_player_configs(
     challenge: dict, human_picks: List[int], team_info: dict, teammates: List[dict]
 ):
-    global BOTS_CONFIG
-    if BOTS_CONFIG is None:
-        with open(path.join(path.dirname(__file__), "bots.json")) as botlist:
-            BOTS_CONFIG = json.load(botlist)
-
     player_configs = []
     player_configs.append(make_human_config(Team.BLUE))
 
