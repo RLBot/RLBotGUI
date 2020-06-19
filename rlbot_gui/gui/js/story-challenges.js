@@ -1,5 +1,6 @@
 
 import StoryUpgrades from './story-upgrades.js' 
+import StoryPickTeam from './story-pick-team.js'
 
 const DEBUG = false;
 const CITIES = {
@@ -64,10 +65,17 @@ export default {
     name: 'story-challenges',
     props: { saveState: Object },
     components:  {
-        "story-upgrades": StoryUpgrades
+        "story-upgrades": StoryUpgrades,
+        "story-pick-team": StoryPickTeam
     },
     template: /*html*/`
     <div class="pt-2" v-if="challenges">
+        <story-pick-team
+            ref="pickTeamPopup"
+            :challenge="{}"
+            :teammates="saveState.teammates"
+            @teamPicked="launchChallenge($event.id, $event.pickedTeammates)">
+        </story-pick-team>
         <b-button v-if="${DEBUG}" @click="$bvModal.show('game_completed_popup')">Open Modal</b-button>
         <b-modal id="game_completed_popup" ok-only
             v-bind:title="game_completed.completed ? 'Congratulations!' : 'Try again!'"
@@ -142,17 +150,20 @@ export default {
                         v-bind:style="{top: city.overlayLocation[0] + 'px', left: city.overlayLocation[1] + 'px'}" 
                         v-if="getCityState(cityId) !== ${CITY_STATE.OPEN}" />
                 </b-col>
-                <b-col cols-xl="auto" style="min-width:200px; max-width:800px;">
+                <b-col class="mh-100" cols-xl="auto" style="min-width:200px; max-width:800px;">
                     <b-row class="h-50">
                         <b-card 
                             v-bind:title="'City: ' + cityDisplayInfo[selectedCityId].displayName"
-                            bg-variant="dark" class="w-100">
+                            bg-variant="light" text-variant="dark" class="w-100">
                         <b-list-group flush v-if="selectedCityId" class="story-card-text">
                             <b-list-group-item
-                                v-for="challenge in challenges[selectedCityId]"
                                 v-bind:variant="challengeCompleted(challenge.id) ? 'success' : 'default'"
-                                v-bind:class="challengeCompleted(challenge.id) ? 'completed-challenge' : ''">
-                                {{challenge.display}}
+                                v-for="challenge in challenges[selectedCityId]">
+                                <b-button block
+                                    @click="$refs.pickTeamPopup.show(challenge)"
+                                    v-bind:variant="challengeCompleted(challenge.id)? 'outline-dark' : 'outline-primary' ">
+                                    {{challenge.display}}
+                                </b-button>
                             </b-list-group-item>
                         </b-list-group>
                         </b-card>
@@ -265,7 +276,7 @@ export default {
         getOverlayForCity: function (city) {
             return CITY_ICON_MAP[this.getCityState(city)]
         },
-        launchChallenge: function(challengeId) { 
+        launchChallenge: function(challengeId, pickedTeammates=[]) { 
             let attempts = this.saveState.challenges_attempts[challengeId]
             this.game_in_progress = {
                 name: challengeId,

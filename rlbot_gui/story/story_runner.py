@@ -14,8 +14,13 @@ from rlbot_gui.story.story_challenge_setup import run_challenge, configure_chall
 CURRENT_STATE = None
 CHALLENGES = None
 
+CHALLENGES_BY_ID = None
+
 with open(path.join(path.dirname(__file__), 'challenges.json')) as c:
     CHALLENGES = json.load(c)
+    CHALLENGES_BY_ID = {
+        challenge["id"]: challenge 
+        for city in CHALLENGES.values() for challenge in city }
 
 ##### EEL -- these are the hooks exposed to JS
 @eel.expose
@@ -64,8 +69,7 @@ def story_save_state():
 
 @eel.expose
 def launch_challenge(challenge_id):
-    if challenge_id == "INTRO-1":
-        launch_intro_1()
+    launch_challenge_with_config(challenge_id)
 
 
 @eel.expose
@@ -140,12 +144,12 @@ class StoryState:
         return s
 
 
-def launch_intro_1():
-    print("In launch_intro_1")
+def launch_challenge_with_config(challenge_id):
+    print(f"In launch_challenge {challenge_id}")
 
-    intro_1 = CHALLENGES["INTRO"][0]
-    match_config = configure_challenge(intro_1, CURRENT_STATE, [])
-    completed, results = run_challenge(match_config, intro_1, CURRENT_STATE.upgrades)
-    CURRENT_STATE.add_match_result(intro_1["id"], completed, results)
+    challenge = CHALLENGES_BY_ID[challenge_id]
+    match_config = configure_challenge(challenge, CURRENT_STATE, [])
+    completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades)
+    CURRENT_STATE.add_match_result(challenge_id, completed, results)
 
     flush_save_state()
