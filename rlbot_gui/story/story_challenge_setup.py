@@ -8,7 +8,7 @@ import time
 import traceback
 
 from rlbot.utils.game_state_util import GameState
-from rlbot.utils.structures.game_data_struct import GameTickPacket
+from rlbot.utils.structures.game_data_struct import GameTickPacket, Vector3
 from rlbot.parsing.match_settings_config_parser import (
     game_mode_types,
     boost_amount_mutator_types,
@@ -24,15 +24,16 @@ from rlbot.matchconfig.match_config import (
     Team,
 )
 from rlbot.setup_manager import SetupManager
-from rlbot_gui import gui as rlbot_gui
+from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
 
 from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
+
 WITNESS_ID = random.randint(0, 1e5)
 
 DEBUG_MODE_SHORT_GAMES = True
 
 
-def setup_failure_freeplay(setup_manager: SetupManager):
+def setup_failure_freeplay(setup_manager: SetupManager, message: str):
     match_config = MatchConfig()
     match_config.game_mode = game_mode_types[0]
     match_config.game_map = "BeckwithPark"
@@ -49,13 +50,10 @@ def setup_failure_freeplay(setup_manager: SetupManager):
     setup_manager.load_match_config(match_config)
     setup_manager.start_match()
     color = setup_manager.game_interface.renderer.red()
-    text = f"YOU FAILED"
     setup_manager.game_interface.renderer.begin_rendering()
     # setup_manager.game_interface.renderer.draw_rect_2d(20, 20, 800, 800, True, setup_manager.game_interface.renderer.black())
-    setup_manager.game_interface.renderer.draw_string_2d(20, 200, 4, 4, text, color)
+    setup_manager.game_interface.renderer.draw_string_2d(20, 200, 4, 4, message, color)
     setup_manager.game_interface.renderer.end_rendering()
-
-
 
 
 def make_match_config(
@@ -87,11 +85,10 @@ def make_match_config(
 
 def rlbot_to_player_config(player: dict, team: Team):
     bot_path = player["path"]
-    if (isinstance(bot_path, list)):
+    if isinstance(bot_path, list):
         bot_path = path.join(*bot_path)
 
     if "$RLBOTPACKROOT" in bot_path:
-        # TODO: move out bot_folder_settings into its own utiltiy
         for bot_folder in rlbot_gui.bot_folder_settings["folders"].keys():
             adjusted_folder = path.join(bot_folder, "RLBotPack-master")
             subbed_path = bot_path.replace("$RLBOTPACKROOT", adjusted_folder)
@@ -253,28 +250,60 @@ def calculate_completion(challenge, manual_stats, results):
     return completed
 
 
-def update_manual_stats(
-    manual_stats: dict,
-    demo_state_helper: List[bool],
-    gamePacket: GameTickPacket,
-    challenge
-):
-    """
-    Updates manual_stats and demo_state_helper
-    """
-    # keep track of demos
-    for i in range(len(demo_state_helper)):
-        cur_player = gamePacket.game_cars[i]
-        if demo_state_helper[i]:  # we will toggle this if we have respawned
-            demo_state_helper[i] = cur_player.is_demolished
-        elif cur_player.is_demolished:
-            print("SOMEONE GOT DEMO'd")
-            demo_state_helper[i] = True
-            if i == 0:
-                manual_stats["recievedDemos"] += 1
-            elif i >= challenge["humanTeamSize"]:
-                # its an opponent bot
-                manual_stats["opponentRecievedDemos"] += 1
+class ManualStatsTracker:
+    def __init__(self, challenge):
+        self.stats = {
+            "recievedDemos": 0,  # how many times the human got demo'd
+            "opponentRecievedDemos": 0,  # how many times the opponents were demo'd
+            "humanGoalsScored": 0,
+        }
+
+        self._challenge = challenge
+        self._player_count = challenge["humanTeamSize"] + len(challenge["opponentBots"])
+        self._human_team = Team.BLUE.value  # hardcoded for now
+        self._human_player_index = 0
+
+        # helper to find discrete demo events
+        self._in_demo_state = [False] * self._player_count
+        # helper to find who scored!
+        self._last_touch_by_team = [None, None]
+        self._last_score_by_team = [0, 0]
+
+    def updateStats(self, gamePacket: GameTickPacket):
+        """
+        Update and track stats based on the game packet
+        """
+        # keep track of demos
+        for i in range(len(self._in_demo_state)):
+            cur_player = gamePacket.game_cars[i]
+            if self._in_demo_state[i]:  # we will toggle this if we have respawned
+                self._in_demo_state[i] = cur_player.is_demolished
+            elif cur_player.is_demolished:
+                print("SOMEONE GOT DEMO'd")
+                self._in_demo_state[i] = True
+                if i == self._human_player_index:
+                    self.stats["recievedDemos"] += 1
+                elif i >= self._challenge["humanTeamSize"]:
+                    # its an opponent bot
+                    self.stats["opponentRecievedDemos"] += 1
+
+        touch = gamePacket.game_ball.latest_touch
+        team = touch.team
+        self._last_touch_by_team[team] = touch
+
+        for i in range(2):  # iterate of [{team_index, score}]
+            team_index = gamePacket.teams[i].team_index
+            new_score = gamePacket.teams[i].score
+            if new_score != self._last_score_by_team[team_index]:
+                self._last_score_by_team[team_index] = new_score
+
+                if team_index == self._human_team:
+                    last_touch_player = self._last_touch_by_team[
+                        team_index
+                    ].player_index
+                    if last_touch_player == self._human_player_index:
+                        self.stats["humanGoalsScored"] += 1
+                        print("humanGoalsScored")
 
 
 def manage_game_state(
@@ -296,13 +325,10 @@ def manage_game_state(
     elif "boost-33" in upgrades:
         max_boost = 33
 
-    stats = {
-        "recievedDemos": 0,  # how many times the human got demo'd
-        "opponentRecievedDemos": 0,  # how many times the opponents were demo'd
-    }
+    half_field = challenge.get("limitations", {}).get("half-fied", False)
 
-    player_count = challenge["humanTeamSize"] + len(challenge["opponentBots"])
-    in_demo_state = [False] * player_count  # helper to find discrete demo events
+    stats_tracker = ManualStatsTracker(challenge)
+    do_once_helper = True
     while True:
         try:
             game_tick_packet = GameTickPacket()
@@ -310,13 +336,14 @@ def manage_game_state(
                 game_tick_packet, 1000, WITNESS_ID
             )
 
+            if do_once_helper:
+                do_once_helper = False
 
-            update_manual_stats(stats, in_demo_state, packet, challenge)
+            stats_tracker.updateStats(packet)
 
-            if has_user_perma_failed(challenge, stats):
-                print("Wow that's a failure")
+            if has_user_perma_failed(challenge, stats_tracker.stats):
                 time.sleep(2)
-                setup_failure_freeplay(setup_manager)
+                setup_failure_freeplay(setup_manager, "You failed the challenge!")
                 return early_failure
 
             game_state = GameState.create_from_gametickpacket(packet)
@@ -329,10 +356,14 @@ def manage_game_state(
                 human_state.boost_amount = max_boost
                 changed = True
 
+            if half_field and human_state.physics.location.y > 0:
+                human_state.physics.location.y = 0
+                human_state.physics.velocity.y = -abs(human_state.physics.velocity.y)
+                changed = True
+
             if changed:
                 setup_manager.game_interface.set_game_state(game_state)
 
-            # only handle the win condition for now
             if packet.game_info.is_match_ended:
                 results = packet_to_game_results(packet)
                 break
@@ -342,10 +373,10 @@ def manage_game_state(
             traceback.print_exc()
             # it means that the game was interrupted by the user
             print("Looks like the game is in a bad state")
-            setup_failure_freeplay(setup_manager)
+            setup_failure_freeplay(setup_manager, "The game was interrupted.")
             return early_failure
 
-    return calculate_completion(challenge, stats, results), results
+    return calculate_completion(challenge, stats_tracker.stats, results), results
 
 
 def run_challenge(
@@ -368,7 +399,7 @@ def run_challenge(
         traceback.print_exc()
         print("Something failed with the game. Will proceed with shutdown")
         # need to make failure apparent to user
-        setup_failure_freeplay(setup_manager)
+        setup_failure_freeplay(setup_manager, "The game failed to continue")
         return False, {}
 
     setup_manager.shut_down()
