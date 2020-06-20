@@ -36,6 +36,7 @@ def setup_failure_freeplay(setup_manager: SetupManager):
     match_config = MatchConfig()
     match_config.game_mode = game_mode_types[0]
     match_config.game_map = "BeckwithPark"
+    match_config.enable_rendering = True
     match_config.instant_start = True
     match_config.skip_replays = True
 
@@ -47,6 +48,14 @@ def setup_failure_freeplay(setup_manager: SetupManager):
 
     setup_manager.load_match_config(match_config)
     setup_manager.start_match()
+    color = setup_manager.game_interface.renderer.red()
+    text = f"YOU FAILED"
+    setup_manager.game_interface.renderer.begin_rendering()
+    # setup_manager.game_interface.renderer.draw_rect_2d(20, 20, 800, 800, True, setup_manager.game_interface.renderer.black())
+    setup_manager.game_interface.renderer.draw_string_2d(20, 200, 4, 4, text, color)
+    setup_manager.game_interface.renderer.end_rendering()
+
+
 
 
 def make_match_config(
@@ -59,6 +68,7 @@ def make_match_config(
     match_config.game_mode = game_mode_types[0]  # Soccar
     match_config.game_map = challenge.get("map")
     match_config.enable_state_setting = True
+    match_config.enable_rendering = True
 
     match_config.mutators = MutatorConfig()
     match_config.mutators.max_score = challenge.get("max_score")
@@ -195,6 +205,8 @@ def has_user_perma_failed(challenge, manual_stats):
     Check if the user has perma-failed the challenge
     meaning more time in the game doesn't change the result
     """
+    if "completionConditions" not in challenge:
+        return False
     failed = False
     completionConditions = challenge["completionConditions"]
 
@@ -208,7 +220,7 @@ def has_user_perma_failed(challenge, manual_stats):
 
 def calculate_completion(challenge, manual_stats, results):
     """
-    parse challenge to file completionCondition and evaluate
+    parse challenge to file completionConditions and evaluate
     each.
     All conditions are "and"
     """
@@ -245,7 +257,7 @@ def update_manual_stats(
     manual_stats: dict,
     demo_state_helper: List[bool],
     gamePacket: GameTickPacket,
-    challenge,
+    challenge
 ):
     """
     Updates manual_stats and demo_state_helper
@@ -298,6 +310,7 @@ def manage_game_state(
                 game_tick_packet, 1000, WITNESS_ID
             )
 
+
             update_manual_stats(stats, in_demo_state, packet, challenge)
 
             if has_user_perma_failed(challenge, stats):
@@ -307,6 +320,7 @@ def manage_game_state(
                 return early_failure
 
             game_state = GameState.create_from_gametickpacket(packet)
+            # game_state.console_commands.append("ShowDebug PHYSICS")
             human_state = game_state.cars[0]  # this is used to change state
 
             changed = False
@@ -325,8 +339,10 @@ def manage_game_state(
 
             time.sleep(1.0 / tick_rate)
         except KeyError:
+            traceback.print_exc()
             # it means that the game was interrupted by the user
             print("Looks like the game is in a bad state")
+            setup_failure_freeplay(setup_manager)
             return early_failure
 
     return calculate_completion(challenge, stats, results), results
@@ -353,6 +369,7 @@ def run_challenge(
         print("Something failed with the game. Will proceed with shutdown")
         # need to make failure apparent to user
         setup_failure_freeplay(setup_manager)
+        return False, {}
 
     setup_manager.shut_down()
 
