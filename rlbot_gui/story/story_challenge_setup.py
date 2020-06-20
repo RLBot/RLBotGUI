@@ -15,6 +15,7 @@ from rlbot.parsing.match_settings_config_parser import (
     map_types,
     max_score_types,
     rumble_mutator_types,
+    match_length_types,
 )
 from rlbot.matchconfig.match_config import (
     PlayerConfig,
@@ -29,6 +30,23 @@ from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
 WITNESS_ID = random.randint(0, 1e5)
 
 DEBUG_MODE_SHORT_GAMES = True
+
+
+def setup_failure_freeplay(setup_manager: SetupManager):
+    match_config = MatchConfig()
+    match_config.game_mode = game_mode_types[0]
+    match_config.game_map = "BeckwithPark"
+    match_config.instant_start = True
+    match_config.skip_replays = True
+
+    mutators = MutatorConfig()
+    mutators.match_length = match_length_types[3]
+    match_config.mutators = mutators
+
+    match_config.player_configs = []
+
+    setup_manager.load_match_config(match_config)
+    setup_manager.start_match()
 
 
 def make_match_config(
@@ -158,14 +176,34 @@ def packet_to_game_results(game_tick_packet: GameTickPacket):
     }
 
 
+def has_user_perma_failed(challenge, manual_stats):
+    """
+    Check if the user has perma-failed the challenge
+    meaning more time in the game doesn't change the result
+    """
+    failed = False
+    completionConditions = challenge["completionConditions"]
+
+    if "selfDemoCount" in completionConditions:
+        survived = (
+            manual_stats["recievedDemos"] <= completionConditions["selfDemoCount"]
+        )
+        failed = failed or not survived
+    return failed
+
+
 def calculate_completion(challenge, manual_stats, results):
     """
     parse challenge to file completionCondition and evaluate
     each.
+    All conditions are "and"
     """
     completed = results["human_won"]
     if "completionConditions" not in challenge:
         return completed
+
+    if has_user_perma_failed(challenge, manual_stats):
+        return False
 
     completionConditions = challenge["completionConditions"]
 
@@ -178,14 +216,6 @@ def calculate_completion(challenge, manual_stats, results):
         condition = completionConditions["scoreDifference"]
         difference = results["score"][0]["score"] - results["score"][1]["score"]
         completed = completed and (difference >= condition)
-
-    if "selfDemoCount" in completionConditions:
-        print("In selfDemoCount")
-        survived = (
-            manual_stats["recievedDemos"] <= completionConditions["selfDemoCount"]
-        )
-        print(f"survived {survived}")
-        completed = completed and survived
 
     if "demoAchievedCount" in completionConditions:
         achieved = (
@@ -230,6 +260,7 @@ def manage_game_state(
     At the end of the game, calculate results and the challenge completion
     and return that
     """
+    early_failure = False, {}
     tick_rate = 120
     # completion_conditions = challenge["completionConditions"]
     results = None
@@ -255,6 +286,12 @@ def manage_game_state(
 
             update_manual_stats(stats, in_demo_state, packet, challenge)
 
+            if has_user_perma_failed(challenge, stats):
+                print("Wow that's a failure")
+                time.sleep(2)
+                setup_failure_freeplay(setup_manager)
+                return early_failure
+
             game_state = GameState.create_from_gametickpacket(packet)
             human_state = game_state.cars[0]  # this is used to change state
 
@@ -276,7 +313,7 @@ def manage_game_state(
         except KeyError:
             # it means that the game was interrupted by the user
             print("Looks like the game is in a bad state")
-            return False, {}
+            return early_failure
 
     return calculate_completion(challenge, stats, results), results
 
