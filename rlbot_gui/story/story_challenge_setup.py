@@ -30,7 +30,7 @@ from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
 
 WITNESS_ID = random.randint(0, 1e5)
 
-DEBUG_MODE_SHORT_GAMES = True
+DEBUG_MODE_SHORT_GAMES = False
 
 
 def setup_failure_freeplay(setup_manager: SetupManager, message: str):
@@ -38,8 +38,6 @@ def setup_failure_freeplay(setup_manager: SetupManager, message: str):
     match_config.game_mode = game_mode_types[0]
     match_config.game_map = "BeckwithPark"
     match_config.enable_rendering = True
-    match_config.instant_start = True
-    match_config.skip_replays = True
 
     mutators = MutatorConfig()
     mutators.match_length = match_length_types[3]
@@ -64,9 +62,10 @@ def make_match_config(
     match_config = MatchConfig()
 
     match_config.game_mode = game_mode_types[0]  # Soccar
+    if challenge.get("limitations", []).count("half-field"):
+        match_config.game_mode = game_mode_types[5] # Heatseeker
     match_config.game_map = challenge.get("map")
     match_config.enable_state_setting = True
-    match_config.enable_rendering = True
 
     match_config.mutators = MutatorConfig()
     match_config.mutators.max_score = challenge.get("max_score")
@@ -77,7 +76,7 @@ def make_match_config(
         match_config.mutators.boost_amount = boost_amount_mutator_types[4]  # No boost
 
     if "rumble" in upgrades:
-        match_config.mutators.rumble = rumble_mutator_types[3]  # Civilized
+        match_config.mutators.rumble = rumble_mutator_types[1]  # All rumble
 
     match_config.player_configs = player_configs
     return match_config
@@ -329,9 +328,10 @@ def manage_game_state(
     elif "boost-33" in upgrades:
         max_boost = 33
 
-    half_field = challenge.get("limitations", {}).get("half-fied", False)
+    half_field = challenge.get("limitations", []).count("half-field") > 0
 
     stats_tracker = ManualStatsTracker(challenge)
+    last_boost_bump_time = time.monotonic()
     do_once_helper = True
     while True:
         try:
@@ -356,14 +356,26 @@ def manage_game_state(
 
             changed = False
             # adjust boost
-            if human_state.boost_amount > max_boost:
+            if human_state.boost_amount > max_boost and not half_field:
+                # Adjust boost, unless in heatseeker mode
                 human_state.boost_amount = max_boost
                 changed = True
 
-            if half_field and human_state.physics.location.y > 0:
-                human_state.physics.location.y = 0
-                human_state.physics.velocity.y = -abs(human_state.physics.velocity.y)
-                changed = True
+            if "boost-recharge" in upgrades:
+                # increase boost at 10% per second
+                # we do it in chunks because otherwise we lag hard
+                now = time.monotonic()
+                if human_state.boost_amount < 100 and (now - last_boost_bump_time > 2):
+                    changed = True
+                    last_boost_bump_time = now
+                    human_state.boost_amount += 20
+
+
+            # This isn't fun :)
+            # if half_field and human_state.physics.location.y > 0:
+            #     human_state.physics.location.y = 0
+            #     human_state.physics.velocity.y = -abs(human_state.physics.velocity.y)
+            #     changed = True
 
             if changed:
                 setup_manager.game_interface.set_game_state(game_state)
