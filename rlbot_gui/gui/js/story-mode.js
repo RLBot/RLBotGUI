@@ -9,7 +9,7 @@ const UI_STATES = {
     'START_SCREEN': 1,
     'STORY_CHALLENGES': 2
 };
-const DEBUG_STORY_STATE = true; // only changes the UI state
+const DEBUG_STORY_STATE = false;
 
 
 export default {
@@ -28,7 +28,6 @@ export default {
         </story-challenges>
 
         <b-button @click="deleteSave" variant="danger" v-if="ui_state > ${UI_STATES.START_SCREEN}">Delete Save</b-button>
-        <b-button @click="startMatch()" class="mt-2">Test</b-button>
 
         <alter-save-state v-model="saveState" v-if="debugStoryState"/>
     </b-container>
@@ -70,7 +69,7 @@ export default {
             this.storyStateMachine(UI_STATES.START_SCREEN);
         },
         launchChallenge: function ({ id, pickedTeammates }) {
-            console.log("Starting match", name);
+            console.log("Starting match", id);
             eel.launch_challenge(id, pickedTeammates);
         },
         purchaseUpgrade: function ({ id, currentCurrency }) {
