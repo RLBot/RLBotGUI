@@ -247,6 +247,10 @@ def calculate_completion(challenge, manual_stats, results):
         )
         completed = completed and achieved
 
+    if "goalsScored" in completionConditions:
+        achieved = manual_stats["humanGoalsScored"] >= completionConditions["goalsScored"]
+        completed = completed and achieved
+
     return completed
 
 
