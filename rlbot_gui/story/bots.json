@@ -15,6 +15,48 @@
         "skill": 1,
         "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "adversity_bot.cfg"]
     },
+    "airbud": {
+        "name": "Airbud",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "air_bud.cfg"]
+    },
+    "reliefbot": {
+        "name": "ReliefBot",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "relief_bot.cfg"]
+    },
+    "sdc": {
+        "name": "Self-Driving Car",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Self-driving car", "self-driving-car.cfg"]
+    },
+    "kamael": {
+        "name": "Kamael",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Kamael", "Kamael.cfg"]
+    },
+    "botimus": {
+        "name": "BoltimusPrime",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "BotimusPrime", "botimus.cfg"]
+    },
+    "bumblebee": {
+        "name": "Bumblebee",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "BotimusPrime", "bumblebee.cfg"]
+    },
+    "baf": {
+        "name": "Missle - Heat Seeking Kind",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "blind_and_deaf", "bot.cfg"]
+    },
     "tbd": {
         "name": "Psyonix Allstar",
         "type": "psyonix",
