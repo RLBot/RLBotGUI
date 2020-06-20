@@ -238,8 +238,17 @@ def run_challenge(
     setup_manager.start_match()
     setup_manager.launch_bot_processes()
 
-    game_results = manage_game_state(challenge, upgrades, setup_manager)
+    game_results = None
+    try:
+        game_results = manage_game_state(challenge, upgrades, setup_manager)
+    except:
+        # no matter what happens we gotta continue
+        traceback.print_exc()
+        print("Something failed with the game. Will proceed with shutdown")
     setup_manager.shut_down()
+
+    if not game_results:
+        return False, {}
 
     return game_results
 
