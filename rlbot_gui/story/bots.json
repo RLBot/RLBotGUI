@@ -13,7 +13,7 @@
         "name": "AdversityBot",
         "type": "rlbot",
         "skill": 1,
-        "path": "C:\\Users\\Triton\\Projects\\RLBotGUI\\RLBotPackDeletable\\RLBotPack-master\\RLBotPack\\ReliefBotFamily\\README\\adversity_bot.cfg"
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "adversity_bot.cfg"]
     },
     "tbd": {
         "name": "Psyonix Allstar",
