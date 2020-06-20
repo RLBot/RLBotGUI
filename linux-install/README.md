@@ -20,7 +20,7 @@ There are a few steps to install this on Linux.
 
    We won't do anything else with the sudo permission you give us.
 
-5. Once the shell script does it's thing, the RLBotGUI will open! You can now take `RLBotGUI.sh` and put it where every in your system you want. The RLBotGUI has been installed, and you won't need to do it again. (Or at least for a while.)
+5. Once the shell script does its thing, the RLBotGUI will open! You can now take `RLBotGUI.sh` and put it wherever in your system you want. The RLBotGUI has been installed, and you won't need to do it again. (Or at least for a while.)
 
 ## Opening RLBotGUI after installation
 
