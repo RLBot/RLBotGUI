@@ -12,6 +12,7 @@ There are a few steps to install this on Linux.
    - `sudo apt-get update`
    - `sudo apt-get install python3.8` NOTE: If you're using Ubuntu 20.04, This won't be run as you'll already have Python 3.8 installed.
    - `sudo apt-get install python3.8-venv`
+   - `sudo apt-get install curl`
    - `sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
    - `sudo rm get-pip.py`
 

@@ -47,16 +47,34 @@ then
 
     python3.8 -m venv --without-pip env
 
-    # Enter the virtual environment and install pip, wheel and setuptools
+    # Enter the virtual environment
     source ./env/bin/activate
+
+    # Check if curl is installed and install it if needed
+    curl -V
+
+    if [ $? -gt 0 ]
+    then
+        echo "Installing cURL"
+        sudo apt-get install curl
+    fi
+
+    # Install pip, wheel and setuptools
     sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 
     python get-pip.py
+    if [ $? -gt 0 ]
+    then
+        echo "Installing distutils"
+        sudo apt-get install python3-distutils
+        python get-pip.py
+    fi
 
     # Pip is now installed, so we can remove get-pip.py as it's no longer needed
     sudo rm get-pip.py
 
-    pip install rlbot_gui rlbot
+    # Install packages
+    pip install eel rlbot_gui rlbot
 else
     # Enter the virtual environment and upgrade all packages
     echo "Activating virtual environment"
