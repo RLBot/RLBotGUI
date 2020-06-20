@@ -24,9 +24,9 @@ from rlbot.matchconfig.match_config import (
     Team,
 )
 from rlbot.setup_manager import SetupManager
+from rlbot_gui import gui as rlbot_gui
 
 from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
-
 WITNESS_ID = random.randint(0, 1e5)
 
 DEBUG_MODE_SHORT_GAMES = True
@@ -76,12 +76,26 @@ def make_match_config(
 
 
 def rlbot_to_player_config(player: dict, team: Team):
+    bot_path = player["path"]
+    if (isinstance(bot_path, list)):
+        bot_path = path.join(*bot_path)
+
+    if "$RLBOTPACKROOT" in bot_path:
+        # TODO: move out bot_folder_settings into its own utiltiy
+        for bot_folder in rlbot_gui.bot_folder_settings["folders"].keys():
+            adjusted_folder = path.join(bot_folder, "RLBotPack-master")
+            subbed_path = bot_path.replace("$RLBOTPACKROOT", adjusted_folder)
+            if path.exists(subbed_path):
+                print("it exists!")
+                bot_path = subbed_path
+                break
+
     player_config = PlayerConfig()
     player_config.bot = True
     player_config.rlbot_controlled = True
     player_config.name = player["name"]
     player_config.team = team.value
-    player_config.config_path = player["path"]
+    player_config.config_path = bot_path
     return player_config
 
 
