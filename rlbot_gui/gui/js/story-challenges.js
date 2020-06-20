@@ -297,7 +297,7 @@ export default {
         },
         switchSelectedCityToBest: function () {
             let cur = this.selectedCityId;
-            if (this.getCityState(cur) == CITY_STATE.OPEN) {
+            if (this.getCityState(cur) == CITY_STATE.OPEN || this.all_challenges_done) {
                 // current city is stll open, that's fine
                 return;
             }
@@ -326,7 +326,7 @@ export default {
             return displayName + ' ' + suffix[state];
         },
         handleCityClick: function (city) {
-            if (this.getCityState(city) != CITY_STATE.CLOSED) {
+            if (this.getCityState(city) != CITY_STATE.LOCKED) {
                 this.selectedCityId = city;
             }
         },
