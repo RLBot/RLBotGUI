@@ -24,8 +24,10 @@ export default {
             this.text = event.target.value;
         },
         sendJSON: function () {
-            console.log(this.text);
+            let state = JSON.parse(this.text)
+            console.log(state);
             this.$emit('input', JSON.parse(this.text));
+            eel.story_save_fake_state(state)
         }
     }
 };
