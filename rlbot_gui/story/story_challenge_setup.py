@@ -1,10 +1,11 @@
-import json
-from os import path
-import random
-
 from datetime import datetime
-import time
+from os import path
 from typing import List, Tuple
+
+import json
+import random
+import time
+import traceback
 
 from rlbot.utils.game_state_util import GameState
 from rlbot.utils.structures.game_data_struct import GameTickPacket
@@ -157,6 +158,69 @@ def packet_to_game_results(game_tick_packet: GameTickPacket):
     }
 
 
+def calculate_completion(challenge, manual_stats, results):
+    """
+    parse challenge to file completionCondition and evaluate
+    each.
+    """
+    completed = results["human_won"]
+    if "completionConditions" not in challenge:
+        return completed
+
+    completionConditions = challenge["completionConditions"]
+
+    if not completionConditions.get("win", True):
+        # the "win" requirement is explicitly off
+        completed = True
+
+    if "scoreDifference" in completionConditions:
+        # ignore the team, jsut look at the differential
+        condition = completionConditions["scoreDifference"]
+        difference = results["score"][0]["score"] - results["score"][1]["score"]
+        completed = completed and (difference >= condition)
+
+    if "selfDemoCount" in completionConditions:
+        print("In selfDemoCount")
+        survived = (
+            manual_stats["recievedDemos"] <= completionConditions["selfDemoCount"]
+        )
+        print(f"survived {survived}")
+        completed = completed and survived
+
+    if "demoAchievedCount" in completionConditions:
+        achieved = (
+            manual_stats["opponentRecievedDemos"]
+            >= completionConditions["demoAchievedCount"]
+        )
+        completed = completed and achieved
+
+    return completed
+
+
+def update_manual_stats(
+    manual_stats: dict,
+    demo_state_helper: List[bool],
+    gamePacket: GameTickPacket,
+    challenge,
+):
+    """
+    Updates manual_stats and demo_state_helper
+    """
+    # keep track of demos
+    for i in range(len(demo_state_helper)):
+        cur_player = gamePacket.game_cars[i]
+        if demo_state_helper[i]:  # we will toggle this if we have respawned
+            demo_state_helper[i] = cur_player.is_demolished
+        elif cur_player.is_demolished:
+            print("SOMEONE GOT DEMO'd")
+            demo_state_helper[i] = True
+            if i == 0:
+                manual_stats["recievedDemos"] += 1
+            elif i >= challenge["humanTeamSize"]:
+                # its an opponent bot
+                manual_stats["opponentRecievedDemos"] += 1
+
+
 def manage_game_state(
     challenge: dict, upgrades: dict, setup_manager: SetupManager
 ) -> Tuple[bool, dict]:
@@ -175,6 +239,13 @@ def manage_game_state(
     elif "boost-33" in upgrades:
         max_boost = 33
 
+    stats = {
+        "recievedDemos": 0,  # how many times the human got demo'd
+        "opponentRecievedDemos": 0,  # how many times the opponents were demo'd
+    }
+
+    player_count = challenge["humanTeamSize"] + len(challenge["opponentBots"])
+    in_demo_state = [False] * player_count  # helper to find discrete demo events
     while True:
         try:
             game_tick_packet = GameTickPacket()
@@ -182,14 +253,15 @@ def manage_game_state(
                 game_tick_packet, 1000, WITNESS_ID
             )
 
-            # keep track of demo
-            # adjust boost
-            game_state = GameState.create_from_gametickpacket(packet)
-            changed = False
+            update_manual_stats(stats, in_demo_state, packet, challenge)
 
-            car = game_state.cars[0]
-            if car.boost_amount > max_boost:
-                car.boost_amount = max_boost
+            game_state = GameState.create_from_gametickpacket(packet)
+            human_state = game_state.cars[0]  # this is used to change state
+
+            changed = False
+            # adjust boost
+            if human_state.boost_amount > max_boost:
+                human_state.boost_amount = max_boost
                 changed = True
 
             if changed:
@@ -206,24 +278,7 @@ def manage_game_state(
             print("Looks like the game is in a bad state")
             return False, {}
 
-    # calculate completion
-    completed = results["human_won"]
-    if "completionConditions" in challenge:
-        completionConditions = challenge["completionConditions"]
-
-        if not completionConditions.get("win", True):
-            # the "win" requirement is explicitly off
-            completed = True
-
-        if "scoreDifference" in completionConditions:
-            print("In score diffie")
-            # ignore the team, jsut look at the differential
-            condition = completionConditions["scoreDifference"]
-            difference = results["score"][0]["score"] - results["score"][1]["score"]
-            print(f"{difference} >= {condition}")
-            completed = completed and (difference >= condition)
-
-    return completed, results
+    return calculate_completion(challenge, stats, results), results
 
 
 def run_challenge(
