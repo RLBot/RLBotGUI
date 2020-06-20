@@ -137,6 +137,7 @@ class StoryState:
         if challenge_id not in self.challenges_attempts:
             # no defaultdict because we serialize the data
             self.challenges_attempts[challenge_id] = []
+
         self.challenges_attempts[challenge_id].append(
             {"game_results": game_results, "challenge_completed": challenge_completed}
         )
