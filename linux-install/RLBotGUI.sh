@@ -2,7 +2,7 @@
 
 set +v
 
-echo "Installing RLBotGUI is necessary, then launching!"
+echo "Installing RLBotGUI if necessary, then launching!"
 echo ""
 
 if [ ! -d "$HOME/.RLBotGUI" ]
