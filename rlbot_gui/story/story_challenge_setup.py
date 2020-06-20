@@ -337,10 +337,10 @@ def run_challenge(
         # no matter what happens we gotta continue
         traceback.print_exc()
         print("Something failed with the game. Will proceed with shutdown")
-    setup_manager.shut_down()
+        # need to make failure apparent to user
+        setup_failure_freeplay(setup_manager)
 
-    if not game_results:
-        return False, {}
+    setup_manager.shut_down()
 
     return game_results
 
