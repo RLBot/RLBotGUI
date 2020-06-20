@@ -75,6 +75,12 @@ then
 
     # Install packages
     pip install eel rlbot_gui rlbot
+    if [ $? -gt 0 ]
+    then
+        echo "Install Python-dev"
+        sudo apt-get install python3.8-dev
+    fi
+    
 else
     # Enter the virtual environment and upgrade all packages
     echo "Activating virtual environment"
