@@ -45,29 +45,34 @@
         {
             "id": "WASTELAND-2",
             "humanTeamSize": 3,
-            "opponentBots": ["adversity", "adversity", "psyonix-allstar-name"],
+            "opponentBots": ["adversity", "adversity", "reliefbot"],
             "completionConditions": {
                 "win": true,
-                "demoAchievedCount": 1
+                "demoAchievedCount": 2
             },
             "map": "Wasteland",
-            "display": "Win and get at least one demo"
+            "display": "Win and get at least two demos"
         }
     ],
     "CAMPANDSNIPE": [
         {
             "id": "CS-1",
-            "humanTeamSize": 3,
-            "opponentBots": ["tbd", "tbd", "tbd"],
+            "humanTeamSize": 2,
+            "opponentBots": ["adversity", "baf"],
             "limitations": ["half-field"],
-            "map": "AquaDome"
+            "map": "AquaDome",
+            "display": "The ball is moving a lot faster! Win this heatseeker match!"
         },
         {
             "id": "CS-2",
-            "humanTeamSize": 2,
-            "opponentBots": ["tbd", "tbd"],
+            "humanTeamSize": 1,
+            "opponentBots": ["adversity", "baf"],
             "limitations": ["half-field"],
-            "map": "AquaDome"
+            "completionConditions": {
+                "goalsScored": 1
+            },
+            "map": "AquaDome",
+            "display": "You are making the saves alone! Win 1v2!"
         }
 
     ],
@@ -75,20 +80,29 @@
         {
             "id": "CHAMP-1",
             "humanTeamSize": 3,
-            "opponentBots": ["tbd", "tbd", "tbd", "tbd"],
-            "map": "ChampionsField,"
+            "opponentBots": ["botimus", "sdc", "reliefbot", "adversity"],
+            "map": "ChampionsField",
+            "display": "Things are getting unfair. Can you win 3v4?"
         },
         {
             "id": "CHAMP-2",
             "humanTeamSize": 2,
-            "opponentBots": ["tbd", "tbd", "tbd", "tbd", "tbd"],
-            "map": "ChampionsField_Day"
+            "opponentBots": ["botimus", "sdc", "adversity"],
+            "map": "ChampionsField_Day",
+            "display": "2v3! Win and score at least 2 goals!",
+            "completionConditions": {
+                "goalsScored": 2
+            }
         },
         {
             "id": "CHAMP-3",
-            "humanTeamSize": 2,
-            "opponentBots": ["tbd", "tbd", "tbd", "tbd", "tbd", "tbd"],
-            "map": "ChampionsField"
+            "humanTeamSize": 1,
+            "opponentBots": ["botimus", "sdc", "adversity"],
+            "map": "ChampionsField",
+            "display": "1v3! The ultimate challenge! Win without getting demoed.",
+            "completionConditions": {
+                "selfDemoCount": 0
+            }
         }
     ]
 }
