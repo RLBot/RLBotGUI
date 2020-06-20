@@ -79,8 +79,9 @@ then
     then
         echo "Install Python-dev"
         sudo apt-get install python3.8-dev
+        pip install rlbot
     fi
-    
+
 else
     # Enter the virtual environment and upgrade all packages
     echo "Activating virtual environment"
