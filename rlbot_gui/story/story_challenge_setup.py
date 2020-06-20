@@ -27,6 +27,8 @@ from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
 
 WITNESS_ID = random.randint(0, 1e5)
 
+DEBUG_MODE_SHORT_GAMES = True
+
 
 def make_match_config(
     challenge: dict, upgrades: dict, player_configs: List[PlayerConfig]
@@ -41,6 +43,8 @@ def make_match_config(
 
     match_config.mutators = MutatorConfig()
     match_config.mutators.max_score = challenge.get("max_score")
+    if DEBUG_MODE_SHORT_GAMES:
+        match_config.mutators.max_score = "3 Goals"
 
     if challenge.get("disabledBoost"):
         match_config.mutators.boost_amount = boost_amount_mutator_types[4]  # No boost
