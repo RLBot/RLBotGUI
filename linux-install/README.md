@@ -6,7 +6,7 @@ There are a few steps to install this on Linux.
 
 1. Download `RLBotGUI.sh`
 2. `chmod +x /path/to/RLBotGUI.sh`
-3. `./RLBotGUI`
+3. `path/to/RLBotGUI`
 4. You will be asked to provide your password. The RLBotGUI requires sudo in order to run:
 
    - `sudo apt-get update`
