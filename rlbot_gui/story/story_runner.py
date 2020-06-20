@@ -70,6 +70,16 @@ def story_save_state():
 
 
 @eel.expose
+def story_save_fake_state(state):
+    """Only use for debugging.
+    Normally state should just flow from python to JS"""
+    global CURRENT_STATE
+    settings = QSettings("rlbotgui", "story_save")
+    CURRENT_STATE = CURRENT_STATE.from_dict(state)
+    settings.setValue("save", state)
+
+
+@eel.expose
 def launch_challenge(challenge_id, pickedTeammates):
     launch_challenge_with_config(challenge_id, pickedTeammates)
 
