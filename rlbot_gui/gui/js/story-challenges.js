@@ -78,7 +78,16 @@ export default {
             @hide="closeGameCompletedPopup"
             header-text-variant="light">
             <div class="d-block text-center">
-            <div v-if="game_completed.completed">
+            <div v-if="game_completed.completed && all_challenges_done">
+                <b-img src="imgs/story/victory-160px.png" />
+                <p>
+                Woah! You have completed all the challenges!
+                </p>
+                <p>
+                You are the Champion of this Rocket League Story!
+                </p>
+            </div>
+            <div v-if="game_completed.completed && !all_challenges_done">
                 <b-img src="imgs/story/coin.png" />
                 <p>
                 Congrats on finishing the challenge! 
@@ -205,7 +214,20 @@ export default {
         };
     },
     computed: {
+        all_challenges_done: function() {
+            for (let city of Object.keys(this.challenges)) {
+                for (let challenge of this.challenges[city]) {
+                    console.log(challenge.id)
+                    if (!this.challengeCompleted(challenge.id)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+
+        },
         game_completed: function () {
+            // True if a recent on going match finished
             let result = {};
             if (this.game_in_progress.name) {
                 let name = this.game_in_progress.name;
