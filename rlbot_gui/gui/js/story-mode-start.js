@@ -39,8 +39,8 @@ export default {
     data() {
         return {
             form: {
-                teamname: '',
-                teamcolor: ''
+                teamname: 'Team',
+                teamcolor: 0
             },
             accent_color_info: { primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15 },
             colors: null,
