@@ -45,7 +45,7 @@ export default {
 			</b-dropdown>
 		</b-navbar-nav>
 	</b-navbar>
-	<b-container fluid>
+	<b-container fluid class="rlbot-main-config">
 
 	
 

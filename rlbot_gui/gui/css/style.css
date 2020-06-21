@@ -26,7 +26,7 @@ body, html {
   min-height: 100%;
 }
 
-.card-body {
+.rlbot-main-config .card-body {
   padding: 5px;
 }
 
