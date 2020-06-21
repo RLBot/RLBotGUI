@@ -14,13 +14,13 @@ fi
 pushd "$HOME/.RLBotGUI"
 
 
-# If any version of Python 3.8 is not installed, install Python 3.8
+# If any version of Python 3.7 is not installed, then install it
 
 parsedVersion=$(echo "${version//./}")
-if [[ "$parsedVersion" -gt "380" ]]
+if [[ "$parsedVersion" -gt "370" && "$parsedVersion" -lt "380" ]]
 then
-    echo "Invalid Python install. Installing Python 3.8..."
-    sudo apt-get install python3.8
+    echo "Invalid Python install. Installing Python 3.7..."
+    sudo apt-get install python3.7
 else
     echo "Detected valid Python install"
 fi
@@ -30,22 +30,22 @@ fi
 if [ ! -e "$HOME/.RLBotGUI/env/bin/activate" ]
 then
 
-    # Check if the user has python3.8-venv installed. If they don't, then install it
+    # Check if the user has python3.7-venv installed. If they don't, then install it
     
-    python3.8 -c "import venv"
+    python3.7 -c "import venv"
 
     if [ $? -gt 0 ]
     then
-        echo "Installing the Python 3.8 Virtual Environment"
-        sudo apt-get install python3.8-venv
+        echo "Installing the Python 3.7 Virtual Environment"
+        sudo apt-get install python3.7-venv
     fi
 
     # Create the virutal environment
     # There's currently a bug in Ubuntu, so we must create the venv without pip and then manually install it
 
-    echo "Creating the Python 3.8 Virtual Environment"
+    echo "Creating the Python 3.7 Virtual Environment"
 
-    python3.8 -m venv --without-pip env
+    python3.7 -m venv --without-pip env
 
     # Enter the virtual environment
     source ./env/bin/activate
@@ -78,7 +78,7 @@ then
     if [ $? -gt 0 ]
     then
         echo "Install Python-dev"
-        sudo apt-get install python3.8-dev
+        sudo apt-get install python3.7-dev
         pip install rlbot
     fi
 
