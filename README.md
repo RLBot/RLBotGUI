@@ -17,6 +17,13 @@ to taking over more cities.
 
 Here are things that can use additional work/feedback:
 
+### Packaging/Deployment
+
+- One possibility worth discussing is if this project could be packaged
+as part of RLBotGui
+- If not, its probably worth removing the unused code from RLBotGui and
+package it on its own so people don't have to run it through python
+
 ### Features to add
 
 - Adding support for "bot personas". Currently bots are just added
