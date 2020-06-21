@@ -32,8 +32,7 @@ WITNESS_ID = random.randint(0, 1e5)
 
 DEBUG_MODE_SHORT_GAMES = False
 
-
-def setup_failure_freeplay(setup_manager: SetupManager, message: str):
+def setup_failure_freeplay(setup_manager: SetupManager, message: str, color_key="red"):
     match_config = MatchConfig()
     match_config.game_mode = game_mode_types[0]
     match_config.game_map = "BeckwithPark"
@@ -47,7 +46,7 @@ def setup_failure_freeplay(setup_manager: SetupManager, message: str):
 
     setup_manager.load_match_config(match_config)
     setup_manager.start_match()
-    color = setup_manager.game_interface.renderer.red()
+    color = getattr(setup_manager.game_interface.renderer, color_key)()
     setup_manager.game_interface.renderer.begin_rendering()
     # setup_manager.game_interface.renderer.draw_rect_2d(20, 20, 800, 800, True, setup_manager.game_interface.renderer.black())
     setup_manager.game_interface.renderer.draw_string_2d(20, 200, 4, 4, message, color)
@@ -213,6 +212,17 @@ def has_user_perma_failed(challenge, manual_stats):
         failed = failed or not survived
     return failed
 
+def end_by_mercy(challenge, manual_stats, results):
+    """Returns true if the human team is ahead by a lot
+    and the other challenges have finished"""
+    challenge_completed = calculate_completion(challenge, manual_stats, results)
+
+    mercy_difference = 5
+    # ignore the team, just look at the differential
+    score_differential = results["score"][0]["score"] - results["score"][1]["score"]
+
+    return score_differential >= mercy_difference and challenge_completed
+
 
 def calculate_completion(challenge, manual_stats, results):
     """
@@ -344,11 +354,17 @@ def manage_game_state(
                 do_once_helper = False
 
             stats_tracker.updateStats(packet)
+            results = packet_to_game_results(packet)
 
             if has_user_perma_failed(challenge, stats_tracker.stats):
-                time.sleep(2)
+                time.sleep(3)
                 setup_failure_freeplay(setup_manager, "You failed the challenge!")
                 return early_failure
+            
+            if end_by_mercy(challenge, stats_tracker.stats, results):
+                time.sleep(5)
+                setup_failure_freeplay(setup_manager, "Challenge completed by mercy rule!", "green")
+                return True, results
 
             game_state = GameState.create_from_gametickpacket(packet)
             # game_state.console_commands.append("ShowDebug PHYSICS")
@@ -381,7 +397,6 @@ def manage_game_state(
                 setup_manager.game_interface.set_game_state(game_state)
 
             if packet.game_info.is_match_ended:
-                results = packet_to_game_results(packet)
                 break
 
             time.sleep(1.0 / tick_rate)
