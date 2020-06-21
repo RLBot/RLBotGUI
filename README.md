@@ -19,13 +19,13 @@ Here are things that can use additional work/feedback:
 
 ### Features to add
 
-    - Adding support for "bot personas". Currently bots are just added
-      with their bot names and using their default appearance. If a bot is
-      used in different cities, they look the same. We should instead have 
-      different "persona" in each city with different names and different looks.
-    - Recruited teammate customization: Players should be able to customize
-      their teammates' looks.
-    - Should other types of challenges be added? Other types of stats to track?
+- Adding support for "bot personas". Currently bots are just added
+    with their bot names and using their default appearance. If a bot is
+    used in different cities, they look the same. We should instead have 
+    different "persona" in each city with different names and different looks.
+- Recruited teammate customization: Players should be able to customize
+    their teammates' looks.
+- Should other types of challenges be added? Other types of stats to track?
 
 ### Bot recommendations
 
@@ -35,11 +35,11 @@ for challenges that use particular skills of bots would be valuable too.
 
 ### UI Improvements
 
-    - Adding more animation and sound when a user succeeds might be good
-    - The CSS and HTML layout is pretty ad-hoc right now. Cleaning that up
-    would be good.
-    - A different map that has more RL feel would be very cool. Also ideas
-    for keeping the map extendible would be good too.
+- Adding more animation and sound when a user succeeds might be good
+- The CSS and HTML layout is pretty ad-hoc right now. Cleaning that up
+would be good.
+- A different map that has more RL feel would be very cool. Also ideas
+for keeping the map extendible would be good too.
 
 
 ## How to run
