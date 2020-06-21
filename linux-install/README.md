@@ -10,11 +10,11 @@ There are a few steps to install this on Linux.
 4. You will be asked to provide your password. The RLBotGUI requires sudo in order to run:
 
    - `sudo apt-get update`
-   - `sudo apt-get install python3.8` (If needed)
-   - `sudo apt-get install python3.8-venv` (If needed)
+   - `sudo apt-get install python3.7` (If needed)
+   - `sudo apt-get install python3.7-venv` (If needed)
    - `sudo apt-get install curl` (If needed)
    - `sudo apt-get install python3-distutils` (If needed)
-   - `sudo apt-get install python3.8-dev` (If needed)
+   - `sudo apt-get install python3.7-dev` (If needed)
    - `sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
    - `sudo rm get-pip.py`
 
