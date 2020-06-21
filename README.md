@@ -38,3 +38,33 @@ for challenges that use particular skills of bots would be valuable too.
     - Adding more animation and sound when a user succeeds might be good
     - The CSS and HTML layout is pretty ad-hoc right now. Cleaning that up
     would be good.
+    - A different map that has more RL feel would be very cool. Also ideas
+    for keeping the map extendible would be good too.
+
+
+## How to run
+
+Currently you have to clone this repo and run through there. If you have 
+RLBotGUI cloned, you can just add this repo as a remote and switch to that.
+
+If you are doing a fresh clone:
+
+```
+$ pip -r requirements.txt
+$ python run.py
+```
+
+This will load the RLBotGui website, you can go inside and click on "Add -> Download BotPack".
+This will download all the bots that are used i nthe story mode.
+
+After that you can click on the "Story Mode" button on the top right.
+
+
+## How to Customize
+
+Story Mode is primarily described in two JSON files:
+  - `rlbot_gui/story/bots.json`: This dictates what bots are available and how they are configured
+  - `rlbot_guid/story/challenges.json`: This dictates the challenges in each city
+  and what the goals and restrictions are of each challenge. It also picks which
+  bots to use for each level.
+    - Note that if you are adding new cities, there is more UI work involved.
