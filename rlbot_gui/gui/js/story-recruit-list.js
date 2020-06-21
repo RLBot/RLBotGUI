@@ -2,7 +2,8 @@
 export default {
     name: 'story-recruit-list',
     props: {
-        recruitables: Array
+        recruitables: Array,
+        currency: 0
     },
     template: /*html*/ `
     <b-list-group>
@@ -13,6 +14,7 @@ export default {
             {{recruit.name}}
             <b-button v-if="!recruit.recruited"
                 variant="success"
+                :disabled="currency < 1"
                 @click="$emit('recruit', recruit.id)">
                 Recruit
             </b-button>
