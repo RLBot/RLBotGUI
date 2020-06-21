@@ -77,6 +77,7 @@ export default {
             @teamPicked="launchChallenge($event.id, $event.pickedTeammates)">
         </story-pick-team>
         
+        <!-- Popup after completing a game -->
         <b-button v-if="${DEBUG}" @click="$bvModal.show('game_completed_popup')">Open Modal</b-button>
         <b-modal id="game_completed_popup" ok-only
             v-bind:title="game_completed.completed ? 'Congratulations!' : 'Try again!'"
@@ -117,6 +118,8 @@ export default {
             </div>
         </b-modal>
         <b-overlay :show="game_in_progress.name" rounded="sm" variant="dark">
+
+            <!-- Intro message-->
             <b-card v-if="showIntroPopup()" class="mx-auto story-card-text" 
                 style="width: 600px;"
                 title="Are you ready?">
@@ -134,9 +137,11 @@ export default {
                 </b-button>
             </b-card>
 
+            <!-- Main UI -->
             <b-container fluid v-if="!showIntroPopup()" >
                 <b-row>
                 <b-col cols="auto">
+                    <!-- Map and overlays -->
                    <img 
                         src="imgs/story/story-mode-map.png"
                         usemap="#story-image-map">
@@ -181,6 +186,7 @@ export default {
                 </b-col>
                 <b-col class="mh-100" cols-xl="auto" style="min-width:200px; max-width:800px;">
                     <b-row class="h-50">
+                    <!-- Selecting the challenge -->
                         <b-card 
                             title="Challenges"
                             bg-variant="light" text-variant="dark" class="w-100">
@@ -197,6 +203,7 @@ export default {
                         </b-list-group>
                         </b-card>
                     </b-row>
+                    <!-- Currency, upgrades and recruiting -->
                     <b-row>
                         <div show variant="primary"
                             class="d-flex justify-content-between align-items-center w-100 mt-1 p-3 bg-info text-white">
