@@ -8,7 +8,7 @@ RLBotGUI is a streamlined user interface that helps you run custom
 Rocket League bots for offline entertainment. It relies on the RLBot
 project to work its magic: https://github.com/RLBot/RLBot
 
-It works on Windows only.
+Works on Windows and Linux
 
 ## Installation
 
