@@ -188,7 +188,7 @@ export default {
                     <b-row class="h-50">
                     <!-- Selecting the challenge -->
                         <b-card 
-                            title="Challenges"
+                            :title="cityDisplayInfo[selectedCityId].displayName"
                             bg-variant="light" text-variant="dark" class="w-100">
                         <b-list-group flush v-if="selectedCityId" class="story-card-text">
                             <b-list-group-item
