@@ -248,7 +248,7 @@ export default {
 		    </template>
 		</b-toast>
 
-		<b-toast id="bot-pack-available-toast" title="Bot Pack Update Available!" toaster="b-toaster-bottom-center">
+		<b-toast id="bot-pack-available-toast" v-model="showBotpackUpdateSnackbar" title="Bot Pack Update Available!" toaster="b-toaster-bottom-center">
 			<b-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
 		</b-toast>
 

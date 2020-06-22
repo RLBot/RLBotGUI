@@ -45,3 +45,7 @@ rem Install and / or upgrade RLBot components
 rem Launch the GUI
 
 %rlbotpy% -c "from rlbot_gui import gui; gui.start()"
+
+if %ERRORLEVEL% GTR 0 (
+  pause
+)
