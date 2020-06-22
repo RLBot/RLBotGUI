@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Exo+2:300,300i,500,500i');
 
 :root {
-  --main-color: #fff;
   --hover: rgba(200,200,200,1);
   --hover-controls: rgba(255,255,255,0.1);
   --green-color: #3b7538;
@@ -17,7 +16,6 @@ body, html {
   font-family: 'Exo 2', sans-serif;
   font-weight: 300;
   font-size: 16px;
-  color: var(--main-color);
   margin: 0;
   padding-bottom: 10px;
   background-image: url(../imgs/arenas/DFHStadium.jpg);
@@ -300,4 +298,8 @@ button.icon-button {
 .form-group-inline .form-control {
   display: inline-block;
   width: initial;
+}
+
+#javascript-trouble {
+
 }

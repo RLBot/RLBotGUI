@@ -35,3 +35,7 @@ const app = new Vue({
         }
     }
 });
+
+// We loaded this javascript successfully, so get rid of the help message that suggests the new launcher script,
+// because they either don't need it or already have it.
+document.getElementById("javascript-trouble").remove();
