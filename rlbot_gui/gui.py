@@ -406,11 +406,16 @@ def get_last_botpack_commit_id():
     except:
         return 'unknown'
 
+@eel.expose
+def get_downloaded_botpack_commit_id():
+    settings = load_settings()
+    local_commit_id = settings.value(COMMIT_ID_KEY, type=str)
+    return local_commit_id
+
 
 @eel.expose
 def is_botpack_up_to_date():
-    settings = load_settings()
-    local_commit_id = settings.value(COMMIT_ID_KEY, type=str)
+    local_commit_id = get_downloaded_botpack_commit_id()
 
     if not local_commit_id:
         return False
