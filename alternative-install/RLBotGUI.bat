@@ -6,7 +6,7 @@ echo Installing RLBotGUI if necessary, then launching!
 if not exist "%LocalAppData%\RLBotGUIX" mkdir "%LocalAppData%\RLBotGUIX"
 pushd "%LocalAppData%\RLBotGUIX"
 
-py -3.7 --version
+py -3.7-64 --version
 
 rem If python 3.7 is not installed, then the above py command will cause a non-zero error level.
 
@@ -35,7 +35,7 @@ if not exist .\venv\Scripts\python.exe (
   call %~dp0\RefreshEnv.cmd
 
   echo Creating python virtual environment just for RLBot...
-  py -3.7 -m venv .\venv
+  py -3.7-64 -m venv .\venv
 )
 
 set rlbotpy=.\venv\Scripts\python.exe
