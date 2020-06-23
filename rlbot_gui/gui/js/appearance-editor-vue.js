@@ -58,11 +58,11 @@ export default {
 
 		<div>
 			<b-form inline>
-				<b-button @click="spawnCarForViewing(0)" class="mr-1">
+				<b-button variant="outline-primary" @click="spawnCarForViewing(0)" class="mr-1">
 					<b-icon icon="eye"></b-icon>
 					View blue car in game
 				</b-button>
-				<b-button @click="spawnCarForViewing(1)" class="mr-1">
+				<b-button variant="outline-primary" @click="spawnCarForViewing(1)" class="mr-1">
 					<b-icon icon="eye"></b-icon>
 					View orange car in game
 				</b-button>
@@ -73,7 +73,6 @@ export default {
 				</b-form-select>
 				<span style="flex-grow: 1"></span>
 				<b-button variant="primary" @click="saveAppearance" class="mr-1">
-					<b-icon icon="check"></b-icon>
 					Save and close
 				</b-button>
 				<b-button @click="loadLooks(path)">
@@ -162,7 +161,7 @@ export default {
 			},
 			saveAppearance: function() {
 				eel.save_looks(this.config, this.path)();
-				this.$emit('appearance-editor-closed');
+				this.$bvModal.hide('appearance-editor-dialog');
 			},
 			spawnCarForViewing: function(team) {
 				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType, this.map);
