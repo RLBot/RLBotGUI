@@ -7,7 +7,7 @@ import random
 import time
 import traceback
 
-from rlbot.utils.game_state_util import GameState
+from rlbot.utils.game_state_util import GameState, CarState
 from rlbot.utils.structures.game_data_struct import GameTickPacket, Vector3
 from rlbot.parsing.match_settings_config_parser import (
     game_mode_types,
@@ -380,32 +380,26 @@ def manage_game_state(
                 setup_failure_freeplay(setup_manager, "Challenge completed by mercy rule!", "green")
                 return True, results
 
-            game_state = GameState.create_from_gametickpacket(packet)
-            # game_state.console_commands.append("ShowDebug PHYSICS")
-            human_state = game_state.cars[0]  # this is used to change state
+            human_info = packet.game_cars[0]
+            game_state = GameState()
+            human_desired_state = CarState()
+            game_state.cars = {0: human_desired_state}
 
             changed = False
             # adjust boost
-            if human_state.boost_amount > max_boost and not half_field:
+            if human_info.boost > max_boost and not half_field:
                 # Adjust boost, unless in heatseeker mode
-                human_state.boost_amount = max_boost
+                human_desired_state.boost_amount = max_boost
                 changed = True
 
             if "boost-recharge" in upgrades:
                 # increase boost at 10% per second
-                # we do it in chunks because otherwise we lag hard
                 now = time.monotonic()
-                if human_state.boost_amount < max_boost and (now - last_boost_bump_time > 2):
+                if human_info.boost < max_boost and (now - last_boost_bump_time > 0.1):
                     changed = True
                     last_boost_bump_time = now
-                    human_state.boost_amount += 20
+                    human_desired_state.boost_amount = min(human_info.boost + 1, max_boost)
 
-
-            # This isn't fun :)
-            # if half_field and human_state.physics.location.y > 0:
-            #     human_state.physics.location.y = 0
-            #     human_state.physics.velocity.y = -abs(human_state.physics.velocity.y)
-            #     changed = True
 
             if changed:
                 setup_manager.game_interface.set_game_state(game_state)
