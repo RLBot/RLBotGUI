@@ -52,7 +52,7 @@
         "path": ["$RLBOTPACKROOT", "RLBotPack", "BotimusPrime", "bumblebee.cfg"]
     },
     "baf": {
-        "name": "Missle - Heat Seeking Kind",
+        "name": "BAF",
         "type": "rlbot",
         "skill": 1,
         "path": ["$RLBOTPACKROOT", "RLBotPack", "blind_and_deaf", "bot.cfg"]
