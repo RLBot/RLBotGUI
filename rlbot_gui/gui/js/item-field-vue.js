@@ -10,8 +10,8 @@ export default {
 			</b-form-group>
 		</b-col>
 		<b-col cols="3">
-			<md-field :class="selectedPaintColorClass" class="paint-color" v-if="itemType.paintKey">
-				<b-form-select v-model="selectedPaint">
+			<md-field v-if="itemType.paintKey">
+				<b-form-select v-model="selectedPaint" class="paint-color" :class="selectedPaintColorClass">
 					<b-form-select-option v-for="color in paintColors" :value="color.id" :class="color.class" class="paint-color">
 						{{ color.name }}
 					</b-form-select-option>
@@ -76,7 +76,7 @@ export default {
 			}
 		},
 		selectedPaintColorClass: function() {
-			let color = this.paintColors.find(el => el.id === this.selectedPaint);
+			let color = this.paintColors.find(el => el.id == this.selectedPaint);
 			return color ? color.class : '';
 		}
 	}
