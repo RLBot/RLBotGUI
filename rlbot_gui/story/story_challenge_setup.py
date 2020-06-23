@@ -110,9 +110,8 @@ def make_human_config(team: Team):
     player_config.rlbot_controlled = False
     player_config.human_index = 0
     player_config.team = team.value
-    player_config.name = "WillThisMattet?"
+    player_config.name = ""
 
-    # i wonder if we can overwrite loadout_config
     return player_config
 
 
