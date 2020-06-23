@@ -1,70 +1,40 @@
-# RLBotGUI
+# Rocket League Story Mode
 
-[<img src="https://img.shields.io/pypi/v/rlbot-gui.svg">](https://pypi.org/project/rlbot-gui/)
+This project used RLBot and RLBotGui to provide a Story Mode for
+Rocket League. The story UI runs in your browser and it can
+start games to continue with the story.
 
-## About
+Here are some images from the UI.
 
-RLBotGUI is a streamlined user interface that helps you run custom
-Rocket League bots for offline entertainment. It relies on the RLBot
-project to work its magic: https://github.com/RLBot/RLBot
 
 Works on Windows and Linux
 
-## Installation
+## Status
 
-If you just want to use this GUI, you can go download the installer from http://www.rlbot.org/
+The current Story Mode is fully functioning. Your saves are persisted,
+you can recruit players, you can purchase upgrades on your way
+to taking over more cities.
 
-It will put "RLBotGUI" in your Windows start menu.
+Here are things that can use additional work/feedback:
 
-## Dev Environment Setup
+### Features to add
 
-### Prerequisites
+    - Adding support for "bot personas". Currently bots are just added
+      with their bot names and using their default appearance. If a bot is
+      used in different cities, they look the same. We should instead have 
+      different "persona" in each city with different names and different looks.
+    - Recruited teammate customization: Players should be able to customize
+      their teammates' looks.
+    - Should other types of challenges be added? Other types of stats to track?
 
-- Python 3.7
+### Bot recommendations
 
-### Setup
+The current selection of bots was chosen somewhat arbitrarily. Recommendation
+on bots that fit specific challenges would be great. Additionally, ideas
+for challenges that use particular skills of bots would be valuable too.
 
-1. In a command prompt, run `pip install -r requirements.txt`
-2. Run `python run.py`
+### UI Improvements
 
-### Deployment to PyPI
-
-For normal changes, e.g. things happening inside the rlbot_gui folder,
-you should be publishing an update to PyPI. All users will get this change
-automatically without needing to reinstall!
-
-To deploy:
-1. Create a .pypirc file like the one described here:
-https://github.com/RLBot/RLBot/wiki/Deploying-Changes#first-time-setup
-1. Look in setup.py and increment the version number.
-1. Run `publish-to-pypi-prod.bat`
-
-#### Note
-When deploying to pypi, the files which get included are controlled by the MANIFEST.in file.
-You may wish to exclude anything which does not belong in the initial install, e.g.
-bot logos which get copied in to the GUI folder as you use the program.
-
-As a rule of thumb, if you add something to .gitignore, it may also belong in MANIFEST.in
-as a prune line.
-
-### Building the Installer
-
-You can build an installer executable for users to download. You will rarely need
-to do this, because normal updates should be pushed to users by deploying to PyPI.
-
-You really only need a new installer if you changed something in the pynsist_helpers
-folder, run.py, or anything else that gets referenced in installer.cfg. **AVOID THIS**
-because you don't want to run around bugging users to reinstall.
-
-1. Follow https://pynsist.readthedocs.io/en/latest/index.html to get NSIS installed.
-2. Run `pip install pynsist`
-3. Run `pynsist installer.cfg`
-
-Find the resulting executable in build\nsis.
-
-### How to update items in the appearance editor
-1. Install and run [BakkesMod](http://www.bakkesmod.com/)
-2. In Rocket League, press F6 to open the BakkesMod console, and enter the `dumpitems` command
-3. Find the output `items.csv` in the folder where your `RocketLeague.exe` is
-4. Replace `rlbot_gui/gui/csv/items.csv` with the new file
-5. Don't forget to bump the version number in `setup.py`
+    - Adding more animation and sound when a user succeeds might be good
+    - The CSS and HTML layout is pretty ad-hoc right now. Cleaning that up
+    would be good.
