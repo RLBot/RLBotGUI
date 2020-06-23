@@ -413,7 +413,6 @@ def manage_game_state(
             if packet.game_info.is_match_ended:
                 break
 
-            time.sleep(1.0 / tick_rate)
         except KeyError:
             traceback.print_exc()
             # it means that the game was interrupted by the user
