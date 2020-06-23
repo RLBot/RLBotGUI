@@ -776,6 +776,7 @@
 1129,Skin,Product_TA ProductsDB.Products.Skin_MuscleCar_Racer,Dominus: Demagogue
 1130,Skin,Product_TA ProductsDB.Products.Skin_MuscleCar_Rooster,Dominus: Pollo Caliente
 1131,Skin,Product_TA ProductsDB.Products.Skin_MuscleCar_SnakeSkin,Dominus: Snakeskin
+1132,Skin,Product_TA ProductsDB.Products.skin_musclecar_techarrows,Dominus: Vector
 1158,Boost,Product_TA ProductsDB.Products.boost_plexus,Trinity
 1159,Body,Product_TA ProductsDB.Products.Body_Torch2,X-Devil Mk2
 1160,Skin,Product_TA ProductsDB.Products.Skin_Torch2_Devil,X-Devil Mk2: X
@@ -1257,7 +1258,7 @@
 1999,SupersonicTrail,Product_TA ProductsDB.Products.SS_Tier_02_Platinum,Season 4 - Platinum
 2000,SupersonicTrail,Product_TA ProductsDB.Products.ss_tier_03_Diamond,Season 4 - Diamond
 2001,SupersonicTrail,Product_TA ProductsDB.Products.SS_Tier_04_Champion,Season 4 - Champion
-2002,Wheels,Product_TA ProductsDB.Products.wheel_levain,Decenium
+2002,Wheels,Product_TA ProductsDB.Products.wheel_levain,Decennium
 2003,Skin,Product_TA ProductsDB.Products.skin_multigrain_painted,Imperator DT5: Skullcap
 2004,Skin,Product_TA ProductsDB.Products.skin_multigrain_pat,Imperator DT5: Righteous Sun
 2005,Wheels,Product_TA ProductsDB.Products.wheel_Getsi,Moko
@@ -1594,6 +1595,7 @@
 2679,Skin,Product_TA ProductsDB.Products.skin_force_DemonClaw,Breakout: Astaroth
 2680,Skin,Product_TA ProductsDB.Products.skin_force_Egger,Breakout: Egged
 2683,Skin,Product_TA ProductsDB.Products.skin_torch_redo_discorobo,X-Devil: Disco Monster
+2685,Skin,Product_TA ProductsDB.Products.skin_Scarab_Pangolin,Scarab: Ankylo
 2686,Skin,Product_TA ProductsDB.Products.skin_spark_Redo_bumble,Gizmo: Hive Mind
 2687,Skin,Product_TA ProductsDB.Products.Skin_Orion_Shaperacer,Paladin: ShapeRacer
 2693,Skin,Product_TA ProductsDB.Products.skin_musclecar_funnybook,Dominus: Funny Book
@@ -2379,6 +2381,7 @@
 3993,Skin,Product_TA ProductsDB.Products.skin_octane_evilgeniuses_esports,Octane: Evil Geniuses
 3994,Skin,Product_TA ProductsDB.Products.skin_octane_nrg_esports,Octane: NRG Esports
 3995,Wheels,Product_TA ProductsDB.Products.wheel_capture_Tier2,Generator II
+3997,Wheels,Product_TA ProductsDB.Products.wheel_honeycomb,HNY
 4000,Wheels,Product_TA ProductsDB.Products.wheel_chief_se,Metalwork
 4001,Wheels,Product_TA ProductsDB.Products.wheel_manno_se,Galvan
 4002,PlayerAvatarBorder,Product_TA ProductsDB.Products.AvatarBorder_Crown,Crown
@@ -2554,10 +2557,12 @@
 4284,Body,Product_TA ProductsDB.Products.body_grain,Fennec
 4285,Skin,Product_TA ProductsDB.Products.skin_grain_racelines,Fennec: Nitty-Gritty
 4286,Skin,Product_TA ProductsDB.Products.skin_grain_stripes,Fennec: Stripes
+4287,Wheels,Product_TA ProductsDB.Products.wheel_dragon_se,Draco
 4290,Skin,Product_TA ProductsDB.Products.skin_grain_block,Fennec: Ribbon HBF
 4291,Skin,Product_TA ProductsDB.Products.skin_grain_flames,Fennec: Flames
 4292,Skin,Product_TA ProductsDB.Products.skin_grain_lightning,Fennec: Lightning
 4293,Skin,Product_TA ProductsDB.Products.skin_grain_lines,Fennec: Bluster Bar
+4294,Wheels,Product_TA ProductsDB.Products.wheel_ridge_se,Pyrrhos
 4295,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Grain,Fennec
 4296,Wheels,Product_TA ProductsDB.Products.wheel_ultramariner,Blade Wave
 4297,Wheels,Product_TA ProductsDB.Products.wheel_igtyjr,Truncheon
@@ -2707,6 +2712,7 @@
 4545,Antenna,Product_TA ProductsDB.Products.flag_mc_tails,Tails
 4546,Antenna,Product_TA ProductsDB.Products.flag_mc_throttle,Throttle
 4547,Antenna,Product_TA ProductsDB.Products.flag_mc_tonyromera,Tony Romera
+4549,GoalExplosion,Product_TA ProductsDB.Products.explosion_Portal,Gravity Bomb
 4557,Hat,Product_TA ProductsDB.Products.hat_beat,Beat Saber
 4558,Skin,Product_TA ProductsDB.Products.Skin_Sword,Luster Edge
 4560,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_scoopsahoy,Scoops Ahoy
@@ -2736,8 +2742,10 @@
 4618,Skin,Product_TA ProductsDB.Products.skin_durian_stripes_tierall,Chikara: Stripes
 4620,EngineAudio,Product_TA ProductsDB.Products.engineaudio_Cat,Civet
 4621,PaintFinish,Product_TA ProductsDB.Products.PaintFinish_MudBug,Metallograph
+4622,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_proudasapeacock,Tranquil Toff
 4627,Wheels,Product_TA ProductsDB.Products.wheel_offsetracer_se,Saptarishi
 4638,Antenna,Product_TA ProductsDB.Products.antenna_corseque_tier2,Corseque II
+4640,Wheels,Product_TA ProductsDB.Products.wheel_insectoid,CNTCT-1
 4641,Wheels,Product_TA ProductsDB.Products.wheel_pizzacrustpunk,Stuffed Crust
 4646,Wheels,Product_TA ProductsDB.Products.wheel_fsl_se,FSL-B
 4651,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_Runner,CHOU JP
@@ -2788,6 +2796,7 @@
 4717,Wheels,Product_TA ProductsDB.Products.wheel_spiralizer_SE,Spiralis R2
 4721,Wheels,Product_TA ProductsDB.Products.Wheel_FakeSugar_SE_Infinity,IO
 4722,PremiumInventory,Product_TA ProductsDB.Products.CrateUnlocked_DecryptorGift,Bonus Gift
+4726,Wheels,Product_TA ProductsDB.Products.wheel_uzumaki,Cutter
 4728,PaintFinish,Product_TA ProductsDB.Products.Paintfinish_Jaggie,Mako Marks
 4730,Skin,Product_TA ProductsDB.Products.Skin_Requiem,Dune-Sweeper
 4732,PaintFinish,Product_TA ProductsDB.Products.PaintFinish_ToonGlossySketch,Toon Sketch
@@ -2811,6 +2820,7 @@
 4777,Wheels,Product_TA ProductsDB.Products.wheel_soccerball_Online,Cristiano
 4778,Wheels,Product_TA ProductsDB.Products.Wheel_Spinner_Online,Spinner
 4779,Wheels,Product_TA ProductsDB.Products.wheel_energyring,Jandertek
+4781,Body,Product_TA ProductsDB.Products.body_shark,Peregrine TT
 4783,Boost,Product_TA ProductsDB.Products.boost_geotech,HoloData
 4784,GoalExplosion,Product_TA ProductsDB.Products.Explosion_Baseballs,Grand Slam
 4785,SupersonicTrail,Product_TA ProductsDB.Products.ss_geotech,HoloData
@@ -2836,6 +2846,7 @@
 4839,Wheels,Product_TA ProductsDB.Products.wheel_mild_se,Tremor
 4843,ESportsTeam,Product_TA ProductsDB.Products.esportsteam_pittsburghknights,Pittsburgh Knights
 4844,ESportsTeam,Product_TA ProductsDB.Products.esportsteam_reciprocity,Reciprocity
+4847,Skin,Product_TA ProductsDB.Products.Skin_BeachSlang,Smokescreen
 4849,Wheels,Product_TA ProductsDB.Products.wheel_energyring_se,Jandertek
 4852,Skin,Product_TA ProductsDB.Products.skin_octane_pittsburghknights_esports,Octane: Pittsburgh Knights
 4853,Skin,Product_TA ProductsDB.Products.skin_octane_veloce_esports,Octane: Veloce
@@ -2891,6 +2902,27 @@
 4957,Skin,Product_TA ProductsDB.Products.skin_mitty_line,Komodo: Takeover
 4958,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_PixelFire,Pixel Fire
 4964,Skin,Product_TA ProductsDB.Products.skin_force_huntress,Breakout: Huntress
+4965,Skin,Product_TA ProductsDB.Products.skin_octane_tux,Octane: Tinted Formal
 4972,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_cyberstreet,Moddyopolis
 4978,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_celebration,Hypnoteks
-5009,ShopItem,Product_TA ProductsDB.Products.ShopItem_Body_CarCar,?INT?Products.ShopItem_Body_CarCar.Label?
+4989,Skin,Product_TA ProductsDB.Products.Skin_Balmorhea,Interstellar
+4992,Skin,Product_TA ProductsDB.Products.skin_Grain_windswept,Fennec: Hardline
+5009,ShopItem,Product_TA ProductsDB.Products.ShopItem_Body_CarCar,-Body Car Car-
+5078,PaintFinish,Product_TA ProductsDB.Products.PaintFinish_toothpicks,Stiletto
+5079,Skin,Product_TA ProductsDB.Products.skin_grain_huntress,Fennec: Huntress
+5105,Wheels,Product_TA ProductsDB.Products.Wheel_zoned,Grappler
+5107,Skin,Product_TA ProductsDB.Products.skin_octane_tux_bw,Octane: Fancy Formal
+5121,Boost,Product_TA ProductsDB.Products.boost_quasar,Quasar
+5127,Skin,Product_TA ProductsDB.Products.skin_sliver,Z-Current
+5144,Blueprint,Product_TA ProductsDB.Products.BP_Series3,Momentum
+5178,Wheels,Product_TA ProductsDB.Products.wheel_honeycomb_inverted,HNY: Inverted
+5179,Wheels,Product_TA ProductsDB.Products.wheel_insectoid_infinity,CNTCT-1: Infinite
+5184,Wheels,Product_TA ProductsDB.Products.wheel_uzumaki_inverted,Cutter: Inverted
+5188,Body,Product_TA ProductsDB.Products.Body_Scarab_online,Scarab
+5194,EngineAudio,Product_TA ProductsDB.Products.engineaudio_shark,Peregrine TT
+5268,Skin,Product_TA ProductsDB.Products.skin_shark_stripes,Peregrine TT: Stripes
+5285,Skin,Product_TA ProductsDB.Products.skin_shark_wings,Peregrine TT: Wings
+5286,Skin,Product_TA ProductsDB.Products.skin_shark_flames,Peregrine TT: Flames
+5306,Skin,Product_TA ProductsDB.Products.skin_shark_crisis,Peregrine TT: Crisis
+5309,Skin,Product_TA ProductsDB.Products.skin_shark_stroke,Peregrine TT: Hoodbar
+5315,Skin,Product_TA ProductsDB.Products.skin_shark_lightning,Peregrine TT: Lightning
