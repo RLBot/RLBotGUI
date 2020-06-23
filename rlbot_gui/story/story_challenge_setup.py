@@ -329,8 +329,22 @@ def manage_game_state(
     and return that
     """
     early_failure = False, {}
+
+    expected_player_count = challenge["humanTeamSize"] + len(challenge["opponentBots"])
+    # Wait for everything to be initialized
+    packet = GameTickPacket()
+    setup_manager.game_interface.fresh_live_data_packet(packet, 1000, WITNESS_ID)
+    waiting_start = time.monotonic()
+    while packet.num_cars != expected_player_count and time.monotonic() - waiting_start < 5:
+        print("Game started but no cars are in the packets")
+        time.sleep(0.5)
+        setup_manager.game_interface.fresh_live_data_packet(packet, 1000, WITNESS_ID)
+
+    if packet.num_cars == 0:
+        print("The game was initialized with no cars")
+        return early_failure
+
     tick_rate = 120
-    # completion_conditions = challenge["completionConditions"]
     results = None
     max_boost = 0
     if "boost-100" in upgrades:
@@ -342,16 +356,17 @@ def manage_game_state(
 
     stats_tracker = ManualStatsTracker(challenge)
     last_boost_bump_time = time.monotonic()
-    do_once_helper = True
     while True:
         try:
-            game_tick_packet = GameTickPacket()
-            packet = setup_manager.game_interface.fresh_live_data_packet(
-                game_tick_packet, 1000, WITNESS_ID
+            packet = GameTickPacket()
+            setup_manager.game_interface.fresh_live_data_packet(
+                packet, 1000, WITNESS_ID
             )
 
-            if do_once_helper:
-                do_once_helper = False
+            if packet.num_cars == 0:
+                # User seems to have ended the match
+                print("User ended the match")
+                return early_failure
 
             stats_tracker.updateStats(packet)
             results = packet_to_game_results(packet)
