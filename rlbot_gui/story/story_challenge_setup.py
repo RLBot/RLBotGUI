@@ -396,7 +396,7 @@ def manage_game_state(
                 # increase boost at 10% per second
                 # we do it in chunks because otherwise we lag hard
                 now = time.monotonic()
-                if human_state.boost_amount < 100 and (now - last_boost_bump_time > 2):
+                if human_state.boost_amount < max_boost and (now - last_boost_bump_time > 2):
                     changed = True
                     last_boost_bump_time = now
                     human_state.boost_amount += 20
