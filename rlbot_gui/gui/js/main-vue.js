@@ -21,13 +21,30 @@ export default {
 
 		<b-navbar-nav class="ml-auto">
 			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning" class="mr-2"></b-spinner>
-			<span v-if="!matchSettings.enable_state_setting" class="mr-2">
+			<span id="sandbox-button-wrapper">
+				<b-button
+					@click="$router.replace('/sandbox')" variant="dark"
+					:disabled="!matchSettings.enable_state_setting">
+					State Setting Sandbox
+				</b-button>
+			</span>
+			<b-tooltip target="sandbox-button-wrapper" v-if="!matchSettings.enable_state_setting">
 				<b-icon class="warning-icon" icon="exclamation-triangle-fill"></b-icon>
 				State setting is turned off, sandbox won't work!
+			</b-tooltip>
+
+			<span id="story-button-wrapper">
+				<b-button 
+					@click="$router.replace('/story')" variant="dark" class="ml-2"
+					:disabled="!hasAValidFolder()">
+					Story Mode
+				</b-button>
 			</span>
-			<b-button @click="$router.replace('/story')" variant="dark">
-				Story Mode
-			</b-button>
+			<b-tooltip target="story-button-wrapper" v-if="!hasAValidFolder()">
+				<b-icon class="warning-icon" icon="exclamation-triangle-fill"></b-icon>
+				Download the BotPack first!
+			</b-tooltip>
+
 			<b-dropdown right class="ml-4" variant="dark">
 				<template v-slot:button-content>
 					Menu
@@ -417,8 +434,8 @@ export default {
 			newBotName: '',
 			newBotLanguageChoice: 'python',
 			folderSettings: {
-				files: [],
-				folders: []
+				files: {},
+				folders: {}
 			},
 			downloadProgressPercent: 0,
 			downloadStatus: '',
@@ -630,6 +647,11 @@ export default {
 			eel.scan_for_bots()(this.botsReceived);
 			eel.scan_for_scripts()(this.scriptsReceived);
 		},
+
+		hasAValidFolder: function() {
+			return Object.keys(this.folderSettings.folders).length > 0
+		},
+
 		botpackUpdateChecked: function (isBotpackUpToDate) {
 			this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
 		},
