@@ -5,7 +5,7 @@ export default {
 	<b-row>
 		<b-col>
 			<b-form-group :label="itemType.name" label-cols="5">
-				<b-form-input v-model="itemSelection" :list="'list' + itemType.name + team" autocomplete="off"></b-form-input>
+				<b-form-input v-model="itemSelection" :list="'list' + itemType.name + team" autocomplete="off" :state="validationState"></b-form-input>
 				<b-form-datalist :id="'list' + itemType.name + team" :options="items" value-field="itemKey" text-field="name"></b-form-datalist>
 			</b-form-group>
 		</b-col>
@@ -23,6 +23,7 @@ export default {
 	data: function() {
 		return {
 			itemSelection: null,
+			validationState: null,
 			paintColors: [
 				{id: 0, class: '', name: 'No Paint'},
 				{id: 1, class: 'crimson', name: 'Crimson'},
@@ -56,6 +57,7 @@ export default {
 			handler: function(val) {
 				let item = this.items.find(el => el.name === val);
 				this.value[this.itemType.itemKey] = item ? item.id : '0';
+				this.validationState = item || val === '' ? null : false;
 				this.$emit('input', this.value);
 			}
 		},
