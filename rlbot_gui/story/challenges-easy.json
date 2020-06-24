@@ -1,0 +1,108 @@
+{
+    "INTRO": [
+        {
+            "id": "INTRO-1",
+            "humanTeamSize": 1,
+            "opponentBots": ["psyonix-pro"],
+            "max_score": "3 Goals",
+            "map": "BeckwithPark",
+            "disabledBoost": true,
+            "display": "Win something so we know you can drive"
+        }
+    ],
+    "URBAN": [
+        {
+            "id": "URBAN-1",
+            "humanTeamSize": 2,
+            "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+            "map": "UrbanCentral",
+            "display": "Beat local up-and-comers in a 2v2."
+        },
+        {
+            "id": "URBAN-2",
+            "humanTeamSize": 2,
+            "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+            "completionConditions": {
+                "win": true,
+                "scoreDifference": 3
+            },
+            "map": "UrbanCentral_Dawn",
+            "display": "Upgrade your reputation by beating your opponents by 3 or more goals"
+        }
+    ],
+    "WASTELAND": [
+        {
+            "id": "WASTELAND-1",
+            "humanTeamSize": 2,
+            "opponentBots": ["adversity", "adversity"],
+            "completionConditions": {
+                "win": true,
+                "selfDemoCount": 0
+            },
+            "map": "Wasteland",
+            "display": "Win without getting demoed the whole game"
+        },
+        {
+            "id": "WASTELAND-2",
+            "humanTeamSize": 3,
+            "opponentBots": ["adversity", "adversity", "reliefbot"],
+            "completionConditions": {
+                "win": true,
+                "demoAchievedCount": 2
+            },
+            "map": "Wasteland",
+            "display": "Win and get at least two demos"
+        }
+    ],
+    "CAMPANDSNIPE": [
+        {
+            "id": "CS-1",
+            "humanTeamSize": 2,
+            "opponentBots": ["adversity", "baf"],
+            "limitations": ["half-field"],
+            "map": "AquaDome",
+            "display": "The ball is moving a lot faster! Win this heatseeker match!"
+        },
+        {
+            "id": "CS-2",
+            "humanTeamSize": 1,
+            "opponentBots": ["adversity", "baf"],
+            "limitations": ["half-field"],
+            "completionConditions": {
+                "goalsScored": 1
+            },
+            "map": "AquaDome",
+            "display": "You are making the saves alone! Win 1v2!"
+        }
+
+    ],
+    "CHAMPIONSIAN": [
+        {
+            "id": "CHAMP-1",
+            "humanTeamSize": 3,
+            "opponentBots": ["botimus", "sdc", "reliefbot", "adversity"],
+            "map": "ChampionsField",
+            "display": "Things are getting unfair. Can you win 3v4?"
+        },
+        {
+            "id": "CHAMP-2",
+            "humanTeamSize": 2,
+            "opponentBots": ["botimus", "sdc", "adversity"],
+            "map": "ChampionsField_Day",
+            "display": "2v3! Win and score at least 2 goals!",
+            "completionConditions": {
+                "goalsScored": 2
+            }
+        },
+        {
+            "id": "CHAMP-3",
+            "humanTeamSize": 1,
+            "opponentBots": ["botimus", "sdc", "adversity"],
+            "map": "ChampionsField",
+            "display": "1v3! The ultimate challenge! Win without getting demoed.",
+            "completionConditions": {
+                "selfDemoCount": 0
+            }
+        }
+    ]
+}

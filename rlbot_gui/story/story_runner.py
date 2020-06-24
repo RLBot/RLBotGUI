@@ -10,9 +10,9 @@ from PyQt5.QtCore import QSettings
 
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
 from rlbot_gui.story.load_story_descriptions import (
-    BOTS_CONFIG,
-    CHALLENGES,
-    CHALLENGES_BY_ID,
+    get_bots_configs,
+    get_challenges,
+    get_challenges_by_id,
 )
 
 
@@ -26,13 +26,13 @@ def story_story_test():
 
 
 @eel.expose
-def get_challenges_json():
-    return CHALLENGES
+def get_challenges_json(story_id):
+    return get_challenges(story_id)
 
 
 @eel.expose
-def get_bots_json():
-    return BOTS_CONFIG
+def get_bots_json(story_id):
+    return get_bots_configs(story_id)
 
 
 @eel.expose
@@ -44,6 +44,8 @@ def story_load_save():
     if state:
         print(f"Save state: {state}")
         CURRENT_STATE = StoryState.from_dict(state)
+        # default values should get added if missing
+        state = CURRENT_STATE.__dict__
     return state
 
 
@@ -112,6 +114,7 @@ class StoryState:
 
     def __init__(self):
         self.version = 1
+        self.story_config = "default"
         self.team_info = {"name": "", "color_secondary": ""}
         self.teammates = []
         self.challenges_attempts = {}  # many entries per challenge
@@ -174,8 +177,12 @@ class StoryState:
 def launch_challenge_with_config(challenge_id, pickedTeammates):
     print(f"In launch_challenge {challenge_id}")
 
-    challenge = CHALLENGES_BY_ID[challenge_id]
-    match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates)
+    story_id = CURRENT_STATE.story_config
+    challenge = get_challenges_by_id(story_id)[challenge_id]
+    all_bots = get_bots_configs(story_id)
+
+
+    match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates, all_bots)
     completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades)
     CURRENT_STATE.add_match_result(challenge_id, completed, results)
 

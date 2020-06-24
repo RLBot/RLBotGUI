@@ -29,8 +29,6 @@ from rlbot.setup_manager import SetupManager
 from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager
 from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
 
-from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
-
 WITNESS_ID = random.randint(0, 1e5)
 
 DEBUG_MODE_SHORT_GAMES = False
@@ -139,19 +137,19 @@ def bot_to_player(player: dict, team: Team):
 
 
 def make_player_configs(
-    challenge: dict, human_picks: List[int], team_info: dict, teammates: List[dict]
+    challenge: dict, human_picks: List[int], team_info: dict, teammates: List[dict], all_bots
 ):
     player_configs = []
     player_configs.append(make_human_config(Team.BLUE))
 
     for i in range(challenge["humanTeamSize"] - 1):
         print(i)
-        teammate = BOTS_CONFIG[human_picks[i]]
+        teammate = all_bots[human_picks[i]]
         config = bot_to_player(teammate, Team.BLUE)
         player_configs.append(config)
 
     for opponent in challenge["opponentBots"]:
-        bot = bot_to_player(BOTS_CONFIG[opponent], Team.ORANGE)
+        bot = bot_to_player(all_bots[opponent], Team.ORANGE)
         player_configs.append(bot)
 
     return player_configs
@@ -449,9 +447,9 @@ def run_challenge(
     return game_results
 
 
-def configure_challenge(challenge: dict, saveState, human_picks: List[int]):
+def configure_challenge(challenge: dict, saveState, human_picks: List[int], all_bots):
     player_configs = make_player_configs(
-        challenge, human_picks, saveState.team_info, saveState.teammates
+        challenge, human_picks, saveState.team_info, saveState.teammates, all_bots
     )
     match_config = make_match_config(challenge, saveState.upgrades, player_configs)
 
