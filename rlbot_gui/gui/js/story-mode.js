@@ -9,7 +9,7 @@ const UI_STATES = {
     'START_SCREEN': 1,
     'STORY_CHALLENGES': 2
 };
-const DEBUG_STORY_STATE = false;
+const DEBUG_STORY_STATE = true;
 
 
 export default {

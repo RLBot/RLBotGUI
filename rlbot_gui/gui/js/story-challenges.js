@@ -371,8 +371,9 @@ export default {
         }
     },
     created: async function () {
-        this.challenges = await eel.get_challenges_json()();
-        this.bots_config = await eel.get_bots_json()();
+        console.log(this.saveState)
+        this.challenges = await eel.get_challenges_json(this.saveState.story_config)();
+        this.bots_config = await eel.get_bots_json(this.saveState.story_config)();
         this.switchSelectedCityToBest();
     },
     watch: {
