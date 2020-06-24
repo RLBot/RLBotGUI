@@ -168,7 +168,7 @@ export default {
                         {{getCityStateTooltip(cityId)}}
                     </b-tooltip>
                     <b-card 
-                        class="mt-2"
+                        class="mt-2 ml-0 mr-0 settings-card"
                         :title="'City: ' + cityDisplayInfo[selectedCityId].displayName"
                         bg-variant="dark"
                         text-variant="light"
@@ -176,7 +176,8 @@ export default {
                         <div>
                             <b-img
                                 :src="'imgs/arenas/' + challenges[selectedCityId][0].map  +'.jpg'"
-                                height="100px"/>
+                                height="100px"
+                                class="mr-2" />
                             <p class="story-inline" style="max-width:400px; display:inline-block">
                             {{cityDisplayInfo[selectedCityId].message}}
                             </p>

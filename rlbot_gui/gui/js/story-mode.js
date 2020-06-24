@@ -15,6 +15,26 @@ const DEBUG_STORY_STATE = false;
 export default {
     name: 'story',
     template: `
+    <div>
+    <b-navbar class="navbar">
+        <b-navbar-brand>
+            <img class="logo" src="imgs/rlbot_logo.png">
+            <span class="rlbot-brand" style="flex: 1">Story Mode</span>
+        </b-navbar-brand>
+        <b-navbar-nav class="ml-auto">
+            <alter-save-state v-model="saveState" v-if="debugStoryState"/>
+            <b-dropdown class="ml-4" right variant="dark">
+				<template v-slot:button-content>
+					Menu
+				</template>
+                <b-dropdown-item @click="deleteSave" v-if="ui_state > ${UI_STATES.START_SCREEN}">Delete Save</b-dropdown-item>
+			</b-dropdown>
+			<b-button class="ml-4" @click="watching = false; $router.replace('/')" variant="dark">
+                Back
+            </b-button>
+        </b-navbar-nav>
+    </b-navbar>
+
     <b-container fluid>
         <story-start v-on:started="startStory" v-if="ui_state === ${UI_STATES.START_SCREEN}">
         </story-start>
@@ -26,11 +46,8 @@ export default {
             v-bind:saveState="saveState"
             v-if="ui_state == ${UI_STATES.STORY_CHALLENGES}">
         </story-challenges>
-
-        <b-button @click="deleteSave" variant="danger" v-if="ui_state > ${UI_STATES.START_SCREEN}">Delete Save</b-button>
-
-        <alter-save-state v-model="saveState" v-if="debugStoryState"/>
     </b-container>
+    </div>
     `,
     components: {
         'story-start': StoryStart,

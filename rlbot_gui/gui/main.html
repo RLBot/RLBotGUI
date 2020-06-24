@@ -24,7 +24,7 @@
 	<div id="app" :style="bodyStyle">
 
 <!--		https://stackoverflow.com/a/55296309/280852-->
-		<keep-alive include="match-setup,sandbox">
+		<keep-alive include="match-setup,sandbox,story">
 			<router-view @background-change="changeBackgroundImage"></router-view>
 		</keep-alive>
 
