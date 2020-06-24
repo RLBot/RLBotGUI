@@ -118,6 +118,17 @@ def fetch_game_tick_packet() -> GameTickPacket:
     return game_tick_packet
 
 
+def get_fresh_setup_manager():
+    global sm
+    if sm is not None:
+        try:
+            sm.shut_down()
+        except Exception as e:
+            print(e)
+    sm = SetupManager()
+    return sm
+
+
 def start_match_helper(bot_list, match_settings):
     print(bot_list)
     print(match_settings)
@@ -156,14 +167,7 @@ def start_match_helper(bot_list, match_settings):
     match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
     match_config.script_configs = [create_script_config(script) for script in match_settings['scripts']]
 
-    global sm
-    if sm is not None:
-        try:
-            sm.shut_down()
-        except Exception as e:
-            print(e)
-
-    sm = SetupManager()
+    sm = get_fresh_setup_manager()
     sm.early_start_seconds = 5
     sm.connect_to_game()
     sm.load_match_config(match_config)
