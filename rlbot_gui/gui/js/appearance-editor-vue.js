@@ -1,9 +1,11 @@
 import ItemField from './item-field-vue.js';
+import Colorpicker from './colorpicker-vue.js'
 
 export default {
 	name: 'appearance-editor',
 	components: {
-		'item-field': ItemField
+		'item-field': ItemField,
+		'colorpicker': Colorpicker,
 	},
 	props: ['path', 'activeBot', 'map'],
 	template: `
@@ -21,37 +23,18 @@ export default {
 				<div style="height: 7px; background-color: orange;"></div>
 			</b-col>
 		</b-row>
-		<b-row v-if="colors" class="mb-3">
+
+		<b-row class="mb-3">
 			<b-col v-for="team in teams">
-				<span v-for="colorType in colorTypes">
-					<b-dropdown :text="colorType.name">
-						<b-dropdown-text>
-							<table style="border-spacing: 0;">
-								<tr v-for="i in colorType.rows">
-									<td v-for="j in colorType.columns" :style="{'background-color': colorStyleFromRowAndColumn(colorType, team, i, j)}">
-										<div class="colorpicker-color"
-											 :class="{'selected-color':
-												config[team][colorType.key] == getColorIDFromRowAndColumn(i, j, colorType)}"
-											 @click="config[team][colorType.key] = getColorIDFromRowAndColumn(i, j, colorType);">
-										</div>
-									</td>
-								</tr>
-							</table>
-						</b-dropdown-text>
-					</b-dropdown>
-					<span class="color-indicator" :style="{'background-color': colorStyle(colorType, team)}"></span>
-				</span>
+				<colorpicker text="Primary Color" v-model="config[team]['team_color_id']" primary :team="team"/>
+				<colorpicker text="Accent Color" v-model="config[team]['custom_color_id']"/>
 			</b-col>
 		</b-row>
+
 		<b-row v-if="Object.keys(config.blue).length" class="mb-4">
-			<b-col class="blue-team">
+			<b-col v-for="team in teams">
 				<div v-for="itemType in itemTypes">
-					<item-field :item-type="itemType" :items="items[itemType.category]" team="blue" v-model="config.blue"></item-field>
-				</div>
-			</b-col>
-			<b-col class="orange-team">
-				<div v-for="itemType in itemTypes">
-					<item-field :item-type="itemType" :items="items[itemType.category]" team="orange" v-model="config.orange"></item-field>
+					<item-field :item-type="itemType" :items="items[itemType.category]" :team="team" v-model="config[team]"/>
 				</div>
 			</b-col>
 		</b-row>
@@ -104,11 +87,6 @@ export default {
 					{name: 'Goal Explosion', category: 'GoalExplosion', itemKey: 'goal_explosion_id', paintKey: 'goal_explosion_paint_id'},
 				],
 				teams: ['blue', 'orange'],
-				colorTypes: [
-					{primary: true, name: 'Primary Color', key: 'team_color_id', rows: 7, columns: 10},
-					{primary: false, name: 'Accent Color', key: 'custom_color_id', rows: 7, columns: 15}
-				],
-				colors: null,
 				showcaseTypes: [
 					{id: "back-center-kickoff-blue", name: "Static (Back-center kickoff - Blue)"},
 					{id: "back-center-kickoff-orange", name: "Static (Back-center kickoff - Orange)"},
@@ -155,33 +133,12 @@ export default {
 
 				this.items = items;
 			},
-			getColors: async function() {
-				let response = await fetch('json/colors.json');
-				this.colors = await response.json();
-			},
 			saveAppearance: function() {
 				eel.save_looks(this.config, this.path)();
 				this.$bvModal.hide('appearance-editor-dialog');
 			},
 			spawnCarForViewing: function(team) {
 				eel.spawn_car_for_viewing(this.config, team, this.selectedShowcaseType, this.map);
-			},
-			getColorRGB: function(colorID, colorType, team) {
-				let colors = colorType.primary ? this.colors[team] : this.colors.secondary;
-				return colors[colorID];
-			},
-			getColorIDFromRowAndColumn(row, column, colorType) {
-				return (row - 1) * colorType.columns + (column - 1);
-			},
-			colorStyle: function(colorType, team) {
-				let id = this.config[team][colorType.key];
-				let rgb = this.getColorRGB(id, colorType, team);
-				return 'rgb(' + (rgb ? rgb.toString() : '') + ')';
-			},
-			colorStyleFromRowAndColumn: function (colorType, team, row, column) {
-				let id = this.getColorIDFromRowAndColumn(row, column, colorType);
-				let rgb = this.getColorRGB(id, colorType, team);
-				return 'rgb(' + (rgb ? rgb.toString() : '') + ')';
 			},
 			loadLooks: async function (path) {
 				this.config = await eel.get_looks(path)();
@@ -190,7 +147,6 @@ export default {
 
 	created: function() {
 			this.getAndParseItems();
-			this.getColors();
 		},
 
 	watch: {
