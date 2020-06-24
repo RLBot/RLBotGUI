@@ -7,6 +7,7 @@ import random
 import time
 import traceback
 
+import eel
 from rlbot.utils.game_state_util import GameState, CarState
 from rlbot.utils.structures.game_data_struct import GameTickPacket, Vector3
 from rlbot.parsing.match_settings_config_parser import (
@@ -24,6 +25,8 @@ from rlbot.matchconfig.match_config import (
     Team,
 )
 from rlbot.setup_manager import SetupManager
+
+from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager
 from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
 
 from rlbot_gui.story.load_story_descriptions import BOTS_CONFIG
@@ -155,7 +158,7 @@ def make_player_configs(
 
 
 def packet_to_game_results(game_tick_packet: GameTickPacket):
-    """Take the final game_tick_packet and 
+    """Take the final game_tick_packet and
     returns the info related to the final game results
     """
     players = game_tick_packet.game_cars
@@ -357,6 +360,7 @@ def manage_game_state(
     last_boost_bump_time = time.monotonic()
     while True:
         try:
+            eel.sleep(0)  # yield to allow other gui threads to operate.
             packet = GameTickPacket()
             setup_manager.game_interface.fresh_live_data_packet(
                 packet, 1000, WITNESS_ID
@@ -374,7 +378,7 @@ def manage_game_state(
                 time.sleep(3)
                 setup_failure_freeplay(setup_manager, "You failed the challenge!")
                 return early_failure
-            
+
             if end_by_mercy(challenge, stats_tracker.stats, results):
                 time.sleep(5)
                 setup_failure_freeplay(setup_manager, "Challenge completed by mercy rule!", "green")
@@ -421,7 +425,7 @@ def run_challenge(
     match_config: MatchConfig, challenge: dict, upgrades: dict
 ) -> Tuple[bool, dict]:
     """Launch the game and keep track of the state"""
-    setup_manager = SetupManager()
+    setup_manager = get_fresh_setup_manager()
     setup_manager.early_start_seconds = 5
     setup_manager.connect_to_game()
     setup_manager.load_match_config(match_config)
