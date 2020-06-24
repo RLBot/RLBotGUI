@@ -10,6 +10,26 @@ project to work its magic: https://github.com/RLBot/RLBot
 
 Works on Windows and Linux
 
+## Features
+
+- Download various bots programmed by the community
+- Get started with creating your own bot
+- Create matches against bots
+  - Customize game mode, arena and mutators!
+- Try out the Story Mode
+
+## Screenshots
+
+You can download, update or create bots
+
+![HomeScreenshot](screenshots/RLBotGUI-Home.PNG)
+
+
+In Story Mode, you can take over cities by beating challenges and can also
+recruit teammates and purchase upgrades for your car!
+
+![StoryMode](screenshots/rl-story-mode.PNG)
+
 ## Installation
 
 If you just want to use this GUI, you can go download the installer from http://www.rlbot.org/
