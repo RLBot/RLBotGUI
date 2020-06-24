@@ -43,13 +43,13 @@
         "name": "BoltimusPrime",
         "type": "rlbot",
         "skill": 1,
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "BotimusPrime", "botimus.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Botimus&Bumblebee", "botimus.cfg"]
     },
     "bumblebee": {
         "name": "Bumblebee",
         "type": "rlbot",
         "skill": 1,
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "BotimusPrime", "bumblebee.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Botimus&Bumblebee", "bumblebee.cfg"]
     },
     "baf": {
         "name": "BAF",
