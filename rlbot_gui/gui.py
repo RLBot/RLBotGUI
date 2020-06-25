@@ -196,7 +196,7 @@ def save_team_settings(blue_bots, orange_bots):
 
 
 @eel.expose
-def pick_location(is_folder):
+def pick_location(is_folder, filter="Config files (*.cfg)"):
     """
     We're using python for file picking because only python (not javascript) can retrieve
     an actual path on the file system which is what we need.
@@ -211,7 +211,7 @@ def pick_location(is_folder):
     if is_folder:
         filename = QFileDialog.getExistingDirectory(options=options)
     else:
-        filename, _ = QFileDialog.getOpenFileName(filter="Config files (*.cfg)", options=options)
+        filename, _ = QFileDialog.getOpenFileName(filter=filter, options=options)
 
     app.exit()
 

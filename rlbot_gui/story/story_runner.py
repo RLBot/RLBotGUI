@@ -50,9 +50,9 @@ def story_load_save():
 
 
 @eel.expose
-def story_new_save(name, color_secondary):
+def story_new_save(name, color_secondary, story_id, custom_config):
     global CURRENT_STATE
-    CURRENT_STATE = StoryState.new(name, color_secondary)
+    CURRENT_STATE = StoryState.new(name, color_secondary, story_id, custom_config)
     return story_save_state()
 
 
@@ -114,7 +114,7 @@ class StoryState:
 
     def __init__(self):
         self.version = 1
-        self.story_config = "default"
+        self.story_config = "default" # can be dict for custom config
         self.team_info = {"name": "", "color_secondary": ""}
         self.teammates = []
         self.challenges_attempts = {}  # many entries per challenge
@@ -161,9 +161,13 @@ class StoryState:
             self.upgrades["currency"] += 1
 
     @staticmethod
-    def new(name, color_secondary):
+    def new(name, color_secondary, story_id, custom_config):
         s = StoryState()
         s.team_info = {"name": name, "color_secondary": color_secondary}
+        if story_id == 'custom':
+            s.story_config = custom_config
+        else:
+            s.story_config = story_id
         return s
 
     @staticmethod

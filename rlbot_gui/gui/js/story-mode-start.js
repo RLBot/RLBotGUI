@@ -12,7 +12,7 @@ export default {
     <b-card>
     <b-card-text>
     <b-form @submit.prev="$emit('started', form)">
-        <b-form-group label="Teamname" label-for="teamname_entry" label-cols="auto" >
+        <b-form-group label="Teamname" label-for="teamname_entry" label-cols="auto">
             <b-form-input 
                 type="text"
                 required
@@ -70,7 +70,7 @@ export default {
         pickFile: async function(event) {
             let field = event.target.value;
 
-            let path = await eel.pick_location(false)(); // is_folder=False
+            let path = await eel.pick_location(false, 'JSON files (*.json)')(); // is_folder=False
             if (path) {
                 this.form.custom_story[field] = path
             }

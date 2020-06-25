@@ -9,7 +9,7 @@ const UI_STATES = {
     'START_SCREEN': 1,
     'STORY_CHALLENGES': 2
 };
-const DEBUG_STORY_STATE = true;
+const DEBUG_STORY_STATE = false;
 
 
 export default {
@@ -76,9 +76,13 @@ export default {
         },
         startStory: async function (event) {
             console.log(event);
-            let state = await eel.story_new_save(event.teamname, event.teamcolor)();
+            let state = await eel.story_new_save(
+                event.teamname,
+                event.teamcolor,
+                event.story_id,
+                event.custom_story)();
             this.saveState = state;
-            this.storyStateMachine(UI_STATES.CITY_MAP);
+            this.storyStateMachine(UI_STATES.STORY_CHALLENGES);
         },
         deleteSave: async function () {
             await eel.story_delete_save()();
