@@ -3,6 +3,16 @@ function PythonPrint(message) {
     console.log("Python: "+message);
 }
 
+
+// eel does not provide an API for this. Lets just edit the browser functions it uses. Improvise, adapt, overcome.
+const _WebSocket = window.WebSocket;
+window.WebSocket = function() {
+    const ws = new _WebSocket(...arguments);
+    ws.onclose = window.close.bind(window);
+    return ws;
+};
+
+
 // looks like if you want to expose a function inside a vue component,
 // you first have to expose it's signature like this
 eel.expose(updateDownloadProgress);
