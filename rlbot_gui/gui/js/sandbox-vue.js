@@ -22,7 +22,7 @@ export default {
                 </b-button>
             </b-navbar-nav>
         </b-navbar>
-        <div>
+        <b-container fluid>
             <b-row>
                 <b-col>
                     <b-card class="settings-card">
@@ -71,7 +71,7 @@ export default {
                     </b-card>
                 </b-col>
             </b-row>
-        </div>
+        </b-container>
     </div>
     `,
     data() {

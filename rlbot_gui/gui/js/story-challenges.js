@@ -171,7 +171,7 @@ export default {
                         {{getCityStateTooltip(cityId)}}
                     </b-tooltip>
                     <b-card 
-                        class="mt-2 ml-0 mr-0 settings-card"
+                        class="mt-2 ml-0 mr-0 mb-0 settings-card"
                         :title="'City: ' + cityDisplayInfo[selectedCityId].displayName"
                         bg-variant="dark"
                         text-variant="light"
@@ -180,8 +180,8 @@ export default {
                             <b-img
                                 :src="'imgs/arenas/' + challenges[selectedCityId][0].map  +'.jpg'"
                                 height="100px"
-                                class="mr-2" />
-                            <p class="story-inline" style="max-width:400px; display:inline-block">
+                                class="mr-2 float-left" />
+                            <p class="story-inline" style="max-width:700px;">
                             {{cityDisplayInfo[selectedCityId].message}}
                             </p>
                         </div>
@@ -189,7 +189,7 @@ export default {
  
                 </b-col>
                 <b-col class="mh-100" cols-xl="auto" style="min-width:200px; max-width:800px;">
-                    <b-row class="h-50">
+                    <b-row style="overflow-y: auto; height: 380px">
                     <!-- Selecting the challenge -->
                         <b-card 
                             :title="cityDisplayInfo[selectedCityId].displayName"
