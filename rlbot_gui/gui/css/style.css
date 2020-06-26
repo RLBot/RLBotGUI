@@ -30,10 +30,6 @@ body, html {
   padding: 5px;
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
-
 .navbar {
   background-color: rgb(17, 18, 19);
 }

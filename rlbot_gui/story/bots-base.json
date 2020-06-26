@@ -61,5 +61,89 @@
         "name": "Psyonix Allstar",
         "type": "psyonix",
         "skill": 1
+    },
+    "skybot": {
+        "name": "Skybot",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Skybot", "SkyBot.cfg"]
+    },
+    "wildfire": {
+        "name": "Wildfire",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Wildfire_Lightfall_Fix", "python", "wildfire.cfg"]
+    },
+    "diablo": {
+        "name": "Diablo",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Diablo", "diablo.cfg"]
+    },
+    "rashbot": {
+        "name": "rashBot",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "MarvinBots", "rashBot", "rashBot.cfg"]
+    },
+    "stick": {
+        "name": "Stick",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "MarvinBots", "Stick", "stick.cfg"]
+    },
+    "leaf": {
+        "name": "Leaf",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "MarvinBots", "Leaf", "leaf.cfg"]
+    },
+    "lanfear": {
+        "name": "Lanfear",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "The Forsaken", "Lanfear.cfg"]
+    },
+    "manticore": {
+        "name": "Manticore",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Manticore", "manticore.cfg"]
+    },
+    "atlas": {
+        "name": "Atlas",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Atlas_Wintertide_Patch", "AtlasAgent", "Atlas.cfg"]
+    },
+    "sniper": {
+        "name": "Sniper",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Sniper", "sniper.cfg"]
+    },
+    "snek": {
+        "name": "Snek",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Snek", "snek.cfg"]
+    },
+    "nombot": {
+        "name": "NomBot",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "DomNomNom", "NomBot_v1.0", "NomBot_v1.cfg"]
+    },
+    "beast": {
+        "name": "Beast from the East",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Beast from the East", "beastbot.cfg"]
+    },
+    "cryo": {
+        "name": "Codename Cryo",
+        "type": "rlbot",
+        "skill": 1,
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Codename_Cryo", "Codename_Cryo.cfg"]
     }
 }
