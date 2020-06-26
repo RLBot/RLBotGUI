@@ -61,7 +61,10 @@ const CITY_DISPLAY_INFO = {
 
 export default {
     name: 'story-challenges',
-    props: { saveState: Object },
+    props: {
+        saveState: Object,
+        debugMode: Boolean
+    },
     components: {
         "story-upgrades": StoryUpgrades,
         "story-pick-team": StoryPickTeam,
@@ -335,7 +338,7 @@ export default {
             return displayName + ' ' + suffix[state];
         },
         handleCityClick: function (city) {
-            if (this.getCityState(city) != CITY_STATE.LOCKED) {
+            if (this.getCityState(city) != CITY_STATE.LOCKED || this.debugMode) {
                 this.selectedCityId = city;
             }
         },

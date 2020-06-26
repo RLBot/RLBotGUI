@@ -9,7 +9,6 @@ const UI_STATES = {
     'START_SCREEN': 1,
     'STORY_CHALLENGES': 2
 };
-const DEBUG_STORY_STATE = false;
 
 
 export default {
@@ -22,11 +21,12 @@ export default {
             <span class="rlbot-brand" style="flex: 1">Story Mode</span>
         </b-navbar-brand>
         <b-navbar-nav class="ml-auto">
-            <alter-save-state v-model="saveState" v-if="debugStoryState"/>
+            <alter-save-state v-model="saveState" v-if="debugMode"/>
             <b-dropdown class="ml-4" right variant="dark">
 				<template v-slot:button-content>
 					Menu
 				</template>
+                <b-dropdown-item @click="toggleDebugMode" v-if="ui_state > ${UI_STATES.START_SCREEN}">Debug Mode</b-dropdown-item>
                 <b-dropdown-item @click="deleteSave" v-if="ui_state > ${UI_STATES.START_SCREEN}">Delete Save</b-dropdown-item>
 			</b-dropdown>
 			<b-button class="ml-4" @click="watching = false; $router.replace('/')" variant="dark">
@@ -44,6 +44,7 @@ export default {
             @purchase_upgrade="purchaseUpgrade"
             @recruit="recruit"
             v-bind:saveState="saveState"
+            v-bind:debugMode="debugMode"
             v-if="ui_state == ${UI_STATES.STORY_CHALLENGES}">
         </story-challenges>
     </b-container>
@@ -58,11 +59,14 @@ export default {
         return {
             ui_state: UI_STATES.LOAD_SAVE,
             saveState: null,
-            debugStoryState: DEBUG_STORY_STATE,
+            debugMode: false,
             debugStateHelper: ''
         };
     },
     methods: {
+        toggleDebugMode() {
+            this.debugMode = !this.debugMode;
+        },
         storyStateMachine(targetState) {
             console.log(`Going from ${this.ui_state} to ${targetState}`);
             this.ui_state = targetState;
