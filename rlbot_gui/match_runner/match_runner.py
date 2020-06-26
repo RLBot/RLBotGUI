@@ -188,8 +188,8 @@ def hot_reload_bots():
         sm.reload_all_agents()
 
 
-def shut_down():
+def shut_down(kill_rlbot_exe=False):
     if sm is not None:
-        sm.shut_down(time_limit=5, kill_all_pids=True)
+        sm.shut_down(time_limit=5, kill_all_pids=True, kill_rlbot_exe=kill_rlbot_exe)
     else:
         print("There gotta be some setup manager already")

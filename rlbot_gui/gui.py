@@ -549,7 +549,6 @@ def on_websocket_close(page, sockets):
     if not len(eel._websockets):
         # At this point we think the browser window has been closed.
         should_quit = True
-        shut_down()
 
 
 def is_chrome_installed():
@@ -621,3 +620,5 @@ def start():
     while not should_quit:
         do_infinite_loop_content()
         eel.sleep(0.4)
+        
+    shut_down(kill_rlbot_exe=True)
