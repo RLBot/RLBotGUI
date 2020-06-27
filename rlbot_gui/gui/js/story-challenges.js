@@ -25,36 +25,36 @@ const CITY_DISPLAY_INFO = {
     'INTRO': {
         displayName: "Beginner's Park",
         message: "Shoddy field for shoddy players. No boost available.",
-        overlayLocation: [390, 630],
-        clickArea: "649,380,601,379,586,457,566,479,599,525,635,546,718,566,718,514",
+        overlayLocation: [229, 92], 
+        clickArea: "45,181,53,319,79,347,97,329,141,335,144,277,121,183,70,169",
         prereqs: [],
     },
     'URBAN': {
         displayName: 'Urban Central',
         message: 'Place to start making your name! People at this level know the value of Boost upgrades!',
-        overlayLocation: [350, 700],
-        clickArea: "650,3,671,141,585,221,643,354,724,509,801,437,829,221,779,9",
+        overlayLocation: [205, 225],
+        clickArea: "124,182,146,335,281,321,289,237,241,172,149,126,115,147",
         prereqs: ['INTRO']
     },
     'WASTELAND': {
         displayName: 'Demolishing Wastelands',
         message: 'Don\'t expect politeness here. Home of the demo experts!',
-        overlayLocation: [85, 155],
-        clickArea: "4,59,109,5,268,62,199,269,166,532,3,547",
+        overlayLocation: [123, 616],
+        clickArea: "582,71,558,291,666,296,726,251,812,266,754,85",
         prereqs: ['URBAN']
     },
     'CAMPANDSNIPE': {
         displayName: 'Commonwealth of Campandsnipe',
         message: 'This city is a little different. Boost is limitless but the ball seems a bit different!',
-        overlayLocation: [300, 500],
-        clickArea: "295,158,254,198,232,302,255,366,270,502,351,525,446,508,562,473,595,384,641,331,578,229,404,294,332,226,323,187,348,149,326,143",
+        overlayLocation: [369, 724],
+        clickArea: "556,297,537,377,673,412,749,391,821,332,820,261,725,253,665,301",
         prereqs: ['URBAN']
     },
     'CHAMPIONSIAN': {
         displayName: 'Championsian Federation',
         message: 'You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.',
-        overlayLocation: [64, 540],
-        clickArea: "401,92,334,176,405,285,579,217,668,125,637,4,469,21",
+        overlayLocation: [193, 520],
+        clickArea: "227,160,293,237,284,317,267,355,280,377,425,336,487,321,557,232,559,160,417,106,222,113",
         prereqs: ['WASTELAND', 'CAMPANDSNIPE']
     }
 };
@@ -151,7 +151,7 @@ export default {
                     <img v-for="(city, cityId) in cityDisplayInfo"
                         class="story-map-icon"
                         v-bind:src="getOverlayForCity(cityId)"
-                        v-bind:style="{top: city.overlayLocation[0] + 'px', left: city.overlayLocation[1] + 'px', postion: 'absolute'}" 
+                        v-bind:style="{top: city.overlayLocation[0] - 20 + 'px', left: city.overlayLocation[1] + 'px', postion: 'absolute'}" 
                         v-if="getCityState(cityId) !== ${CITY_STATE.OPEN}" />
 
                     <map name="story-image-map">
