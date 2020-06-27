@@ -7,6 +7,7 @@ import eel
 import time
 from pathlib import Path
 from shutil import rmtree
+from typing import Optional
 
 
 def download_and_extract_zip(download_url: str, local_folder_path: Path,
@@ -36,17 +37,17 @@ def get_json_from_url(url):
     return json.loads(response.read())
 
 
-def get_repo_size(repo_full_name):
+def get_repo_size(repo_full_name) -> Optional[int]:
     """
     Call GitHub API to get an estimate size of a GitHub repository.
     :param repo_full_name: Full name of a repository. Example: 'RLBot/RLBotPack'
-    :return: Size of the repository in bytes, or 0 if the API call fails.
+    :return: Size of the repository in bytes, or None if the API call fails.
     """
     try:
         data = get_json_from_url('https://api.github.com/repos/' + repo_full_name)
-        return int(data["size"]) * 1000
+        return int(data["size"] * 1000)
     except:
-        return 0
+        return None
 
 
 class BotpackDownloader:
@@ -94,13 +95,13 @@ class BotpackDownloader:
 
         # Unfortunately we can't know the size of the zip file before downloading it,
         # so we have to get the size from the GitHub API.
-        self.estimated_zip_size = get_repo_size(repo_full_name) * 0.5
+        self.estimated_zip_size = get_repo_size(repo_full_name) * 0.7
 
         # If we fail to get the repo size, set it to a fallback value,
         # so the progress bar will show atleast some progress.
-        # Let's assume the zip file is around 15 MB.
-        if self.estimated_zip_size == 0:
-            self.estimated_zip_size = 15_000_000
+        # Let's assume the zip file is around 40 MB.
+        if not self.estimated_zip_size:
+            self.estimated_zip_size = 40_000_000
 
         download_and_extract_zip(download_url=repo_url + '/archive/' + branch_name + '.zip',
                                  local_folder_path=checkout_folder,
