@@ -1,5 +1,6 @@
 import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
+import BotCard from './bot-card-vue.js'
 
 const STARTING_BOT_POOL = [
 	{'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
@@ -111,40 +112,24 @@ export default {
 			</div>
 
 			<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-				<b-card class="bot-card draggable md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
-					<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
-						<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-						<img v-if="bot.logo" v-bind:src="bot.logo">
-						<span class="bot-name">{{ bot.name }}</span>
-						<b-button size="sm" class="icon-button warning-icon" v-if="bot.warn" variant="outline-warning"
-								   @click.stop="activeBot = bot;" v-b-modal.language-warning-modal>
-						    <b-icon icon="exclamation-triangle-fill"></b-icon>
-						</b-button>
-						<b-button size="sm" variant="outline-primary" class="bot-hover-reveal icon-button" v-if="bot.info"
-								   @click.stop="activeBot = bot;" v-b-modal.bot-info-modal>
-							<b-icon icon="info-circle"></b-icon>
-						</b-button>
-					</button>
-				</b-card>
+				<bot-card v-for="bot in botPool" :bot="bot" @active-bot="activeBot = bot;"
+						  :class="{'filtered': !passesFilter(bot.name)}" class="draggable"
+						  @click="addToTeam(bot, teamSelection)"/>
 			</draggable>
+
 			<div class="mt-2 d-flex flex-wrap">
-				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool" :class="{'filtered': !passesFilter(script.name)}">
+				<bot-card v-for="script in scriptPool" :bot="script"
+						  class="script-card" :class="{'filtered': !passesFilter(script.name)}"
+						  @active-bot="activeBot = script;">
 					<b-form inline>
 						<b-form-checkbox v-model="script.enabled">
 							<img v-if="script.logo" v-bind:src="script.logo">
 							{{script.name}}
 						</b-form-checkbox>
-						<b-button size="sm" class="icon-button warning-icon" v-if="script.warn" variant="outline-warning"
-								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
-							<b-icon icon="exclamation-triangle-fill"></b-icon>
-						</b-button>
-						<b-button size="sm" variant="outline-primary" class="icon-button bot-hover-reveal" v-if="script.info"
-								   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
-							<b-icon icon="info-circle"></b-icon>
-						</b-button>
 					</b-form>
-				</b-card>
+				</bot-card>
 			</div>
+
 		</b-card>
 
 		<b-row>
@@ -383,7 +368,8 @@ export default {
 	`,
 	components: {
 		'appearance-editor': AppearanceEditor,
-		'mutator-field': MutatorField
+		'mutator-field': MutatorField,
+		'bot-card': BotCard,
 	},
 	data () {
 		return {
