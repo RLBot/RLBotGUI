@@ -1,0 +1,162 @@
+{
+    "bots": { },
+    "cities": {
+        "INTRO": {
+            "description": {
+                "displayName": "Beginner's Park",
+                "message": "Shoddy field for shoddy players. No boost available.",
+                "prereqs": []
+            },
+            "challenges": [
+                {
+                    "id": "INTRO-1",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["psyonix-pro"],
+                    "max_score": "3 Goals",
+                    "map": "BeckwithPark",
+                    "disabledBoost": true,
+                    "display": "Win something so we know you can drive"
+                }
+            ]
+        },
+        "TRYHARD": {
+            "description": {
+                "displayName": "City-State of Tryhard",
+                "message": "Place to start making your name! But know that everyone else is trying to do the same!",
+                "prereqs": ["INTRO"]
+            },
+            "challenges": [
+                {
+                    "id": "TRYHARD-1",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+                    "map": "UrbanCentral",
+                    "display": "Beat local up-and-comers in a 2v2."
+                },
+                {
+                    "id": "TRYHARD-2",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+                    "completionConditions": {
+                        "win": true,
+                        "scoreDifference": 3
+                    },
+                    "map": "UrbanCentral_Dawn",
+                    "display": "Upgrade your reputation by beating your opponents by 3 or more goals"
+                }
+            ]
+        },
+        "PBOOST": {
+            "description": {
+                "displayName": "Principality of Boost",
+                "message": "People at this level know the value of boost upgrades!",
+                "prereqs": ["INTRO"]
+            },
+            "challenges": [
+                {
+                    "id": "PBOOST-1",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["wildfire"],
+                    "map": "Mannfield",
+                    "display": "Take on a 1v1 match. Boost is your real ally!"
+                }
+            ]
+        },
+        "WASTELAND": {
+            "description": {
+                "displayName": "Demolishing Wastelands",
+                "message": "Don't expect politeness here. Home of the demo experts!",
+                "prereqs": ["TRYHARD", "PBOOST"]
+            },
+            "challenges": [
+                {
+                    "id": "WASTELAND-1",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["adversity", "adversity"],
+                    "completionConditions": {
+                        "win": true,
+                        "selfDemoCount": 0
+                    },
+                    "map": "Wasteland",
+                    "display": "Win without getting demoed the whole game"
+                },
+                {
+                    "id": "WASTELAND-2",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["adversity", "adversity", "reliefbot"],
+                    "completionConditions": {
+                        "win": true,
+                        "demoAchievedCount": 2
+                    },
+                    "map": "Wasteland",
+                    "display": "Win and get at least two demos"
+                }
+            ]
+        },
+        "CAMPANDSNIPE": {
+            "description": {
+                "displayName": "Commonwealth of Campandsnipe",
+                "message": "This city is a little different. Boost is limitless but the ball seems a bit different!",
+                "prereqs": ["TRYHARD", "PBOOST"]
+            },
+            "challenges": [
+            {
+                "id": "CS-1",
+                "humanTeamSize": 2,
+                "opponentBots": ["adversity", "baf"],
+                "limitations": ["half-field"],
+                "map": "AquaDome",
+                "display": "The ball is moving a lot faster! Win this heatseeker match!"
+            },
+            {
+                "id": "CS-2",
+                "humanTeamSize": 1,
+                "opponentBots": ["adversity", "baf"],
+                "limitations": ["half-field"],
+                "completionConditions": {
+                    "goalsScored": 1
+                },
+                "map": "AquaDome",
+                "display": "You are making the saves alone! Win 1v2!"
+            }
+
+            ]
+        },
+        "CHAMPIONSIAN": {
+            "description": {
+                "displayName": "Championsian Federation",
+                "message": "You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.",
+                "prereqs": ["WASTELAND", "CAMPANDSNIPE"]
+            },
+            "challenges": [
+            {
+                "id": "CHAMP-1",
+                "humanTeamSize": 3,
+                "opponentBots": ["botimus", "sdc", "reliefbot", "adversity"],
+                "map": "ChampionsField",
+                "display": "Things are getting unfair. Can you win 3v4?"
+            },
+            {
+                "id": "CHAMP-2",
+                "humanTeamSize": 2,
+                "opponentBots": ["botimus", "sdc", "adversity"],
+                "map": "ChampionsField_Day",
+                "display": "2v3! Win and score at least 2 goals!",
+                "completionConditions": {
+                    "goalsScored": 2
+                }
+            },
+            {
+                "id": "CHAMP-3",
+                "humanTeamSize": 1,
+                "opponentBots": ["botimus", "sdc", "adversity"],
+                "map": "ChampionsField",
+                "display": "1v3! The ultimate challenge! Win without getting demoed.",
+                "completionConditions": {
+                    "selfDemoCount": 0
+                }
+            }
+            ]
+        }
+    }
+}
