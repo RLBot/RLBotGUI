@@ -4,9 +4,6 @@ import StoryPickTeam from './story-pick-team.js';
 import StoryRecruitList from './story-recruit-list.js';
 
 const DEBUG = false;
-const CITIES = {
-    'INTRO': 1,
-};
 
 const CITY_STATE = {
     'LOCKED': 0,
@@ -26,9 +23,13 @@ const CITY_MAP_INFO = {
         overlayLocation: [229, 92], 
         clickArea: "45,181,53,319,79,347,97,329,141,335,144,277,121,183,70,169",
     },
-    'URBAN': {
+    'TRYHARD': {
         overlayLocation: [205, 225],
         clickArea: "124,182,146,335,281,321,289,237,241,172,149,126,115,147",
+    },
+    'PBOOST': {
+        overlayLocation: [367, 209],
+        clickArea: "74,346,61,381,83,461,137,532,266,526,328,455,286,392,255,349,254,323,152,338,98,332",
     },
     'WASTELAND': {
         overlayLocation: [123, 616],

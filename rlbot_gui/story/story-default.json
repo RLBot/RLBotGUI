@@ -19,22 +19,22 @@
                 }
             ]
         },
-        "URBAN": {
+        "TRYHARD": {
             "description": {
-                "displayName": "Urban Central",
-                "message": "Place to start making your name! People at this level know the value of Boost upgrades!",
+                "displayName": "City-State of Tryhard",
+                "message": "Place to start making your name! But know that everyone else is trying to do the same!",
                 "prereqs": ["INTRO"]
             },
             "challenges": [
                 {
-                    "id": "URBAN-1",
+                    "id": "TRYHARD-1",
                     "humanTeamSize": 2,
                     "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
                     "map": "UrbanCentral",
                     "display": "Beat local up-and-comers in a 2v2."
                 },
                 {
-                    "id": "URBAN-2",
+                    "id": "TRYHARD-2",
                     "humanTeamSize": 2,
                     "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
                     "completionConditions": {
@@ -46,11 +46,27 @@
                 }
             ]
         },
+        "PBOOST": {
+            "description": {
+                "displayName": "Principality of Boost",
+                "message": "People at this level know the value of boost upgrades!",
+                "prereqs": ["INTRO"]
+            },
+            "challenges": [
+                {
+                    "id": "PBOOST-1",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["wildfire"],
+                    "map": "Mannfield",
+                    "display": "Take on a 1v1 match. Boost is your real ally!"
+                }
+            ]
+        },
         "WASTELAND": {
             "description": {
                 "displayName": "Demolishing Wastelands",
                 "message": "Don't expect politeness here. Home of the demo experts!",
-                "prereqs": ["URBAN"]
+                "prereqs": ["TRYHARD", "PBOOST"]
             },
             "challenges": [
                 {
@@ -81,7 +97,7 @@
             "description": {
                 "displayName": "Commonwealth of Campandsnipe",
                 "message": "This city is a little different. Boost is limitless but the ball seems a bit different!",
-                "prereqs": ["URBAN"]
+                "prereqs": ["TRYHARD", "PBOOST"]
             },
             "challenges": [
             {
