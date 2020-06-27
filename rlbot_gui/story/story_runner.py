@@ -11,7 +11,7 @@ from PyQt5.QtCore import QSettings
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
 from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
-    get_challenges,
+    get_cities,
     get_challenges_by_id,
 )
 
@@ -26,8 +26,8 @@ def story_story_test():
 
 
 @eel.expose
-def get_challenges_json(story_id):
-    return get_challenges(story_id)
+def get_cities_json(story_id):
+    return get_cities(story_id)
 
 
 @eel.expose

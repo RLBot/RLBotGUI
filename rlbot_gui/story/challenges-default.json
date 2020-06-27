@@ -1,108 +1,294 @@
 {
-    "INTRO": [
-        {
-            "id": "INTRO-1",
-            "humanTeamSize": 1,
-            "opponentBots": ["psyonix-pro"],
-            "max_score": "3 Goals",
-            "map": "BeckwithPark",
-            "disabledBoost": true,
-            "display": "Win something so we know you can drive"
-        }
-    ],
-    "URBAN": [
-        {
-            "id": "URBAN-1",
-            "humanTeamSize": 2,
-            "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
-            "map": "UrbanCentral",
-            "display": "Beat local up-and-comers in a 2v2."
+    "bots": {
+        "psyonix-pro": {
+            "name": "Psyonix Pro",
+            "type": "psyonix",
+            "skill": 0.5
         },
-        {
-            "id": "URBAN-2",
-            "humanTeamSize": 2,
-            "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
-            "completionConditions": {
-                "win": true,
-                "scoreDifference": 3
-            },
-            "map": "UrbanCentral_Dawn",
-            "display": "Upgrade your reputation by beating your opponents by 3 or more goals"
-        }
-    ],
-    "WASTELAND": [
-        {
-            "id": "WASTELAND-1",
-            "humanTeamSize": 2,
-            "opponentBots": ["adversity", "adversity"],
-            "completionConditions": {
-                "win": true,
-                "selfDemoCount": 0
-            },
-            "map": "Wasteland",
-            "display": "Win without getting demoed the whole game"
+        "psyonix-allstar-name": {
+            "name": "Psyonix Allstar",
+            "type": "psyonix",
+            "skill": 1
         },
-        {
-            "id": "WASTELAND-2",
-            "humanTeamSize": 3,
-            "opponentBots": ["adversity", "adversity", "reliefbot"],
-            "completionConditions": {
-                "win": true,
-                "demoAchievedCount": 2
-            },
-            "map": "Wasteland",
-            "display": "Win and get at least two demos"
-        }
-    ],
-    "CAMPANDSNIPE": [
-        {
-            "id": "CS-1",
-            "humanTeamSize": 2,
-            "opponentBots": ["adversity", "baf"],
-            "limitations": ["half-field"],
-            "map": "AquaDome",
-            "display": "The ball is moving a lot faster! Win this heatseeker match!"
+        "adversity": {
+            "name": "AdversityBot",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "adversity_bot.cfg"]
         },
-        {
-            "id": "CS-2",
-            "humanTeamSize": 1,
-            "opponentBots": ["adversity", "baf"],
-            "limitations": ["half-field"],
-            "completionConditions": {
-                "goalsScored": 1
-            },
-            "map": "AquaDome",
-            "display": "You are making the saves alone! Win 1v2!"
+        "airbud": {
+            "name": "Airbud",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "air_bud.cfg"]
+        },
+        "reliefbot": {
+            "name": "ReliefBot",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "ReliefBotFamily", "README", "relief_bot.cfg"]
+        },
+        "sdc": {
+            "name": "Self-Driving Car",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Self-driving car", "self-driving-car.cfg"]
+        },
+        "kamael": {
+            "name": "Kamael",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Kamael", "Kamael.cfg"]
+        },
+        "botimus": {
+            "name": "BoltimusPrime",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Botimus&Bumblebee", "botimus.cfg"]
+        },
+        "bumblebee": {
+            "name": "Bumblebee",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Botimus&Bumblebee", "bumblebee.cfg"]
+        },
+        "baf": {
+            "name": "BAF",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "blind_and_deaf", "bot.cfg"]
+        },
+        "tbd": {
+            "name": "Psyonix Allstar",
+            "type": "psyonix",
+            "skill": 1
+        },
+        "skybot": {
+            "name": "Skybot",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Skybot", "SkyBot.cfg"]
+        },
+        "wildfire": {
+            "name": "Wildfire",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Wildfire_Lightfall_Fix", "python", "wildfire.cfg"]
+        },
+        "diablo": {
+            "name": "Diablo",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Diablo", "diablo.cfg"]
+        },
+        "rashbot": {
+            "name": "rashBot",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "MarvinBots", "rashBot", "rashBot.cfg"]
+        },
+        "stick": {
+            "name": "Stick",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "MarvinBots", "Stick", "stick.cfg"]
+        },
+        "leaf": {
+            "name": "Leaf",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "MarvinBots", "Leaf", "leaf.cfg"]
+        },
+        "lanfear": {
+            "name": "Lanfear",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "The Forsaken", "Lanfear.cfg"]
+        },
+        "manticore": {
+            "name": "Manticore",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Manticore", "manticore.cfg"]
+        },
+        "atlas": {
+            "name": "Atlas",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Atlas_Wintertide_Patch", "AtlasAgent", "Atlas.cfg"]
+        },
+        "sniper": {
+            "name": "Sniper",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Sniper", "sniper.cfg"]
+        },
+        "snek": {
+            "name": "Snek",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Snek", "snek.cfg"]
+        },
+        "nombot": {
+            "name": "NomBot",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "DomNomNom", "NomBot_v1.0", "NomBot_v1.cfg"]
+        },
+        "beast": {
+            "name": "Beast from the East",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Beast from the East", "beastbot.cfg"]
+        },
+        "cryo": {
+            "name": "Codename Cryo",
+            "type": "rlbot",
+            "skill": 1,
+            "path": ["$RLBOTPACKROOT", "RLBotPack", "Codename_Cryo", "Codename_Cryo.cfg"]
         }
+    },
+    "cities": {
+        "INTRO": {
+            "description": {
+                "displayName": "Beginner's Park",
+                "message": "Shoddy field for shoddy players. No boost available.",
+                "prereqs": []
+            },
+            "challenges": [
+                {
+                    "id": "INTRO-1",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["psyonix-pro"],
+                    "max_score": "3 Goals",
+                    "map": "BeckwithPark",
+                    "disabledBoost": true,
+                    "display": "Win something so we know you can drive"
+                }
+            ]
+        },
+        "URBAN": {
+            "description": {
+                "displayName": "Urban Central",
+                "message": "Place to start making your name! People at this level know the value of Boost upgrades!",
+                "prereqs": ["INTRO"]
+            },
+            "challenges": [
+                {
+                    "id": "URBAN-1",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+                    "map": "UrbanCentral",
+                    "display": "Beat local up-and-comers in a 2v2."
+                },
+                {
+                    "id": "URBAN-2",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+                    "completionConditions": {
+                        "win": true,
+                        "scoreDifference": 3
+                    },
+                    "map": "UrbanCentral_Dawn",
+                    "display": "Upgrade your reputation by beating your opponents by 3 or more goals"
+                }
+            ]
+        },
+        "WASTELAND": {
+            "description": {
+                "displayName": "Demolishing Wastelands",
+                "message": "Don't expect politeness here. Home of the demo experts!",
+                "prereqs": ["URBAN"]
+            },
+            "challenges": [
+                {
+                    "id": "WASTELAND-1",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["adversity", "adversity"],
+                    "completionConditions": {
+                        "win": true,
+                        "selfDemoCount": 0
+                    },
+                    "map": "Wasteland",
+                    "display": "Win without getting demoed the whole game"
+                },
+                {
+                    "id": "WASTELAND-2",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["adversity", "adversity", "reliefbot"],
+                    "completionConditions": {
+                        "win": true,
+                        "demoAchievedCount": 2
+                    },
+                    "map": "Wasteland",
+                    "display": "Win and get at least two demos"
+                }
+            ]
+        },
+        "CAMPANDSNIPE": {
+            "description": {
+                "displayName": "Commonwealth of Campandsnipe",
+                "message": "This city is a little different. Boost is limitless but the ball seems a bit different!",
+                "prereqs": ["URBAN"]
+            },
+            "challenges": [
+            {
+                "id": "CS-1",
+                "humanTeamSize": 2,
+                "opponentBots": ["adversity", "baf"],
+                "limitations": ["half-field"],
+                "map": "AquaDome",
+                "display": "The ball is moving a lot faster! Win this heatseeker match!"
+            },
+            {
+                "id": "CS-2",
+                "humanTeamSize": 1,
+                "opponentBots": ["adversity", "baf"],
+                "limitations": ["half-field"],
+                "completionConditions": {
+                    "goalsScored": 1
+                },
+                "map": "AquaDome",
+                "display": "You are making the saves alone! Win 1v2!"
+            }
 
-    ],
-    "CHAMPIONSIAN": [
-        {
-            "id": "CHAMP-1",
-            "humanTeamSize": 3,
-            "opponentBots": ["botimus", "sdc", "reliefbot", "adversity"],
-            "map": "ChampionsField",
-            "display": "Things are getting unfair. Can you win 3v4?"
+            ]
         },
-        {
-            "id": "CHAMP-2",
-            "humanTeamSize": 2,
-            "opponentBots": ["botimus", "sdc", "adversity"],
-            "map": "ChampionsField_Day",
-            "display": "2v3! Win and score at least 2 goals!",
-            "completionConditions": {
-                "goalsScored": 2
+        "CHAMPIONSIAN": {
+            "description": {
+                "displayName": "Championsian Federation",
+                "message": "You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.",
+                "prereqs": ["WASTELAND", "CAMPANDSNIPE"]
+            },
+            "challenges": [
+            {
+                "id": "CHAMP-1",
+                "humanTeamSize": 3,
+                "opponentBots": ["botimus", "sdc", "reliefbot", "adversity"],
+                "map": "ChampionsField",
+                "display": "Things are getting unfair. Can you win 3v4?"
+            },
+            {
+                "id": "CHAMP-2",
+                "humanTeamSize": 2,
+                "opponentBots": ["botimus", "sdc", "adversity"],
+                "map": "ChampionsField_Day",
+                "display": "2v3! Win and score at least 2 goals!",
+                "completionConditions": {
+                    "goalsScored": 2
+                }
+            },
+            {
+                "id": "CHAMP-3",
+                "humanTeamSize": 1,
+                "opponentBots": ["botimus", "sdc", "adversity"],
+                "map": "ChampionsField",
+                "display": "1v3! The ultimate challenge! Win without getting demoed.",
+                "completionConditions": {
+                    "selfDemoCount": 0
+                }
             }
-        },
-        {
-            "id": "CHAMP-3",
-            "humanTeamSize": 1,
-            "opponentBots": ["botimus", "sdc", "adversity"],
-            "map": "ChampionsField",
-            "display": "1v3! The ultimate challenge! Win without getting demoed.",
-            "completionConditions": {
-                "selfDemoCount": 0
-            }
+            ]
         }
-    ]
+    }
 }

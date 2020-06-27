@@ -21,41 +21,26 @@ const CITY_ICON_MAP = [
 ];
 
 // clickArea's generated using https://www.image-map.net/
-const CITY_DISPLAY_INFO = {
+const CITY_MAP_INFO = {
     'INTRO': {
-        displayName: "Beginner's Park",
-        message: "Shoddy field for shoddy players. No boost available.",
         overlayLocation: [229, 92], 
         clickArea: "45,181,53,319,79,347,97,329,141,335,144,277,121,183,70,169",
-        prereqs: [],
     },
     'URBAN': {
-        displayName: 'Urban Central',
-        message: 'Place to start making your name! People at this level know the value of Boost upgrades!',
         overlayLocation: [205, 225],
         clickArea: "124,182,146,335,281,321,289,237,241,172,149,126,115,147",
-        prereqs: ['INTRO']
     },
     'WASTELAND': {
-        displayName: 'Demolishing Wastelands',
-        message: 'Don\'t expect politeness here. Home of the demo experts!',
         overlayLocation: [123, 616],
         clickArea: "582,71,558,291,666,296,726,251,812,266,754,85",
-        prereqs: ['URBAN']
     },
     'CAMPANDSNIPE': {
-        displayName: 'Commonwealth of Campandsnipe',
-        message: 'This city is a little different. Boost is limitless but the ball seems a bit different!',
         overlayLocation: [369, 724],
         clickArea: "556,297,537,377,673,412,749,391,821,332,820,261,725,253,665,301",
-        prereqs: ['URBAN']
     },
     'CHAMPIONSIAN': {
-        displayName: 'Championsian Federation',
-        message: 'You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.',
         overlayLocation: [193, 520],
         clickArea: "227,160,293,237,284,317,267,355,280,377,425,336,487,321,557,232,559,160,417,106,222,113",
-        prereqs: ['WASTELAND', 'CAMPANDSNIPE']
     }
 };
 
@@ -245,7 +230,7 @@ export default {
         return {
             bots_config: {},
             game_in_progress: {},
-            cityDisplayInfo: CITY_DISPLAY_INFO,
+            cityDisplayInfo: {},
             challenges: null,
             selectedCityId: 'INTRO',
         };
@@ -328,7 +313,7 @@ export default {
         },
         getCityStateTooltip: function (city) {
             let state = this.getCityState(city);
-            let displayName = CITY_DISPLAY_INFO[city].displayName;
+            let displayName = this.cityDisplayInfo[city].displayName;
 
             const suffix = [
                 'is still locked.',
@@ -375,8 +360,14 @@ export default {
     },
     created: async function () {
         console.log(this.saveState)
-        this.challenges = await eel.get_challenges_json(this.saveState.story_config)();
+        let cities = await eel.get_cities_json(this.saveState.story_config)();
         this.bots_config = await eel.get_bots_json(this.saveState.story_config)();
+        this.challenges = {}
+        for (let city of Object.keys(cities)) {
+            this.challenges[city] = cities[city].challenges
+            this.cityDisplayInfo[city] = cities[city].description
+            Object.assign(this.cityDisplayInfo[city], CITY_MAP_INFO[city])
+        }
         this.switchSelectedCityToBest();
     },
     watch: {
