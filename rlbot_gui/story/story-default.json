@@ -3,7 +3,6 @@
     "cities": {
         "INTRO": {
             "description": {
-                "displayName": "Beginner's Park",
                 "message": "Shoddy field for shoddy players. No boost available.",
                 "prereqs": []
             },
@@ -21,7 +20,6 @@
         },
         "TRYHARD": {
             "description": {
-                "displayName": "City-State of Tryhard",
                 "message": "Place to start making your name! But know that everyone else is trying to do the same!",
                 "prereqs": ["INTRO"]
             },
@@ -48,7 +46,6 @@
         },
         "PBOOST": {
             "description": {
-                "displayName": "Principality of Boost",
                 "message": "People at this level know the value of boost upgrades!",
                 "prereqs": ["INTRO"]
             },
@@ -64,7 +61,6 @@
         },
         "WASTELAND": {
             "description": {
-                "displayName": "Demolishing Wastelands",
                 "message": "Don't expect politeness here. Home of the demo experts!",
                 "prereqs": ["TRYHARD", "PBOOST"]
             },
@@ -95,7 +91,6 @@
         },
         "CAMPANDSNIPE": {
             "description": {
-                "displayName": "Commonwealth of Campandsnipe",
                 "message": "This city is a little different. Boost is limitless but the ball seems a bit different!",
                 "prereqs": ["TRYHARD", "PBOOST"]
             },
@@ -124,7 +119,6 @@
         },
         "CHAMPIONSIAN": {
             "description": {
-                "displayName": "Championsian Federation",
                 "message": "You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.",
                 "prereqs": ["WASTELAND", "CAMPANDSNIPE"]
             },

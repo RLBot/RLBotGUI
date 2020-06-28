@@ -20,26 +20,32 @@ const CITY_ICON_MAP = [
 // clickArea's generated using https://www.image-map.net/
 const CITY_MAP_INFO = {
     'INTRO': {
+        displayName: "Beginner's Park",
         overlayLocation: [229, 92], 
         clickArea: "45,181,53,319,79,347,97,329,141,335,144,277,121,183,70,169",
     },
     'TRYHARD': {
+        displayName: "City-State of Tryhard",
         overlayLocation: [205, 225],
         clickArea: "124,182,146,335,281,321,289,237,241,172,149,126,115,147",
     },
     'PBOOST': {
+        displayName: "Principality of Boost",
         overlayLocation: [367, 209],
         clickArea: "74,346,61,381,83,461,137,532,266,526,328,455,286,392,255,349,254,323,152,338,98,332",
     },
     'WASTELAND': {
+        displayName: "Demolishing Wastelands",
         overlayLocation: [123, 616],
         clickArea: "582,71,558,291,666,296,726,251,812,266,754,85",
     },
     'CAMPANDSNIPE': {
+        displayName: "Commonwealth of Campandsnipe",
         overlayLocation: [369, 724],
         clickArea: "556,297,537,377,673,412,749,391,821,332,820,261,725,253,665,301",
     },
     'CHAMPIONSIAN': {
+        displayName: "Championsian Federation",
         overlayLocation: [193, 520],
         clickArea: "227,160,293,237,284,317,267,355,280,377,425,336,487,321,557,232,559,160,417,106,222,113",
     }
