@@ -120,7 +120,7 @@ def pysonix_to_player_config(player: dict, team: Team):
     player_config = PlayerConfig()
     player_config.bot = True
     player_config.rlbot_controlled = False
-    player_config.bot_skill = player["skill"]
+    player_config.bot_skill = player["skill"] if "skill" in player else 1
     player_config.name = player["name"]
     player_config.team = team.value
     # should be able to customize "loadout_config"
