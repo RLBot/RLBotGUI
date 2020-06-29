@@ -75,13 +75,13 @@
                 {
                     "id": "WASTELAND-1",
                     "humanTeamSize": 2,
-                    "opponentBots": ["adversity", "adversity"],
+                    "opponentBots": ["adversity", "wildfire"],
                     "completionConditions": {
                         "win": true,
-                        "selfDemoCount": 0
+                        "selfDemoCount": 1
                     },
                     "map": "Wasteland",
-                    "display": "Win without getting demoed the whole game"
+                    "display": "Win without getting demoed more than once"
                 },
                 {
                     "id": "WASTELAND-2",
@@ -105,21 +105,10 @@
             {
                 "id": "CS-1",
                 "humanTeamSize": 2,
-                "opponentBots": ["adversity", "baf"],
+                "opponentBots": ["leaf", "baf"],
                 "limitations": ["half-field"],
                 "map": "AquaDome",
                 "display": "The ball is moving a lot faster! Win this heatseeker match!"
-            },
-            {
-                "id": "CS-2",
-                "humanTeamSize": 1,
-                "opponentBots": ["adversity", "baf"],
-                "limitations": ["half-field"],
-                "completionConditions": {
-                    "goalsScored": 1
-                },
-                "map": "AquaDome",
-                "display": "You are making the saves alone! Win heatseeker 1v2!"
             },
             {
                 "id": "CS-3",
@@ -146,24 +135,24 @@
                 },
                 {
                     "id": "CHAMP-2",
-                    "humanTeamSize": 2,
+                    "humanTeamSize": 3,
                     "opponentBots": ["botimus", "sdc", "kamael"],
                     "map": "ChampionsField_Day",
-                    "display": "Things are getting unfair. Can you handle a 2v3?"
+                    "display": "Take on a crew of some of the best solo players!"
                 },
                 {
                     "id": "CHAMP-3",
                     "humanTeamSize": 3,
-                    "opponentBots": ["kamael", "diablo", "lanfear", "manticore", "atlas"],
+                    "opponentBots": ["diablo", "lanfear", "manticore", "atlas"],
                     "map": "ChampionsField_Day",
-                    "display": "These are mythical and magical cars. Can you take them on in a 3v5?"
+                    "display": "These are mythical and magical cars. Can you take them on in a 3v4?"
                 },
                 {
                     "id": "CHAMP-4",
-                    "humanTeamSize": 1,
+                    "humanTeamSize": 3,
                     "opponentBots": ["bumblebee", "bumblebee", "bumblebee"],
                     "map": "ChampionsField",
-                    "display": "1v3! Time to face the beehive."
+                    "display": "Time to face the beehive and prove yourself."
                 }
             ]
         }
