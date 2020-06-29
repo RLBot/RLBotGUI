@@ -123,5 +123,10 @@
         "name": "Codename Cryo",
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Codename_Cryo", "Codename_Cryo.cfg"]
+    },
+    "penguin": {
+        "name": "PenguinBot",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "PenguinBot", "penguin_config.cfg"]
     }
 }

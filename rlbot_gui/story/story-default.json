@@ -10,7 +10,7 @@
                 {
                     "id": "INTRO-1",
                     "humanTeamSize": 1,
-                    "opponentBots": ["psyonix-pro"],
+                    "opponentBots": ["skybot"],
                     "max_score": "3 Goals",
                     "map": "BeckwithPark",
                     "disabledBoost": true,
@@ -27,14 +27,14 @@
                 {
                     "id": "TRYHARD-1",
                     "humanTeamSize": 2,
-                    "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+                    "opponentBots": ["nombot", "beast"],
                     "map": "UrbanCentral",
                     "display": "Beat local up-and-comers in a 2v2."
                 },
                 {
                     "id": "TRYHARD-2",
                     "humanTeamSize": 2,
-                    "opponentBots": ["psyonix-allstar-name", "psyonix-allstar-name"],
+                    "opponentBots": ["penguin", "beast"],
                     "completionConditions": {
                         "win": true,
                         "scoreDifference": 3
@@ -46,16 +46,23 @@
         },
         "PBOOST": {
             "description": {
-                "message": "People at this level know the value of boost upgrades!",
+                "message": "This city is usually going through a storm. Legend says, Boost is how they have managed to prosper despite those conditions.",
                 "prereqs": ["INTRO"]
             },
             "challenges": [
                 {
                     "id": "PBOOST-1",
-                    "humanTeamSize": 1,
-                    "opponentBots": ["wildfire"],
-                    "map": "Mannfield",
-                    "display": "Take on a 1v1 match. Boost is your real ally!"
+                    "humanTeamSize": 2,
+                    "opponentBots": ["cryo", "cryo", "cryo"],
+                    "map": "UtopiaColiseum_Snowy",
+                    "display": "Bundle up to survive the deep freeze"
+                },
+                {
+                    "id": "PBOOST-2",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["rashbot", "stick", "leaf"],
+                    "map": "Mannfield_Stormy",
+                    "display": "2v3! Get through this storm of Marvin bots!"
                 }
             ]
         },
@@ -79,7 +86,7 @@
                 {
                     "id": "WASTELAND-2",
                     "humanTeamSize": 3,
-                    "opponentBots": ["adversity", "adversity", "reliefbot"],
+                    "opponentBots": ["adversity", "diablo", "wildfire"],
                     "completionConditions": {
                         "win": true,
                         "demoAchievedCount": 2
@@ -91,7 +98,7 @@
         },
         "CAMPANDSNIPE": {
             "description": {
-                "message": "This city is a little different. Boost is limitless but the ball seems a bit different!",
+                "message": "This city has a different feel. Sometimes the ball is possesed, other times its the cars. Be careful, you may be next!",
                 "prereqs": ["TRYHARD", "PBOOST"]
             },
             "challenges": [
@@ -112,9 +119,16 @@
                     "goalsScored": 1
                 },
                 "map": "AquaDome",
-                "display": "You are making the saves alone! Win 1v2!"
+                "display": "You are making the saves alone! Win heatseeker 1v2!"
+            },
+            {
+                "id": "CS-3",
+                "humanTeamSize": 2,
+                "opponentBots": ["sniper", "sniper", "nombot"],
+                "max_score": "3 Goals",
+                "map": "NeoTokyo",
+                "display": "There's something unnatural about these bots..."
             }
-
             ]
         },
         "CHAMPIONSIAN": {
@@ -123,33 +137,34 @@
                 "prereqs": ["WASTELAND", "CAMPANDSNIPE"]
             },
             "challenges": [
-            {
-                "id": "CHAMP-1",
-                "humanTeamSize": 3,
-                "opponentBots": ["botimus", "sdc", "reliefbot", "adversity"],
-                "map": "ChampionsField",
-                "display": "Things are getting unfair. Can you win 3v4?"
-            },
-            {
-                "id": "CHAMP-2",
-                "humanTeamSize": 2,
-                "opponentBots": ["botimus", "sdc", "adversity"],
-                "map": "ChampionsField_Day",
-                "display": "2v3! Win and score at least 2 goals!",
-                "completionConditions": {
-                    "goalsScored": 2
+                {
+                    "id": "CHAMP-1",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["airbud", "reliefbot", "adversity"],
+                    "map": "ChampionsField",
+                    "display": "Take on the Relief family in a 3v3!"
+                },
+                {
+                    "id": "CHAMP-2",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["botimus", "sdc", "kamael"],
+                    "map": "ChampionsField_Day",
+                    "display": "Things are getting unfair. Can you handle a 2v3?"
+                },
+                {
+                    "id": "CHAMP-3",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["kamael", "diablo", "lanfear", "manticore", "atlas"],
+                    "map": "ChampionsField_Day",
+                    "display": "These are mythical and magical cars. Can you take them on in a 3v5?"
+                },
+                {
+                    "id": "CHAMP-4",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["bumblebee", "bumblebee", "bumblebee"],
+                    "map": "ChampionsField",
+                    "display": "1v3! Time to face the beehive."
                 }
-            },
-            {
-                "id": "CHAMP-3",
-                "humanTeamSize": 1,
-                "opponentBots": ["botimus", "sdc", "adversity"],
-                "map": "ChampionsField",
-                "display": "1v3! The ultimate challenge! Win without getting demoed.",
-                "completionConditions": {
-                    "selfDemoCount": 0
-                }
-            }
             ]
         }
     }
