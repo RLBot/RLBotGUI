@@ -113,7 +113,7 @@
             {
                 "id": "CS-2",
                 "humanTeamSize": 1,
-                "opponentBots": ["adversity", "baf"],
+                "opponentBots": ["leaf", "baf"],
                 "limitations": ["half-field"],
                 "completionConditions": {
                     "goalsScored": 1
