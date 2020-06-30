@@ -18,6 +18,7 @@ There are a few steps to install this on Linux.
    - `sudo apt-get install curl` (If needed)
    - `sudo apt-get install python3-distutils` (If needed)
    - `sudo apt-get install python3.7-dev` (If needed)
+   - `sudo apt autoremove` (For garbage collection of recently installed packages)
    - `sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
    - `sudo rm get-pip.py`
 
