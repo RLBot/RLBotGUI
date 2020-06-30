@@ -363,9 +363,9 @@ export default {
 		<b-modal id="recommendations-modal" size="lg" hide-footer centered title="Recommendations" v-if="recommendations">
 			<p>Not sure which bots to play against? Try our recommended picks:</p>
 			<b-list-group>
-				<b-list-group-item v-for="recommendation in recommendations">
-					<bot-card v-for="bot in recommendation" :bot="bot" class="d-inline-flex" @active-bot="activeBot = bot;"/>
-					<b-button variant="primary" class="float-right" @click="selectRecommendation(recommendation)">Select</b-button>
+				<b-list-group-item v-for="recommendation in recommendations.recommendations">
+					<bot-card v-for="bot in recommendation.bots" :bot="bot" class="d-inline-flex" @active-bot="activeBot = bot;"/>
+					<b-button variant="primary" class="float-right" @click="selectRecommendation(recommendation.bots)">Select</b-button>
 				</b-list-group-item>
 			</b-list-group>
 		</b-modal>
