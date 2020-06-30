@@ -19,10 +19,10 @@ pushd "$HOME/.RLBotGUI"
 parsedVersion=$(echo "${version//./}")
 if [[ "$parsedVersion" -gt "370" && "$parsedVersion" -lt "380" ]]
 then
+    echo "Detected valid Python install"
+else
     echo "Invalid Python install. Installing Python 3.7..."
     sudo apt-get install python3.7
-else
-    echo "Detected valid Python install"
 fi
 
 # Check if the virtual environment exists
@@ -77,7 +77,8 @@ then
     pip install eel rlbot_gui rlbot
     if [ $? -gt 0 ]
     then
-        echo "Install Python-dev"
+        echo "Installing build-essential and python3.7-dev"
+		sudo apt-get install build-essential
         sudo apt-get install python3.7-dev
         pip install rlbot
     fi
