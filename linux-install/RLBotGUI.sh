@@ -18,9 +18,9 @@ pushd "$HOME/.RLBotGUI"
 python3.7 -V
 if [ $? -gt 0 ]
 then
-	echo ""
+    echo ""
     echo "Invalid Python install. Installing Python 3.7, and possibly not present dependencies..."
-	echo ""
+    echo ""
     sudo apt-get install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt-get update
@@ -31,10 +31,10 @@ fi
 
 if [ ! -e "$HOME/.RLBotGUI/env/bin/activate" ]
 then
-	# Instead of waiting to see if these aren't installed, just install them. If they're already installed, then nothing will happen.
-	echo ""
+    # Instead of waiting to see if these aren't installed, just install them. If they're already installed, then nothing will happen.
+    echo ""
     echo "Installing build-essential, python3.7-venv, python3.7-dev, python3-distutils, and curl if they're needed"
-	echo ""
+    echo ""
     sudo apt-get install build-essential
     sudo apt-get install python3.7-venv
     sudo apt-get install python3.7-dev
@@ -45,9 +45,9 @@ then
     # Create the virutal environment
     # There's currently a bug in Ubuntu, so we must create the venv without pip and then manually install it
 
-	echo ""
+    echo ""
     echo "Creating the Python 3.7 Virtual Environment"
-	echo ""
+    echo ""
 
     python3.7 -m venv --without-pip env
 
@@ -68,14 +68,14 @@ then
 
 else
     # Enter the virtual environment and upgrade all packages
-	echo ""
+    echo ""
     echo "Activating virtual environment"
-	echo ""
+    echo ""
     source ./env/bin/activate
 	
-	echo ""
+    echo ""
     echo "Updating packages"
-	echo ""
+    echo ""
     pip install --upgrade pip wheel setuptools eel rlbot_gui rlbot
 fi
 
