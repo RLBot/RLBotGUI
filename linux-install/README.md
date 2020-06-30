@@ -10,6 +10,9 @@ There are a few steps to install this on Linux.
 4. You will be asked to provide your password. The RLBotGUI requires sudo in order to run:
 
    - `sudo apt-get update`
+   - `sudo apt-get install software-properties-common` (If needed)
+   - `sudo add-apt-repository ppa:deadsnakes/ppa` (If needed)
+   - `sudo apt-get install build-essential` (If needed)
    - `sudo apt-get install python3.7` (If needed)
    - `sudo apt-get install python3.7-venv` (If needed)
    - `sudo apt-get install curl` (If needed)
@@ -27,4 +30,4 @@ There are a few steps to install this on Linux.
 1. Where ever you've put `RLBotGUI.sh`, run it using `path/to/RLBotGUI.sh`
 2. Unlike the first time you ran the script, you won't be prompted for you password. This is because it isn't needed.
 3. The shell script will now update all dependicies if needed (`pip`, `wheel`, `setuptools`, `eel`, `rlbot_gui` and `rlbot`)
-4. The RLBotGUI will then launch.
+4. The RLBotGUI will then launch in Chrome, or your defaut system browser if Chrome isn't installed.
