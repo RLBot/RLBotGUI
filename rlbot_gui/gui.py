@@ -468,18 +468,19 @@ def download_bot_pack():
 @eel.expose
 def get_recommendations():
     try:
-        # Load bot names from recommendations.json
+        # Load recommendations.json
         botpack_folder = get_content_folder() / BOTPACK_FOLDER
         file = open(botpack_folder / f'{BOTPACK_REPO_NAME}-{BOTPACK_REPO_BRANCH}' / 'RLBotPack' / 'recommendations.json')
-        recommendations_names = json.load(file)
+        data = json.load(file)
 
-        # Find bots in the botpack with matching names
+        # Replace bot names with bot bundles with matching names from the botpack
         bots_in_botpack = get_bots_from_directory(botpack_folder)
-        recommendations_bundles = []
-        for recommendation in recommendations_names:
-            bots = [next(bot for bot in bots_in_botpack if bot['name'] == name) for name in recommendation]
-            recommendations_bundles.append(bots)
-        return recommendations_bundles
+        for recommendation in data['recommendations']:
+            bot_names = recommendation['bots']
+            bots = [next(bot for bot in bots_in_botpack if bot['name'] == name) for name in bot_names]
+            recommendation['bots'] = bots
+
+        return data
 
     except Exception as ex:
         print(f'Failed to load recommendations. Reason: {ex}')
