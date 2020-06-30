@@ -12,18 +12,23 @@ rem If python 3.7 is not installed, then the above py command will cause a non-z
 
 if %ERRORLEVEL% GTR 0 (
 
-  echo Looks like we don't have python 3.7, will download and install from python.org...
+  echo Looks like we're missing the py launcher or python 3.7, will install...
 
-  if not exist python-install.exe (
-    powershell -Command "Invoke-WebRequest https://www.python.org/ftp/python/3.7.7/python-3.7.7-amd64.exe -OutFile .\python-installer.exe"
+  py --version
+  if %ERRORLEVEL% GTR 0 (
+    rem We seem not to have the python launcher, so install that explicitly and put it on the path.
+    %~dp0\python-3.7.7-amd64.exe /passive LauncherOnly=1 Include_launcher=1 InstallLauncherAllUsers=1 PrependPath=1
   )
 
-  rem Go ahead and install the specific version of python we want.
-  rem We have selected options which will not modify the user's PATH
-  rem If the user already has 3.7 installed but the py command was not available or could not find it,
-  rem the installation will be modified, which will probably not cause trouble for anyone.
 
-  .\python-installer.exe /passive InstallAllUsers=0 Shortcuts=0 Include_doc=0 Include_dev=0 Include_launcher=1 InstallLauncherAllUsers=0 PrependPath=0
+  py -3.7-64 --version
+  if %ERRORLEVEL% GTR 0 (
+    rem Go ahead and install the specific version of python we want.
+    rem We have selected options which will not modify the user's PATH
+    rem If the user already has 3.7 installed but the py command was not available or could not find it,
+    rem the installation will be modified, which will probably not cause trouble for anyone.
+    %~dp0\python-3.7.7-amd64.exe /passive InstallAllUsers=0 Shortcuts=0 Include_doc=0 Include_dev=0 Include_launcher=0 PrependPath=0
+  )
 )
 
 rem Create a virtual environment which will isolate our package installations from any
@@ -36,6 +41,11 @@ if not exist .\venv\Scripts\python.exe (
 
   echo Creating python virtual environment just for RLBot...
   py -3.7-64 -m venv .\venv
+  if %ERRORLEVEL% GTR 0 (
+    echo Something went wrong with the python installation, aborting.
+    pause
+    exit
+  )
 )
 
 set rlbotpy=.\venv\Scripts\python.exe
