@@ -8,6 +8,9 @@ import time
 import traceback
 
 import eel
+from rlbot.matchconfig.loadout_config import LoadoutConfig
+from rlbot.parsing.bot_config_bundle import get_bot_config_bundle
+from rlbot.parsing.agent_config_parser import load_bot_appearance
 from rlbot.utils.game_state_util import GameState, CarState
 from rlbot.utils.structures.game_data_struct import GameTickPacket, Vector3
 from rlbot.parsing.match_settings_config_parser import (
@@ -102,6 +105,9 @@ def rlbot_to_player_config(player: dict, team: Team):
     player_config.name = player["name"]
     player_config.team = team.value
     player_config.config_path = bot_path
+    config = get_bot_config_bundle(bot_path)
+    loadout = load_bot_appearance(config.get_looks_config(), team.value)
+    player_config.loadout_config = loadout
     return player_config
 
 
@@ -146,10 +152,14 @@ def make_player_configs(
         print(i)
         teammate = all_bots[human_picks[i]]
         config = bot_to_player(teammate, Team.BLUE)
+        config.loadout_config.custom_color_id = team_info["color_secondary"]
         player_configs.append(config)
 
     for opponent in challenge["opponentBots"]:
         bot = bot_to_player(all_bots[opponent], Team.ORANGE)
+        color = challenge.get("city_description", {}).get("color")
+        if color:
+            bot.loadout_config.team_color_id = color
         player_configs.append(bot)
 
     return player_configs
