@@ -1,5 +1,6 @@
 from functools import lru_cache
 from os import path
+from copy import deepcopy
 
 import json
 
@@ -31,10 +32,12 @@ def get_cities(story_id):
 
 
 def get_challenges_by_id(story_id):
-    challenges = get_cities(story_id)
-    challenges_by_id = {
-        challenge["id"]: challenge for city in challenges.values() for challenge in city["challenges"]
-    }
+    cities = get_cities(story_id)
+    challenges_by_id = { }
+    for city_id, city in cities.items():
+        for challenge in  city["challenges"]:
+            challenges_by_id[challenge["id"]] = deepcopy(challenge)
+            challenges_by_id[challenge["id"]]["city_description"] = city["description"]
     return challenges_by_id
 
 
