@@ -51,18 +51,18 @@
             },
             "challenges": [
                 {
-                    "id": "PBOOST-1",
-                    "humanTeamSize": 2,
-                    "opponentBots": ["cryo", "cryo", "cryo"],
-                    "map": "UtopiaColiseum_Snowy",
-                    "display": "Bundle up to survive the deep freeze"
-                },
-                {
                     "id": "PBOOST-2",
                     "humanTeamSize": 2,
                     "opponentBots": ["rashbot", "stick", "leaf"],
                     "map": "Mannfield_Stormy",
                     "display": "2v3! Get through this storm of Marvin bots!"
+                },
+                {
+                    "id": "PBOOST-1",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["cryo", "cryo", "cryo"],
+                    "map": "UtopiaColiseum_Snowy",
+                    "display": "Bundle up to survive the deep freeze"
                 }
             ]
         },
