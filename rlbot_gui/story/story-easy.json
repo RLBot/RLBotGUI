@@ -105,7 +105,7 @@
             {
                 "id": "CS-1",
                 "humanTeamSize": 2,
-                "opponentBots": ["leaf", "baf"],
+                "opponentBots": ["kamael", "baf"],
                 "limitations": ["half-field"],
                 "map": "AquaDome",
                 "display": "The ball is moving a lot faster! Win this heatseeker match!"
