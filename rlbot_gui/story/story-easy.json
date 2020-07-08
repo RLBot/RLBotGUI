@@ -21,7 +21,8 @@
         "TRYHARD": {
             "description": {
                 "message": "Place to start making your name! But know that everyone else is trying to do the same!",
-                "prereqs": ["INTRO"]
+                "prereqs": ["INTRO"],
+                "color": 16
             },
             "challenges": [
                 {
@@ -47,7 +48,8 @@
         "PBOOST": {
             "description": {
                 "message": "This city is usually going through a storm. Legend says, Boost is how they have managed to prosper despite those conditions.",
-                "prereqs": ["INTRO"]
+                "prereqs": ["INTRO"],
+                "color": 32
             },
             "challenges": [
                 {
@@ -69,7 +71,8 @@
         "WASTELAND": {
             "description": {
                 "message": "Don't expect politeness here. Home of the demo experts!",
-                "prereqs": ["TRYHARD", "PBOOST"]
+                "prereqs": ["TRYHARD", "PBOOST"],
+                "color": 36
             },
             "challenges": [
                 {
@@ -99,7 +102,8 @@
         "CAMPANDSNIPE": {
             "description": {
                 "message": "This city has a different feel. Sometimes the ball is possesed, other times its the cars. Be careful, you may be next!",
-                "prereqs": ["TRYHARD", "PBOOST"]
+                "prereqs": ["TRYHARD", "PBOOST"],
+                "color": 39
             },
             "challenges": [
             {
@@ -123,7 +127,8 @@
         "CHAMPIONSIAN": {
             "description": {
                 "message": "You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.",
-                "prereqs": ["WASTELAND", "CAMPANDSNIPE"]
+                "prereqs": ["WASTELAND", "CAMPANDSNIPE"],
+                "color": 69
             },
             "challenges": [
                 {
