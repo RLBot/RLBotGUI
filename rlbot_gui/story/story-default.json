@@ -117,7 +117,7 @@
             {
                 "id": "CS-2",
                 "humanTeamSize": 1,
-                "opponentBots": ["leaf", "baf"],
+                "opponentBots": ["kamael", "baf"],
                 "limitations": ["half-field"],
                 "completionConditions": {
                     "goalsScored": 1
