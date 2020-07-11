@@ -22,7 +22,7 @@ Works on Windows and Linux
 
 You can download, update or create bots
 
-![HomeScreenshot](screenshots/RLBotGUI-Home.PNG)
+![HomeScreenshot](screenshots/RLBotGUI-Home-2.png)
 
 
 In Story Mode, you can take over cities by beating challenges and can also
