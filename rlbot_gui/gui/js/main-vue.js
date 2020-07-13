@@ -473,11 +473,11 @@ export default {
 			eel.kill_bots();
 		},
 		pickBotFolder: function (event) {
-			eel.pick_bot_folder()(this.botsReceived);
+			eel.pick_bot_folder()();
 			eel.get_folder_settings()(this.folderSettingsReceived);
 		},
 		pickBotConfig: function (event) {
-			eel.pick_bot_config()(this.botsReceived);
+			eel.pick_bot_config()();
 			eel.get_folder_settings()(this.folderSettingsReceived);
 		},
 		addToTeam: function(bot, team) {
