@@ -115,12 +115,27 @@
                 "display": "The ball is moving a lot faster! Win this heatseeker match!"
             },
             {
+                "id": "CS-4",
+                "humanTeamSize": 2,
+                "opponentBots": ["invisibot", "invisibot", "peter"],
+                "map": "NeoTokyo",
+                "display": "Wait where did that car go?"
+            },
+            {
                 "id": "CS-3",
                 "humanTeamSize": 2,
                 "opponentBots": ["sniper", "sniper", "nombot"],
                 "max_score": "3 Goals",
                 "map": "NeoTokyo",
                 "display": "There's something unnatural about these bots..."
+            },
+            {
+                "id": "CS-5",
+                "humanTeamSize": 2,
+                "opponentBots": ["snek", "snek"],
+                "max_score": "3 Goals",
+                "map": "NeoTokyo",
+                "display": "There's something unnatural-er about these bots"
             }
             ]
         },
@@ -144,6 +159,13 @@
                     "opponentBots": ["botimus", "sdc", "kamael"],
                     "map": "ChampionsField_Day",
                     "display": "Take on a crew of some of the best solo players!"
+                },
+                {
+                    "id": "CHAMP-5",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["snek", "sniper", "invisibot"],
+                    "map": "ChampionsField_Day",
+                    "display": "These masters of space and time have united to stop you!"
                 },
                 {
                     "id": "CHAMP-3",
