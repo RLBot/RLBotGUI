@@ -126,12 +126,27 @@
                 "display": "You are making the saves alone! Win heatseeker 1v2!"
             },
             {
+                "id": "CS-4",
+                "humanTeamSize": 2,
+                "opponentBots": ["invisibot", "invisibot", "peter"],
+                "map": "NeoTokyo",
+                "display": "Wait where did that car go?"
+            },
+            {
                 "id": "CS-3",
                 "humanTeamSize": 2,
                 "opponentBots": ["sniper", "sniper", "nombot"],
                 "max_score": "3 Goals",
                 "map": "NeoTokyo",
                 "display": "There's something unnatural about these bots..."
+            },
+            {
+                "id": "CS-5",
+                "humanTeamSize": 1,
+                "opponentBots": ["snek", "peter"],
+                "max_score": "3 Goals",
+                "map": "NeoTokyo",
+                "display": "There's something unnatural-er about these bots"
             }
             ]
         },
@@ -154,7 +169,14 @@
                     "humanTeamSize": 2,
                     "opponentBots": ["botimus", "sdc", "kamael"],
                     "map": "ChampionsField_Day",
-                    "display": "Things are getting unfair. Can you handle a 2v3?"
+                    "display": "Things are getting unfair. Can you handle a 2v3 against some of the best solo players?"
+                },
+                {
+                    "id": "CHAMP-5",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["snek", "sniper", "invisibot"],
+                    "map": "ChampionsField_Day",
+                    "display": "These masters of space and time have united to stop you!"
                 },
                 {
                     "id": "CHAMP-3",

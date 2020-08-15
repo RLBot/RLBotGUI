@@ -128,5 +128,16 @@
         "name": "PenguinBot",
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "PenguinBot", "penguin_config.cfg"]
+    },
+    "peter": {
+        "name": "St. Peter",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Kamael", "peter.cfg"]
+    },
+    "invisibot": {
+        "name": "Invisibot",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Invisibot", "src", "invisibot.cfg"]
     }
+
 }
