@@ -17,7 +17,7 @@ if %ERRORLEVEL% GTR 0 (
   py --version
   if %ERRORLEVEL% GTR 0 (
     rem We seem not to have the python launcher, so install that explicitly and put it on the path.
-    %~dp0\python-3.7.7-amd64.exe /passive LauncherOnly=1 Include_launcher=1 InstallLauncherAllUsers=1 PrependPath=1
+    "%~dp0\python-3.7.7-amd64.exe" /passive LauncherOnly=1 Include_launcher=1 InstallLauncherAllUsers=1 PrependPath=1
   )
 
 
@@ -27,7 +27,7 @@ if %ERRORLEVEL% GTR 0 (
     rem We have selected options which will not modify the user's PATH
     rem If the user already has 3.7 installed but the py command was not available or could not find it,
     rem the installation will be modified, which will probably not cause trouble for anyone.
-    %~dp0\python-3.7.7-amd64.exe /passive InstallAllUsers=0 Shortcuts=0 Include_doc=0 Include_dev=0 Include_launcher=0 PrependPath=0
+    "%~dp0\python-3.7.7-amd64.exe" /passive InstallAllUsers=0 Shortcuts=0 Include_doc=0 Include_dev=0 Include_launcher=0 PrependPath=0
   )
 )
 
@@ -37,7 +37,7 @@ rem existing python installation that the user may have.
 if not exist .\venv\Scripts\python.exe (
   rem if we just installed python for the first time then py is probably still not on PATH.
   rem Make sure the environment variables are up-to-date.
-  call %~dp0\RefreshEnv.cmd
+  call "%~dp0\RefreshEnv.cmd"
 
   echo Creating python virtual environment just for RLBot...
   py -3.7-64 -m venv .\venv
