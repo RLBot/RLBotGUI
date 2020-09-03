@@ -97,10 +97,10 @@ export default {
             console.log("Starting match", id);
             eel.launch_challenge(id, pickedTeammates);
         },
-        purchaseUpgrade: function ({ id, currentCurrency }) {
+        purchaseUpgrade: function ({ id, currentCurrency, cost }) {
             // Send eel a message to add id to purchases and reduce currency
             console.log("Will purchase: ", id);
-            eel.purchase_upgrade(id, currentCurrency);
+            eel.purchase_upgrade(id, currentCurrency, cost);
         },
         recruit: function ({ id, currentCurrency }) {
             console.log("Will recruit ", id);

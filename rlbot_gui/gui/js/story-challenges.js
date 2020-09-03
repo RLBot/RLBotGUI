@@ -93,7 +93,7 @@ export default {
                 <b-img src="imgs/story/coin.png" />
                 <p>
                 Congrats on finishing the challenge! 
-                You have earned 1 currency!
+                You have earned 2 currency!
                 </p>
                 <p>
                 You can use it to recruit previous opponents, 
@@ -210,7 +210,7 @@ export default {
                     <b-row class="mt-1 overflow-auto" style="max-height: 300px; min-height:300px">
                     <b-card no-body class="w-100">
                         <b-tabs content-class="mt-3" fill class="story-card-text">
-                            <b-tab title="Upgrades" >
+                            <b-tab title="Upgrades">
                                 <story-upgrades 
                                     v-bind:upgradeSaveState="saveState.upgrades"
                                     @purchase_upgrade="$emit('purchase_upgrade', $event)">
