@@ -3,18 +3,22 @@ const UPGRADES = [
     {
         "id": "boost-33",
         "text": "Boost Capacity: 33%",
+        "cost": 3,
     },
     {
         "id": "boost-100",
         "text": "Boost Capacity: 100%",
+        "cost": 3,
     },
     {
         "id": "boost-recharge",
         "text": "Auto-Recharge Boost",
+        "cost": 4,
     },
     {
         "id": "rumble",
         "text": "Rumble Powerups",
+        "cost": 6
     }
 ];
 
@@ -32,8 +36,9 @@ export default {
                 v-bind:id="upgrade.id"
                 variant="success"
                 v-bind:disabled="!upgrade.available"
-                @click="purchase(upgrade.id)">
-                Purchase
+                @click="purchase(upgrade)">
+                {{upgrade.cost}}
+                <b-img src="imgs/story/coin.png" height="30px"/>
             </b-button>
         </b-list-group-item>
     </b-list-group>
@@ -44,8 +49,9 @@ export default {
             let result = UPGRADES.map((item) => ({
                 id: item.id,
                 text: item.text,
+                cost: item.cost,
                 purchased: Boolean(this.upgradeSaveState[item.id]),
-                available: currency > 0
+                available: currency >= item.cost
             }));
 
             // Screw it, hard coding it is
@@ -59,11 +65,12 @@ export default {
         },
     },
     methods: {
-        purchase: function (id) {
-            console.log("In purchases", id);
+        purchase: function (item) {
+            console.log("In purchases", item.id);
             this.$emit('purchase_upgrade', {
-                id,
-                currentCurrency: this.upgradeSaveState.currency
+                id: item.id,
+                currentCurrency: this.upgradeSaveState.currency,
+                cost: item.cost
             });
         }
     }
