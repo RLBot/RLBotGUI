@@ -6,7 +6,7 @@ if not exist "%LocalAppData%\RLBotGUIX" mkdir "%LocalAppData%\RLBotGUIX"
 pushd "%LocalAppData%\RLBotGUIX"
 
 if not exist "%LocalAppData%\RLBotGUIX\Python37" (
-  echo Looks like we're missing the Python 3.7, installing...
+  echo Looks like we're missing RLBot's Python (3.7.9), installing...
 
   powershell Expand-Archive "%~dp0\python-3.7.9-custom-amd64.zip" "%LocalAppData%\RLBotGUIX\Python37"
 
@@ -21,10 +21,10 @@ rem Create a virtual environment which will isolate our package installations fr
 rem existing python installation that the user may have.
 
 if not exist .\venv\Scripts\activate.bat (
-  echo Creating python virtual environment just for RLBot...
+  echo Creating Python virtual environment just for RLBot...
   "%LocalAppData%\RLBotGUIX\Python37\python.exe" -m venv .\venv
   if %ERRORLEVEL% GTR 0 (
-    echo Something went wrong with the python installation, aborting.
+    echo Something went wrong with creating Python virtual environment, aborting.
     pause
     exit
   )
