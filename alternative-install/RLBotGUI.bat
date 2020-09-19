@@ -6,7 +6,7 @@ if not exist "%LocalAppData%\RLBotGUIX" mkdir "%LocalAppData%\RLBotGUIX"
 pushd "%LocalAppData%\RLBotGUIX"
 
 if not exist "%LocalAppData%\RLBotGUIX\Python37" (
-  echo Looks like we're missing RLBot's Python (3.7.9), installing...
+  echo Looks like we're missing RLBot's Python ^(3.7.9^), installing...
 
   powershell Expand-Archive "%~dp0\python-3.7.9-custom-amd64.zip" "%LocalAppData%\RLBotGUIX\Python37"
 
@@ -47,3 +47,4 @@ python -c "from rlbot_gui import gui; gui.start()"
 if %ERRORLEVEL% GTR 0 (
   pause
 )
+
