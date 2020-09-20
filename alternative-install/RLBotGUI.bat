@@ -2,65 +2,49 @@
 
 echo Installing RLBotGUI if necessary, then launching!
 
-
 if not exist "%LocalAppData%\RLBotGUIX" mkdir "%LocalAppData%\RLBotGUIX"
 pushd "%LocalAppData%\RLBotGUIX"
 
-py -3.7-64 --version
+if not exist "%LocalAppData%\RLBotGUIX\Python37" (
+  echo Looks like we're missing RLBot's Python ^(3.7.9^), installing...
 
-rem If python 3.7 is not installed, then the above py command will cause a non-zero error level.
+  powershell Expand-Archive "%~dp0\python-3.7.9-custom-amd64.zip" "%LocalAppData%\RLBotGUIX\Python37"
 
-if %ERRORLEVEL% GTR 0 (
-
-  echo Looks like we're missing the py launcher or python 3.7, will install...
-
-  py --version
-  if %ERRORLEVEL% GTR 0 (
-    rem We seem not to have the python launcher, so install that explicitly and put it on the path.
-    "%~dp0\python-3.7.7-amd64.exe" /passive LauncherOnly=1 Include_launcher=1 InstallLauncherAllUsers=1 PrependPath=1
-  )
-
-
-  py -3.7-64 --version
-  if %ERRORLEVEL% GTR 0 (
-    rem Go ahead and install the specific version of python we want.
-    rem We have selected options which will not modify the user's PATH
-    rem If the user already has 3.7 installed but the py command was not available or could not find it,
-    rem the installation will be modified, which will probably not cause trouble for anyone.
-    "%~dp0\python-3.7.7-amd64.exe" /passive InstallAllUsers=0 Shortcuts=0 Include_doc=0 Include_dev=0 Include_launcher=0 PrependPath=0
+  if exist "%LocalAppData%\RLBotGUIX\venv\pyvenv.cfg" (
+    echo Old venv detected, updating Python location so we don't have to reinstall...
+    rem This is a custom python script that updates the Python location in the venv
+    "%LocalAppData%\RLBotGUIX\Python37\python.exe" "%~dp0\update_venv.py"
   )
 )
 
 rem Create a virtual environment which will isolate our package installations from any
 rem existing python installation that the user may have.
 
-if not exist .\venv\Scripts\python.exe (
-  rem if we just installed python for the first time then py is probably still not on PATH.
-  rem Make sure the environment variables are up-to-date.
-  call "%~dp0\RefreshEnv.cmd"
-
-  echo Creating python virtual environment just for RLBot...
-  py -3.7-64 -m venv .\venv
+if not exist .\venv\Scripts\activate.bat (
+  echo Creating Python virtual environment just for RLBot...
+  "%LocalAppData%\RLBotGUIX\Python37\python.exe" -m venv .\venv
   if %ERRORLEVEL% GTR 0 (
-    echo Something went wrong with the python installation, aborting.
+    echo Something went wrong with creating Python virtual environment, aborting.
     pause
     exit
   )
 )
 
-set rlbotpy=.\venv\Scripts\python.exe
+rem Activate the virtual environment
+call .\venv\Scripts\activate.bat
 
 echo Installing / upgrading RLBot components...
 
-%rlbotpy% -m pip install --upgrade pip
-%rlbotpy% -m pip install wheel
-%rlbotpy% -m pip install eel
-%rlbotpy% -m pip install --upgrade rlbot_gui rlbot
+pip install --upgrade pip
+pip install wheel
+pip install eel
+pip install --upgrade rlbot_gui rlbot
 
 echo Launching RLBotGUI...
 
-%rlbotpy% -c "from rlbot_gui import gui; gui.start()"
+python -c "from rlbot_gui import gui; gui.start()"
 
 if %ERRORLEVEL% GTR 0 (
   pause
 )
+
