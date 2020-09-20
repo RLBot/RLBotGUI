@@ -482,8 +482,7 @@ def get_recommendations():
 
         return data
 
-    except Exception as ex:
-        print(f'Failed to load recommendations. Reason: {ex}')
+    except:
         return None
 
 
