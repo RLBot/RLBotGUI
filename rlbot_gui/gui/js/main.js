@@ -3,19 +3,9 @@ function PythonPrint(message) {
     console.log("Python: "+message);
 }
 
-
 import Main from './main-vue.js'
 import Sandbox from './sandbox-vue.js'
 import Story from './story-mode.js'
-
-
-// eel does not provide an API for this. Lets just edit the browser functions it uses. Improvise, adapt, overcome.
-const _WebSocket = window.WebSocket;
-window.WebSocket = function() {
-    const ws = new _WebSocket(...arguments);
-    ws.onclose = window.close.bind(window);
-    return ws;
-};
 
 const routes = [
     { path: '/', component: Main },
