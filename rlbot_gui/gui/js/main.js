@@ -7,13 +7,8 @@ import Main from './main-vue.js'
 import Sandbox from './sandbox-vue.js'
 import Story from './story-mode.js'
 
-// eel does not provide an API for this. Lets just edit the browser functions it uses. Improvise, adapt, overcome.
-const _WebSocket = window.WebSocket;
-window.WebSocket = function() {
-    const ws = new _WebSocket(...arguments);
-    ws.onclose = window.close.bind(window);
-    return ws;
-};
+// eel does not provide an API for this. Close the browser when the websocket closes.
+document.addEventListener("DOMContentLoaded", e => eel._websocket.onclose = window.close.bind(window));
 
 const routes = [
     { path: '/', component: Main },
