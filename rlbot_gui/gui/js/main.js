@@ -4,6 +4,11 @@ function PythonPrint(message) {
 }
 
 
+import Main from './main-vue.js'
+import Sandbox from './sandbox-vue.js'
+import Story from './story-mode.js'
+
+
 // eel does not provide an API for this. Lets just edit the browser functions it uses. Improvise, adapt, overcome.
 const _WebSocket = window.WebSocket;
 window.WebSocket = function() {
@@ -11,20 +16,6 @@ window.WebSocket = function() {
     ws.onclose = window.close.bind(window);
     return ws;
 };
-
-
-// looks like if you want to expose a function inside a vue component,
-// you first have to expose it's signature like this
-eel.expose(updateDownloadProgress);
-function updateDownloadProgress(progress, status) {}
-// otherwise python will think it doesn't exist
-// you can then expose the actual function later
-
-// Vue.use(VueMaterial.default);
-
-import Main from './main-vue.js'
-import Sandbox from './sandbox-vue.js'
-import Story from './story-mode.js'
 
 const routes = [
     { path: '/', component: Main },

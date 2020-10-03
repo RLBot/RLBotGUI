@@ -1,8 +1,10 @@
 import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
+import BotCard from './bot-card-vue.js'
 
+const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
 const STARTING_BOT_POOL = [
-	{'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'},
+	HUMAN,
 	{'name': 'Psyonix Allstar', 'type': 'psyonix', 'skill': 1, 'image': 'imgs/psyonix.png'},
 	{'name': 'Psyonix Pro', 'type': 'psyonix', 'skill': 0.5, 'image': 'imgs/psyonix.png'},
 	{'name': 'Psyonix Rookie', 'type': 'psyonix', 'skill': 0, 'image': 'imgs/psyonix.png'}
@@ -81,7 +83,8 @@ export default {
 		<b-card class="bot-pool">
 			<div class="center-flex mb-3">
 				<span class="rlbot-card-header">Player Types</span>
-				<b-dropdown text="Add" class="ml-2 mr-2">
+				<b-dropdown class="ml-2 mr-2">
+					<template v-slot:button-content><b-icon icon="plus"/>Add</template>
 					<b-dropdown-item  @click="downloadBotPack()">
 						<b-icon icon="cloud-download"></b-icon>
 						<span>Download Bot Pack</span>
@@ -100,51 +103,38 @@ export default {
 					</b-dropdown-item>
 				</b-dropdown>
 				<b-button @click="prepareFolderSettingsDialog" v-b-modal.folder-settings-modal>
-					Manage bot folders
+				<b-icon icon="gear"/> Manage bot folders
 				</b-button>
-				<div class="ml-4">
+				<div class="ml-3">
 					<b-form inline>
 						<label for="filter-text-input" class="mr-2"><b-icon icon="search"></b-icon></label>
 						<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Filter..."></b-form-input>
 					</b-form>
 				</div>
+				<b-button v-b-modal.recommendations-modal class="ml-2" v-if="recommendations">
+					<b-icon icon="hand-thumbs-up"/> Recommendations
+				</b-button>
 			</div>
 
 			<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-				<b-card class="bot-card draggable md-elevation-3" v-for="bot in botPool" :class="{'filtered': !passesFilter(bot.name)}">
-					<button class="center-flex secret-button" @click="addToTeam(bot, teamSelection)">
-						<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-						<img v-if="bot.logo" v-bind:src="bot.logo">
-						<span class="bot-name">{{ bot.name }}</span>
-						<b-button size="sm" class="icon-button warning-icon" v-if="bot.warn" variant="outline-warning"
-								   @click.stop="activeBot = bot;" v-b-modal.language-warning-modal>
-						    <b-icon icon="exclamation-triangle-fill"></b-icon>
-						</b-button>
-						<b-button size="sm" variant="outline-primary" class="bot-hover-reveal icon-button" v-if="bot.info"
-								   @click.stop="activeBot = bot;" v-b-modal.bot-info-modal>
-							<b-icon icon="info-circle"></b-icon>
-						</b-button>
-					</button>
-				</b-card>
+				<bot-card v-for="bot in botPool" :bot="bot" @active-bot="activeBot = bot;"
+						  :class="{'filtered': !passesFilter(bot.name)}" class="draggable"
+						  @click="addToTeam(bot, teamSelection)"/>
 			</draggable>
+
 			<div class="mt-2 d-flex flex-wrap">
-				<b-card class="bot-card script-card md-elevation-3" v-for="script in scriptPool" :class="{'filtered': !passesFilter(script.name)}">
+				<bot-card v-for="script in scriptPool" :bot="script"
+						  class="script-card" :class="{'filtered': !passesFilter(script.name)}"
+						  @active-bot="activeBot = script;">
 					<b-form inline>
 						<b-form-checkbox v-model="script.enabled">
 							<img v-if="script.logo" v-bind:src="script.logo">
 							{{script.name}}
 						</b-form-checkbox>
-						<b-button size="sm" class="icon-button warning-icon" v-if="script.warn" variant="outline-warning"
-								   @click.stop="activeBot = script;" v-b-modal.language-warning-modal>
-							<b-icon icon="exclamation-triangle-fill"></b-icon>
-						</b-button>
-						<b-button size="sm" variant="outline-primary" class="icon-button bot-hover-reveal" v-if="script.info"
-								   @click.stop="activeBot = script;" v-b-modal.bot-info-modal>
-							<b-icon icon="info-circle"></b-icon>
-						</b-button>
 					</b-form>
-				</b-card>
+				</bot-card>
 			</div>
+
 		</b-card>
 
 		<b-row>
@@ -370,6 +360,16 @@ export default {
 			<p>{{ downloadStatus }}</p>
 		</b-modal>
 
+		<b-modal id="recommendations-modal" size="lg" hide-footer centered title="Recommendations" v-if="recommendations">
+			<p>Not sure which bots to play against? Try our recommended picks:</p>
+			<b-list-group>
+				<b-list-group-item v-for="recommendation in recommendations.recommendations">
+					<bot-card v-for="bot in recommendation.bots" :bot="bot" class="d-inline-flex" @active-bot="activeBot = bot;"/>
+					<b-button variant="primary" class="float-right" @click="selectRecommendation(recommendation.bots)">Select</b-button>
+				</b-list-group-item>
+			</b-list-group>
+		</b-modal>
+
 		<appearance-editor
 				v-bind:active-bot="activeBot"
 				v-bind:path="appearancePath"
@@ -383,7 +383,8 @@ export default {
 	`,
 	components: {
 		'appearance-editor': AppearanceEditor,
-		'mutator-field': MutatorField
+		'mutator-field': MutatorField,
+		'bot-card': BotCard,
 	},
 	data () {
 		return {
@@ -442,7 +443,8 @@ export default {
 			downloadStatus: '',
 			showBotpackUpdateSnackbar: false,
 			botNameFilter: '',
-			appearancePath: ''
+			appearancePath: '',
+			recommendations: null,
 		}
 	},
 
@@ -471,11 +473,11 @@ export default {
 			eel.kill_bots();
 		},
 		pickBotFolder: function (event) {
-			eel.pick_bot_folder()(this.botsReceived);
+			eel.pick_bot_folder()();
 			eel.get_folder_settings()(this.folderSettingsReceived);
 		},
 		pickBotConfig: function (event) {
-			eel.pick_bot_config()(this.botsReceived);
+			eel.pick_bot_config()();
 			eel.get_folder_settings()(this.folderSettingsReceived);
 		},
 		addToTeam: function(bot, team) {
@@ -663,6 +665,7 @@ export default {
 			this.$bvModal.hide('bot-pack-download-modal');
 			eel.get_folder_settings()(this.folderSettingsReceived);
 			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived);
+			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 		},
 
 		onInstallationComplete: function (result) {
@@ -679,7 +682,12 @@ export default {
 		installRequirements: function (configPath) {
 			this.showProgressSpinner = true;
 			eel.install_requirements(configPath)(this.onInstallationComplete);
-		}
+		},
+		selectRecommendation: function(bots) {
+			this.blueTeam = [HUMAN];
+			this.orangeTeam = bots.slice();
+			this.$bvModal.hide('recommendations-modal');
+		},
 	},
 	created: function () {
 		eel.get_folder_settings()(this.folderSettingsReceived);
@@ -694,6 +702,7 @@ export default {
 
 		eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived)
 		eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
+		eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 
 		const self = this;
 		eel.expose(updateDownloadProgress);

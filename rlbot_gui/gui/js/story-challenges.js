@@ -4,9 +4,6 @@ import StoryPickTeam from './story-pick-team.js';
 import StoryRecruitList from './story-recruit-list.js';
 
 const DEBUG = false;
-const CITIES = {
-    'INTRO': 1,
-};
 
 const CITY_STATE = {
     'LOCKED': 0,
@@ -21,41 +18,36 @@ const CITY_ICON_MAP = [
 ];
 
 // clickArea's generated using https://www.image-map.net/
-const CITY_DISPLAY_INFO = {
+const CITY_MAP_INFO = {
     'INTRO': {
         displayName: "Beginner's Park",
-        message: "Shoddy field for shoddy players. No boost available.",
-        overlayLocation: [390, 630],
-        clickArea: "649,380,601,379,586,457,566,479,599,525,635,546,718,566,718,514",
-        prereqs: [],
+        overlayLocation: [229, 92], 
+        clickArea: "45,181,53,319,79,347,97,329,141,335,144,277,121,183,70,169",
     },
-    'URBAN': {
-        displayName: 'Urban Central',
-        message: 'Place to start making your name! People at this level know the value of Boost upgrades!',
-        overlayLocation: [350, 700],
-        clickArea: "650,3,671,141,585,221,643,354,724,509,801,437,829,221,779,9",
-        prereqs: ['INTRO']
+    'TRYHARD': {
+        displayName: "City-State of Tryhard",
+        overlayLocation: [205, 225],
+        clickArea: "124,182,146,335,281,321,289,237,241,172,149,126,115,147",
+    },
+    'PBOOST': {
+        displayName: "Principality of Boost",
+        overlayLocation: [367, 209],
+        clickArea: "74,346,61,381,83,461,137,532,266,526,328,455,286,392,255,349,254,323,152,338,98,332",
     },
     'WASTELAND': {
-        displayName: 'Demolishing Wastelands',
-        message: 'Don\'t expect politeness here. Home of the demo experts!',
-        overlayLocation: [85, 155],
-        clickArea: "4,59,109,5,268,62,199,269,166,532,3,547",
-        prereqs: ['URBAN']
+        displayName: "Demolishing Wastelands",
+        overlayLocation: [123, 616],
+        clickArea: "582,71,558,291,666,296,726,251,812,266,754,85",
     },
     'CAMPANDSNIPE': {
-        displayName: 'Commonwealth of Campandsnipe',
-        message: 'This city is a little different. Boost is limitless but the ball seems a bit different!',
-        overlayLocation: [300, 500],
-        clickArea: "295,158,254,198,232,302,255,366,270,502,351,525,446,508,562,473,595,384,641,331,578,229,404,294,332,226,323,187,348,149,326,143",
-        prereqs: ['URBAN']
+        displayName: "Commonwealth of Campandsnipe",
+        overlayLocation: [369, 724],
+        clickArea: "556,297,537,377,673,412,749,391,821,332,820,261,725,253,665,301",
     },
     'CHAMPIONSIAN': {
-        displayName: 'Championsian Federation',
-        message: 'You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.',
-        overlayLocation: [64, 540],
-        clickArea: "401,92,334,176,405,285,579,217,668,125,637,4,469,21",
-        prereqs: ['WASTELAND', 'CAMPANDSNIPE']
+        displayName: "Championsian Federation",
+        overlayLocation: [193, 520],
+        clickArea: "227,160,293,237,284,317,267,355,280,377,425,336,487,321,557,232,559,160,417,106,222,113",
     }
 };
 
@@ -101,7 +93,7 @@ export default {
                 <b-img src="imgs/story/coin.png" />
                 <p>
                 Congrats on finishing the challenge! 
-                You have earned 1 currency!
+                You have earned 2 currency!
                 </p>
                 <p>
                 You can use it to recruit previous opponents, 
@@ -151,7 +143,7 @@ export default {
                     <img v-for="(city, cityId) in cityDisplayInfo"
                         class="story-map-icon"
                         v-bind:src="getOverlayForCity(cityId)"
-                        v-bind:style="{top: city.overlayLocation[0] + 'px', left: city.overlayLocation[1] + 'px', postion: 'absolute'}" 
+                        v-bind:style="{top: city.overlayLocation[0] - 20 + 'px', left: city.overlayLocation[1] + 'px', postion: 'absolute'}" 
                         v-if="getCityState(cityId) !== ${CITY_STATE.OPEN}" />
 
                     <map name="story-image-map">
@@ -218,7 +210,7 @@ export default {
                     <b-row class="mt-1 overflow-auto" style="max-height: 300px; min-height:300px">
                     <b-card no-body class="w-100">
                         <b-tabs content-class="mt-3" fill class="story-card-text">
-                            <b-tab title="Upgrades" >
+                            <b-tab title="Upgrades">
                                 <story-upgrades 
                                     v-bind:upgradeSaveState="saveState.upgrades"
                                     @purchase_upgrade="$emit('purchase_upgrade', $event)">
@@ -245,7 +237,7 @@ export default {
         return {
             bots_config: {},
             game_in_progress: {},
-            cityDisplayInfo: CITY_DISPLAY_INFO,
+            cityDisplayInfo: {},
             challenges: null,
             selectedCityId: 'INTRO',
         };
@@ -328,7 +320,7 @@ export default {
         },
         getCityStateTooltip: function (city) {
             let state = this.getCityState(city);
-            let displayName = CITY_DISPLAY_INFO[city].displayName;
+            let displayName = this.cityDisplayInfo[city].displayName;
 
             const suffix = [
                 'is still locked.',
@@ -375,8 +367,14 @@ export default {
     },
     created: async function () {
         console.log(this.saveState)
-        this.challenges = await eel.get_challenges_json(this.saveState.story_config)();
+        let cities = await eel.get_cities_json(this.saveState.story_config)();
         this.bots_config = await eel.get_bots_json(this.saveState.story_config)();
+        this.challenges = {}
+        for (let city of Object.keys(cities)) {
+            this.challenges[city] = cities[city].challenges
+            this.cityDisplayInfo[city] = cities[city].description
+            Object.assign(this.cityDisplayInfo[city], CITY_MAP_INFO[city])
+        }
         this.switchSelectedCityToBest();
     },
     watch: {

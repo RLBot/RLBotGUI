@@ -31,13 +31,9 @@ export default {
         </b-form-group>
 
         <b-form-group label="Custom Story Config" v-if="form.story_id == 'custom'" label-class="font-weight-bold">
-            <b-form-group label="Challenge Config" label-cols="3">
-                <b-button @click="pickFile" value="challenge">Pick File</b-button>
-                <span>{{this.form.custom_story.challenge}}</span>
-            </b-form-group>
-            <b-form-group label="Bots Config (Optional)" label-cols="3">
-                <b-button @click="pickFile" value="bots">Pick File</b-button>
-                <span>{{this.form.custom_story.bots}}</span>
+            <b-form-group label="Story Config" label-cols="3">
+                <b-button @click="pickFile" value="storyPath">Pick File</b-button>
+                <span>{{this.form.custom_story.storyPath}}</span>
             </b-form-group>
         </b-form-group>
 
@@ -55,8 +51,7 @@ export default {
                 teamcolor: 0,
                 story_id: 'default',
                 custom_story: {
-                    challenge: '',
-                    bots: ''
+                    storyPath: ''
                 }
             },
             storyIdOptions: [

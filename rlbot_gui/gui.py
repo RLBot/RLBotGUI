@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 import sys
+import json
 from pathlib import Path
 
 import eel
@@ -462,6 +463,27 @@ def download_bot_pack():
     settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
     settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
     settings.sync()
+
+
+@eel.expose
+def get_recommendations():
+    try:
+        # Load recommendations.json
+        botpack_folder = get_content_folder() / BOTPACK_FOLDER
+        file = open(botpack_folder / f'{BOTPACK_REPO_NAME}-{BOTPACK_REPO_BRANCH}' / 'RLBotPack' / 'recommendations.json')
+        data = json.load(file)
+
+        # Replace bot names with bot bundles with matching names from the botpack
+        bots_in_botpack = get_bots_from_directory(botpack_folder)
+        for recommendation in data['recommendations']:
+            bot_names = recommendation['bots']
+            bots = [next(bot for bot in bots_in_botpack if bot['name'] == name) for name in bot_names]
+            recommendation['bots'] = bots
+
+        return data
+
+    except:
+        return None
 
 
 @eel.expose

@@ -11,7 +11,7 @@ from PyQt5.QtCore import QSettings
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
 from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
-    get_challenges,
+    get_cities,
     get_challenges_by_id,
 )
 
@@ -26,8 +26,8 @@ def story_story_test():
 
 
 @eel.expose
-def get_challenges_json(story_id):
-    return get_challenges(story_id)
+def get_cities_json(story_id):
+    return get_cities(story_id)
 
 
 @eel.expose
@@ -87,8 +87,8 @@ def launch_challenge(challenge_id, pickedTeammates):
 
 
 @eel.expose
-def purchase_upgrade(id, current_currency):
-    CURRENT_STATE.add_purchase(id, current_currency)
+def purchase_upgrade(id, current_currency, cost):
+    CURRENT_STATE.add_purchase(id, current_currency, cost)
     flush_save_state()
 
 
@@ -122,14 +122,14 @@ class StoryState:
 
         self.upgrades = {"currency": 0}
 
-    def add_purchase(self, id, current_currency):
+    def add_purchase(self, id, current_currency, cost):
         """The only validation we do is to make sure current_currency is correct.
         This is NOT a security mechanism, this is a bug prevention mechanism to
         avoid accidental double clicks.
         """
         if self.upgrades["currency"] == current_currency:
             self.upgrades[id] = True
-            self.upgrades["currency"] -= 1
+            self.upgrades["currency"] -= cost
 
     def add_recruit(self, id, current_currency):
         """The only validation we do is to make sure current_currency is correct.
@@ -158,7 +158,7 @@ class StoryState:
         if challenge_completed:
             index = len(self.challenges_attempts[challenge_id]) - 1
             self.challenges_completed[challenge_id] = index
-            self.upgrades["currency"] += 1
+            self.upgrades["currency"] += 2
 
     @staticmethod
     def new(name, color_secondary, story_id, custom_config):
