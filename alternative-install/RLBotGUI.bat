@@ -8,7 +8,7 @@ pushd "%LocalAppData%\RLBotGUIX"
 if not exist "%LocalAppData%\RLBotGUIX\Python37" (
   echo Looks like we're missing RLBot's Python ^(3.7.9^), installing...
 
-  powershell Expand-Archive "%~dp0\python-3.7.9-custom-amd64.zip" "%LocalAppData%\RLBotGUIX\Python37"
+  powershell -command "Expand-Archive '%~dp0python-3.7.9-custom-amd64.zip' '%LocalAppData%\RLBotGUIX\Python37'"
 
   if exist "%LocalAppData%\RLBotGUIX\venv\pyvenv.cfg" (
     echo Old venv detected, updating Python location so we don't have to reinstall...
