@@ -20,6 +20,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
+from rlbot.setup_manager import DEFAULT_LAUNCHER_PREFERENCE
 from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
@@ -42,6 +43,7 @@ BOTPACK_REPO_BRANCH = 'master'
 CREATED_BOTS_FOLDER = 'MyBots'
 BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 MATCH_SETTINGS_KEY = 'match_settings'
+LAUNCHER_SETTINGS_KEY = 'launcher_settings'
 TEAM_SETTINGS_KEY = 'team_settings'
 COMMIT_ID_KEY = 'latest_botpack_commit_id'
 bot_folder_settings = None
@@ -52,8 +54,8 @@ def load_settings() -> QSettings:
 
 
 @eel.expose
-def start_match(bot_list, match_settings):
-    eel.spawn(start_match_helper, bot_list, match_settings)
+def start_match(bot_list, match_settings, launcher_preference_map):
+    eel.spawn(start_match_helper, bot_list, match_settings, launcher_preference_map)
 
 
 @eel.expose
@@ -172,6 +174,13 @@ def get_match_settings():
 
 
 @eel.expose
+def get_launcher_settings():
+    settings = load_settings()
+    launcher_settings = settings.value(LAUNCHER_SETTINGS_KEY, type=dict)
+    return launcher_settings if launcher_settings else DEFAULT_LAUNCHER_PREFERENCE.__dict__
+
+
+@eel.expose
 def get_team_settings():
     settings = load_settings()
     team_settings = settings.value(TEAM_SETTINGS_KEY, type=dict)
@@ -188,6 +197,12 @@ def get_team_settings():
 def save_match_settings(match_settings):
     settings = load_settings()
     settings.setValue(MATCH_SETTINGS_KEY, match_settings)
+
+
+@eel.expose
+def save_launcher_settings(launcher_settings_map):
+    settings = load_settings()
+    settings.setValue(LAUNCHER_SETTINGS_KEY, launcher_settings_map)
 
 
 @eel.expose

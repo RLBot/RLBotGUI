@@ -4,7 +4,7 @@ from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, ScriptConfig
 from rlbot.parsing.incrementing_integer import IncrementingInteger
-from rlbot.setup_manager import SetupManager
+from rlbot.setup_manager import SetupManager, RocketLeagueLauncherPreference
 from rlbot.utils.structures.bot_input_struct import PlayerInput
 from rlbot.utils.game_state_util import GameState, CarState, BallState, Physics, Vector3, Rotator
 from rlbot.utils.structures.game_data_struct import GameTickPacket
@@ -129,7 +129,7 @@ def get_fresh_setup_manager():
     return sm
 
 
-def start_match_helper(bot_list, match_settings):
+def start_match_helper(bot_list, match_settings, launcher_preference_map):
     print(bot_list)
     print(match_settings)
 
@@ -167,9 +167,12 @@ def start_match_helper(bot_list, match_settings):
     match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
     match_config.script_configs = [create_script_config(script) for script in match_settings['scripts']]
 
+    launcher_prefs = RocketLeagueLauncherPreference(launcher_preference_map['preferred_launcher'],
+                                                    launcher_preference_map['use_login_tricks'])
+
     sm = get_fresh_setup_manager()
     sm.early_start_seconds = 5
-    sm.connect_to_game()
+    sm.connect_to_game(launcher_preference=launcher_prefs)
     sm.load_match_config(match_config)
     sm.launch_early_start_bot_processes()
     sm.start_match()

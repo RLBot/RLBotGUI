@@ -215,6 +215,24 @@ export default {
 			<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
 			<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
 			<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
+			<div>
+				Preferred Rocket League Launcher
+				<b-form-group>
+					<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="steam">Steam</b-form-radio>
+					<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="epic">Epic Games</b-form-radio>
+				</b-form-group>
+			</div>
+			<div>
+				<b-form-checkbox 
+					v-model="launcherSettings.use_login_tricks" 
+					:disabled="launcherSettings.preferred_launcher !== 'epic'" 
+					>
+					
+					Use Login Tricks <b-icon class="warning-icon" icon="exclamation-triangle-fill" v-b-tooltip.hover 
+					title="If you choose this, we'll do some fancy things to make sure your Epic account logs in successfully and loads your car + camera settings. 
+					It might look slightly weird on the Epic login server but they probably won't care."></b-icon>
+				</b-form-checkbox>
+			</div>
 			</b-modal>
 
 			<b-modal id="mutators-modal" title="Mutators" size="lg" hide-footer centered>
@@ -425,6 +443,7 @@ export default {
 				auto_save_replay: false,
 				scripts: [],
 			},
+			launcherSettings: { preferred_launcher: 'epic', use_login_tricks: false },
 			randomMapPool: [],
 			packageString: null,
 			showSnackbar: false,
@@ -455,6 +474,7 @@ export default {
 			this.matchSettings.scripts = this.scriptPool.filter((val) => { return val.enabled });
 			eel.save_match_settings(this.matchSettings);
 			eel.save_team_settings(this.blueTeam, this.orangeTeam);
+			eel.save_launcher_settings(this.launcherSettings);
 
 			const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
 			const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
@@ -466,7 +486,7 @@ export default {
 
 			// start match asynchronously, so it doesn't block things like updating the background image
 			setTimeout(() => {
-				eel.start_match(blueBots.concat(orangeBots), this.matchSettings);
+				eel.start_match(blueBots.concat(orangeBots), this.matchSettings, this.launcherSettings);
 			}, 0);
 		},
 		killBots: function(event) {
@@ -638,6 +658,11 @@ export default {
 				this.resetMatchSettingsToDefault();
 			}
 		},
+		launcherSettingsReceived: function (launcherSettings) {
+			if (launcherSettings) {
+				Object.assign(this.launcherSettings, launcherSettings);
+			}
+		},
 		teamSettingsReceived: function (teamSettings) {
 			if (teamSettings) {
 				this.blueTeam = teamSettings.blue_team;
@@ -693,6 +718,7 @@ export default {
 		eel.get_folder_settings()(this.folderSettingsReceived);
 		eel.get_match_options()(this.matchOptionsReceived);
 		eel.get_match_settings()(this.matchSettingsReceived);
+		eel.get_launcher_settings()(this.launcherSettingsReceived);
 		eel.get_team_settings()(this.teamSettingsReceived);
 
 		eel.get_language_support()((support) => {
@@ -709,6 +735,13 @@ export default {
 		function updateDownloadProgress(progress, status) {
 			self.downloadStatus = status;
 			self.downloadProgressPercent = progress;
+		}
+	},
+	watch: {
+		'launcherSettings.preferred_launcher': function(newVal) {
+			if (newVal === 'steam') {
+				this.launcherSettings.use_login_tricks = false;
+			}
 		}
 	},
 };
