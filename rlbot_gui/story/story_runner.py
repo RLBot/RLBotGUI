@@ -8,7 +8,7 @@ from os import path
 import eel
 from PyQt5.QtCore import QSettings
 
-from persistence.settings import load_launcher_settings, launcher_preferences_from_map
+from rlbot_gui.persistence.settings import load_launcher_settings, launcher_preferences_from_map
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
 from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
