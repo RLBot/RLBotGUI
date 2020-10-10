@@ -11,7 +11,7 @@ def load_settings() -> QSettings:
     return QSettings('rlbotgui', 'preferences')
 
 
-def launcher_preferences_from_map(launcher_preference_map) -> RocketLeagueLauncherPreference:
+def launcher_preferences_from_map(launcher_preference_map: dict) -> RocketLeagueLauncherPreference:
     return RocketLeagueLauncherPreference(launcher_preference_map['preferred_launcher'],
                                           launcher_preference_map['use_login_tricks'])
 

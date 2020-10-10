@@ -45,8 +45,10 @@ CREATED_BOTS_FOLDER = 'MyBots'
 COMMIT_ID_KEY = 'latest_botpack_commit_id'
 bot_folder_settings = None
 
+
 @eel.expose
-def start_match(bot_list, match_settings, launcher_preference_map):
+def start_match(bot_list, match_settings):
+    launcher_preference_map = load_launcher_settings()
     launcher_prefs = launcher_preferences_from_map(launcher_preference_map)
     eel.spawn(start_match_helper, bot_list, match_settings, launcher_prefs)
 

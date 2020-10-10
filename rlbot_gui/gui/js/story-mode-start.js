@@ -1,9 +1,11 @@
 import Colorpicker from './colorpicker-vue.js'
+import LauncherPreferenceModal from './launcher-preference-vue.js'
 
 export default {
     name: 'story-start',
     components: {
         'colorpicker': Colorpicker,
+        'launcher-preference-modal': LauncherPreferenceModal,
     },
     template: /*html*/`
     <b-container class="pt-5">
@@ -36,12 +38,21 @@ export default {
                 <span>{{this.form.custom_story.storyPath}}</span>
             </b-form-group>
         </b-form-group>
-
+        
+        <b-form-group label="Launcher" label-cols="auto">
+            <b-button v-b-modal.launcher-modal-story>
+                Choose Steam or Epic
+            </b-button>
+        </b-form-group>
 
         <b-button type="submit" variant="primary" class="mt-2">Get Started</b-button>
     </b-form>
     </b-card-text>
     </b-card>
+    <b-modal title="Preferred Rocket League Launcher" id="launcher-modal-story" size="md" hide-footer centered>
+<!--    Modal id is intentionally different from the one on the main page in main-vue.js-->
+        <launcher-preference-modal modal-id="launcher-modal-story" />
+    </b-modal>
     </b-container>
     `,
     data() {
