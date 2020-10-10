@@ -20,7 +20,6 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
-from rlbot.setup_manager import DEFAULT_LAUNCHER_PREFERENCE
 from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
@@ -29,6 +28,8 @@ from rlbot_gui.bot_management.downloader import BotpackDownloader, get_json_from
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
 from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
+from rlbot_gui.persistence.settings import load_settings, BOT_FOLDER_SETTINGS_KEY, MATCH_SETTINGS_KEY, \
+    LAUNCHER_SETTINGS_KEY, TEAM_SETTINGS_KEY, load_launcher_settings, launcher_preferences_from_map
 
 #### LOAD JUST TO EXPOSE STORY_MODE
 from rlbot_gui.story import story_runner
@@ -41,21 +42,13 @@ BOTPACK_REPO_OWNER = 'RLBot'
 BOTPACK_REPO_NAME = 'RLBotPack'
 BOTPACK_REPO_BRANCH = 'master'
 CREATED_BOTS_FOLDER = 'MyBots'
-BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
-MATCH_SETTINGS_KEY = 'match_settings'
-LAUNCHER_SETTINGS_KEY = 'launcher_settings'
-TEAM_SETTINGS_KEY = 'team_settings'
 COMMIT_ID_KEY = 'latest_botpack_commit_id'
 bot_folder_settings = None
 
-
-def load_settings() -> QSettings:
-    return QSettings('rlbotgui', 'preferences')
-
-
 @eel.expose
 def start_match(bot_list, match_settings, launcher_preference_map):
-    eel.spawn(start_match_helper, bot_list, match_settings, launcher_preference_map)
+    launcher_prefs = launcher_preferences_from_map(launcher_preference_map)
+    eel.spawn(start_match_helper, bot_list, match_settings, launcher_prefs)
 
 
 @eel.expose
@@ -70,7 +63,7 @@ def pick_bot_folder():
     if filename:
         global bot_folder_settings
         bot_folder_settings['folders'][filename] = {'visible': True}
-        settings = QSettings('rlbotgui', 'preferences')
+        settings = load_settings()
         settings.setValue(DEFAULT_BOT_FOLDER, filename)
         settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
         settings.sync()
@@ -175,9 +168,7 @@ def get_match_settings():
 
 @eel.expose
 def get_launcher_settings():
-    settings = load_settings()
-    launcher_settings = settings.value(LAUNCHER_SETTINGS_KEY, type=dict)
-    return launcher_settings if launcher_settings else DEFAULT_LAUNCHER_PREFERENCE.__dict__
+    return load_launcher_settings()
 
 
 @eel.expose
@@ -296,7 +287,9 @@ def save_looks(looks: dict, path: str):
 def spawn_car_for_viewing(looks: dict, team: int, showcase_type: str, map_name: str):
     looks_config = convert_to_looks_config(looks)
     loadout_config = load_bot_appearance(looks_config, team)
-    spawn_car_in_showroom(loadout_config, team, showcase_type, map_name)
+    launcher_settings_map = get_launcher_settings()
+    launcher_prefs = launcher_preferences_from_map(launcher_settings_map)
+    spawn_car_in_showroom(loadout_config, team, showcase_type, map_name, launcher_prefs)
 
 
 @eel.expose

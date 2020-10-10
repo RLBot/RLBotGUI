@@ -1,4 +1,5 @@
 from math import pi
+from typing import List
 
 from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
@@ -14,7 +15,7 @@ from rlbot_gui.type_translation.set_state_translation import dict_to_game_state
 sm: SetupManager = None
 
 
-def create_player_config(bot, human_index_tracker: IncrementingInteger):
+def create_player_config(bot: dict, human_index_tracker: IncrementingInteger):
     player_config = PlayerConfig()
     player_config.bot = bot['type'] in ('rlbot', 'psyonix')
     player_config.rlbot_controlled = bot['type'] in ('rlbot', 'party_member_bot')
@@ -30,7 +31,8 @@ def create_script_config(script):
     return ScriptConfig(script['path'])
 
 
-def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str, map_name: str):
+def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str, map_name: str,
+                          launcher_prefs: RocketLeagueLauncherPreference):
     match_config = MatchConfig()
     match_config.game_mode = 'Soccer'
     match_config.game_map = map_name
@@ -54,7 +56,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
     global sm
     if sm is None:
         sm = SetupManager()
-    sm.connect_to_game()
+    sm.connect_to_game(launcher_preference=launcher_prefs)
     sm.load_match_config(match_config)
     sm.start_match()
 
@@ -129,7 +131,7 @@ def get_fresh_setup_manager():
     return sm
 
 
-def start_match_helper(bot_list, match_settings, launcher_preference_map):
+def start_match_helper(bot_list: List[dict], match_settings: dict, launcher_prefs: RocketLeagueLauncherPreference):
     print(bot_list)
     print(match_settings)
 
@@ -166,9 +168,6 @@ def start_match_helper(bot_list, match_settings, launcher_preference_map):
     human_index_tracker = IncrementingInteger(0)
     match_config.player_configs = [create_player_config(bot, human_index_tracker) for bot in bot_list]
     match_config.script_configs = [create_script_config(script) for script in match_settings['scripts']]
-
-    launcher_prefs = RocketLeagueLauncherPreference(launcher_preference_map['preferred_launcher'],
-                                                    launcher_preference_map['use_login_tricks'])
 
     sm = get_fresh_setup_manager()
     sm.early_start_seconds = 5

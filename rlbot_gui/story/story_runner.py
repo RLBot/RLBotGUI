@@ -8,6 +8,7 @@ from os import path
 import eel
 from PyQt5.QtCore import QSettings
 
+from persistence.settings import load_launcher_settings, launcher_preferences_from_map
 from rlbot_gui.story.story_challenge_setup import run_challenge, configure_challenge
 from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
@@ -144,7 +145,7 @@ class StoryState:
         self, challenge_id: str, challenge_completed: bool, game_results
     ):
         """game_results should be the output of packet_to_game_results.
-        You have to call it anyways to figure out if the player 
+        You have to call it anyways to figure out if the player
         completed the challenge so that's why we don't call it again here.
         """
         if challenge_id not in self.challenges_attempts:
@@ -187,7 +188,9 @@ def launch_challenge_with_config(challenge_id, pickedTeammates):
 
 
     match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates, all_bots)
-    completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades)
+    launcher_settings_map = load_launcher_settings()
+    launcher_prefs = launcher_preferences_from_map(launcher_settings_map)
+    completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades, launcher_prefs)
     CURRENT_STATE.add_match_result(challenge_id, completed, results)
 
     flush_save_state()

@@ -23,9 +23,14 @@ export default {
 
 		<b-navbar-nav class="ml-auto">
 			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning" class="mr-2"></b-spinner>
+			<b-button
+				v-b-modal.launcher-modal variant="dark">
+				<img class="platform-icon" src="imgs/steam.png" /> /
+				<img class="platform-icon" src="imgs/epic.png" />
+			</b-button>
 			<span id="sandbox-button-wrapper">
 				<b-button
-					@click="$router.replace('/sandbox')" variant="dark"
+					@click="$router.replace('/sandbox')" variant="dark" class="ml-2"
 					:disabled="!matchSettings.enable_state_setting">
 					State Setting Sandbox
 				</b-button>
@@ -194,6 +199,10 @@ export default {
 
 				<b-button class="ml-4" v-b-modal.mutators-modal>Mutators</b-button>
 				<b-button class="ml-2" v-b-modal.extra-modal>Extra</b-button>
+				<b-button class="ml-2" v-b-modal.launcher-modal>
+					<img class="platform-icon" src="imgs/steam.png" /> /
+					<img class="platform-icon" src="imgs/epic.png" />
+				</b-button>
 
 				<span style="flex-grow: 1"></span>
 
@@ -208,31 +217,35 @@ export default {
 			</div>
 
 			<b-modal title="Extra Options" id="extra-modal" size="md" hide-footer centered>
-			<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
-			<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
-			<div>
-				Preferred Rocket League Launcher
-				<b-form-group>
-					<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="steam">Steam</b-form-radio>
-					<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="epic">Epic Games</b-form-radio>
-				</b-form-group>
-			</div>
-			<div>
-				<b-form-checkbox 
-					v-model="launcherSettings.use_login_tricks" 
-					:disabled="launcherSettings.preferred_launcher !== 'epic'" 
-					>
+				<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
+				<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
+			</b-modal>
+			
+			<b-modal title="Preferred Rocket League Launcher" id="launcher-modal" size="md" hide-footer centered>
+				<div>
+					<b-form-group>
+						<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="steam">Steam</b-form-radio>
+						<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="epic">Epic Games</b-form-radio>
+						<b-form-checkbox
+							class="ml-4"
+							v-model="launcherSettings.use_login_tricks" 
+							:disabled="launcherSettings.preferred_launcher !== 'epic'">
+						
+							Use Epic Login Tricks <b-icon class="warning-icon" icon="exclamation-triangle-fill" v-b-tooltip.hover 
+							title="If you choose this, we'll do some fancy things to make sure your Epic account logs in successfully and loads your car + camera settings. 
+							It might look slightly weird on the Epic login server but they probably won't care."></b-icon>
+						</b-form-checkbox>
+					</b-form-group>
+				</div>
+				<div>
 					
-					Use Login Tricks <b-icon class="warning-icon" icon="exclamation-triangle-fill" v-b-tooltip.hover 
-					title="If you choose this, we'll do some fancy things to make sure your Epic account logs in successfully and loads your car + camera settings. 
-					It might look slightly weird on the Epic login server but they probably won't care."></b-icon>
-				</b-form-checkbox>
-			</div>
+				</div>
+				<b-button variant="primary" class="mt-3" @click="saveLauncherSettings()">Save</b-button>
 			</b-modal>
 
 			<b-modal id="mutators-modal" title="Mutators" size="lg" hide-footer centered>
@@ -712,6 +725,10 @@ export default {
 			this.blueTeam = [HUMAN];
 			this.orangeTeam = bots.slice();
 			this.$bvModal.hide('recommendations-modal');
+		},
+		saveLauncherSettings: function() {
+			eel.save_launcher_settings(this.launcherSettings);
+			this.$bvModal.hide('launcher-modal');
 		},
 	},
 	created: function () {
