@@ -27,7 +27,7 @@ from rlbot.matchconfig.match_config import (
     MutatorConfig,
     Team,
 )
-from rlbot.setup_manager import SetupManager
+from rlbot.setup_manager import SetupManager, RocketLeagueLauncherPreference
 
 from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager
 from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
@@ -430,12 +430,12 @@ def manage_game_state(
 
 
 def run_challenge(
-    match_config: MatchConfig, challenge: dict, upgrades: dict
+    match_config: MatchConfig, challenge: dict, upgrades: dict, launcher_pref: RocketLeagueLauncherPreference
 ) -> Tuple[bool, dict]:
     """Launch the game and keep track of the state"""
     setup_manager = get_fresh_setup_manager()
     setup_manager.early_start_seconds = 5
-    setup_manager.connect_to_game()
+    setup_manager.connect_to_game(launcher_preference=launcher_pref)
     setup_manager.load_match_config(match_config)
     setup_manager.launch_early_start_bot_processes()
     setup_manager.start_match()

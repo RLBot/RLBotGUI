@@ -1,6 +1,7 @@
 import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
 import BotCard from './bot-card-vue.js'
+import LauncherPreferenceModal from './launcher-preference-vue.js'
 
 const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
 const STARTING_BOT_POOL = [
@@ -25,7 +26,7 @@ export default {
 			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning" class="mr-2"></b-spinner>
 			<span id="sandbox-button-wrapper">
 				<b-button
-					@click="$router.replace('/sandbox')" variant="dark"
+					@click="$router.replace('/sandbox')" variant="dark" class="ml-2"
 					:disabled="!matchSettings.enable_state_setting">
 					State Setting Sandbox
 				</b-button>
@@ -194,6 +195,10 @@ export default {
 
 				<b-button class="ml-4" v-b-modal.mutators-modal>Mutators</b-button>
 				<b-button class="ml-2" v-b-modal.extra-modal>Extra</b-button>
+				<b-button class="ml-2" v-b-modal.launcher-modal>
+					<img class="platform-icon" src="imgs/steam.png" /> /
+					<img class="platform-icon" src="imgs/epic.png" />
+				</b-button>
 
 				<span style="flex-grow: 1"></span>
 
@@ -208,13 +213,13 @@ export default {
 			</div>
 
 			<b-modal title="Extra Options" id="extra-modal" size="md" hide-footer centered>
-			<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
-			<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
-			<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
+				<div><b-form-checkbox v-model="matchSettings.enable_rendering">Enable Rendering (bots can draw on screen)</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.enable_state_setting">Enable State Setting (bots can teleport)</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.auto_save_replay">Auto Save Replay</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.skip_replays">Skip Replays</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.instant_start">Instant Start</b-form-checkbox></div>
+				<div><b-form-checkbox v-model="matchSettings.enable_lockstep">Enable Lockstep</b-form-checkbox></div>
+				<mutator-field label="Existing Match Behaviour" :options="matchOptions.match_behaviours" v-model="matchSettings.match_behavior" class="mt-3"></mutator-field>
 			</b-modal>
 
 			<b-modal id="mutators-modal" title="Mutators" size="lg" hide-footer centered>
@@ -375,6 +380,10 @@ export default {
 				v-bind:path="appearancePath"
 				v-bind:map="matchSettings.map"
 				id="appearance-editor-dialog" />
+				
+		<b-modal title="Preferred Rocket League Launcher" id="launcher-modal" size="md" hide-footer centered>
+			<launcher-preference-modal modal-id="launcher-modal" />
+		</b-modal>
 
 	</div>
 
@@ -385,6 +394,7 @@ export default {
 		'appearance-editor': AppearanceEditor,
 		'mutator-field': MutatorField,
 		'bot-card': BotCard,
+		'launcher-preference-modal': LauncherPreferenceModal,
 	},
 	data () {
 		return {
@@ -710,5 +720,5 @@ export default {
 			self.downloadStatus = status;
 			self.downloadProgressPercent = progress;
 		}
-	},
+	}
 };

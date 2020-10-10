@@ -24,7 +24,7 @@ export default {
                 >
                 <div class="d-block text-center">
                     <div v-if="!enoughAvailableTeammates">
-                    <p>You do not have enough teamamtes to create a team for this challenge.
+                    <p>You do not have enough teammates to create a team for this challenge.
                     Recruit teammates from the "teammate" tab or play older matches to earn
                     more currency</p>
 

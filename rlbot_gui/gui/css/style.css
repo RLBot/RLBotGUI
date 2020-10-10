@@ -296,6 +296,10 @@ button.icon-button {
   width: initial;
 }
 
-#javascript-trouble {
+.platform-icon {
+  height: 1em;
+}
 
+.btn-dark .platform-icon {
+  filter: invert()
 }

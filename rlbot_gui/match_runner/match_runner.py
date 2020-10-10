@@ -1,10 +1,11 @@
 from math import pi
+from typing import List
 
 from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, ScriptConfig
 from rlbot.parsing.incrementing_integer import IncrementingInteger
-from rlbot.setup_manager import SetupManager
+from rlbot.setup_manager import SetupManager, RocketLeagueLauncherPreference
 from rlbot.utils.structures.bot_input_struct import PlayerInput
 from rlbot.utils.game_state_util import GameState, CarState, BallState, Physics, Vector3, Rotator
 from rlbot.utils.structures.game_data_struct import GameTickPacket
@@ -14,7 +15,7 @@ from rlbot_gui.type_translation.set_state_translation import dict_to_game_state
 sm: SetupManager = None
 
 
-def create_player_config(bot, human_index_tracker: IncrementingInteger):
+def create_player_config(bot: dict, human_index_tracker: IncrementingInteger):
     player_config = PlayerConfig()
     player_config.bot = bot['type'] in ('rlbot', 'psyonix')
     player_config.rlbot_controlled = bot['type'] in ('rlbot', 'party_member_bot')
@@ -30,7 +31,8 @@ def create_script_config(script):
     return ScriptConfig(script['path'])
 
 
-def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str, map_name: str):
+def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_type: str, map_name: str,
+                          launcher_prefs: RocketLeagueLauncherPreference):
     match_config = MatchConfig()
     match_config.game_mode = 'Soccer'
     match_config.game_map = map_name
@@ -54,7 +56,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
     global sm
     if sm is None:
         sm = SetupManager()
-    sm.connect_to_game()
+    sm.connect_to_game(launcher_preference=launcher_prefs)
     sm.load_match_config(match_config)
     sm.start_match()
 
@@ -129,7 +131,7 @@ def get_fresh_setup_manager():
     return sm
 
 
-def start_match_helper(bot_list, match_settings):
+def start_match_helper(bot_list: List[dict], match_settings: dict, launcher_prefs: RocketLeagueLauncherPreference):
     print(bot_list)
     print(match_settings)
 
@@ -169,7 +171,7 @@ def start_match_helper(bot_list, match_settings):
 
     sm = get_fresh_setup_manager()
     sm.early_start_seconds = 5
-    sm.connect_to_game()
+    sm.connect_to_game(launcher_preference=launcher_prefs)
     sm.load_match_config(match_config)
     sm.launch_early_start_bot_processes()
     sm.start_match()
