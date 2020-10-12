@@ -159,7 +159,7 @@
 162,Antenna,Product_TA ProductsDB.Products.CountryFlag_Ireland,Ireland
 163,Antenna,Product_TA ProductsDB.Products.CountryFlag_Israel,Israel
 164,Antenna,Product_TA ProductsDB.Products.CountryFlag_Italy,Italy
-165,Antenna,Product_TA ProductsDB.Products.CountryFlag_IvoryCoast,Côte d'Ivoire
+165,Antenna,Product_TA ProductsDB.Products.CountryFlag_IvoryCoast,CÃ´te d'Ivoire
 166,Antenna,Product_TA ProductsDB.Products.CountryFlag_Jamaica,Jamaica
 167,Antenna,Product_TA ProductsDB.Products.CountryFlag_Japan,Japan
 168,Antenna,Product_TA ProductsDB.Products.CountryFlag_Kenya,Kenya
@@ -230,7 +230,7 @@
 238,Hat,Product_TA ProductsDB.Products.Hat_Sombrero,Sombrero
 239,Hat,Product_TA ProductsDB.Products.Hat_Taxi,Taxi Topper
 240,Hat,Product_TA ProductsDB.Products.Hat_TopHat,Top Hat
-241,Hat,Product_TA ProductsDB.Products.Hat_Viking_Helmet,Brünnehilde
+241,Hat,Product_TA ProductsDB.Products.Hat_Viking_Helmet,BrÃ¼nnehilde
 242,Hat,Product_TA ProductsDB.Products.Hat_Witch,Witch's Hat
 243,Hat,Product_TA ProductsDB.Products.Hat_WizardHat,Wizard Hat
 265,Antenna,Product_TA ProductsDB.Products.Pack_CountryFlags,International Flags
@@ -365,7 +365,7 @@
 397,Antenna,Product_TA ProductsDB.Products.Antenna_FlakShell,Unreal Tournament - Flak Shell
 398,Antenna,Product_TA ProductsDB.Products.Antenna_FoamFinger,Foam Finger
 399,Antenna,Product_TA ProductsDB.Products.antenna_Panda,Giant Panda
-400,Antenna,Product_TA ProductsDB.Products.Antenna_Pinata,Piñata
+400,Antenna,Product_TA ProductsDB.Products.Antenna_Pinata,PiÃ±ata
 401,Antenna,Product_TA ProductsDB.Products.Antenna_Waffle,Waffle
 402,Body,Product_TA ProductsDB.Products.Body_Import,Takumi
 403,Body,Product_TA ProductsDB.Products.Body_MuscleCar,Dominus
@@ -523,7 +523,7 @@
 563,Antenna,Product_TA ProductsDB.Products.CountryFlag_Macau,Macau
 564,Antenna,Product_TA ProductsDB.Products.CountryFlag_Mauritius,Mauritius
 565,Antenna,Product_TA ProductsDB.Products.CountryFlag_Puntland,Puntland
-566,Antenna,Product_TA ProductsDB.Products.CountryFlag_Reunion,Réunion
+566,Antenna,Product_TA ProductsDB.Products.CountryFlag_Reunion,RÃ©union
 567,Antenna,Product_TA ProductsDB.Products.CountryFlag_SolomonIslands,Solomon Islands
 568,Antenna,Product_TA ProductsDB.Products.CountryFlag_Somaliland,Somaliland
 569,Antenna,Product_TA ProductsDB.Products.CountryFlag_Suriname,Suriname
@@ -1174,11 +1174,11 @@
 1849,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Ripper,Ripper
 1850,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Scarab,Scarab
 1852,Skin,Product_TA ProductsDB.Products.skins_zmoney_NineK,Nemesis: Full Speed
-1856,Body,Product_TA ProductsDB.Products.body_Sourdough,Jäger 619
+1856,Body,Product_TA ProductsDB.Products.body_Sourdough,JÃ¤ger 619
 1861,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Zippy_REV,Zippy
 1867,Skin,Product_TA ProductsDB.Products.skin_takumi_ii_Konstruction,Takumi RX-T: Chusho
 1868,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Rye,Maverick
-1869,EngineAudio,Product_TA ProductsDB.Products.engineAudio_Sourdough,Jäger 619
+1869,EngineAudio,Product_TA ProductsDB.Products.engineAudio_Sourdough,JÃ¤ger 619
 1870,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Speedster,Werewolf
 1872,Blueprint,Product_TA ProductsDB.Products.crate_number8,Overdrive
 1873,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Aftershock_V2,Aftershock v2
@@ -1317,12 +1317,12 @@
 2076,Hat,Product_TA ProductsDB.Products.hat_Catfish,Catfish
 2077,Hat,Product_TA ProductsDB.Products.hat_Lei,Hawaiian Lei
 2078,Hat,Product_TA ProductsDB.Products.hat_strawberry,Sad Strawberry
-2081,Skin,Product_TA ProductsDB.Products.skin_sourdough_stripes,Jäger 619: Stripes
+2081,Skin,Product_TA ProductsDB.Products.skin_sourdough_stripes,JÃ¤ger 619: Stripes
 2083,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Calzone,NSR
 2084,Hat,Product_TA ProductsDB.Products.hat_jalapeno,Mr. Hot Pepper
 2086,Skin,Product_TA ProductsDB.Products.skin_multigrain_shapes,Imperator DT5: Overhaul
-2097,Skin,Product_TA ProductsDB.Products.skin_sourdough_meteor,Jäger 619: The Summit
-2157,Skin,Product_TA ProductsDB.Products.skin_sourdough_squid,Jäger 619: Kraken
+2097,Skin,Product_TA ProductsDB.Products.skin_sourdough_meteor,JÃ¤ger 619: The Summit
+2157,Skin,Product_TA ProductsDB.Products.skin_sourdough_squid,JÃ¤ger 619: Kraken
 2223,Logo,Product_TA ProductsDB.Products.Logo_Barracudas,Barracudas
 2224,Logo,Product_TA ProductsDB.Products.Logo_Guardians,Guardians
 2225,Logo,Product_TA ProductsDB.Products.Logo_Cyclones,Cyclones
@@ -1353,8 +1353,8 @@
 2271,Hat,Product_TA ProductsDB.Products.hat_pancakestack,Hotcakes
 2272,Hat,Product_TA ProductsDB.Products.hat_ranger,Campaign Hat
 2275,PaintFinish,Product_TA ProductsDB.Products.paintfinish_anodized,Anodized
-2277,Skin,Product_TA ProductsDB.Products.skin_sourdough_storm,Jäger 619: Storm Warning
-2278,Skin,Product_TA ProductsDB.Products.skin_sourdough_tri,Jäger 619: Euphoria
+2277,Skin,Product_TA ProductsDB.Products.skin_sourdough_storm,JÃ¤ger 619: Storm Warning
+2278,Skin,Product_TA ProductsDB.Products.skin_sourdough_tri,JÃ¤ger 619: Euphoria
 2279,Antenna,Product_TA ProductsDB.Products.antenna_mint,Peppermint
 2283,Hat,Product_TA ProductsDB.Products.hat_presentbow,Holiday Bow
 2298,Body,Product_TA ProductsDB.Products.body_muffin,Samus's Gunship
@@ -1397,9 +1397,9 @@
 2375,Skin,Product_TA ProductsDB.Products.skin_Challah_02,'70 Dodge Charger R/T: Good Graces
 2376,Skin,Product_TA ProductsDB.Products.skin_Challah_stripes,'70 Dodge Charger R/T: Rally
 2377,Hat,Product_TA ProductsDB.Products.hat_cargoyle,Gargoyle
-2378,Skin,Product_TA ProductsDB.Products.skin_sourdough_livery,Jäger 619: Circuit Pro
+2378,Skin,Product_TA ProductsDB.Products.skin_sourdough_livery,JÃ¤ger 619: Circuit Pro
 2383,Skin,Product_TA ProductsDB.Products.skin_flatbread_snakeskin,Mantis: Snakeskin
-2392,Skin,Product_TA ProductsDB.Products.skin_Sourdough_Snakeskin,Jäger 619: Snakeskin
+2392,Skin,Product_TA ProductsDB.Products.skin_Sourdough_Snakeskin,JÃ¤ger 619: Snakeskin
 2394,Boost,Product_TA ProductsDB.Products.boost_abstractfire,Fractal Fire
 2395,Hat,Product_TA ProductsDB.Products.hat_babyelephant,Little Elephant
 2396,Skin,Product_TA ProductsDB.Products.skin_Challah_03,'70 Dodge Charger R/T: Sinclair
@@ -1521,10 +1521,10 @@
 2540,Skin,Product_TA ProductsDB.Products.skin_vanquish_athena,Merc: Athena
 2544,Skin,Product_TA ProductsDB.Products.skin_multigrain_bouncy,Imperator DT5: Windswept
 2547,Skin,Product_TA ProductsDB.Products.skin_multigrain_moshpitter,Imperator DT5: Mosher
-2548,Skin,Product_TA ProductsDB.Products.skin_sourdough_boltspitter,Jäger 619: Mister Monsoon
-2549,Skin,Product_TA ProductsDB.Products.skin_sourdough_divinestyler,Jäger 619: Shark Tooth
-2550,Skin,Product_TA ProductsDB.Products.skin_sourdough_rabbitjack,Jäger 619: Hip-Hop
-2551,Skin,Product_TA ProductsDB.Products.skin_sourdough_starlighter,Jäger 619: StarLighter
+2548,Skin,Product_TA ProductsDB.Products.skin_sourdough_boltspitter,JÃ¤ger 619: Mister Monsoon
+2549,Skin,Product_TA ProductsDB.Products.skin_sourdough_divinestyler,JÃ¤ger 619: Shark Tooth
+2550,Skin,Product_TA ProductsDB.Products.skin_sourdough_rabbitjack,JÃ¤ger 619: Hip-Hop
+2551,Skin,Product_TA ProductsDB.Products.skin_sourdough_starlighter,JÃ¤ger 619: StarLighter
 2552,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_CarStreak,Winning Streak
 2554,Wheels,Product_TA ProductsDB.Products.Wheel_Zag_02,Z-Plate
 2555,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_Dreamscape,Migraine
@@ -1542,7 +1542,7 @@
 2575,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_Zombie,Zombie
 2579,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_WinterWonderland,Winter's Warmth
 2580,PlayerBanner,Product_TA ProductsDB.Products.playerBanner_Salt,Salty
-2581,Skin,Product_TA ProductsDB.Products.skin_sourdough_sixteen,Jäger 619: XVI
+2581,Skin,Product_TA ProductsDB.Products.skin_sourdough_sixteen,JÃ¤ger 619: XVI
 2583,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s5reward_grandchamp,Season 5 - Grand Champion (Dragon)
 2584,Hat,Product_TA ProductsDB.Products.hat_camera,Camera
 2585,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_christmasgifts,Holiday Gifts
@@ -1626,7 +1626,7 @@
 2726,Antenna,Product_TA ProductsDB.Products.Antenna_Dandelion,Dandelion Seed
 2727,Boost,Product_TA ProductsDB.Products.boost_hydroburst,Blast Ray
 2728,Hat,Product_TA ProductsDB.Products.Hat_HappyAccident_02,GG the Clown
-2729,Wheels,Product_TA ProductsDB.Products.Wheel_ANouvea,Balla-Carrà
+2729,Wheels,Product_TA ProductsDB.Products.Wheel_ANouvea,Balla-CarrÃ 
 2730,Blueprint,Product_TA ProductsDB.Products.Crate_Spring18,Spring Fever
 2731,PremiumInventory,Product_TA ProductsDB.Products.CrateUnlocked_Spring18,Crate - Spring Fever (Unlocked)
 2732,Skin,Product_TA ProductsDB.Products.skin_octane_comix,Octane: Ripped Comic
@@ -1739,13 +1739,13 @@
 2916,Boost,Product_TA ProductsDB.Products.boost_energyburst,Cirrus
 2917,PaintFinish,Product_TA ProductsDB.Products.paintfinish_reptile,Dino
 2918,Wheels,Product_TA ProductsDB.Products.wheel_cruxe,Cruxe
-2919,Body,Product_TA ProductsDB.Products.body_maple,Jurassic Jeep® Wrangler
+2919,Body,Product_TA ProductsDB.Products.body_maple,Jurassic JeepÂ® Wrangler
 2920,Antenna,Product_TA ProductsDB.Products.flag_pine,Jurassic Park 
 2921,Antenna,Product_TA ProductsDB.Products.flag_wood,Jurassic World
 2922,GoalExplosion,Product_TA ProductsDB.Products.explosion_Beachballs,Beach Party
 2925,SupersonicTrail,Product_TA ProductsDB.Products.ss_toonwater,Toon Hydro
 2926,Wheels,Product_TA ProductsDB.Products.wheel_pill,Mothership Pro
-2927,EngineAudio,Product_TA ProductsDB.Products.engineaudio_maple,Jurassic Jeep® Wrangler
+2927,EngineAudio,Product_TA ProductsDB.Products.engineaudio_maple,Jurassic JeepÂ® Wrangler
 2929,Hat,Product_TA ProductsDB.Products.hat_seaturtle,Sea Turtle
 2930,Antenna,Product_TA ProductsDB.Products.flag_s_watercolor,S. Watercolour
 2932,Antenna,Product_TA ProductsDB.Products.flag_juniper,InGen
@@ -1763,7 +1763,7 @@
 2952,Skin,Product_TA ProductsDB.Products.skin_force_niceshot,Breakout: Nice Shot
 2953,Skin,Product_TA ProductsDB.Products.skin_musclecar_savage,Dominus: Savage
 2954,Skin,Product_TA ProductsDB.Products.skin_octane_niceshot,Octane: Nice Shot
-2955,Wheels,Product_TA ProductsDB.Products.wheel_maple,Jurassic Jeep® Wrangler
+2955,Wheels,Product_TA ProductsDB.Products.wheel_maple,Jurassic JeepÂ® Wrangler
 2956,Wheels,Product_TA ProductsDB.Products.wheel_treble_mega,Sovereign A/T
 2958,Skin,Product_TA ProductsDB.Products.skin_force_whatasave,Breakout: What A Save!
 2959,Hat,Product_TA ProductsDB.Products.hat_10yr_anniversary_cake,Battle-Cars Anniversary
@@ -2148,7 +2148,7 @@
 3603,Skin,Product_TA ProductsDB.Products.skin_enspier_tech_tierall,Artemis: Pegasus
 3604,Antenna,Product_TA ProductsDB.Products.antenna_paperdragon,Paper Dragon
 3607,Skin,Product_TA ProductsDB.Products.skin_octane_jackoriver,Octane: Jacktide
-3608,Skin,Product_TA ProductsDB.Products.skin_octane_pinatamonster,Octane: Piñata Monster
+3608,Skin,Product_TA ProductsDB.Products.skin_octane_pinatamonster,Octane: PiÃ±ata Monster
 3609,Skin,Product_TA ProductsDB.Products.skin_octane_stealthtraveler,Octane: Razortooth
 3610,Skin,Product_TA ProductsDB.Products.skin_octane_stylee,Octane: Styler
 3611,Antenna,Product_TA ProductsDB.Products.antenna_orbit_tier2,Electron II
@@ -3101,6 +3101,6 @@
 5444,ShopItem,Product_TA ProductsDB.Products.ShopItem_Body_Torch2,?INT?Products.ShopItem_Body_Torch2.Label?
 5445,ShopItem,Product_TA ProductsDB.Products.ShopItem_Body_Twinzer,?INT?Products.ShopItem_Body_Twinzer.Label?
 5446,ShopItem,Product_TA ProductsDB.Products.ShopItem_Body_Wheatbread,?INT?Products.ShopItem_Body_Wheatbread.Label?
-5617,Skin,Product_TA ProductsDB.Products.skin_octane_elp,Octane: Pelé
-5621,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_elp,Pelé
-5622,Wheels,Product_TA ProductsDB.Products.wheel_elp,Pelé
+5617,Skin,Product_TA ProductsDB.Products.skin_octane_elp,Octane: PelÃ©
+5621,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_elp,PelÃ©
+5622,Wheels,Product_TA ProductsDB.Products.wheel_elp,PelÃ©
