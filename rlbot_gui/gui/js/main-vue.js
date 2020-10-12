@@ -193,7 +193,10 @@ export default {
 					</b-form-select>
 				</div>
 
-				<b-button class="ml-4" v-b-modal.mutators-modal>Mutators</b-button>
+				<b-button class="ml-4" v-b-modal.mutators-modal>
+					Mutators
+					<b-badge variant="info" v-if="activeMutatorCount > 0">{{ activeMutatorCount }}</b-badge>
+				</b-button>
 				<b-button class="ml-2" v-b-modal.extra-modal>Extra</b-button>
 				<b-button class="ml-2" v-b-modal.launcher-modal>
 					<img class="platform-icon" src="imgs/steam.png" /> /
@@ -697,6 +700,13 @@ export default {
 			this.blueTeam = [HUMAN];
 			this.orangeTeam = bots.slice();
 			this.$bvModal.hide('recommendations-modal');
+		},
+	},
+	computed: {
+		activeMutatorCount: function() {
+			return Object.keys(this.matchSettings.mutators).map(key =>
+				this.matchSettings.mutators[key] != this.matchOptions.mutators[key + "_types"][0]
+			).filter(Boolean).length;
 		},
 	},
 	created: function () {

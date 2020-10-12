@@ -303,3 +303,8 @@ button.icon-button {
 .btn-dark .platform-icon {
   filter: invert()
 }
+
+.highlighted-mutator-field {
+  font-weight: bold;
+  color: rgb(27, 27, 27);
+}
