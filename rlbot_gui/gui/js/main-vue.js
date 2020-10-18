@@ -585,6 +585,7 @@ export default {
 
 			this.botPool = this.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
 			this.applyLanguageWarnings();
+			this.distinguishDuplicateBots();
 			this.showProgressSpinner = false;
 		},
 
@@ -616,6 +617,32 @@ export default {
 				});
 			}
 		},
+		
+		distinguishDuplicateBots: function() {
+			const uniqueNames = [...new Set(this.botPool.map(bot => bot.name))];
+			const splitPath = bot => bot.path.split(/[\\|\/]/).reverse();
+
+			for (const name of uniqueNames) {
+				const bots = this.botPool.filter(bot => bot.name == name);
+				if (bots.length == 1) {
+					bots[0].uniquePathSegment = null;
+					continue;
+				}
+				for (let i = 0; bots.length > 0 && i < 99; i++) {
+					const pathSegments = bots.map(b => splitPath(b)[i]);
+
+					for (const bot of bots.slice()) {
+						const path = splitPath(bot);
+						const count = pathSegments.filter(s => s == path[i]).length;
+						if (count == 1) {
+							bot.uniquePathSegment = path[i];
+							bots.splice(bots.indexOf(bot), 1);
+						}
+					}
+				}
+			}
+		},
+
 		matchOptionsReceived: function(matchOptions) {
 			this.matchOptions = matchOptions;
 		},

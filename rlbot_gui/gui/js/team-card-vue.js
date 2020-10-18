@@ -10,7 +10,7 @@ export default {
                 <b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in team">
                     <img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
                     <img v-if="bot.logo" v-bind:src="bot.logo">
-                    <span class="bot-name">{{ bot.name }}</span>
+                    <span class="bot-name">{{ bot.name }} <span v-if="bot.uniquePathSegment" class="unique-bot-identifier">({{ bot.uniquePathSegment }})</span></span>
                     <b-button size="sm" variant="outline-danger" class="icon-button" @click="team.splice(index, 1)">
                         <b-icon icon="x"></b-icon>
                     </b-button>

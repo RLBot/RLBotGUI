@@ -7,7 +7,7 @@ export default {
             <slot>
                 <img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
                 <img v-if="bot.logo" v-bind:src="bot.logo">
-                <span class="bot-name">{{ bot.name }}</span>
+                <span class="bot-name">{{ bot.name }} <span v-if="bot.uniquePathSegment" class="unique-bot-identifier">({{ bot.uniquePathSegment }})</span></span>
             </slot>
 
             <b-button size="sm" class="icon-button warning-icon" v-if="bot.warn" variant="outline-warning"
