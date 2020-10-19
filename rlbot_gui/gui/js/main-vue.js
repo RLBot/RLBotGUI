@@ -1,6 +1,7 @@
 import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
 import BotCard from './bot-card-vue.js'
+import TeamCard from './team-card-vue.js'
 import LauncherPreferenceModal from './launcher-preference-vue.js'
 
 const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
@@ -140,39 +141,15 @@ export default {
 
 		<b-row>
 			<b-col>
-				<b-card class="blu team-card md-elevation-8">
-					<div class="team-label">
-						<b-form-radio v-model="teamSelection" name="team-radios" value="blue">Add to Blue Team</b-form-radio>
-					</div>
-					<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
-						<b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
-							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-							<img v-if="bot.logo" v-bind:src="bot.logo">
-							<span class="bot-name">{{ bot.name }}</span>
-							<b-button size="sm" variant="outline-danger" class="icon-button" @click="blueTeam.splice(index, 1)">
-								<b-icon icon="x"></b-icon>
-							</b-button>
-						</b-card>
-					</draggable>
-				</b-card>
+				<team-card :team="blueTeam" team-class="blu">
+					<b-form-radio v-model="teamSelection" name="team-radios" value="blue">Add to Blue Team</b-form-radio>
+				</team-card>
 			</b-col>
 
 			<b-col>
-				<b-card class="org team-card md-elevation-8">
-					<div class="team-label">
-						<b-form-radio v-model="teamSelection" name="team-radios" value="orange">Add to Orange Team</b-form-radio>
-					</div>
-					<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
-						<b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
-							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-							<img v-if="bot.logo" v-bind:src="bot.logo">
-							<span class="bot-name">{{ bot.name }}</span>
-							<b-button size="sm" variant="outline-danger" class="icon-button" @click="orangeTeam.splice(index, 1)">
-								<b-icon icon="x"></b-icon>
-							</b-button>
-						</b-card>
-					</draggable>
-				</b-card>
+				<team-card :team="orangeTeam" team-class="org">
+					<b-form-radio v-model="teamSelection" name="team-radios" value="orange">Add to Orange Team</b-form-radio>
+				</team-card>
 			</b-col>
 		</b-row>
 
@@ -398,6 +375,7 @@ export default {
 		'mutator-field': MutatorField,
 		'bot-card': BotCard,
 		'launcher-preference-modal': LauncherPreferenceModal,
+		'team-card': TeamCard,
 	},
 	data () {
 		return {
@@ -607,6 +585,7 @@ export default {
 
 			this.botPool = this.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
 			this.applyLanguageWarnings();
+			this.distinguishDuplicateBots();
 			this.showProgressSpinner = false;
 		},
 
@@ -638,6 +617,32 @@ export default {
 				});
 			}
 		},
+		
+		distinguishDuplicateBots: function() {
+			const uniqueNames = [...new Set(this.botPool.map(bot => bot.name))];
+			const splitPath = bot => bot.path.split(/[\\|\/]/).reverse();
+
+			for (const name of uniqueNames) {
+				const bots = this.botPool.filter(bot => bot.name == name);
+				if (bots.length == 1) {
+					bots[0].uniquePathSegment = null;
+					continue;
+				}
+				for (let i = 0; bots.length > 0 && i < 99; i++) {
+					const pathSegments = bots.map(b => splitPath(b)[i]);
+
+					for (const bot of bots.slice()) {
+						const path = splitPath(bot);
+						const count = pathSegments.filter(s => s == path[i]).length;
+						if (count == 1) {
+							bot.uniquePathSegment = path[i];
+							bots.splice(bots.indexOf(bot), 1);
+						}
+					}
+				}
+			}
+		},
+
 		matchOptionsReceived: function(matchOptions) {
 			this.matchOptions = matchOptions;
 		},
