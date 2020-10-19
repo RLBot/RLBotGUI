@@ -1,7 +1,6 @@
 import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
 import BotCard from './bot-card-vue.js'
-import TeamCard from './team-card-vue.js'
 import LauncherPreferenceModal from './launcher-preference-vue.js'
 
 const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
@@ -141,15 +140,39 @@ export default {
 
 		<b-row>
 			<b-col>
-				<team-card :team="blueTeam" team-class="blu">
+				<b-card class="blu team-card md-elevation-8">
+					<div class="team-label">
 					<b-form-radio v-model="teamSelection" name="team-radios" value="blue">Add to Blue Team</b-form-radio>
-				</team-card>
+					</div>
+					<draggable v-model="blueTeam" class="team-entries" :options="{group:'bots'}">
+						<b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in blueTeam">
+							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+							<img v-if="bot.logo" v-bind:src="bot.logo">
+							<span class="bot-name">{{ bot.name }}</span>
+							<b-button size="sm" variant="outline-danger" class="icon-button" @click="blueTeam.splice(index, 1)">
+								<b-icon icon="x"></b-icon>
+							</b-button>
+						</b-card>
+					</draggable>
+				</b-card>
 			</b-col>
 
 			<b-col>
-				<team-card :team="orangeTeam" team-class="org">
+				<b-card class="org team-card md-elevation-8">
+					<div class="team-label">
 					<b-form-radio v-model="teamSelection" name="team-radios" value="orange">Add to Orange Team</b-form-radio>
-				</team-card>
+					</div>
+					<draggable v-model="orangeTeam" class="team-entries" :options="{group:'bots'}">
+						<b-card class="bot-card draggable center-flex md-elevation-3" v-for="(bot, index) in orangeTeam">
+							<img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
+							<img v-if="bot.logo" v-bind:src="bot.logo">
+							<span class="bot-name">{{ bot.name }}</span>
+							<b-button size="sm" variant="outline-danger" class="icon-button" @click="orangeTeam.splice(index, 1)">
+								<b-icon icon="x"></b-icon>
+							</b-button>
+						</b-card>
+					</draggable>
+				</b-card>
 			</b-col>
 		</b-row>
 
@@ -375,7 +398,6 @@ export default {
 		'mutator-field': MutatorField,
 		'bot-card': BotCard,
 		'launcher-preference-modal': LauncherPreferenceModal,
-		'team-card': TeamCard,
 	},
 	data () {
 		return {
@@ -617,7 +639,7 @@ export default {
 				});
 			}
 		},
-		
+
 		distinguishDuplicateBots: function() {
 			const uniqueNames = [...new Set(this.botPool.map(bot => bot.name))];
 			const splitPath = bot => bot.path.split(/[\\|\/]/).reverse();
