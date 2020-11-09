@@ -33,10 +33,9 @@ if not exist .\venv\Scripts\activate.bat (
 rem Activate the virtual environment
 call .\venv\Scripts\activate.bat
 
-rem We ping rlbot.org to see if we have an internet connection
-rem We then store the output of the command to a temporary file
-rem This is to prevent the ping command from printing anything to the console
-ping -n 1 rlbot.org | find /I "Lost = 0" > tmp_out_file
+rem We ping google.com to see if we have an internet connection
+rem We then store the output of the command to nul which prevents the command from printing to the console
+ping -n 1 google.com > nul
 if %errorlevel% == 0 (
   echo Installing / upgrading RLBot components...
   pip install --upgrade pip
@@ -47,9 +46,6 @@ if %errorlevel% == 0 (
   echo It looks like you're offline, skipping package upgrades.
   echo Please note that if this is your first time running RLBotGUI, an internet connection is required to properly install.
 )
-
-rem Here, we delete the temporary file - it should only be a few dozen bytes at most
-del tmp_out_file
 
 echo Launching RLBotGUI...
 
