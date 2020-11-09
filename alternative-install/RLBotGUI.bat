@@ -38,7 +38,7 @@ rem We then store the output of the command to nul which prevents the command fr
 ping -n 1 google.com > nul
 if %errorlevel% == 0 (
   echo Installing / upgrading RLBot components...
-  pip install --upgrade pip
+  python -m pip install --upgrade pip
   pip install wheel
   pip install eel
   pip install --upgrade rlbot_gui rlbot
