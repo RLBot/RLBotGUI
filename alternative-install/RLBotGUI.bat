@@ -33,12 +33,19 @@ if not exist .\venv\Scripts\activate.bat (
 rem Activate the virtual environment
 call .\venv\Scripts\activate.bat
 
-echo Installing / upgrading RLBot components...
-
-pip install --upgrade pip
-pip install wheel
-pip install eel
-pip install --upgrade rlbot_gui rlbot
+rem We ping google.com to see if we have an internet connection
+rem We then store the output of the command to nul which prevents the command from printing to the console
+ping -n 1 google.com > nul
+if %errorlevel% == 0 (
+  echo Installing / upgrading RLBot components...
+  python -m pip install --upgrade pip
+  pip install wheel
+  pip install eel
+  pip install --upgrade rlbot_gui rlbot
+) else (
+  echo It looks like you're offline, skipping package upgrades.
+  echo Please note that if this is your first time running RLBotGUI, an internet connection is required to properly install.
+)
 
 echo Launching RLBotGUI...
 
@@ -47,4 +54,3 @@ python -c "from rlbot_gui import gui; gui.start()"
 if %ERRORLEVEL% GTR 0 (
   pause
 )
-
