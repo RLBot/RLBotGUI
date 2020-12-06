@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '0.0.86'
+__version__ = '0.0.88'
 
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
@@ -16,6 +16,7 @@ setuptools.setup(
         'scipy',
         'numpy==1.19.3',
         'RLUtilities',  # Used by Snek
+        'VirxERLU-CLib', # Used by Virx bots
         'websockets',  # Needed for scratch bots
         'selenium',  # Needed for scratch bots
         'PyQt5==5.15.0'  # Used for settings and file pickers currently.
