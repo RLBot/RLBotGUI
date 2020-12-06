@@ -9,3 +9,6 @@ rlbot_gui
 
 # Chip's utilities - https://github.com/samuelpmish/RLUtilities/tree/master/RLUtilities
 RLUtilities
+
+# VirxERLU's C Library - https://github.com/VirxEC/VirxERLU
+VirxERLU-CLib
