@@ -92,7 +92,7 @@
     "manticore": {
         "name": "Manticore",
         "type": "rlbot",
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "Manticore", "manticore.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "manticore", "manticore.cfg"]
     },
     "atlas": {
         "name": "Atlas",
@@ -117,7 +117,7 @@
     "beast": {
         "name": "Beast from the East",
         "type": "rlbot",
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "Beast from the East", "beastbot.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "beastbot", "beastbot.cfg"]
     },
     "cryo": {
         "name": "Codename Cryo",
