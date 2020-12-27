@@ -77,7 +77,7 @@ export default {
 		</b-form-group>
 
 		<template v-slot:modal-footer>
-			<b-button @click="installPackage()" class="md-raised md-primary">Install Package</b-button>
+			<b-button @click="installPackage()" variant="primary">Install Package</b-button>
 		</template>
 	</b-modal>
 
@@ -241,7 +241,7 @@ export default {
 		</b-toast>
 
 		<b-toast id="bot-pack-available-toast" v-model="showBotpackUpdateSnackbar" title="Bot Pack Update Available!" toaster="b-toaster-bottom-center">
-			<b-button class="md-accent" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
+			<b-button variant="primary" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
 		</b-toast>
 
 		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer centered>
@@ -255,14 +255,14 @@ export default {
 			<p><span class="bot-info-key">Language:</span> {{activeBot.info.language}}</p>
 			<p class="bot-file-path">{{activeBot.path}}</p>
 
-			<md-dialog-actions>
+			<div>
 				<b-button v-if="activeBot.type !== 'script'" @click="showAppearanceEditor(activeBot.looks_path)" v-b-modal.appearance-editor-dialog>
 					<b-icon icon="card-image"></b-icon> Edit Appearance
 				</b-button>
 				<b-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
 					<b-icon icon="folder"></b-icon> Show Files
 				</b-button>
-			</md-dialog-actions>
+			</div>
 		</b-modal>
 
 		<b-modal id="language-warning-modal" v-if="activeBot && activeBot.warn" title="Compatibility Warning" hide-footer centered>
@@ -272,6 +272,7 @@ export default {
 				<ol>
 					<li>Download Java from <a href="https://java.com" target="_blank">java.com</a></li>
 					<li>Install it</li>
+					<li>Make sure you've <a href="https://javatutorial.net/set-java-home-windows-10">set the JAVA_HOME environment variable</a></li>
 					<li>Reboot your computer</li>
 				</ol>
 			</div>
@@ -288,7 +289,7 @@ export default {
 					<code><span v-for="missing in activeBot.missing_python_packages">{{missing}} </span></code>
 				</p>
 				<b-button @click="installRequirements(activeBot.path)"
-						   class="md-primary md-raised">Install Now</b-button>
+						   variant="primary">Install Now</b-button>
 				<p v-if="!languageSupport.fullpython">
 					If the installation fails, try downloading our <a href="https://github.com/RLBot/RLBotGUI/releases/download/v1.0/RLBotGUI.exe">new launcher script</a>
 					which makes RLBotGUI better with package management.
@@ -449,11 +450,6 @@ export default {
 
 			const blueBots = this.blueTeam.map((bot) => { return  {'name': bot.name, 'team': 0, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
 			const orangeBots = this.orangeTeam.map((bot) => { return  {'name': bot.name, 'team': 1, 'type': bot.type, 'skill': bot.skill, 'path': bot.path} });
-
-			const renderingMsg = this.matchSettings.enable_rendering ? "🎨 Rendering is ON." : "🚫 Rendering is OFF.";
-			const stateSettingMsg = this.matchSettings.enable_state_setting ? "✨ State Setting is ON." : "🚫 State Setting is OFF.";
-			this.snackbarContent = renderingMsg + " " + stateSettingMsg + " See EXTRA to change.";
-			this.showSnackbar = true;
 
 			// start match asynchronously, so it doesn't block things like updating the background image
 			setTimeout(() => {
@@ -617,7 +613,7 @@ export default {
 				});
 			}
 		},
-		
+
 		distinguishDuplicateBots: function() {
 			const uniqueNames = [...new Set(this.botPool.map(bot => bot.name))];
 			const splitPath = bot => bot.path.split(/[\\|\/]/).reverse();
