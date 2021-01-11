@@ -474,6 +474,7 @@ def download_bot_pack():
         settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
         settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
         settings.sync()
+        scan_for_bots()
 
 
 @eel.expose
@@ -495,6 +496,7 @@ def update_bot_pack():
         settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
         settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
         settings.sync()
+        scan_for_bots()
 
 
 @eel.expose

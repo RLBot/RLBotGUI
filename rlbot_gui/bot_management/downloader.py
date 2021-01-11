@@ -210,6 +210,8 @@ class BotpackUpdater:
             return False
 
         releases_to_download = list(range(int(local_release_tag.replace("incr-", "")) + 1, int(latest_release["tag_name"].replace("incr-", "")) + 1))
+        if len(releases_to_download) > 10:
+            return "download"
 
         self.total_steps = len(releases_to_download) * 2
 
