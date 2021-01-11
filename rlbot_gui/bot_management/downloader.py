@@ -14,6 +14,15 @@ from rlbot_gui.persistence.settings import load_settings
 RELEASE_TAG = 'latest_botpack_release_tag'
 
 
+def remove_empty_folders(root: Path):
+    for path, _, _ in list(os.walk(root))[::-1]:
+        if len(os.listdir(path)) == 0:
+            try:
+                os.remove(path)
+            except Exception:
+                continue
+
+
 def download_and_extract_zip(download_url: str, local_folder_path: Path, local_subfolder_name: str,
                              clobber: bool = False, progress_callback: callable = None,
                              unzip_callback: callable = None):
@@ -68,6 +77,8 @@ def smart_upgrade(download_url: str, local_folder_path: Path, unzip_callback: ca
                     file_name = local_folder_path / line.replace("\n", "")
                     if os.path.isfile(file_name):
                         os.remove(file_name)
+        
+        remove_empty_folders(local_folder_path)
     return True
 
 
@@ -172,7 +183,7 @@ class BotpackUpdater:
         self.current_step = 0
 
     def update_progressbar_and_status(self, status=None):
-        total_progress_percent = int(min(self.current_step / self.total_steps, 1) * 100)
+        total_progress_percent = int(min(self.current_step / self.total_steps, 1) * 100) if self.total_steps != 0 else 0
         if status is None: status = self.status
         status = f'{status} ({total_progress_percent}%)'
         eel.updateDownloadProgress(total_progress_percent, status)
