@@ -54,6 +54,9 @@ export default {
 					Menu
 				</template>
 
+				<b-dropdown-item @click="downloadBotPack()">
+					Repair bot pack
+				</b-dropdown-item>
 				<b-dropdown-item v-b-modal.package-installer>
 					Install missing python package
 				</b-dropdown-item>
@@ -90,10 +93,6 @@ export default {
 					<b-dropdown-item  @click="updateBotPack()">
 						<b-icon icon="cloud-download"></b-icon>
 						<span>Download Bot Pack</span>
-					</b-dropdown-item>
-					<b-dropdown-item  @click="downloadBotPack()">
-						<b-icon icon="hammer"></b-icon>
-						<span>Repair Bot Pack</span>
 					</b-dropdown-item>
 					<b-dropdown-item v-b-modal.new-bot-modal>
 						<b-icon icon="pencil-square"></b-icon>
