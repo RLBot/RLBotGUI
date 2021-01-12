@@ -4,6 +4,8 @@ import tempfile
 import time
 import urllib.request
 import zipfile
+import multiprocessing as mp
+from functools import partial
 from pathlib import Path
 from shutil import rmtree
 from typing import Optional
@@ -53,33 +55,6 @@ def download_and_extract_zip(download_url: str, local_folder_path: Path, local_s
             os.rename(os.path.join(local_folder_path, folder_name), os.path.join(local_folder_path, local_subfolder_name))
     return True
 
-
-def smart_upgrade(download_url: str, local_folder_path: Path, unzip_callback: callable = None):
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        downloaded_zip_path = os.path.join(tmpdirname, 'downloaded.zip')
-        try:
-            urllib.request.urlretrieve(download_url, downloaded_zip_path)
-        except Exception as err:
-            print(err)
-            return False
-
-        if unzip_callback:
-            unzip_callback()
-
-        with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
-            zip_ref.extractall(local_folder_path)
-
-        with open(local_folder_path / ".deleted", "r", encoding="utf-16") as deleted_ref:
-            files = deleted_ref.readlines()
-
-            for line in files:
-                if line.replace(" ", "").replace("\n", "") != "":
-                    file_name = local_folder_path / line.replace("\n", "")
-                    if os.path.isfile(file_name):
-                        os.remove(file_name)
-        
-        remove_empty_folders(local_folder_path)
-    return True
 
 
 def get_json_from_url(url):
@@ -188,6 +163,18 @@ class BotpackUpdater:
         status = f'{status} ({total_progress_percent}%)'
         eel.updateDownloadProgress(total_progress_percent, status)
 
+
+    def download_single(self, tmpdir: Path, repo_url: str, tag: int):
+            download_url = f"{repo_url}/releases/download/incr-{tag}/incremental.zip"
+            downloaded_zip_path = os.path.join(tmpdir, f"downloaded-{tag}.zip")
+            try:
+                urllib.request.urlretrieve(download_url, downloaded_zip_path)
+            except Exception as err:
+                print(err)
+                return False
+            return tag
+
+
     def update(self, repo_owner: str, repo_name: str, branch_name: str, checkout_folder: Path):
         repo_full_name = repo_owner + '/' + repo_name
         repo_url = 'https://github.com/' + repo_full_name
@@ -210,21 +197,42 @@ class BotpackUpdater:
             return False
 
         releases_to_download = list(range(int(local_release_tag.replace("incr-", "")) + 1, int(latest_release["tag_name"].replace("incr-", "")) + 1))
-        if len(releases_to_download) > 10:
+        if len(releases_to_download) > 50:
             return "download"
+            
+        local_folder_path = Path(os.path.join(checkout_folder, master_folder))
 
-        self.total_steps = len(releases_to_download) * 2
+        self.total_steps = len(releases_to_download)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with mp.Pool(15) as p:
+                for tag in p.imap(partial(self.download_single, tmpdir, repo_url), releases_to_download):
 
-        for tag in releases_to_download:
-            self.update_progressbar_and_status(f"Downloading incr-{tag}")
-            self.status = f"Applying changes from incr-{tag}"
-            self.current_step += 1
-            if not smart_upgrade(f"{repo_url}/releases/download/incr-{tag}/incremental.zip", Path(os.path.join(checkout_folder, master_folder)), self.update_progressbar_and_status):
-                print("Failed to complete botpack upgrade")
-                return False
-            # encase something goes wrong in the future, we can save our place between commit upgrades
-            settings.setValue(RELEASE_TAG, f"incr-{tag}")
-            self.current_step += 1
+                    if tag is False:
+                        print("Failed to complete botpack upgrade")
+                        return False
+                    self.update_progressbar_and_status(f"applying patch {tag}")
+                    
+                    # apply incremental patch
+                    print(f"applying incr-{tag}")
+                    downloaded_zip_path = os.path.join(tmpdir, f"downloaded-{tag}.zip")
+                    
+                    with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
+                        zip_ref.extractall(local_folder_path)
+
+                    with open(local_folder_path / ".deleted", "r", encoding="utf-16") as deleted_ref:
+                        files = deleted_ref.readlines()
+
+                        for line in files:
+                            if line.replace(" ", "").replace("\n", "") != "":
+                                file_name = local_folder_path / line.replace("\n", "")
+                                if os.path.isfile(file_name):
+                                    os.remove(file_name)
+                                    
+                    # encase something goes wrong in the future, we can save our place between commit upgrades
+                    settings.setValue(RELEASE_TAG, f"incr-{tag}")
+                    self.current_step += 1
         
+        remove_empty_folders(local_folder_path)
+
         self.update_progressbar_and_status(f"Done")
         return True
