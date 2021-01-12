@@ -20,7 +20,7 @@ def remove_empty_folders(root: Path):
     for path, _, _ in list(os.walk(root))[::-1]:
         if len(os.listdir(path)) == 0:
             try:
-                os.remove(path)
+                os.rmdir(path)
             except Exception:
                 continue
 
