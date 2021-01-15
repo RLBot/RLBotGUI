@@ -12,6 +12,12 @@ from rlbot.utils.structures.game_data_struct import GameTickPacket
 
 from rlbot_gui.type_translation.set_state_translation import dict_to_game_state
 
+from rlbot_gui.match_runner.custom_maps import (
+    prepare_custom_map,
+    identify_map_directory,
+    convert_custom_map_to_path
+)
+
 sm: SetupManager = None
 
 
@@ -131,6 +137,35 @@ def get_fresh_setup_manager():
     return sm
 
 
+def setup_match(
+    setup_manager: SetupManager, match_config: MatchConfig, launcher_pref: RocketLeagueLauncherPreference
+):
+    """Starts the match and bots. Also detects and handles custom maps"""
+
+    def do_setup():
+        setup_manager.early_start_seconds = 5
+        setup_manager.connect_to_game(launcher_preference=launcher_pref)
+        setup_manager.load_match_config(match_config)
+        setup_manager.launch_early_start_bot_processes()
+        setup_manager.start_match()
+        setup_manager.launch_bot_processes()
+        return setup_manager
+
+    if match_config.game_map.endswith('.upk'):
+        map_file = convert_custom_map_to_path(match_config.game_map)
+        rl_directory = identify_map_directory(launcher_pref)
+
+        if not all([map_file, rl_directory]):
+            print("Couldn't load custom map")
+            return
+
+        with prepare_custom_map(map_file, rl_directory) as game_map:
+            match_config.game_map = game_map
+            do_setup()
+    else:
+        do_setup()
+
+
 def start_match_helper(bot_list: List[dict], match_settings: dict, launcher_prefs: RocketLeagueLauncherPreference):
     print(bot_list)
     print(match_settings)
@@ -170,12 +205,7 @@ def start_match_helper(bot_list: List[dict], match_settings: dict, launcher_pref
     match_config.script_configs = [create_script_config(script) for script in match_settings['scripts']]
 
     sm = get_fresh_setup_manager()
-    sm.early_start_seconds = 5
-    sm.connect_to_game(launcher_preference=launcher_prefs)
-    sm.load_match_config(match_config)
-    sm.launch_early_start_bot_processes()
-    sm.start_match()
-    sm.launch_bot_processes()
+    setup_match(sm , match_config, launcher_prefs)
     # Note that we are not calling infinite_loop because that is not compatible with the way eel works!
     # Instead we will reproduce the important behavior from infinite_loop inside this file.
 
