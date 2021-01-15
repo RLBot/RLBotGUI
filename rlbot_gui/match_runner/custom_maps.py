@@ -70,6 +70,15 @@ def convert_custom_map_to_path(custom_map: str) -> Optional[str]:
     return custom_map_file
 
 
+def find_all_custom_maps() -> List[str]:
+    folders = get_search_folders()
+    maps = []
+    for folder in folders:
+        scan_query = path.join(glob.escape(folder), "**", "*.upk")
+        maps.extend(path.basename(i) for i in glob.iglob(scan_query))
+    return maps
+
+
 def get_search_folders() -> List[str]:
     """Get all folders to search for maps"""
     bot_folders = load_settings().value(BOT_FOLDER_SETTINGS_KEY, type=dict)
