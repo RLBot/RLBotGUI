@@ -33,6 +33,7 @@ from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager
 from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
 
 WITNESS_ID = random.randint(0, 1e5)
+RENDERING_GROUP = "STORY"
 
 DEBUG_MODE_SHORT_GAMES = False
 
@@ -50,8 +51,12 @@ def setup_failure_freeplay(setup_manager: SetupManager, message: str, color_key=
 
     setup_manager.load_match_config(match_config)
     setup_manager.start_match()
+
+    # wait till num players is 0
+    wait_till_cars_spawned(setup_manager, 0)
+
     color = getattr(setup_manager.game_interface.renderer, color_key)()
-    setup_manager.game_interface.renderer.begin_rendering()
+    setup_manager.game_interface.renderer.begin_rendering(RENDERING_GROUP)
     # setup_manager.game_interface.renderer.draw_rect_2d(20, 20, 800, 800, True, setup_manager.game_interface.renderer.black())
     setup_manager.game_interface.renderer.draw_string_2d(20, 200, 4, 4, message, color)
     setup_manager.game_interface.renderer.end_rendering()
@@ -329,6 +334,20 @@ class ManualStatsTracker:
                         print("humanGoalsScored")
 
 
+def wait_till_cars_spawned(
+    setup_manager: SetupManager, expected_player_count: int
+) -> GameTickPacket:
+    packet = GameTickPacket()
+    setup_manager.game_interface.fresh_live_data_packet(packet, 1000, WITNESS_ID)
+    waiting_start = time.monotonic()
+    while packet.num_cars != expected_player_count and time.monotonic() - waiting_start < 5:
+        print("Game started but no cars are in the packets")
+        time.sleep(0.5)
+        setup_manager.game_interface.fresh_live_data_packet(packet, 1000, WITNESS_ID)
+
+    return packet
+
+
 def manage_game_state(
     challenge: dict, upgrades: dict, setup_manager: SetupManager
 ) -> Tuple[bool, dict]:
@@ -342,13 +361,7 @@ def manage_game_state(
 
     expected_player_count = challenge["humanTeamSize"] + len(challenge["opponentBots"])
     # Wait for everything to be initialized
-    packet = GameTickPacket()
-    setup_manager.game_interface.fresh_live_data_packet(packet, 1000, WITNESS_ID)
-    waiting_start = time.monotonic()
-    while packet.num_cars != expected_player_count and time.monotonic() - waiting_start < 5:
-        print("Game started but no cars are in the packets")
-        time.sleep(0.5)
-        setup_manager.game_interface.fresh_live_data_packet(packet, 1000, WITNESS_ID)
+    packet = wait_till_cars_spawned(setup_manager, expected_player_count)
 
     if packet.num_cars == 0:
         print("The game was initialized with no cars")
@@ -441,6 +454,7 @@ def run_challenge(
     setup_manager.start_match()
     setup_manager.launch_bot_processes()
 
+    setup_manager.game_interface.renderer.clear_screen(RENDERING_GROUP)
     game_results = None
     try:
         game_results = manage_game_state(challenge, upgrades, setup_manager)
