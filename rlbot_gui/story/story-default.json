@@ -15,14 +15,6 @@
                     "map": "BeckwithPark",
                     "disabledBoost": true,
                     "display": "Win something so we know you can drive"
-                },
-                {
-                    "id": "INTRO-2",
-                    "humanTeamSize": 1,
-                    "opponentBots": ["adversity"],
-                    "map": "Simplicity.upk",
-                    "max_score": "1 Goal",
-                    "display": "Custom Map world!"
                 }
             ]
         },
