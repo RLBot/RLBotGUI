@@ -6,6 +6,9 @@ from contextlib import contextmanager
 from datetime import datetime
 from os import path
 
+from typing import List, Optional
+
+import glob
 import shutil
 
 from rlbot.setup_manager import (
@@ -15,6 +18,8 @@ from rlbot.setup_manager import (
 )
 from rlbot.gamelaunch.epic_launch import locate_epic_games_launcher_rocket_league_binary
 from rlbot.utils import logging_utils
+
+from rlbot_gui.persistence.settings import load_settings, BOT_FOLDER_SETTINGS_KEY
 
 CUSTOM_MAP_TARGET = {"filename": "Labs_Utopia_P.upk", "game_map": "UtopiaRetro"}
 
@@ -47,20 +52,28 @@ def prepare_custom_map(custom_map_file: str, rl_directory: str):
         logger.info("Reverted real map to %s", real_map_file)
 
 
-def convert_custom_map_to_path(custom_map: str):
-    custom_map_dir = get_custom_map_dir()
-    custom_map_file = path.join(custom_map_dir, custom_map)
-    if not path.exists(custom_map_file):
-        logger.warning("%s - map doesn't exist", custom_map_file)
-        return None
+def convert_custom_map_to_path(custom_map: str) -> Optional[str]:
+    """
+    Search through user's selected folders to find custom_map
+    Return none if not found, full path if found
+    """
+    custom_map_file = None
+    folders = get_search_folders()
+    for folder in folders:
+        scan_query = path.join(glob.escape(folder), "**", custom_map)
+        for match in glob.iglob(scan_query):
+            custom_map_file = match
+
+    if not custom_map_file:
+        logger.warning("%s - map doesn't exist", custom_map)
 
     return custom_map_file
 
 
-def get_custom_map_dir():
-    """Probably will get from storage or something?"""
-    custom_map_dir = r"C:\Users\Triton\Downloads\Simplicity"  # temp hardcoding
-    return custom_map_dir
+def get_search_folders() -> List[str]:
+    """Get all folders to search for maps"""
+    bot_folders = load_settings().value(BOT_FOLDER_SETTINGS_KEY, type=dict)
+    return [k for k, v in bot_folders["folders"].items() if v['visible']]
 
 
 def identify_map_directory(launcher_pref: RocketLeagueLauncherPreference):
