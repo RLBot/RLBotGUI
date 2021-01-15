@@ -24,7 +24,7 @@ from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
     bootstrap_python_hivemind, convert_to_filename
-from rlbot_gui.bot_management.downloader import BotpackDownloader, BotpackUpdater, get_json_from_url
+from rlbot_gui.bot_management.downloader import BotpackStatus, BotpackDownloader, BotpackUpdater, get_json_from_url
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
 from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
@@ -457,16 +457,8 @@ def get_content_folder():
     return Path(os.getcwd())
 
 
-
-@eel.expose
-def download_bot_pack():
-    content_folder = get_content_folder()
-    botpack_location = content_folder / BOTPACK_FOLDER
-
-    # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
-    success = BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
-
-    if success:
+def update_gui_after_botpack_update(botpack_location, botpack_status):
+    if botpack_status is BotpackStatus.SUCCESS:
         # Configure the folder settings.
         bot_folder_settings['folders'][str(botpack_location)] = {'visible': True}
 
@@ -475,28 +467,25 @@ def download_bot_pack():
         settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
         settings.sync()
         scan_for_bots()
+
+
+@eel.expose
+def download_bot_pack():
+    botpack_location = get_content_folder() / BOTPACK_FOLDER
+    botpack_status = BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
+    
+    update_gui_after_botpack_update(botpack_location, botpack_status)
 
 
 @eel.expose
 def update_bot_pack():
-    content_folder = get_content_folder()
-    botpack_location = content_folder / BOTPACK_FOLDER
+    botpack_location = get_content_folder() / BOTPACK_FOLDER
+    botpack_status = BotpackUpdater().update(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
 
-    # The bot pack in now hosted at https://github.com/RLBot/RLBotPack
-    success = BotpackUpdater().update(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
+    if botpack_status == BotpackStatus.REQUIRES_FULL_DOWNLOAD:
+        botpack_status = BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
 
-    if success == "download":
-        success = BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
-
-    if success:
-        # Configure the folder settings.
-        bot_folder_settings['folders'][str(botpack_location)] = {'visible': True}
-
-        settings = load_settings()
-        settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
-        settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
-        settings.sync()
-        scan_for_bots()
+    update_gui_after_botpack_update(botpack_location, botpack_status)
 
 
 @eel.expose

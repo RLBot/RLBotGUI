@@ -1,10 +1,11 @@
 import json
+import multiprocessing as mp
 import os
 import tempfile
 import time
 import urllib.request
 import zipfile
-import multiprocessing as mp
+from enum import Enum
 from functools import partial
 from pathlib import Path
 from shutil import rmtree
@@ -16,9 +17,18 @@ from rlbot_gui.persistence.settings import load_settings
 RELEASE_TAG = 'latest_botpack_release_tag'
 
 
+class BotpackStatus(Enum):
+    REQUIRES_FULL_DOWNLOAD = -1
+    SKIPPED = 0
+    SUCCESS = 1
+
+
+# https://stackoverflow.com/a/64547381/10930209
 def remove_empty_folders(root: Path):
     for path, _, _ in list(os.walk(root))[::-1]:
         if len(os.listdir(path)) == 0:
+            # we need this because sometimes a folder is in use
+            # we just delete what we can and move on, it isn't that big a deal - they're just empty folders
             try:
                 os.rmdir(path)
             except Exception:
@@ -29,6 +39,7 @@ def download_and_extract_zip(download_url: str, local_folder_path: Path, local_s
                              clobber: bool = False, progress_callback: callable = None,
                              unzip_callback: callable = None):
     """
+    :param local_subfolder_name: The folder inside RLBotPackDeletable - right now, this should be 'RLBotPack-master'
     :param clobber: If true, we will delete anything found in local_folder_path.
     :return:
     """
@@ -39,7 +50,7 @@ def download_and_extract_zip(download_url: str, local_folder_path: Path, local_s
             urllib.request.urlretrieve(download_url, downloaded_zip_path, progress_callback)
         except Exception as err:
             print(err)
-            return False
+            return BotpackStatus.SKIPPED
 
         if clobber and os.path.exists(local_folder_path):
             rmtree(local_folder_path)
@@ -53,7 +64,7 @@ def download_and_extract_zip(download_url: str, local_folder_path: Path, local_s
         if not os.path.exists(os.path.join(local_folder_path, local_subfolder_name)):
             folder_name = os.listdir(local_folder_path)[0]
             os.rename(os.path.join(local_folder_path, folder_name), os.path.join(local_folder_path, local_subfolder_name))
-    return True
+    return BotpackStatus.SUCCESS
 
 
 
@@ -131,7 +142,7 @@ class BotpackDownloader:
             latest_release = get_json_from_url(f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest")
         except Exception as err:
             print(err)
-            return False
+            return BotpackStatus.SKIPPED
 
         success = download_and_extract_zip(download_url=latest_release['zipball_url'],
                                  local_folder_path=checkout_folder,
@@ -140,7 +151,7 @@ class BotpackDownloader:
                                  progress_callback=self.zip_download_callback,
                                  unzip_callback=self.unzip_callback)
         
-        if success:
+        if success is BotpackStatus.SUCCESS:
             settings = load_settings()
             settings.setValue(RELEASE_TAG, latest_release["tag_name"])
 
@@ -189,31 +200,44 @@ class BotpackUpdater:
             print(err)
             return False
 
+        # If the botpack is missing, just download the whole botpack
         if local_release_tag == "" or not os.path.exists(os.path.join(checkout_folder, master_folder)):
-            return "download"
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
 
         if local_release_tag == latest_release["tag_name"]:
             print("The botpack is already up-to-date!")
-            return False
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
 
         releases_to_download = list(range(int(local_release_tag.replace("incr-", "")) + 1, int(latest_release["tag_name"].replace("incr-", "")) + 1))
-        if len(releases_to_download) > 50:
-            return "download"
+
+        # if there's more than the cpu's threads * 4 patches, doing a full download be faster
+        # 4 threads = max 16 patches
+        # 16 threads = max 64 patches
+        # most modern systems have at least 8 threads (so max 32 patches)
+        # this is mostly for systems with threadrippers, which have 128 threads - they can, and should, be able to download all required patches at once
+        # at worst we will not be limited by github's download speed and instead by the user's download speed, which is ideal
+        if len(releases_to_download) > os.cpu_count() * 4:
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
             
         local_folder_path = Path(os.path.join(checkout_folder, master_folder))
 
         self.total_steps = len(releases_to_download)
         with tempfile.TemporaryDirectory() as tmpdir:
-            with mp.Pool(15) as p:
+            # we leave the first arg in Pool blank
+            # processes is the number of worker processes to use. If processes is None then the number returned by os.cpu_count() is used
+            # we want to utilize all threads
+            with mp.Pool() as p:
+                # It's very important that patches are applied in order
+                # This is why we use imap and not imap_unordered
+                # we want simultaneous downloads, but applying patches out of order would be a very bad idea
                 for tag in p.imap(partial(self.download_single, tmpdir, repo_url), releases_to_download):
-
                     if tag is False:
                         print("Failed to complete botpack upgrade")
-                        return False
-                    self.update_progressbar_and_status(f"applying patch {tag}")
+                        return BotpackStatus.SKIPPED
                     
                     # apply incremental patch
-                    print(f"applying incr-{tag}")
+                    print(f"Applying patch incr-{tag}")
+                    self.update_progressbar_and_status(f"Applying patch {tag}")
                     downloaded_zip_path = os.path.join(tmpdir, f"downloaded-{tag}.zip")
                     
                     with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
@@ -223,7 +247,7 @@ class BotpackUpdater:
                         files = deleted_ref.readlines()
 
                         for line in files:
-                            if line.replace(" ", "").replace("\n", "") != "":
+                            if line.replace("\n", "").strip() != "":
                                 file_name = local_folder_path / line.replace("\n", "")
                                 if os.path.isfile(file_name):
                                     os.remove(file_name)
