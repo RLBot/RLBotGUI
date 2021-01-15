@@ -29,7 +29,9 @@ from rlbot.matchconfig.match_config import (
 )
 from rlbot.setup_manager import SetupManager, RocketLeagueLauncherPreference
 
-from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager
+from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager, setup_match
+
+
 from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
 
 WITNESS_ID = random.randint(0, 1e5)
@@ -442,17 +444,14 @@ def manage_game_state(
     return calculate_completion(challenge, stats_tracker.stats, results), results
 
 
+
+
 def run_challenge(
     match_config: MatchConfig, challenge: dict, upgrades: dict, launcher_pref: RocketLeagueLauncherPreference
 ) -> Tuple[bool, dict]:
     """Launch the game and keep track of the state"""
     setup_manager = get_fresh_setup_manager()
-    setup_manager.early_start_seconds = 5
-    setup_manager.connect_to_game(launcher_preference=launcher_pref)
-    setup_manager.load_match_config(match_config)
-    setup_manager.launch_early_start_bot_processes()
-    setup_manager.start_match()
-    setup_manager.launch_bot_processes()
+    setup_match(setup_manager, match_config, launcher_pref)
 
     setup_manager.game_interface.renderer.clear_screen(RENDERING_GROUP)
     game_results = None
