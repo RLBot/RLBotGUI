@@ -663,6 +663,7 @@ export default {
 			this.folderSettings = folderSettings;
 			eel.scan_for_bots()(this.botsReceived);
 			eel.scan_for_scripts()(this.scriptsReceived);
+			eel.get_match_options()(this.matchOptionsReceived)
 		},
 
 		botpackPreExistingReceived: function(commit_id) {
