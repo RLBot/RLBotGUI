@@ -345,11 +345,17 @@ def try_copy_logo(bundle: RunnableConfigBundle):
 
 
 def get_bots_from_directory(bot_directory):
-    return [serialize_bundle(bundle) for bundle in scan_directory_for_bot_configs(bot_directory)]
+    bundles = filter_hidden_bundles(scan_directory_for_bot_configs(bot_directory))
+    return [serialize_bundle(bundle) for bundle in bundles]
 
 
 def get_scripts_from_directory(bot_directory):
-    return [serialize_script_bundle(bundle) for bundle in scan_directory_for_script_configs(bot_directory)]
+    bundles = filter_hidden_bundles(scan_directory_for_script_configs(bot_directory))
+    return [serialize_script_bundle(bundle) for bundle in bundles]
+
+
+def filter_hidden_bundles(bundles):
+    return [bundle for bundle in bundles if not bundle.config_file_name.startswith("_")]
 
 
 @eel.expose
