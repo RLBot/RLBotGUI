@@ -36,6 +36,17 @@ def prepare_custom_map(custom_map_file: str, rl_directory: str):
     Once the context is left, the original map is replaced back.
     The context should be left as soon as the match has started
     """
+
+    # check if there metadata for the custom file
+    expected_config_name = "_" + path.basename(custom_map_file)[:-4] + ".cfg"
+    config_path = path.join(path.dirname(custom_map_file), expected_config_name)
+    additional_info = {
+        "original_path": custom_map_file,
+    }
+    if path.exists(config_path):
+        additional_info["config_path"] = config_path
+
+
     real_map_file = path.join(rl_directory, CUSTOM_MAP_TARGET["filename"])
     timestamp = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
     temp_filename = real_map_file + "." + timestamp
@@ -46,7 +57,7 @@ def prepare_custom_map(custom_map_file: str, rl_directory: str):
     logger.info("Copied custom map from %s", custom_map_file)
 
     try:
-        yield CUSTOM_MAP_TARGET["game_map"]
+        yield CUSTOM_MAP_TARGET["game_map"], additional_info
     finally:
         shutil.move(temp_filename, real_map_file)
         logger.info("Reverted real map to %s", real_map_file)

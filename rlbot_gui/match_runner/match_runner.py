@@ -159,8 +159,13 @@ def setup_match(
             print("Couldn't load custom map")
             return
 
-        with prepare_custom_map(map_file, rl_directory) as game_map:
+        with prepare_custom_map(map_file, rl_directory) as (game_map, metadata):
             match_config.game_map = game_map
+            if "config_path" in metadata:
+                config_path = metadata["config_path"]
+                match_config.script_configs.append(
+                    create_script_config({'path': config_path}))
+                print(f"Will load custom script for map {config_path}")
             do_setup()
     else:
         do_setup()
