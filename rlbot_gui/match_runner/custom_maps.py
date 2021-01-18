@@ -10,6 +10,7 @@ from typing import List, Optional
 
 import glob
 import shutil
+import os
 
 from rlbot.setup_manager import (
     SetupManager,
@@ -59,7 +60,7 @@ def prepare_custom_map(custom_map_file: str, rl_directory: str):
     try:
         yield CUSTOM_MAP_TARGET["game_map"], additional_info
     finally:
-        shutil.move(temp_filename, real_map_file)
+        os.replace(temp_filename, real_map_file)
         logger.info("Reverted real map to %s", real_map_file)
 
 
