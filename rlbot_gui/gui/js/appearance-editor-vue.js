@@ -88,11 +88,11 @@ export default {
 				],
 				teams: ['blue', 'orange'],
 				showcaseTypes: [
-					{id: "back-center-kickoff-blue", name: "Static (Back-center kickoff - Blue)"},
-					{id: "back-center-kickoff-orange", name: "Static (Back-center kickoff - Orange)"},
+					{id: "back-center-kickoff", name: "Static (Back-center kickoff)"},
 					{id: "static", name: "Static (Center)"},
 					{id: "throttle", name: "Drive around center"},
 					{id: "boost", name: "Boost around center"},
+					{id: "goal-explosion", name: "Goal explosion"},
 				],
 				selectedShowcaseType: "boost"
 			}

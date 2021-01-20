@@ -46,6 +46,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
     match_config.existing_match_behavior = 'Continue And Spawn'
     match_config.networking_role = NetworkingRole.none
     match_config.enable_state_setting = True
+    match_config.skip_replays = True
 
     bot_config = PlayerConfig()
     bot_config.bot = True
@@ -80,6 +81,7 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
         ))
     )
     player_input = PlayerInput()
+    team_sign = -1 if team == 0 else 1
 
     if showcase_type == "boost":
         player_input.boost = True
@@ -95,13 +97,15 @@ def spawn_car_in_showroom(loadout_config: LoadoutConfig, team: int, showcase_typ
         game_state.cars[0].physics.velocity.x = 1410
         game_state.cars[0].physics.angular_velocity.z = 1.5
 
-    elif showcase_type == "back-center-kickoff-blue":
-        game_state.cars[0].physics.location.y = -4608
-        game_state.cars[0].physics.rotation.yaw = 0.5 * pi
+    elif showcase_type == "back-center-kickoff":
+        game_state.cars[0].physics.location.y = 4608 * team_sign
+        game_state.cars[0].physics.rotation.yaw = -0.5 * pi * team_sign
 
-    elif showcase_type == "back-center-kickoff-orange":
-        game_state.cars[0].physics.location.y = 4608
-        game_state.cars[0].physics.rotation.yaw = -0.5 * pi
+    elif showcase_type == "goal-explosion":
+        game_state.cars[0].physics.location.y = -2000 * team_sign
+        game_state.cars[0].physics.rotation.yaw = -0.5 * pi * team_sign
+        game_state.cars[0].physics.velocity.y = -2300 * team_sign
+        game_state.ball.physics.location = Vector3(0, -3500 * team_sign, 93)
 
     sm.game_interface.update_player_input(player_input, 0)
     sm.game_interface.set_game_state(game_state)
