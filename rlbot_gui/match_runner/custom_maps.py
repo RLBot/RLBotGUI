@@ -93,8 +93,11 @@ def find_all_custom_maps() -> List[str]:
 
 def get_search_folders() -> List[str]:
     """Get all folders to search for maps"""
-    bot_folders = load_settings().value(BOT_FOLDER_SETTINGS_KEY, type=dict)
-    return [k for k, v in bot_folders["folders"].items() if v['visible']]
+    bot_folders_setting = load_settings().value(BOT_FOLDER_SETTINGS_KEY, type=dict)
+    folders = {}
+    if "folders" in bot_folders_setting:
+        folders = bot_folders_setting["folders"]
+    return [k for k, v in folders.items() if v['visible']]
 
 
 def identify_map_directory(launcher_pref: RocketLeagueLauncherPreference):
