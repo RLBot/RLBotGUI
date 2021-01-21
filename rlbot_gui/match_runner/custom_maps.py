@@ -73,7 +73,7 @@ def convert_custom_map_to_path(custom_map: str) -> Optional[str]:
     folders = get_search_folders()
     for folder in folders:
         scan_query = path.join(glob.escape(folder), "**", custom_map)
-        for match in glob.iglob(scan_query):
+        for match in glob.iglob(scan_query, recursive=True):
             custom_map_file = match
 
     if not custom_map_file:
@@ -87,7 +87,7 @@ def find_all_custom_maps() -> List[str]:
     maps = []
     for folder in folders:
         scan_query = path.join(glob.escape(folder), "**", "*.upk")
-        maps.extend(path.basename(i) for i in glob.iglob(scan_query))
+        maps.extend(path.basename(i) for i in glob.iglob(scan_query, recursive=True))
     return maps
 
 
