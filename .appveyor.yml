@@ -1,0 +1,34 @@
+version: '{build}'
+
+environment:
+  pypipw:
+    secure: AnvQqXXhbyfD5/CeJkbivk088RZBnIObU2mXBLH2paw=
+
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON: C:\Python37-x64
+      PIP: C:\Python37-x64\Scripts\pip
+      PYTEST: C:\Python37-x64\Scripts\pytest
+      TWINE: C:\Python37-x64\Scripts\twine
+
+branches:
+   only:
+      - master
+
+install:
+  - cmd: "%PIP% install wheel twine"
+
+build_script:
+  - cmd: "%PIP% install ."
+
+artifacts:
+  - path: dist\*
+
+after_test:
+  - cmd: "echo [pypi] > %USERPROFILE%\\.pypirc"
+  - cmd: "echo username: RLBotOfficial >> %USERPROFILE%\\.pypirc"
+  - cmd: "echo password: %pypipw% >> %USERPROFILE%\\.pypirc"
+  - python setup.py bdist_wheel
+
+on_success:
+  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] %TWINE% upload dist\\*.whl"
