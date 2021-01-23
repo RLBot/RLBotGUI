@@ -54,6 +54,9 @@ export default {
 					Menu
 				</template>
 
+				<b-dropdown-item @click="downloadBotPack()">
+					Repair bot pack
+				</b-dropdown-item>
 				<b-dropdown-item v-b-modal.package-installer>
 					Install missing python package
 				</b-dropdown-item>
@@ -87,7 +90,7 @@ export default {
 				<span class="rlbot-card-header">Player Types</span>
 				<b-dropdown class="ml-2 mr-2">
 					<template v-slot:button-content><b-icon icon="plus"/>Add</template>
-					<b-dropdown-item  @click="downloadBotPack()">
+					<b-dropdown-item  @click="updateBotPack()">
 						<b-icon icon="cloud-download"></b-icon>
 						<span>Download Bot Pack</span>
 					</b-dropdown-item>
@@ -241,7 +244,7 @@ export default {
 		</b-toast>
 
 		<b-toast id="bot-pack-available-toast" v-model="showBotpackUpdateSnackbar" title="Bot Pack Update Available!" toaster="b-toaster-bottom-center">
-			<b-button variant="primary" @click="downloadBotPack()" style="margin-left: auto;">Download</b-button>
+			<b-button variant="primary" @click="updateBotPack()" style="margin-left: auto;">Download</b-button>
 		</b-toast>
 
 		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer centered>
@@ -518,6 +521,13 @@ export default {
 			this.downloadProgressPercent = 0;
 			eel.download_bot_pack()(this.botPackDownloaded);
 		},
+		updateBotPack: function() {
+			this.showBotpackUpdateSnackbar = false;
+			this.$bvModal.show('bot-pack-download-modal');
+			this.downloadStatus = "Starting";
+			this.downloadProgressPercent = 0;
+			eel.update_bot_pack()(this.botPackUpdated);
+		},
 		showAppearanceEditor: function(looksPath) {
 			this.appearancePath = looksPath;
 			this.appearancePath = looksPath;
@@ -676,6 +686,15 @@ export default {
 
 		botPackDownloaded: function (response) {
 			this.snackbarContent = 'Downloaded Bot Pack!';
+			this.showSnackbar = true;
+			this.$bvModal.hide('bot-pack-download-modal');
+			eel.get_folder_settings()(this.folderSettingsReceived);
+			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived);
+			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
+		},
+
+		botPackUpdated: function (response) {
+			this.snackbarContent = 'Updated Bot Pack!';
 			this.showSnackbar = true;
 			this.$bvModal.hide('bot-pack-download-modal');
 			eel.get_folder_settings()(this.folderSettingsReceived);

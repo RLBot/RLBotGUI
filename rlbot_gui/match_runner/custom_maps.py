@@ -73,7 +73,7 @@ def convert_custom_map_to_path(custom_map: str) -> Optional[str]:
     folders = get_search_folders()
     for folder in folders:
         scan_query = path.join(glob.escape(folder), "**", custom_map)
-        for match in glob.iglob(scan_query):
+        for match in glob.iglob(scan_query, recursive=True):
             custom_map_file = match
 
     if not custom_map_file:
@@ -87,14 +87,17 @@ def find_all_custom_maps() -> List[str]:
     maps = []
     for folder in folders:
         scan_query = path.join(glob.escape(folder), "**", "*.upk")
-        maps.extend(path.basename(i) for i in glob.iglob(scan_query))
+        maps.extend(path.basename(i) for i in glob.iglob(scan_query, recursive=True))
     return maps
 
 
 def get_search_folders() -> List[str]:
     """Get all folders to search for maps"""
-    bot_folders = load_settings().value(BOT_FOLDER_SETTINGS_KEY, type=dict)
-    return [k for k, v in bot_folders["folders"].items() if v['visible']]
+    bot_folders_setting = load_settings().value(BOT_FOLDER_SETTINGS_KEY, type=dict)
+    folders = {}
+    if "folders" in bot_folders_setting:
+        folders = bot_folders_setting["folders"]
+    return [k for k, v in folders.items() if v['visible']]
 
 
 def identify_map_directory(launcher_pref: RocketLeagueLauncherPreference):

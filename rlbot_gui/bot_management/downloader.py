@@ -1,26 +1,56 @@
+import json
+import multiprocessing as mp
 import os
 import tempfile
+import time
 import urllib.request
 import zipfile
-import json
-import eel
-import time
+from enum import Enum
+from functools import partial
 from pathlib import Path
 from shutil import rmtree
 from typing import Optional
 
+import eel
+from rlbot_gui.persistence.settings import load_settings
 
-def download_and_extract_zip(download_url: str, local_folder_path: Path,
+RELEASE_TAG = 'latest_botpack_release_tag'
+
+
+class BotpackStatus(Enum):
+    REQUIRES_FULL_DOWNLOAD = -1
+    SKIPPED = 0
+    SUCCESS = 1
+
+
+# https://stackoverflow.com/a/64547381/10930209
+def remove_empty_folders(root: Path):
+    for path, _, _ in list(os.walk(root))[::-1]:
+        if len(os.listdir(path)) == 0:
+            # we need this because sometimes a folder is in use
+            # we just delete what we can and move on, it isn't that big a deal - they're just empty folders
+            try:
+                os.rmdir(path)
+            except Exception:
+                continue
+
+
+def download_and_extract_zip(download_url: str, local_folder_path: Path, local_subfolder_name: str,
                              clobber: bool = False, progress_callback: callable = None,
                              unzip_callback: callable = None):
     """
+    :param local_subfolder_name: The folder inside RLBotPackDeletable - right now, this should be 'RLBotPack-master'
     :param clobber: If true, we will delete anything found in local_folder_path.
     :return:
     """
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         downloaded_zip_path = os.path.join(tmpdirname, 'downloaded.zip')
-        urllib.request.urlretrieve(download_url, downloaded_zip_path, progress_callback)
+        try:
+            urllib.request.urlretrieve(download_url, downloaded_zip_path, progress_callback)
+        except Exception as err:
+            print(err)
+            return BotpackStatus.SKIPPED
 
         if clobber and os.path.exists(local_folder_path):
             rmtree(local_folder_path)
@@ -30,6 +60,12 @@ def download_and_extract_zip(download_url: str, local_folder_path: Path,
 
         with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
             zip_ref.extractall(local_folder_path)
+
+        if not os.path.exists(os.path.join(local_folder_path, local_subfolder_name)):
+            folder_name = os.listdir(local_folder_path)[0]
+            os.rename(os.path.join(local_folder_path, folder_name), os.path.join(local_folder_path, local_subfolder_name))
+    return BotpackStatus.SUCCESS
+
 
 
 def get_json_from_url(url):
@@ -87,7 +123,6 @@ class BotpackDownloader:
 
     def download(self, repo_owner: str, repo_name: str, branch_name: str, checkout_folder: Path):
         repo_full_name = repo_owner + '/' + repo_name
-        repo_url = 'https://github.com/' + repo_full_name
 
         self.status = f'Downloading {repo_full_name}-{branch_name}'
         print(self.status)
@@ -95,16 +130,133 @@ class BotpackDownloader:
 
         # Unfortunately we can't know the size of the zip file before downloading it,
         # so we have to get the size from the GitHub API.
-        self.estimated_zip_size = get_repo_size(repo_full_name) * 0.7
+        self.estimated_zip_size = get_repo_size(repo_full_name) * 0.65
 
         # If we fail to get the repo size, set it to a fallback value,
-        # so the progress bar will show atleast some progress.
-        # Let's assume the zip file is around 40 MB.
+        # so the progress bar will show at least some progress.
+        # Let's assume the zip file is around 70 MB.
         if not self.estimated_zip_size:
-            self.estimated_zip_size = 40_000_000
+            self.estimated_zip_size = 70_000_000
 
-        download_and_extract_zip(download_url=repo_url + '/archive/' + branch_name + '.zip',
+        try:
+            latest_release = get_json_from_url(f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest")
+        except Exception as err:
+            print(err)
+            return BotpackStatus.SKIPPED
+
+        success = download_and_extract_zip(download_url=latest_release['zipball_url'],
                                  local_folder_path=checkout_folder,
+                                 local_subfolder_name=f"{repo_name}-{branch_name}",
                                  clobber=True,
                                  progress_callback=self.zip_download_callback,
                                  unzip_callback=self.unzip_callback)
+        
+        if success is BotpackStatus.SUCCESS:
+            settings = load_settings()
+            settings.setValue(RELEASE_TAG, latest_release["tag_name"])
+
+        return success
+
+
+class BotpackUpdater:
+    """
+    Updates the botpack while updating the progress bar and status text.
+    """
+    def __init__(self):
+        self.status = ''
+
+        self.total_steps = 0
+        self.current_step = 0
+
+    def update_progressbar_and_status(self, status=None):
+        total_progress_percent = int(min(self.current_step / self.total_steps, 1) * 100) if self.total_steps != 0 else 0
+        if status is None: status = self.status
+        status = f'{status} ({total_progress_percent}%)'
+        eel.updateDownloadProgress(total_progress_percent, status)
+
+
+    def download_single(self, tmpdir: Path, repo_url: str, tag: int):
+            download_url = f"{repo_url}/releases/download/incr-{tag}/incremental.zip"
+            downloaded_zip_path = os.path.join(tmpdir, f"downloaded-{tag}.zip")
+            try:
+                urllib.request.urlretrieve(download_url, downloaded_zip_path)
+            except Exception as err:
+                print(err)
+                return False
+            return tag
+
+
+    def update(self, repo_owner: str, repo_name: str, branch_name: str, checkout_folder: Path):
+        repo_full_name = repo_owner + '/' + repo_name
+        repo_url = 'https://github.com/' + repo_full_name
+        master_folder = repo_name + "-" + branch_name
+
+        settings = load_settings()
+        local_release_tag = settings.value(RELEASE_TAG, type=str)
+
+        try:
+            latest_release = get_json_from_url(f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest")
+        except Exception as err:
+            print(err)
+            return False
+
+        # If the botpack is missing, just download the whole botpack
+        if local_release_tag == "" or not os.path.exists(os.path.join(checkout_folder, master_folder)):
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
+
+        if local_release_tag == latest_release["tag_name"]:
+            print("The botpack is already up-to-date!")
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
+
+        releases_to_download = list(range(int(local_release_tag.replace("incr-", "")) + 1, int(latest_release["tag_name"].replace("incr-", "")) + 1))
+
+        # if there's more than the cpu's threads * 4 patches, doing a full download be faster
+        # 4 threads = max 16 patches
+        # 16 threads = max 64 patches
+        # most modern systems have at least 8 threads (so max 32 patches)
+        # this is mostly for systems with threadrippers, which have 128 threads - they can, and should, be able to download all required patches at once
+        # at worst we will not be limited by github's download speed and instead by the user's download speed, which is ideal
+        if len(releases_to_download) > os.cpu_count() * 4:
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
+            
+        local_folder_path = Path(os.path.join(checkout_folder, master_folder))
+
+        self.total_steps = len(releases_to_download)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # we leave the first arg in Pool blank
+            # processes is the number of worker processes to use. If processes is None then the number returned by os.cpu_count() is used
+            # we want to utilize all threads
+            with mp.Pool() as p:
+                # It's very important that patches are applied in order
+                # This is why we use imap and not imap_unordered
+                # we want simultaneous downloads, but applying patches out of order would be a very bad idea
+                for tag in p.imap(partial(self.download_single, tmpdir, repo_url), releases_to_download):
+                    if tag is False:
+                        print("Failed to complete botpack upgrade")
+                        return BotpackStatus.SKIPPED
+                    
+                    # apply incremental patch
+                    print(f"Applying patch incr-{tag}")
+                    self.update_progressbar_and_status(f"Applying patch {tag}")
+                    downloaded_zip_path = os.path.join(tmpdir, f"downloaded-{tag}.zip")
+                    
+                    with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
+                        zip_ref.extractall(local_folder_path)
+
+                    with open(local_folder_path / ".deleted", "r", encoding="utf-16") as deleted_ref:
+                        files = deleted_ref.readlines()
+
+                        for line in files:
+                            if line.replace("\n", "").strip() != "":
+                                file_name = local_folder_path / line.replace("\n", "")
+                                if os.path.isfile(file_name):
+                                    os.remove(file_name)
+                                    
+                    # encase something goes wrong in the future, we can save our place between commit upgrades
+                    settings.setValue(RELEASE_TAG, f"incr-{tag}")
+                    self.current_step += 1
+        
+        remove_empty_folders(local_folder_path)
+
+        self.update_progressbar_and_status(f"Done")
+        return True
