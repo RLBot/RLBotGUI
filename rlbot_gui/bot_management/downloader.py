@@ -210,23 +210,18 @@ class BotpackUpdater:
 
         releases_to_download = list(range(int(local_release_tag.replace("incr-", "")) + 1, int(latest_release["tag_name"].replace("incr-", "")) + 1))
 
-        # if there's more than the cpu's threads * 4 patches, doing a full download be faster
-        # 4 threads = max 16 patches
-        # 16 threads = max 64 patches
-        # most modern systems have at least 8 threads (so max 32 patches)
-        # this is mostly for systems with threadrippers, which have 128 threads - they can, and should, be able to download all required patches at once
-        # at worst we will not be limited by github's download speed and instead by the user's download speed, which is ideal
-        if len(releases_to_download) > os.cpu_count() * 4:
+        # If there are too many patches to be applied at once, don't bother and instead do a full redownload of the bot pack. Each patch has a certain
+        # amount of overhead so at some point it becomes faster to do a full download. We also do not want to spam github with too many download requests.
+        if len(releases_to_download) > 50:
             return BotpackStatus.REQUIRES_FULL_DOWNLOAD
             
         local_folder_path = Path(os.path.join(checkout_folder, master_folder))
 
         self.total_steps = len(releases_to_download)
         with tempfile.TemporaryDirectory() as tmpdir:
-            # we leave the first arg in Pool blank
-            # processes is the number of worker processes to use. If processes is None then the number returned by os.cpu_count() is used
-            # we want to utilize all threads
-            with mp.Pool() as p:
+            # Spawn up to 15 download threads, we want to download the updates at a fast speed without saturating the users network connection.
+            # These threads only serve to initiate the download and mostly sit idle.
+            with mp.Pool(min(15, len(releases_to_download))) as p:
                 # It's very important that patches are applied in order
                 # This is why we use imap and not imap_unordered
                 # we want simultaneous downloads, but applying patches out of order would be a very bad idea
