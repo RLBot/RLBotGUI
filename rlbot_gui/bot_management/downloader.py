@@ -35,7 +35,7 @@ def remove_empty_folders(root: Path):
                 continue
 
 
-def download_and_extract_zip(download_url: str, local_folder_path: Path, local_subfolder_name: str,
+def download_and_extract_zip(download_url: str, local_folder_path: Path, local_subfolder_name: str = None,
                              clobber: bool = False, progress_callback: callable = None,
                              unzip_callback: callable = None):
     """
@@ -61,9 +61,10 @@ def download_and_extract_zip(download_url: str, local_folder_path: Path, local_s
         with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
             zip_ref.extractall(local_folder_path)
 
-        if not os.path.exists(os.path.join(local_folder_path, local_subfolder_name)):
+        full_path = local_folder_path if local_subfolder_name is None else os.path.join(local_folder_path, local_subfolder_name)
+        if not os.path.exists(full_path):
             folder_name = os.listdir(local_folder_path)[0]
-            os.rename(os.path.join(local_folder_path, folder_name), os.path.join(local_folder_path, local_subfolder_name))
+            os.rename(os.path.join(local_folder_path, folder_name), full_path)
     return BotpackStatus.SUCCESS
 
 
