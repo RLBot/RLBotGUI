@@ -45,9 +45,9 @@
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Botimus&Bumblebee", "bumblebee.cfg"]
     },
     "baf": {
-        "name": "BAF",
+        "name": "Flying Panda",
         "type": "rlbot",
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "blind_and_deaf", "bot.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "blind_and_deaf", "_story_mode_bot.cfg"]
     },
     "tbd": {
         "name": "Psyonix Allstar",
