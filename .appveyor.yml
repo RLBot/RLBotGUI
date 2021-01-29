@@ -16,7 +16,7 @@ branches:
       - master
 
 install:
-  - cmd: "%PIP% install --upgrade pip wheel twine"
+  - cmd: "python -m pip install --upgrade pip wheel twine"
 
 build_script:
   - cmd: "%PIP% install ."
