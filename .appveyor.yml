@@ -5,17 +5,18 @@ environment:
     secure: AnvQqXXhbyfD5/CeJkbivk088RZBnIObU2mXBLH2paw=
 
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      PYTHON: C:\Python37-x64\python.exe
 
 branches:
    only:
       - master
 
 install:
-  - cmd: "python -m pip install --upgrade pip wheel twine"
+  - cmd: "%PYTHON% -m pip install --upgrade pip wheel twine"
 
 build_script:
-  - cmd: "python -m pip install ."
+  - cmd: "%PYTHON% -m pip install ."
 
 artifacts:
   - path: dist\*
@@ -27,4 +28,4 @@ after_test:
   - python setup.py bdist_wheel sdist
 
 on_success:
-  - cmd: "python -m twine upload dist\\*"
+  - cmd: "%PYTHON% -m twine upload dist\\*"
