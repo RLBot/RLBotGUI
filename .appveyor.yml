@@ -6,10 +6,6 @@ environment:
 
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      PYTHON: C:\Python37-x64
-      PIP: C:\Python37-x64\Scripts\pip
-      PYTEST: C:\Python37-x64\Scripts\pytest
-      TWINE: C:\Python37-x64\Scripts\twine
 
 branches:
    only:
@@ -19,7 +15,7 @@ install:
   - cmd: "python -m pip install --upgrade pip wheel twine"
 
 build_script:
-  - cmd: "%PIP% install ."
+  - cmd: "python -m pip install ."
 
 artifacts:
   - path: dist\*
@@ -31,4 +27,4 @@ after_test:
   - python setup.py bdist_wheel sdist
 
 on_success:
-  - cmd: "%TWINE% upload dist\\*"
+  - cmd: "python -m twine upload dist\\*"
