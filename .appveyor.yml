@@ -25,7 +25,7 @@ after_test:
   - cmd: "echo [pypi] > %USERPROFILE%\\.pypirc"
   - cmd: "echo username: RLBotOfficial >> %USERPROFILE%\\.pypirc"
   - cmd: "echo password: %pypipw% >> %USERPROFILE%\\.pypirc"
-  - python setup.py bdist_wheel sdist
+  - cmd: "%PYTHON% setup.py bdist_wheel sdist"
 
 on_success:
   - cmd: "%PYTHON% -m twine upload dist\\*"
