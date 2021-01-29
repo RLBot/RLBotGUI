@@ -28,7 +28,7 @@ after_test:
   - cmd: "echo [pypi] > %USERPROFILE%\\.pypirc"
   - cmd: "echo username: RLBotOfficial >> %USERPROFILE%\\.pypirc"
   - cmd: "echo password: %pypipw% >> %USERPROFILE%\\.pypirc"
-  - python setup.py bdist_wheel
+  - python setup.py bdist_wheel sdist
 
 on_success:
-  - cmd: "if [%APPVEYOR_REPO_TAG%]==[true] %TWINE% upload dist\\*.whl"
+  - cmd: "%TWINE% upload dist\\*"
