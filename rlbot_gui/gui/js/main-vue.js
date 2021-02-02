@@ -14,7 +14,7 @@ const STARTING_BOT_POOL = [
 
 export default {
 	name: 'match-setup',
-	template: `
+	template: /*html*/`
 	<div>
 	<b-navbar class="navbar">
 		<b-navbar-brand>
@@ -97,6 +97,10 @@ export default {
 					<b-dropdown-item v-b-modal.new-bot-modal>
 						<b-icon icon="pencil-square"></b-icon>
 						<span>Start Your Own Bot!</span>
+					</b-dropdown-item>
+					<b-dropdown-item @click="updateMapPack()">
+						<b-icon icon="geo"></b-icon>
+						<span>Download Maps</span>
 					</b-dropdown-item>
 					<b-dropdown-item  @click="pickBotFolder()">
 						<b-icon icon="folder-plus"></b-icon>
@@ -341,7 +345,7 @@ export default {
 
 		</b-modal>
 
-		<b-modal id="bot-pack-download-modal" title="Downloading Bot Pack" hide-footer centered no-close-on-backdrop no-close-on-esc hide-header-close>
+		<b-modal id="download-modal" v-bind:title="downloadModalTitle" hide-footer centered no-close-on-backdrop no-close-on-esc hide-header-close>
 			<div class="text-center">
 				<b-icon icon="cloud-download" font-scale="3"></b-icon>
 			</div>
@@ -440,6 +444,7 @@ export default {
 			botNameFilter: '',
 			appearancePath: '',
 			recommendations: null,
+			downloadModalTitle: "Downloading Bot Pack"
 		}
 	},
 
@@ -516,17 +521,27 @@ export default {
 		},
 		downloadBotPack: function() {
 			this.showBotpackUpdateSnackbar = false;
-			this.$bvModal.show('bot-pack-download-modal');
+			this.downloadModalTitle = "Downloading Bot Pack" 
+			this.$bvModal.show('download-modal');
 			this.downloadStatus = "Starting";
 			this.downloadProgressPercent = 0;
-			eel.download_bot_pack()(this.botPackDownloaded);
+			eel.download_bot_pack()(this.botPackUpdated.bind(this, 'Downloaded Bot Pack!'));
 		},
 		updateBotPack: function() {
 			this.showBotpackUpdateSnackbar = false;
-			this.$bvModal.show('bot-pack-download-modal');
+			this.downloadModalTitle = "Updating Bot Pack" 
+			this.$bvModal.show('download-modal');
 			this.downloadStatus = "Starting";
 			this.downloadProgressPercent = 0;
-			eel.update_bot_pack()(this.botPackUpdated);
+			eel.update_bot_pack()(this.botPackUpdated.bind(this, 'Updated Bot Pack!'));
+		},
+		updateMapPack: function() {
+			this.showBotpackUpdateSnackbar = false;
+			this.downloadModalTitle = "Downloading Custom Maps" 
+			this.$bvModal.show('download-modal');
+			this.downloadStatus = "Starting";
+			this.downloadProgressPercent = 0;
+			eel.update_map_pack()(this.botPackUpdated.bind(this, 'Downloaded Maps!'));
 		},
 		showAppearanceEditor: function(looksPath) {
 			this.appearancePath = looksPath;
@@ -684,19 +699,10 @@ export default {
 			this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
 		},
 
-		botPackDownloaded: function (response) {
-			this.snackbarContent = 'Downloaded Bot Pack!';
+		botPackUpdated: function (message) {
+			this.snackbarContent = message;
 			this.showSnackbar = true;
-			this.$bvModal.hide('bot-pack-download-modal');
-			eel.get_folder_settings()(this.folderSettingsReceived);
-			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived);
-			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
-		},
-
-		botPackUpdated: function (response) {
-			this.snackbarContent = 'Updated Bot Pack!';
-			this.showSnackbar = true;
-			this.$bvModal.hide('bot-pack-download-modal');
+			this.$bvModal.hide('download-modal');
 			eel.get_folder_settings()(this.folderSettingsReceived);
 			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived);
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);

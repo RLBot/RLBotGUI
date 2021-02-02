@@ -15,6 +15,7 @@ import eel
 from rlbot_gui.persistence.settings import load_settings
 
 RELEASE_TAG = 'latest_botpack_release_tag'
+FOLDER_SUFFIX = 'master'
 
 
 class BotpackStatus(Enum):
@@ -87,9 +88,9 @@ def get_repo_size(repo_full_name) -> Optional[int]:
         return None
 
 
-class BotpackDownloader:
+class RepoDownloader:
     """
-    Downloads the botpack while updating the progress bar and status text.
+    Downloads the given repo while updating the progress bar and status text.
     """
 
     PROGRESSBAR_UPDATE_INTERVAL = 0.1  # How often to update the progress bar (seconds)
@@ -122,10 +123,11 @@ class BotpackDownloader:
     def unzip_callback(self):
         eel.updateDownloadProgress(100, 'Extracting ZIP file')
 
-    def download(self, repo_owner: str, repo_name: str, branch_name: str, checkout_folder: Path):
+    def download(self, repo_owner: str, repo_name: str, checkout_folder: Path):
         repo_full_name = repo_owner + '/' + repo_name
+        folder_suffix = FOLDER_SUFFIX
 
-        self.status = f'Downloading {repo_full_name}-{branch_name}'
+        self.status = f'Downloading {repo_full_name}-{folder_suffix}'
         print(self.status)
         self.total_progress = 0
 
@@ -147,7 +149,7 @@ class BotpackDownloader:
 
         success = download_and_extract_zip(download_url=latest_release['zipball_url'],
                                  local_folder_path=checkout_folder,
-                                 local_subfolder_name=f"{repo_name}-{branch_name}",
+                                 local_subfolder_name=f"{repo_name}-{folder_suffix}",
                                  clobber=True,
                                  progress_callback=self.zip_download_callback,
                                  unzip_callback=self.unzip_callback)
@@ -187,10 +189,10 @@ class BotpackUpdater:
             return tag
 
 
-    def update(self, repo_owner: str, repo_name: str, branch_name: str, checkout_folder: Path):
+    def update(self, repo_owner: str, repo_name: str, checkout_folder: Path):
         repo_full_name = repo_owner + '/' + repo_name
         repo_url = 'https://github.com/' + repo_full_name
-        master_folder = repo_name + "-" + branch_name
+        master_folder = repo_name + "-" + FOLDER_SUFFIX
 
         settings = load_settings()
         local_release_tag = settings.value(RELEASE_TAG, type=str)
