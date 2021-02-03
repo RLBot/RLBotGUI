@@ -706,6 +706,7 @@ export default {
 			eel.get_folder_settings()(this.folderSettingsReceived);
 			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived);
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
+			eel.get_match_options()(this.matchOptionsReceived)
 		},
 
 		onInstallationComplete: function (result) {

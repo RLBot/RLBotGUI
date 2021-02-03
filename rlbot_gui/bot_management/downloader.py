@@ -36,6 +36,21 @@ def remove_empty_folders(root: Path):
                 continue
 
 
+def get_map_revision(location, repo_name):
+    """
+    For a map pack, tells you the current revision
+    """
+    master_folder = repo_name + "-" + FOLDER_SUFFIX
+    index_path = Path(location) / master_folder / "index.json"
+
+    if index_path.exists():
+        with open(index_path) as file:
+            index = json.load(file)
+        
+        return index["revision"]
+
+
+
 def download_and_extract_zip(download_url: str, local_folder_path: Path, local_subfolder_name: str = None,
                              clobber: bool = False, progress_callback: callable = None,
                              unzip_callback: callable = None):
@@ -123,7 +138,7 @@ class RepoDownloader:
     def unzip_callback(self):
         eel.updateDownloadProgress(100, 'Extracting ZIP file')
 
-    def download(self, repo_owner: str, repo_name: str, checkout_folder: Path):
+    def download(self, repo_owner: str, repo_name: str, checkout_folder: Path, update_tag_setting=True):
         repo_full_name = repo_owner + '/' + repo_name
         folder_suffix = FOLDER_SUFFIX
 
@@ -154,7 +169,7 @@ class RepoDownloader:
                                  progress_callback=self.zip_download_callback,
                                  unzip_callback=self.unzip_callback)
         
-        if success is BotpackStatus.SUCCESS:
+        if success is BotpackStatus.SUCCESS and update_tag_setting:
             settings = load_settings()
             settings.setValue(RELEASE_TAG, latest_release["tag_name"])
 
