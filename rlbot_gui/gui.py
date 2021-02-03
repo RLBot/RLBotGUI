@@ -24,7 +24,8 @@ from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
     bootstrap_python_hivemind, convert_to_filename
-from rlbot_gui.bot_management.downloader import BotpackStatus, BotpackDownloader, BotpackUpdater, get_json_from_url
+from rlbot_gui.bot_management.downloader import BotpackStatus, RepoDownloader, BotpackUpdater, get_json_from_url, \
+    MapPackUpdater
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
 from rlbot_gui.match_runner.custom_maps import find_all_custom_maps
@@ -38,10 +39,12 @@ from rlbot_gui.story import story_runner
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
+MAPPACK_FOLDER = 'RLBotMapPackDeletable'
+MAPPACK_REPO = ("azeemba", "RLBotMapPack")
 OLD_BOTPACK_FOLDER = 'RLBotPack'
 BOTPACK_REPO_OWNER = 'RLBot'
 BOTPACK_REPO_NAME = 'RLBotPack'
-BOTPACK_REPO_BRANCH = 'master'
+BOTPACK_REPO_BRANCH = 'master' # can't change with the new release system
 CREATED_BOTS_FOLDER = 'MyBots'
 COMMIT_ID_KEY = 'latest_botpack_commit_id'
 bot_folder_settings = None
@@ -464,14 +467,16 @@ def get_content_folder():
     return Path(os.getcwd())
 
 
-def update_gui_after_botpack_update(botpack_location, botpack_status):
+def update_gui_after_botpack_update(botpack_location, botpack_status, additional_settings=None):
     if botpack_status is BotpackStatus.SUCCESS:
         # Configure the folder settings.
         bot_folder_settings['folders'][str(botpack_location)] = {'visible': True}
 
         settings = load_settings()
         settings.setValue(BOT_FOLDER_SETTINGS_KEY, bot_folder_settings)
-        settings.setValue(COMMIT_ID_KEY, get_last_botpack_commit_id())
+        if additional_settings:
+            for key, value in additional_settings.items():
+                settings.setValue(key, value)
         settings.sync()
         scan_for_bots()
 
@@ -479,20 +484,47 @@ def update_gui_after_botpack_update(botpack_location, botpack_status):
 @eel.expose
 def download_bot_pack():
     botpack_location = get_content_folder() / BOTPACK_FOLDER
-    botpack_status = BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
-    
-    update_gui_after_botpack_update(botpack_location, botpack_status)
+    botpack_status = RepoDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, botpack_location)
+
+    additional_settings = {COMMIT_ID_KEY: get_last_botpack_commit_id()}
+    update_gui_after_botpack_update(botpack_location, botpack_status, additional_settings)
+
+
+@eel.expose
+def update_map_pack():
+    location = get_content_folder() / MAPPACK_FOLDER
+
+    updater = MapPackUpdater(location, MAPPACK_REPO[0], MAPPACK_REPO[1])
+    map_index_old = updater.get_map_index()
+    status = updater.needs_update()
+
+    if status == BotpackStatus.REQUIRES_FULL_DOWNLOAD:
+        status = RepoDownloader().download(
+            MAPPACK_REPO[0],
+            MAPPACK_REPO[1],
+            location,
+            update_tag_setting=False)
+        
+        map_index = updater.get_map_index()
+
+        if map_index is None:
+            print("ERROR: Updating mappack failed! There is no revision")
+            return
+        updater.hydrate_map_pack(map_index_old)
+
+    update_gui_after_botpack_update(location, status)
 
 
 @eel.expose
 def update_bot_pack():
     botpack_location = get_content_folder() / BOTPACK_FOLDER
-    botpack_status = BotpackUpdater().update(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
+    botpack_status = BotpackUpdater().update(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, botpack_location)
 
     if botpack_status == BotpackStatus.REQUIRES_FULL_DOWNLOAD:
-        botpack_status = BotpackDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, BOTPACK_REPO_BRANCH, botpack_location)
+        botpack_status = RepoDownloader().download(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, botpack_location)
 
-    update_gui_after_botpack_update(botpack_location, botpack_status)
+    additional_settings = {COMMIT_ID_KEY: get_last_botpack_commit_id()}
+    update_gui_after_botpack_update(botpack_location, botpack_status, additional_settings)
 
 
 @eel.expose
