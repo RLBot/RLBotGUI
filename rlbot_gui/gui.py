@@ -25,7 +25,7 @@ from rlbot.utils.requirements_management import install_requirements_file
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
     bootstrap_python_hivemind, convert_to_filename
 from rlbot_gui.bot_management.downloader import BotpackStatus, RepoDownloader, BotpackUpdater, get_json_from_url, \
-    get_map_revision
+    MapPackUpdater
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
     do_infinite_loop_content, spawn_car_in_showroom, set_game_state, fetch_game_tick_packet
 from rlbot_gui.match_runner.custom_maps import find_all_custom_maps
@@ -493,8 +493,10 @@ def download_bot_pack():
 @eel.expose
 def update_map_pack():
     location = get_content_folder() / MAPPACK_FOLDER
-    # status = BotpackUpdater().update(MAPPACK_REPO[0], MAPPACK_REPO[1], MAPPACK_REPO[2], location)
-    status = BotpackStatus.REQUIRES_FULL_DOWNLOAD
+
+    updater = MapPackUpdater(location, MAPPACK_REPO[0], MAPPACK_REPO[1])
+    map_index_old = updater.get_map_index()
+    status = updater.needs_update()
 
     if status == BotpackStatus.REQUIRES_FULL_DOWNLOAD:
         status = RepoDownloader().download(
@@ -502,11 +504,13 @@ def update_map_pack():
             MAPPACK_REPO[1],
             location,
             update_tag_setting=False)
-    revision = get_map_revision(location, MAPPACK_REPO[1])
+        
+        map_index = updater.get_map_index()
 
-    if revision is None:
-        print("ERROR: Updating mappack failed! There is no revision")
-        return
+        if map_index is None:
+            print("ERROR: Updating mappack failed! There is no revision")
+            return
+        updater.hydrate_map_pack(map_index_old)
 
     update_gui_after_botpack_update(location, status)
 

@@ -8,7 +8,7 @@ import zipfile
 from enum import Enum
 from functools import partial
 from pathlib import Path
-from shutil import rmtree
+from shutil import rmtree, copyfileobj
 from typing import Optional
 
 import eel
@@ -17,6 +17,7 @@ from rlbot_gui.persistence.settings import load_settings
 RELEASE_TAG = 'latest_botpack_release_tag'
 FOLDER_SUFFIX = 'master'
 
+MAPPACK_DIR = 'RLBotMapPack-' + FOLDER_SUFFIX
 
 class BotpackStatus(Enum):
     REQUIRES_FULL_DOWNLOAD = -1
@@ -34,20 +35,6 @@ def remove_empty_folders(root: Path):
                 os.rmdir(path)
             except Exception:
                 continue
-
-
-def get_map_revision(location, repo_name):
-    """
-    For a map pack, tells you the current revision
-    """
-    master_folder = repo_name + "-" + FOLDER_SUFFIX
-    index_path = Path(location) / master_folder / "index.json"
-
-    if index_path.exists():
-        with open(index_path) as file:
-            index = json.load(file)
-        
-        return index["revision"]
 
 
 
@@ -273,3 +260,91 @@ class BotpackUpdater:
 
         self.update_progressbar_and_status(f"Done")
         return True
+
+
+class MapPackUpdater:
+
+    def __init__(self, location: Path, repo_owner: str, repo_name: str):
+        self.location = location
+        self.repo_owner = repo_owner
+        self.repo_name = repo_name
+
+        self.full_path = Path(location) / f"{repo_name}-{FOLDER_SUFFIX}"
+
+    
+    def needs_update(self) -> BotpackStatus:
+        index = self.get_map_index()
+        if not index:
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
+
+        revision = index["revision"]
+
+        url = f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}/releases/latest"
+        latest_release = get_json_from_url(url)
+        latest_revision = int(latest_release["tag_name"][1:])
+
+        if latest_revision > revision:
+            return BotpackStatus.REQUIRES_FULL_DOWNLOAD
+        else:
+            print("Map pack is already the latest. Not downloading anything")
+            return BotpackStatus.SUCCESS
+
+    def get_map_index(self):
+        """
+        For a map pack, gets you the index.json data
+        """
+        index_path = self.full_path / "index.json"
+
+        if index_path.exists():
+            with open(index_path) as file:
+                index = json.load(file)
+            
+            return index
+
+    def hydrate_map_pack(self, old_index):
+        """
+        Compares the old_index with current index and for any
+        maps that have updated the revision, we grab them
+        from the latest revision
+        """
+        # Deletions not implemented. Only additions and updates
+
+        # index looks like:
+        # {revision: 1, maps: [{path: a/b.upk, revision: 2}]}
+
+        new_index = self.get_map_index()
+        new_maps = {info["path"]: info["revision"] for info in new_index["maps"]}
+
+        old_maps = []
+        if old_index:
+            old_maps = {info["path"]: info["revision"] for info in old_index["maps"]}
+
+
+        to_fetch = set()
+        for path, revision in new_maps.items():
+            old_revision = -1
+            if path in old_maps:
+                old_revision = old_maps[path]
+
+            if old_revision < revision:
+                to_fetch.add(path)
+        
+        if to_fetch:
+            filename_to_path = {Path(p).name: p for p in to_fetch}
+
+            url = f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}/releases/latest"
+            latest_release = get_json_from_url(url)
+            assets = latest_release["assets"]
+
+            for asset in assets:
+                if asset["name"] in filename_to_path:
+                    local_path = filename_to_path[asset["name"]]
+                    target_path = self.full_path / local_path
+                    print("Will fetch updated map: ", asset["name"])
+
+                    headers = {"Accept": "application/octet-stream"}
+                    request = urllib.request.Request(asset["url"], headers=headers)
+                    with urllib.request.urlopen(request) as response:
+                        with open(target_path, "wb") as filehandle:
+                            copyfileobj(response, filehandle)
+
