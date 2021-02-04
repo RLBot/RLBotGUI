@@ -14,7 +14,7 @@ export default {
     <b-card>
     <b-card-text>
     <b-form @submit.prev="$emit('started', form)">
-        <b-form-group label="Teamname" label-for="teamname_entry" label-cols="auto">
+        <b-form-group label="Teamname" label-for="teamname_entry" label-cols="3">
             <b-form-input 
                 type="text"
                 required
@@ -24,11 +24,15 @@ export default {
 
         </b-form-group>
 
-        <b-form-group label="Team Color" label-cols="auto">
+        <b-form-group label="Team Color" label-cols="3">
             <colorpicker v-model="form.teamcolor" text="Pick color"/>
         </b-form-group>
 
-        <b-form-group label="Difficulty" label-cols="auto">
+        <b-form-group label="Use Custom Maps" label-cols="3">
+            <b-form-checkbox v-model="form.use_custom_maps" size="lg"> </b-form-checkbox>
+        </b-form-group>
+
+        <b-form-group label="Config" label-cols="3" >
             <b-form-select v-model="form.story_id" :options="storyIdOptions"/>
         </b-form-group>
 
@@ -39,7 +43,7 @@ export default {
             </b-form-group>
         </b-form-group>
         
-        <b-form-group label="Launcher" label-cols="auto">
+        <b-form-group label="Launcher" label-cols="3">
             <b-button v-b-modal.launcher-modal-story>
                 Choose Steam or Epic
             </b-button>
@@ -63,12 +67,13 @@ export default {
                 story_id: 'default',
                 custom_story: {
                     storyPath: ''
-                }
+                },
+                use_custom_maps: true
             },
             storyIdOptions: [
                 { value: "easy", text: "Easy"},
                 { value: "default", text: "Default"},
-                { value: "custom", text: "Custom"}
+                { value: "custom", text: "User Provided Config"}
             ]
         };
     },
