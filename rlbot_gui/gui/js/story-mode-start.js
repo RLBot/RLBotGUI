@@ -29,14 +29,16 @@ export default {
         </b-form-group>
 
         <b-form-group label="Use Custom Maps" label-cols="3">
-            <b-form-checkbox v-model="form.use_custom_maps" size="lg"> </b-form-checkbox>
+            <b-form-checkbox v-model="form.use_custom_maps" size="lg">
+                <small> May require large downloads</small>
+            </b-form-checkbox>
         </b-form-group>
 
         <b-form-group label="Config" label-cols="3" >
             <b-form-select v-model="form.story_id" :options="storyIdOptions"/>
         </b-form-group>
 
-        <b-form-group label="Custom Story Config" v-if="form.story_id == 'custom'" label-class="font-weight-bold">
+        <b-form-group label="User Provided" v-if="form.story_id == 'custom'" label-class="font-weight-bold">
             <b-form-group label="Story Config" label-cols="3">
                 <b-button @click="pickFile" value="storyPath">Pick File</b-button>
                 <span>{{this.form.custom_story.storyPath}}</span>
