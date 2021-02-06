@@ -7,9 +7,9 @@ import AlterSaveState from './story-alter-save-state.js';
 const UI_STATES = {
     'LOAD_SAVE': 0,
     'START_SCREEN': 1,
-    'STORY_CHALLENGES': 2
+    'VALIDATE_PRECONDITIONS': 2,
+    'STORY_CHALLENGES': 3
 };
-
 
 export default {
     name: 'story',
@@ -23,13 +23,13 @@ export default {
         <b-navbar-nav class="ml-auto">
             <alter-save-state v-model="saveState" v-if="debugMode"/>
             <b-dropdown class="ml-4" right variant="dark">
-				<template v-slot:button-content>
-					Menu
-				</template>
+                <template v-slot:button-content>
+                    Menu
+                </template>
                 <b-dropdown-item @click="toggleDebugMode" v-if="ui_state > ${UI_STATES.START_SCREEN}">Debug Mode</b-dropdown-item>
                 <b-dropdown-item @click="deleteSave" v-if="ui_state > ${UI_STATES.START_SCREEN}">Delete Save</b-dropdown-item>
-			</b-dropdown>
-			<b-button class="ml-4" @click="watching = false; $router.replace('/')" variant="dark">
+            </b-dropdown>
+            <b-button class="ml-4" @click="watching = false; $router.replace('/')" variant="dark">
                 Back
             </b-button>
         </b-navbar-nav>
@@ -38,6 +38,28 @@ export default {
     <b-container fluid>
         <story-start v-on:started="startStory" v-if="ui_state === ${UI_STATES.START_SCREEN}">
         </story-start>
+
+        <b-card v-if="ui_state == ${UI_STATES.VALIDATE_PRECONDITIONS}" title="Download Needed Content">
+        <b-card-text>
+
+        <b-overlay :show="download_in_progress" rounded="sm" variant="dark">
+            <b-list-group>
+                <b-list-group-item
+                    v-for="conf in validationUIHelper()"
+                    v-if="conf.condition">
+                    <div class="row">
+                        <div class="col">
+                            {{conf.text}}
+                        </div>
+                        <div class="col-2">
+                            <b-button variant="primary" @click="conf.handler">Download</button>
+                        </div>
+                    </div>
+                </b-list-group-item>
+            </b-list-group>
+        </b-overlay>
+        </b-card-text>
+        </b-card>
 
         <story-challenges
             @launch_challenge="launchChallenge"
@@ -59,8 +81,18 @@ export default {
         return {
             ui_state: UI_STATES.LOAD_SAVE,
             saveState: null,
+            validationState: {
+                mapPack: {
+                    downloadNeeded: false,
+                    updateNeeded: false
+                },
+                botPack: {
+                    downloadNeeded: false
+                }
+            },
             debugMode: false,
-            debugStateHelper: ''
+            debugStateHelper: '',
+            download_in_progress: false
         };
     },
     methods: {
@@ -91,7 +123,77 @@ export default {
             }
             let state = await eel.story_new_save(team_settings, story_settings)();
             this.saveState = state;
-            this.storyStateMachine(UI_STATES.STORY_CHALLENGES);
+
+            await this.run_validation()
+        },
+        run_validation: async function () {
+            // check things like map pack and bot pack are downloaded
+            let settings = await eel.get_story_settings_json(this.saveState.story_config)();
+
+            // check min map pack version
+            let key = "min_map_pack_revision"
+            let min_version = settings[key]
+
+            let cur_version = await eel.get_map_pack_revision()()
+            let maps_required = (min_version != null)
+
+            let need_maps_download = false
+            let need_maps_update = false
+            if (maps_required) {
+                need_maps_download = (min_version && !cur_version)
+                need_maps_update = (min_version > cur_version)
+            }
+
+            // check botpack condition
+            // we could do version checks with "release tag" but whatever
+            // just doing existence checks
+            let commit_id = await eel.get_downloaded_botpack_commit_id()()
+            let need_bots_download = (commit_id == null)
+
+            this.validationState.mapPack.downloadNeeded = need_maps_download
+            this.validationState.mapPack.updateNeeded = need_maps_update
+            this.validationState.botPack.downloadNeeded = need_bots_download
+
+            if (need_maps_download || need_maps_update || need_bots_download) {
+                this.storyStateMachine(UI_STATES.VALIDATE_PRECONDITIONS);
+            }
+            else {
+                this.storyStateMachine(UI_STATES.STORY_CHALLENGES)
+            }
+        },
+        validationUIHelper: function() {
+            let mapPack = this.validationState.mapPack;
+            let botPack = this.validationState.botPack;
+            const downloadButtonsHelper = [
+                {
+                    "condition": mapPack.downloadNeeded,
+                    "text": "Download Map Pack",
+                    "handler": this.downloadMapPack
+                },
+                {
+                    "condition": !mapPack.downloadNeeded && mapPack.updateNeeded,
+                    "text": "Update Map Pack",
+                    "handler": this.downloadMapPack
+                },
+                {
+                    "condition": botPack.downloadNeeded,
+                    "text": "Download Bot Pack",
+                    "handler": this.downloadBotPack
+                }
+            ];
+            return downloadButtonsHelper;
+        },
+        downloadBotPack: function() {
+            this.download_in_progress = true
+			eel.download_bot_pack()(this.handle_download_updates);
+        },
+        downloadMapPack: function() {
+            this.download_in_progress = true
+            eel.update_map_pack()(this.handle_download_updates);
+        },
+        handle_download_updates: function(finished) {
+            this.download_in_progress = false
+            this.run_validation()
         },
         deleteSave: async function () {
             await eel.story_delete_save()();
@@ -120,7 +222,7 @@ export default {
         }
         else {
             this.saveState = state;
-            this.storyStateMachine(UI_STATES.STORY_CHALLENGES);
+            this.run_validation()
         }
 
         let self = this;

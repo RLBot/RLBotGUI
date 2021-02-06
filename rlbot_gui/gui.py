@@ -516,6 +516,14 @@ def update_map_pack():
 
 
 @eel.expose
+def get_map_pack_revision():
+    location = get_content_folder() / MAPPACK_FOLDER
+    updater = MapPackUpdater(location, MAPPACK_REPO[0], MAPPACK_REPO[1])
+    index = updater.get_map_index()
+    return index["revision"] if "revision" in index else None
+
+
+@eel.expose
 def update_bot_pack():
     botpack_location = get_content_folder() / BOTPACK_FOLDER
     botpack_status = BotpackUpdater().update(BOTPACK_REPO_OWNER, BOTPACK_REPO_NAME, botpack_location)
