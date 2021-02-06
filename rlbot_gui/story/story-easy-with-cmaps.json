@@ -1,0 +1,187 @@
+{
+    "bots": { },
+    "cities": {
+        "INTRO": {
+            "description": {
+                "message": "Shoddy field for shoddy players. No boost available.",
+                "prereqs": []
+            },
+            "challenges": [
+                {
+                    "id": "INTRO-1",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["skybot"],
+                    "max_score": "3 Goals",
+                    "map": "BeckwithPark",
+                    "disabledBoost": true,
+                    "display": "Win something so we know you can drive"
+                }
+            ]
+        },
+        "TRYHARD": {
+            "description": {
+                "message": "Place to start making your name! But know that everyone else is trying to do the same!",
+                "prereqs": ["INTRO"],
+                "color": 16
+            },
+            "challenges": [
+                {
+                    "id": "TRYHARD-1",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["nombot", "beast"],
+                    "map": "UrbanCentral",
+                    "display": "Beat local up-and-comers in a 2v2."
+                },
+                {
+                    "id": "TRYHARD-2",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["penguin", "beast"],
+                    "completionConditions": {
+                        "win": true,
+                        "scoreDifference": 3
+                    },
+                    "map": "UrbanCentral_Dawn",
+                    "display": "Upgrade your reputation by beating your opponents by 3 or more goals"
+                }
+            ]
+        },
+        "PBOOST": {
+            "description": {
+                "message": "This city is usually going through a storm. Legend says, Boost is how they have managed to prosper despite those conditions.",
+                "prereqs": ["INTRO"],
+                "color": 32
+            },
+            "challenges": [
+                {
+                    "id": "PBOOST-2",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["rashbot", "stick", "leaf"],
+                    "map": "Mannfield_Stormy",
+                    "display": "2v3! Get through this storm of Marvin bots!"
+                },
+                {
+                    "id": "PBOOST-1",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["cryo", "cryo", "cryo"],
+                    "map": "UtopiaColiseum_Snowy",
+                    "display": "Bundle up to survive the deep freeze"
+                }
+            ]
+        },
+        "WASTELAND": {
+            "description": {
+                "message": "Don't expect politeness here. Home of the demo experts!",
+                "prereqs": ["TRYHARD", "PBOOST"],
+                "color": 36
+            },
+            "challenges": [
+                {
+                    "id": "WASTELAND-1",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["adversity", "wildfire"],
+                    "completionConditions": {
+                        "win": true,
+                        "selfDemoCount": 1
+                    },
+                    "map": "Wasteland",
+                    "display": "Win without getting demoed more than once"
+                },
+                {
+                    "id": "WASTELAND-2",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["adversity", "diablo", "wildfire"],
+                    "completionConditions": {
+                        "win": true,
+                        "demoAchievedCount": 2
+                    },
+                    "map": "Wasteland",
+                    "display": "Win and get at least two demos"
+                }
+            ]
+        },
+        "CAMPANDSNIPE": {
+            "description": {
+                "message": "This city has a different feel. Sometimes the ball is possesed, other times its the cars. Be careful, you may be next!",
+                "prereqs": ["TRYHARD", "PBOOST"],
+                "color": 39
+            },
+            "challenges": [
+            {
+                "id": "CS-1",
+                "humanTeamSize": 2,
+                "opponentBots": ["kamael", "baf"],
+                "limitations": ["half-field"],
+                "map": "AquaDome",
+                "display": "The ball is moving a lot faster! Win this heatseeker match!"
+            },
+            {
+                "id": "CS-4",
+                "humanTeamSize": 2,
+                "opponentBots": ["invisibot", "invisibot", "peter"],
+                "map": "NeoTokyo",
+                "display": "Wait where did that car go?"
+            },
+            {
+                "id": "CS-3",
+                "humanTeamSize": 2,
+                "opponentBots": ["sniper", "sniper", "nombot"],
+                "max_score": "3 Goals",
+                "map": "NeoTokyo",
+                "display": "There's something unnatural about these bots..."
+            },
+            {
+                "id": "CS-5",
+                "humanTeamSize": 2,
+                "opponentBots": ["snek", "snek"],
+                "max_score": "3 Goals",
+                "map": "NeoTokyo",
+                "display": "There's something unnatural-er about these bots"
+            }
+            ]
+        },
+        "CHAMPIONSIAN": {
+            "description": {
+                "message": "You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.",
+                "prereqs": ["WASTELAND", "CAMPANDSNIPE"],
+                "color": 69
+            },
+            "challenges": [
+                {
+                    "id": "CHAMP-1",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["airbud", "reliefbot", "adversity"],
+                    "map": "ChampionsField",
+                    "display": "Take on the Relief family in a 3v3!"
+                },
+                {
+                    "id": "CHAMP-2",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["botimus", "sdc", "kamael"],
+                    "map": "ChampionsField_Day",
+                    "display": "Take on a crew of some of the best solo players!"
+                },
+                {
+                    "id": "CHAMP-5",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["snek", "sniper", "invisibot"],
+                    "map": "ChampionsField_Day",
+                    "display": "These masters of space and time have united to stop you!"
+                },
+                {
+                    "id": "CHAMP-3",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["diablo", "lanfear", "manticore", "atlas"],
+                    "map": "ChampionsField_Day",
+                    "display": "These are mythical and magical cars. Can you take them on in a 3v4?"
+                },
+                {
+                    "id": "CHAMP-4",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["bumblebee", "bumblebee", "bumblebee"],
+                    "map": "ChampionsField",
+                    "display": "Time to face the beehive and prove yourself."
+                }
+            ]
+        }
+    }
+}
