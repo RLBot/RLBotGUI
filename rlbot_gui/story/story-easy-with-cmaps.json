@@ -1,4 +1,7 @@
 {
+    "settings": {
+        "min_map_pack_revision": 3
+    },
     "bots": { },
     "cities": {
         "INTRO": {
