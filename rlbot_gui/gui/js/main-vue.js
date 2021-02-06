@@ -729,6 +729,31 @@ export default {
 			this.orangeTeam = bots.slice();
 			this.$bvModal.hide('recommendations-modal');
 		},
+		startup: function() {
+			if (this.$route.path != "/") {
+				return
+			}
+			eel.get_folder_settings()(this.folderSettingsReceived);
+			eel.get_match_options()(this.matchOptionsReceived);
+			eel.get_match_settings()(this.matchSettingsReceived);
+			eel.get_team_settings()(this.teamSettingsReceived);
+
+			eel.get_language_support()((support) => {
+				this.languageSupport = support;
+				this.applyLanguageWarnings();
+			});
+
+			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived)
+			eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
+			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
+
+			const self = this;
+			eel.expose(updateDownloadProgress);
+			function updateDownloadProgress(progress, status) {
+				self.downloadStatus = status;
+				self.downloadProgressPercent = progress;
+			}
+		}
 	},
 	computed: {
 		activeMutatorCount: function() {
@@ -738,25 +763,10 @@ export default {
 		},
 	},
 	created: function () {
-		eel.get_folder_settings()(this.folderSettingsReceived);
-		eel.get_match_options()(this.matchOptionsReceived);
-		eel.get_match_settings()(this.matchSettingsReceived);
-		eel.get_team_settings()(this.teamSettingsReceived);
-
-		eel.get_language_support()((support) => {
-			this.languageSupport = support;
-			this.applyLanguageWarnings();
-		});
-
-		eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived)
-		eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
-		eel.get_recommendations()(recommendations => this.recommendations = recommendations);
-
-		const self = this;
-		eel.expose(updateDownloadProgress);
-		function updateDownloadProgress(progress, status) {
-			self.downloadStatus = status;
-			self.downloadProgressPercent = progress;
-		}
-	}
+		this.startup()
+	},
+	watch: {
+		// call again the method if the route changes
+		'$route': 'startup'
+	},
 };
