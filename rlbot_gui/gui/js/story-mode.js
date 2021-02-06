@@ -13,7 +13,7 @@ const UI_STATES = {
 
 export default {
     name: 'story',
-    template: `
+    template: /*html*/`
     <div>
     <b-navbar class="navbar">
         <b-navbar-brand>
@@ -80,11 +80,15 @@ export default {
         },
         startStory: async function (event) {
             console.log(event);
-            let state = await eel.story_new_save(
-                event.teamname,
-                event.teamcolor,
-                event.story_id,
-                event.custom_story)();
+            team_settings = {
+                name: event.teamname,
+                color: event.teamcolor,
+            }
+            story_settings = {
+                story_id: event.story_id,
+                custom_config: event.custom_story
+            }
+            let state = await eel.story_new_save(team_settings, story_settings)();
             this.saveState = state;
             this.storyStateMachine(UI_STATES.STORY_CHALLENGES);
         },
