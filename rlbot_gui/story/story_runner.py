@@ -171,10 +171,13 @@ class StoryState:
 
         story_id = story_settings["story_id"]
         custom_config = story_settings["custom_config"]
+        use_custom_maps = story_settings["use_custom_maps"]
         if story_id == 'custom':
             s.story_config = custom_config
         else:
             s.story_config = story_id
+            if use_custom_maps:
+                s.story_config = f"{story_id}-with-cmaps"
         return s
 
     @staticmethod
