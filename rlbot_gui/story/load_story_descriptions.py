@@ -20,15 +20,24 @@ def story_id_to_file(story_id):
     return filepath 
 
 
+def get_story_config(story_id):
+    specific_challenges_file = story_id_to_file(story_id)
+    return read_json(specific_challenges_file)
+
+
 def get_cities(story_id):
     """
     Get the challenges file specificed by the story_id
-    Note: There is no merging with the default story. The story file
-    must fully specify all challenges and cities
     """
-    specific_challenges_file = story_id_to_file(story_id)
+    return get_story_config(story_id)["cities"]
 
-    return read_json(specific_challenges_file)["cities"]
+
+def get_story_settings(story_id):
+    """
+    Return the settings associated with this story config
+    """
+    config = get_story_config(story_id)
+    return config.get("settings", {})
 
 
 def get_challenges_by_id(story_id):

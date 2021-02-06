@@ -13,7 +13,8 @@ from rlbot_gui.story.story_challenge_setup import run_challenge, configure_chall
 from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
     get_cities,
-    get_challenges_by_id,
+    get_story_settings,
+    get_challenges_by_id
 )
 
 
@@ -34,6 +35,10 @@ def get_cities_json(story_id):
 @eel.expose
 def get_bots_json(story_id):
     return get_bots_configs(story_id)
+
+@eel.expose
+def get_story_settings_json(story_id):
+    return get_story_settings(story_id)
 
 
 @eel.expose
