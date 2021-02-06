@@ -51,9 +51,9 @@ def story_load_save():
 
 
 @eel.expose
-def story_new_save(name, color_secondary, story_id, custom_config):
+def story_new_save(player_settings, story_settings):
     global CURRENT_STATE
-    CURRENT_STATE = StoryState.new(name, color_secondary, story_id, custom_config)
+    CURRENT_STATE = StoryState.new(player_settings, story_settings)
     return story_save_state()
 
 
@@ -162,9 +162,15 @@ class StoryState:
             self.upgrades["currency"] += 2
 
     @staticmethod
-    def new(name, color_secondary, story_id, custom_config):
+    def new(player_settings, story_settings):
         s = StoryState()
+
+        name = player_settings["name"]
+        color_secondary = player_settings["color"]
         s.team_info = {"name": name, "color_secondary": color_secondary}
+
+        story_id = story_settings["story_id"]
+        custom_config = story_settings["custom_config"]
         if story_id == 'custom':
             s.story_config = custom_config
         else:
