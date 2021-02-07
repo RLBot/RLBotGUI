@@ -83,11 +83,18 @@ def convert_custom_map_to_path(custom_map: str) -> Optional[str]:
 
 
 def find_all_custom_maps() -> List[str]:
+    """
+    Ignores maps starting with _
+    """
     folders = get_search_folders()
     maps = []
     for folder in folders:
         scan_query = path.join(glob.escape(folder), "**", "*.upk")
-        maps.extend(path.basename(i) for i in glob.iglob(scan_query, recursive=True))
+        for match in glob.iglob(scan_query, recursive=True):
+            basename = path.basename(match)
+            if basename.startswith("_"):
+                continue
+            maps.append(basename)
     return maps
 
 
