@@ -40,6 +40,7 @@ RENDERING_GROUP = "STORY"
 DEBUG_MODE_SHORT_GAMES = False
 
 def setup_failure_freeplay(setup_manager: SetupManager, message: str, color_key="red"):
+    setup_manager.shut_down()
     match_config = MatchConfig()
     match_config.game_mode = game_mode_types[0]
     match_config.game_map = "BeckwithPark"
@@ -398,12 +399,12 @@ def manage_game_state(
             results = packet_to_game_results(packet)
 
             if has_user_perma_failed(challenge, stats_tracker.stats):
-                time.sleep(3)
+                time.sleep(1)
                 setup_failure_freeplay(setup_manager, "You failed the challenge!")
                 return early_failure
 
             if end_by_mercy(challenge, stats_tracker.stats, results):
-                time.sleep(5)
+                time.sleep(3)
                 setup_failure_freeplay(setup_manager, "Challenge completed by mercy rule!", "green")
                 return True, results
 
