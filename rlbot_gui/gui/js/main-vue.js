@@ -37,17 +37,11 @@ export default {
 				State setting is turned off, sandbox won't work!
 			</b-tooltip>
 
-			<span id="story-button-wrapper">
-				<b-button 
-					@click="$router.replace('/story')" variant="dark" class="ml-2"
-					:disabled="!botpackPreExisting">
-					Story Mode
-				</b-button>
-			</span>
-			<b-tooltip target="story-button-wrapper" v-if="!botpackPreExisting">
-				<b-icon class="warning-icon" icon="exclamation-triangle-fill"></b-icon>
-				Download the BotPack first!
-			</b-tooltip>
+			<b-button 
+				@click="$router.replace('/story')" variant="dark" class="ml-2"
+				>
+				Story Mode
+			</b-button>
 
 			<b-dropdown right class="ml-4" variant="dark">
 				<template v-slot:button-content>
@@ -437,7 +431,6 @@ export default {
 				files: {},
 				folders: {}
 			},
-			botpackPreExisting: false,
 			downloadProgressPercent: 0,
 			downloadStatus: '',
 			showBotpackUpdateSnackbar: false,
@@ -691,10 +684,6 @@ export default {
 			eel.get_match_options()(this.matchOptionsReceived)
 		},
 
-		botpackPreExistingReceived: function(commit_id) {
-			this.botpackPreExisting = Boolean(commit_id)
-		},
-
 		botpackUpdateChecked: function (isBotpackUpToDate) {
 			this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
 		},
@@ -704,7 +693,6 @@ export default {
 			this.showSnackbar = true;
 			this.$bvModal.hide('download-modal');
 			eel.get_folder_settings()(this.folderSettingsReceived);
-			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived);
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 			eel.get_match_options()(this.matchOptionsReceived)
 		},
@@ -743,7 +731,6 @@ export default {
 				this.applyLanguageWarnings();
 			});
 
-			eel.get_downloaded_botpack_commit_id()(this.botpackPreExistingReceived)
 			eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 
