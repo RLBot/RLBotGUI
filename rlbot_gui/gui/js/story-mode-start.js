@@ -28,7 +28,7 @@ export default {
             <colorpicker v-model="form.teamcolor" text="Pick color"/>
         </b-form-group>
 
-        <b-form-group label="Use Custom Maps" label-cols="3">
+        <b-form-group label="Use Custom Maps" label-cols="3" v-if="false">
             <b-form-checkbox v-model="form.use_custom_maps" size="lg">
                 <small> May require large downloads</small>
             </b-form-checkbox>
@@ -70,7 +70,7 @@ export default {
                 custom_story: {
                     storyPath: ''
                 },
-                use_custom_maps: true
+                use_custom_maps: false
             },
             storyIdOptions: [
                 { value: "easy", text: "Easy"},
