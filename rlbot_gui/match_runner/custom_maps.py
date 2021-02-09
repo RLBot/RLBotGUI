@@ -89,7 +89,7 @@ def find_all_custom_maps() -> List[str]:
     folders = get_search_folders()
     maps = []
     for folder in folders:
-        scan_query = path.join(glob.escape(folder), "**", "*.upk")
+        scan_query = path.join(glob.escape(folder), "**", "*.u[pd]k")
         for match in glob.iglob(scan_query, recursive=True):
             basename = path.basename(match)
             if basename.startswith("_"):
