@@ -155,8 +155,9 @@ def setup_match(
         setup_manager.launch_bot_processes()
         return setup_manager
 
-    if match_config.game_map.endswith('.upk'):
-        map_file = convert_custom_map_to_path(match_config.game_map)
+    game_map = match_config.game_map
+    if game_map.endswith('.upk') or game_map.endswith('.udk'):
+        map_file = convert_custom_map_to_path(game_map)
         rl_directory = identify_map_directory(launcher_pref)
 
         if not all([map_file, rl_directory]):
