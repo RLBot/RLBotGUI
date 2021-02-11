@@ -504,7 +504,7 @@ def update_map_pack():
             MAPPACK_REPO[1],
             location,
             update_tag_setting=False)
-        
+
         map_index = updater.get_map_index()
 
         if map_index is None:
@@ -520,7 +520,7 @@ def get_map_pack_revision():
     location = get_content_folder() / MAPPACK_FOLDER
     updater = MapPackUpdater(location, MAPPACK_REPO[0], MAPPACK_REPO[1])
     index = updater.get_map_index()
-    return index["revision"] if "revision" in index else None
+    return index["revision"] if index is not None and "revision" in index else None
 
 
 @eel.expose

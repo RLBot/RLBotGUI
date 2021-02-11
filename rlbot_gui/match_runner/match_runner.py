@@ -149,6 +149,10 @@ def setup_match(
     def do_setup():
         setup_manager.early_start_seconds = 5
         setup_manager.connect_to_game(launcher_preference=launcher_pref)
+
+        # Loading the setup manager's game interface just as a quick fix because story mode uses it. Ideally story mode
+        # should now make its own game interface to use.
+        setup_manager.game_interface.load_interface(wants_ball_predictions=False, wants_quick_chat=False, wants_game_messages=False)
         setup_manager.load_match_config(match_config)
         setup_manager.launch_early_start_bot_processes()
         setup_manager.start_match()
