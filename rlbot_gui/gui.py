@@ -666,7 +666,7 @@ def is_full_python():
 
 
 def launch_eel(use_chrome):
-    port = 51993
+    port = 40993  # Arbitrary choice from the 'registered sockets' range of 1024 to 49151
     options = {'port': port}
 
     if use_chrome:
