@@ -12,7 +12,7 @@ export default {
 					v-model="launcherSettings.use_login_tricks" 
 					:disabled="launcherSettings.preferred_launcher !== 'epic'">
 				
-					Use Epic Login Tricks <b-icon class="warning-icon" icon="exclamation-triangle-fill" v-b-tooltip.hover 
+					Get My Items/Settings <b-icon class="warning-icon" icon="exclamation-triangle-fill" v-b-tooltip.hover 
 					title="If you choose this, we'll do some fancy things to make sure your Epic account logs in successfully and loads your car + camera settings. 
 					It might look slightly weird on the Epic login server but they probably won't care."></b-icon>
 				</b-form-checkbox>
