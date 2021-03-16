@@ -62,7 +62,11 @@ def bootstrap_python_bot(bot_name, directory):
 
     # This is intended to open the example python file in the default system editor for .py files.
     # Hopefully this will be VS Code or notepad++ or something. If it gets executed as a python script, no harm done.
-    os.startfile(python_file)
+    # This is in a try/except so no error is raised if the user does not have any editor associated with .py files.
+    try:
+        os.startfile(python_file)
+    except OSError:
+        print(f"You have no default program to open .py files. Your new bot is located at {os.path.abspath(top_dir)}")
 
     return config_file
 
@@ -136,6 +140,10 @@ def bootstrap_python_hivemind(hive_name, directory):
 
     # This is intended to open the example python file in the default system editor for .py files.
     # Hopefully this will be VS Code or notepad++ or something. If it gets executed as a python script, no harm done.
-    os.startfile(hive_file)
+    # This is in a try/except so no error is raised if the user does not have any editor associated with .py files.
+    try:
+        os.startfile(hive_file)
+    except OSError:
+        print(f"You have no default program to open .py files. Your new bot is located at {os.path.abspath(top_dir)}")
 
     return config_file
