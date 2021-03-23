@@ -14,7 +14,7 @@ from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
     get_cities,
     get_story_settings,
-    get_challenges_by_id
+    get_challenges_by_id, get_scripts_configs
 )
 
 
@@ -199,9 +199,10 @@ def launch_challenge_with_config(challenge_id, pickedTeammates):
     story_id = CURRENT_STATE.story_config
     challenge = get_challenges_by_id(story_id)[challenge_id]
     all_bots = get_bots_configs(story_id)
+    all_scripts = get_scripts_configs(story_id)
 
 
-    match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates, all_bots)
+    match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates, all_bots, all_scripts)
     launcher_settings_map = load_launcher_settings()
     launcher_prefs = launcher_preferences_from_map(launcher_settings_map)
     completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades, launcher_prefs)

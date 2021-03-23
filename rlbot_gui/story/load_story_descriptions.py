@@ -63,3 +63,18 @@ def get_bots_configs(story_id):
         bots.update(read_json(specific_bots_file)["bots"])
 
     return bots
+
+
+def get_scripts_configs(story_id):
+    """
+    Get the scripts in the story config
+    """
+    specific_scripts_file = story_id_to_file(story_id)
+
+    scripts: dict = {}
+    if path.exists(specific_scripts_file):
+        specific_scripts_file_json = read_json(specific_scripts_file)
+        if "scripts" in specific_scripts_file_json:  #  A "scripts" field is optional
+            scripts.update(specific_scripts_file_json["scripts"])
+
+    return scripts
