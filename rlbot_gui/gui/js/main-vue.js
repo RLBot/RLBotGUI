@@ -296,6 +296,15 @@ export default {
 					which makes RLBotGUI better with package management.
 				</p>
 			</div>
+			<div v-if="activeBot.warn === 'node'">
+				<p><b>{{activeBot.name}}</b> requires Node.js to run javascript and it looks like you don't have it installed!</p>
+				To play with it, you'll need to:
+				<ol>
+					<li>Download Node.js from <a href="https://nodejs.org/" target="_blank">nodejs.org</a></li>
+					<li>Install it</li>
+					<li>Restart RLBotGUI</li>
+				</ol>
+			</div>
 		</b-modal>
 
 		<b-modal id="new-bot-modal" title="Create New Bot" hide-footer centered>
@@ -618,11 +627,14 @@ export default {
 				this.botPool.concat(this.scriptPool).forEach((bot) => {
 					if (bot.info && bot.info.language) {
 						const language = bot.info.language.toLowerCase();
-						if (!this.languageSupport.java && language.match(/java|kotlin|scala/)) {
+						if (!this.languageSupport.java && language.match(/java|kotlin|scala/) && !language.match(/javascript/)) {
 							bot.warn = 'java';
 						}
 						if (!this.languageSupport.chrome && language.match(/scratch/)) {
 							bot.warn = 'chrome';
+						}
+						if (!this.languageSupport.node && language.match(/javascript|node|js/)) {
+							bot.warn = 'node';
 						}
 					}
 					if (bot.missing_python_packages && bot.missing_python_packages.length > 0) {
