@@ -633,7 +633,7 @@ export default {
 						if (!this.languageSupport.chrome && language.match(/scratch/)) {
 							bot.warn = 'chrome';
 						}
-						if (!this.languageSupport.node && language.match(/javascript|node|js/)) {
+						if (!this.languageSupport.node && language.match(/(java|type|coffee)script|js|ts|node/)) {
 							bot.warn = 'node';
 						}
 					}
