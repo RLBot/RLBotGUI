@@ -366,6 +366,10 @@ export default {
 			</b-list-group>
 		</b-modal>
 
+		<b-modal id="no-rlbot-flag-modal" title="Error while starting match" hide-footer centered>
+			<p>This is probably due to Rocket League not being started by RLBot. Please close Rocket League and try again.</p>
+		</b-modal>
+
 		<appearance-editor
 				v-bind:active-bot="activeBot"
 				v-bind:path="appearancePath"
@@ -747,6 +751,13 @@ export default {
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 
 			const self = this;
+
+			eel.expose(noRLBotFlagPopup)
+			function noRLBotFlagPopup(title, text){
+				console.log("POPPING UP")
+				self.$bvModal.show("no-rlbot-flag-modal")
+			}
+
 			eel.expose(updateDownloadProgress);
 			function updateDownloadProgress(progress, status) {
 				self.downloadStatus = status;

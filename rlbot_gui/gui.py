@@ -20,6 +20,7 @@ from rlbot.parsing.match_settings_config_parser import map_types, game_mode_type
     ball_weight_mutator_types, ball_size_mutator_types, ball_bounciness_mutator_types, rumble_mutator_types, \
     boost_strength_mutator_types, gravity_mutator_types, demolish_mutator_types, respawn_time_mutator_types, \
     existing_match_behavior_types
+from rlbot.setup_manager import SetupManager
 from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
@@ -32,6 +33,8 @@ from rlbot_gui.match_runner.custom_maps import find_all_custom_maps
 from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
 from rlbot_gui.persistence.settings import load_settings, BOT_FOLDER_SETTINGS_KEY, MATCH_SETTINGS_KEY, \
     LAUNCHER_SETTINGS_KEY, TEAM_SETTINGS_KEY, load_launcher_settings, launcher_preferences_from_map
+from rlbot.utils.process_configuration import WrongProcessArgs
+from rlbot import gateway_util
 
 #### LOAD JUST TO EXPOSE STORY_MODE
 from rlbot_gui.story import story_runner
@@ -54,7 +57,18 @@ bot_folder_settings = None
 def start_match(bot_list, match_settings):
     launcher_preference_map = load_launcher_settings()
     launcher_prefs = launcher_preferences_from_map(launcher_preference_map)
-    eel.spawn(start_match_helper, bot_list, match_settings, launcher_prefs)
+
+    # Show popup in GUI if rocket league is not started with -rlbot flag
+    try:
+        testSetupManager = SetupManager()
+        temp, port = gateway_util.find_existing_process()
+        del temp
+        testSetupManager.is_rocket_league_running(port);
+    except Exception:
+        eel.noRLBotFlagPopup()
+        print("Error starting match. This is probably due to Rocket League not being started under the -rlbot flag.")
+    else:
+        eel.spawn(start_match_helper, bot_list, match_settings, launcher_prefs)
 
 
 @eel.expose
