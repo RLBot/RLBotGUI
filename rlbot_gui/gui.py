@@ -33,7 +33,6 @@ from rlbot_gui.match_runner.custom_maps import find_all_custom_maps
 from rlbot_gui.type_translation.packet_translation import convert_packet_to_dict
 from rlbot_gui.persistence.settings import load_settings, BOT_FOLDER_SETTINGS_KEY, MATCH_SETTINGS_KEY, \
     LAUNCHER_SETTINGS_KEY, TEAM_SETTINGS_KEY, load_launcher_settings, launcher_preferences_from_map
-from rlbot.utils.process_configuration import WrongProcessArgs
 from rlbot import gateway_util
 
 #### LOAD JUST TO EXPOSE STORY_MODE
