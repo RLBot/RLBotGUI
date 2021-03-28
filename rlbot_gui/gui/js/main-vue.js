@@ -758,7 +758,6 @@ export default {
 
 			eel.expose(noRLBotFlagPopup)
 			function noRLBotFlagPopup(title, text){
-				console.log("POPPING UP")
 				self.$bvModal.show("no-rlbot-flag-modal")
 			}
 
