@@ -26,6 +26,7 @@ from rlbot.matchconfig.match_config import (
     MatchConfig,
     MutatorConfig,
     Team,
+    ScriptConfig,
 )
 from rlbot.setup_manager import SetupManager, RocketLeagueLauncherPreference
 
@@ -66,7 +67,7 @@ def setup_failure_freeplay(setup_manager: SetupManager, message: str, color_key=
 
 
 def make_match_config(
-    challenge: dict, upgrades: dict, player_configs: List[PlayerConfig]
+    challenge: dict, upgrades: dict, player_configs: List[PlayerConfig], script_configs: List[ScriptConfig]
 ):
     """Setup the match, following the challenge rules and user's upgrades
     """
@@ -90,22 +91,27 @@ def make_match_config(
         match_config.mutators.rumble = rumble_mutator_types[1]  # All rumble
 
     match_config.player_configs = player_configs
+    match_config.script_configs = script_configs
     return match_config
 
 
-def rlbot_to_player_config(player: dict, team: Team):
-    bot_path = player["path"]
-    if isinstance(bot_path, list):
-        bot_path = path.join(*bot_path)
+def collapse_path(cfg_path):
+    if isinstance(cfg_path, list):
+        cfg_path = path.join(*cfg_path)
 
-    if "$RLBOTPACKROOT" in bot_path:
+    if "$RLBOTPACKROOT" in cfg_path:
         for bot_folder in rlbot_gui.bot_folder_settings["folders"].keys():
             adjusted_folder = path.join(bot_folder, "RLBotPack-master")
-            subbed_path = bot_path.replace("$RLBOTPACKROOT", adjusted_folder)
+            subbed_path = cfg_path.replace("$RLBOTPACKROOT", adjusted_folder)
             if path.exists(subbed_path):
-                print("it exists!")
-                bot_path = subbed_path
+                cfg_path = subbed_path
                 break
+
+    return cfg_path
+
+
+def rlbot_to_player_config(player: dict, team: Team):
+    bot_path = collapse_path(player["path"])
 
     player_config = PlayerConfig()
     player_config.bot = True
@@ -117,6 +123,11 @@ def rlbot_to_player_config(player: dict, team: Team):
     loadout = load_bot_appearance(config.get_looks_config(), team.value)
     player_config.loadout_config = loadout
     return player_config
+
+
+def script_path_to_script_config(script_path):
+    script_path = collapse_path(script_path)
+    return ScriptConfig(script_path)
 
 
 def make_human_config(team: Team):
@@ -171,6 +182,18 @@ def make_player_configs(
         player_configs.append(bot)
 
     return player_configs
+
+
+def make_script_configs(
+    challenge: dict, all_scripts
+):
+    script_configs = []
+
+    for script in challenge.get("scripts", []):
+        script_config = script_path_to_script_config(all_scripts[script]["path"])
+        script_configs.append(script_config)
+
+    return script_configs
 
 
 def packet_to_game_results(game_tick_packet: GameTickPacket):
@@ -471,10 +494,13 @@ def run_challenge(
     return game_results
 
 
-def configure_challenge(challenge: dict, saveState, human_picks: List[int], all_bots):
+def configure_challenge(challenge: dict, saveState, human_picks: List[int], all_bots, all_scripts):
     player_configs = make_player_configs(
         challenge, human_picks, saveState.team_info, saveState.teammates, all_bots
     )
-    match_config = make_match_config(challenge, saveState.upgrades, player_configs)
+    script_configs = make_script_configs(
+        challenge, all_scripts
+    )
+    match_config = make_match_config(challenge, saveState.upgrades, player_configs, script_configs)
 
     return match_config
