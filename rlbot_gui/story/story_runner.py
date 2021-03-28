@@ -14,7 +14,8 @@ from rlbot_gui.story.load_story_descriptions import (
     get_bots_configs,
     get_cities,
     get_story_settings,
-    get_challenges_by_id, get_scripts_configs
+    get_challenges_by_id,
+    get_scripts_configs
 )
 
 

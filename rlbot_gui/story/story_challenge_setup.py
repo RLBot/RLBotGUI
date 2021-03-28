@@ -25,7 +25,8 @@ from rlbot.matchconfig.match_config import (
     PlayerConfig,
     MatchConfig,
     MutatorConfig,
-    Team, ScriptConfig,
+    Team,
+    ScriptConfig,
 )
 from rlbot.setup_manager import SetupManager, RocketLeagueLauncherPreference
 
@@ -94,19 +95,23 @@ def make_match_config(
     return match_config
 
 
-def rlbot_to_player_config(player: dict, team: Team):
-    bot_path = player["path"]
-    if isinstance(bot_path, list):
-        bot_path = path.join(*bot_path)
+def collapse_path(cfg_path):
+    if isinstance(cfg_path, list):
+        cfg_path = path.join(*cfg_path)
 
-    if "$RLBOTPACKROOT" in bot_path:
+    if "$RLBOTPACKROOT" in cfg_path:
         for bot_folder in rlbot_gui.bot_folder_settings["folders"].keys():
             adjusted_folder = path.join(bot_folder, "RLBotPack-master")
-            subbed_path = bot_path.replace("$RLBOTPACKROOT", adjusted_folder)
+            subbed_path = cfg_path.replace("$RLBOTPACKROOT", adjusted_folder)
             if path.exists(subbed_path):
-                print("it exists!")
-                bot_path = subbed_path
+                cfg_path = subbed_path
                 break
+
+    return cfg_path
+
+
+def rlbot_to_player_config(player: dict, team: Team):
+    bot_path = collapse_path(player["path"])
 
     player_config = PlayerConfig()
     player_config.bot = True
@@ -120,20 +125,8 @@ def rlbot_to_player_config(player: dict, team: Team):
     return player_config
 
 
-def script_to_script_config(script: dict):
-    script_path = script["path"]
-    if isinstance(script_path, list):
-        script_path = path.join(*script_path)
-
-    if "$RLBOTPACKROOT" in script_path:
-        for bot_folder in rlbot_gui.bot_folder_settings["folders"].keys():
-            adjusted_folder = path.join(bot_folder, "RLBotPack-master")
-            subbed_path = script_path.replace("$RLBOTPACKROOT", adjusted_folder)
-            if path.exists(subbed_path):
-                print("it exists! (script)")
-                script_path = subbed_path
-                break
-
+def script_path_to_script_config(script_path):
+    script_path = collapse_path(script_path)
     return ScriptConfig(script_path)
 
 
@@ -197,7 +190,7 @@ def make_script_configs(
     script_configs = []
 
     for script in challenge.get("scripts", []):
-        script_config = script_to_script_config(all_scripts[script])
+        script_config = script_path_to_script_config(all_scripts[script]["path"])
         script_configs.append(script_config)
 
     return script_configs
