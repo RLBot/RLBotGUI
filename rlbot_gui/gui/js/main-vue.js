@@ -366,8 +366,12 @@ export default {
 			</b-list-group>
 		</b-modal>
 
-		<b-modal id="no-rlbot-flag-modal" title="Error while starting match" hide-footer centered>
+		<b-modal id="no-rlbot-flag-modal" title="Error while starting match" centered>
 			<p>This is probably due to Rocket League not being started by RLBot. Please close Rocket League and try again.</p>
+			<template v-slot:modal-footer>
+				<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam});$bvModal.hide('no-rlbot-flag-modal')" >Retry</b-button>
+				<b-button @click="$bvModal.hide('no-rlbot-flag-modal')" variant="primary">OK</b-button>
+			</template>
 		</b-modal>
 
 		<appearance-editor
