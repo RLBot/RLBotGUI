@@ -351,17 +351,16 @@ class ManualStatsTracker:
             if new_score != self._last_score_by_team[team_index]:
                 self._last_score_by_team[team_index] = new_score
 
-                if team_index == self._human_team:
-                    if self._last_touch_by_team[team_index] is not None:
-                        last_touch_player = self._last_touch_by_team[
-                            team_index
-                        ].player_index
-                        last_touch_player_name = self._last_touch_by_team[
-                            team_index
-                        ].player_name
-                        if last_touch_player == self._human_player_index and last_touch_player_name != "":
-                            self.stats["humanGoalsScored"] += 1
-                            print("humanGoalsScored")
+                if team_index == self._human_team and self._last_touch_by_team[team_index] is not None:
+                    last_touch_player = self._last_touch_by_team[
+                        team_index
+                    ].player_index
+                    last_touch_player_name = self._last_touch_by_team[
+                        team_index
+                    ].player_name
+                    if last_touch_player == self._human_player_index and last_touch_player_name != "":
+                        self.stats["humanGoalsScored"] += 1
+                        print("humanGoalsScored")
 
 
 def wait_till_cars_spawned(
