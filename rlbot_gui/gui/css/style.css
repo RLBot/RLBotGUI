@@ -70,6 +70,10 @@ body, html {
   position: relative;
 }
 
+.team-card .bot-card {
+  display: flex;
+}
+
 .team-label {
   position: absolute;
   bottom: 3px;
@@ -84,6 +88,7 @@ body, html {
 .bot-card {
   margin: 2px;
   box-shadow: 1px 1px 7px #0000002e;
+  display: inline-flex;
 }
 
 .bot-card .card-body {
@@ -98,7 +103,12 @@ body, html {
 }
 
 .script-card {
-  background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.34) 50%)
+  background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.644) 50%)
+}
+
+.bot-card.disabled {
+  opacity: 50%;
+  cursor: default;
 }
 
 .center-flex {
@@ -162,8 +172,14 @@ body, html {
   padding: 2px 5px;
 }
 
-.bot-pool .bot-card {
-  display: inline-flex;
+.bot-pool .categories-radio-group {
+  margin-right: 10px;
+  background-color: white;
+}
+
+.bot-pool .divider {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .bot-card img {
@@ -175,8 +191,8 @@ body, html {
   margin: 0 3px 0 0;
 }
 
-.filtered {
-  opacity: 0.2;
+.script-card:not(.disabled) .script-switch * {
+  cursor: pointer;
 }
 
 .bot-card img.darkened {

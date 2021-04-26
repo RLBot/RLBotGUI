@@ -1,8 +1,11 @@
 import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
 import BotCard from './bot-card-vue.js'
+import ScriptCard from './script-card-vue.js'
+import ScriptDependencies from './script-dependencies-vue.js'
 import TeamCard from './team-card-vue.js'
 import LauncherPreferenceModal from './launcher-preference-vue.js'
+import categories from './categories.js';
 
 const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
 const STARTING_BOT_POOL = [
@@ -81,7 +84,7 @@ export default {
 
 		<b-card class="bot-pool">
 			<div class="center-flex mb-3">
-				<span class="rlbot-card-header">Player Types</span>
+				<span class="rlbot-card-header">Bots</span>
 				<b-dropdown class="ml-2 mr-2">
 					<template v-slot:button-content><b-icon icon="plus"/>Add</template>
 					<b-dropdown-item  @click="updateBotPack()">
@@ -108,35 +111,47 @@ export default {
 				<b-button @click="prepareFolderSettingsDialog" v-b-modal.folder-settings-modal>
 				<b-icon icon="gear"/> Manage bot folders
 				</b-button>
-				<div class="ml-3">
-					<b-form inline>
-						<label for="filter-text-input" class="mr-2"><b-icon icon="search"></b-icon></label>
-						<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Filter..."></b-form-input>
-					</b-form>
-				</div>
 				<b-button v-b-modal.recommendations-modal class="ml-2" v-if="recommendations">
 					<b-icon icon="hand-thumbs-up"/> Recommendations
 				</b-button>
 			</div>
 
-			<draggable v-model="botPool" :options="{group: {name:'bots', pull:'clone', put:false}, sort: false}">
-				<bot-card v-for="bot in botPool" :bot="bot" @active-bot="activeBot = bot;"
-						  :class="{'filtered': !passesFilter(bot.name)}" class="draggable"
-						  @click="addToTeam(bot, teamSelection)"/>
-			</draggable>
+			<b-form inline class="mb-2">
+				<b-form-radio-group buttons
+					v-model="primaryCategorySelected"
+					:options="primaryCategoryOptions"
+					button-variant="outline-primary"
+					size="sm"
+					class="categories-radio-group"
+				/>
+				<b-form-radio-group buttons
+					v-if="primaryCategorySelected.categories.length > 1"
+					v-model="primaryCategorySelected.selected"
+					:options="primaryCategorySelected.options"
+					button-variant="outline-primary"
+					size="sm"
+					class="categories-radio-group"
+				/>
+				<span v-if="primaryCategorySelected === categories.all">
+					<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Search..." size="sm" type="search"/>
+				</span>
+			</b-form>
 
-			<div class="mt-2 d-flex flex-wrap">
-				<bot-card v-for="script in scriptPool" :bot="script"
-						  class="script-card" :class="{'filtered': !passesFilter(script.name)}"
-						  @active-bot="activeBot = script;">
-					<b-form inline>
-						<b-form-checkbox v-model="script.enabled">
-							<img v-if="script.logo" v-bind:src="script.logo">
-							{{script.name}}
-						</b-form-checkbox>
-					</b-form>
-				</bot-card>
-			</div>
+			<bot-card v-for="bot in botPool" :bot="bot" v-show="passesFilter(bot)" @click="addToTeam(bot, teamSelection)"/>
+
+			<span v-if="displayedBotsCount + displayedScriptsCount === 0">
+				No bots available.
+				<span v-if="!isBotpackUpToDate">Try <a href="#" @click="updateBotPack">updating your botpack</a>.</span>
+			</span>
+
+			<hr v-if="displayedScriptsCount > 0 || secondaryCategorySelected.displayScriptDependencies" class="divider">
+
+			<script-card v-for="script in scriptPool" :script="script" v-show="passesFilter(script)"/>
+			
+			<script-dependencies :bots="botPool" :scripts="scriptPool"
+				v-if="secondaryCategorySelected.displayScriptDependencies"
+				@bot-clicked="addToTeam($event, teamSelection)"
+			/>
 
 		</b-card>
 
@@ -254,6 +269,10 @@ export default {
 			<p><span class="bot-info-key">GitHub:</span>
 				<a :href="activeBot.info.github" target="_blank">{{activeBot.info.github}}</a></p>
 			<p><span class="bot-info-key">Language:</span> {{activeBot.info.language}}</p>
+			<p>
+				<span class="bot-info-key">Tags:</span>
+				<b-badge v-for="tag in activeBot.info.tags" class="ml-1">{{tag}}</b-badge>
+			</p>
 			<p class="bot-file-path">{{activeBot.path}}</p>
 
 			<div>
@@ -360,7 +379,7 @@ export default {
 			<p>Not sure which bots to play against? Try our recommended picks:</p>
 			<b-list-group>
 				<b-list-group-item v-for="recommendation in recommendations.recommendations">
-					<bot-card v-for="bot in recommendation.bots" :bot="bot" class="d-inline-flex" @active-bot="activeBot = bot;"/>
+					<bot-card v-for="bot in recommendation.bots" :bot="bot" :draggable="false"/>
 					<b-button variant="primary" class="float-right" @click="selectRecommendation(recommendation.bots)">Select</b-button>
 				</b-list-group-item>
 			</b-list-group>
@@ -393,6 +412,8 @@ export default {
 		'appearance-editor': AppearanceEditor,
 		'mutator-field': MutatorField,
 		'bot-card': BotCard,
+		'script-card': ScriptCard,
+		'script-dependencies': ScriptDependencies,
 		'team-card': TeamCard,
 		'launcher-preference-modal': LauncherPreferenceModal,
 	},
@@ -400,9 +421,9 @@ export default {
 		return {
 			botPool: STARTING_BOT_POOL,
 			scriptPool: [],
-			blueTeam: [],
+			blueTeam: [HUMAN],
 			orangeTeam: [],
-			teamSelection: "blue",
+			teamSelection: 'orange',
 			matchOptions: null,
 			matchSettings: {
 				map: null,
@@ -441,20 +462,27 @@ export default {
 			snackbarContent: null,
 			showProgressSpinner: false,
 			languageSupport: null,
-			activeBot: null,
 			newBotName: '',
 			newBotLanguageChoice: 'python',
 			folderSettings: {
 				files: {},
 				folders: {}
 			},
+			isBotpackUpToDate: true,
 			downloadProgressPercent: 0,
 			downloadStatus: '',
 			showBotpackUpdateSnackbar: false,
 			botNameFilter: '',
 			appearancePath: '',
 			recommendations: null,
-			downloadModalTitle: "Downloading Bot Pack"
+			downloadModalTitle: "Downloading Bot Pack",
+			categories: categories,
+			primaryCategoryOptions: Object.values(categories).map(ctg => {
+				ctg.options = ctg.categories.map(sc => ({text: sc.name, value: sc}));
+				ctg.selected = ctg.categories[0];
+				return {text: ctg.name, value: ctg};
+			}),
+			primaryCategorySelected: categories.all,
 		}
 	},
 
@@ -594,8 +622,28 @@ export default {
 			eel.scan_for_bots()(this.botsReceived);
 			eel.scan_for_scripts()(this.scriptsReceived);
 		},
-		passesFilter: function(botName) {
-			return botName.toLowerCase().includes(this.botNameFilter.toLowerCase());
+		passesFilter: function(runnable) {
+			let category = this.secondaryCategorySelected;
+
+			if (category.displaySearchField) {
+				if (!runnable.name.toLowerCase().includes(this.botNameFilter.toLowerCase()))
+					return false;
+			}
+			// only display Human when it's not on any of the teams
+			if (runnable.type === 'human')
+				return !this.blueTeam.concat(this.orangeTeam).includes(HUMAN);
+
+			if (runnable.type === 'psyonix')
+				return category.includePsyonixBots;
+
+			let allowedTags = runnable.type === 'script' ? category.scripts : category.bots;
+			if (allowedTags) {
+				if (allowedTags === '*') {
+					return true;
+				}
+				return runnable.info.tags.some(tag => allowedTags.includes(tag));
+			}
+			return false;
 		},
 		botLoadHandler: function (response) {
 			this.$bvModal.hide('new-bot-modal');
@@ -613,8 +661,9 @@ export default {
 					!this.botPool.find( (element) => element.path === bot.path ));
 
 			freshBots.forEach((bot) => bot.warn = false);
+			freshBots.sort((a, b) => a.name.localeCompare(b.name));
 
-			this.botPool = this.botPool.concat(freshBots).sort((a, b) => a.name.localeCompare(b.name));
+			this.botPool = this.botPool.concat(freshBots);
 			this.applyLanguageWarnings();
 			this.distinguishDuplicateBots();
 			this.showProgressSpinner = false;
@@ -624,8 +673,9 @@ export default {
 			const freshScripts = scripts.filter( (script) =>
 					!this.scriptPool.find( (element) => element.path === script.path ));
 			freshScripts.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
+			freshScripts.sort((a, b) => a.name.localeCompare(b.name));
 
-			this.scriptPool = this.scriptPool.concat(freshScripts).sort((a, b) => a.name.localeCompare(b.name));
+			this.scriptPool = this.scriptPool.concat(freshScripts);
 			this.applyLanguageWarnings();
 			this.showProgressSpinner = false;
 		},
@@ -706,6 +756,7 @@ export default {
 
 		botpackUpdateChecked: function (isBotpackUpToDate) {
 			this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
+			this.isBotpackUpToDate = isBotpackUpToDate;
 		},
 
 		botPackUpdated: function (message) {
@@ -715,6 +766,7 @@ export default {
 			eel.get_folder_settings()(this.folderSettingsReceived);
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 			eel.get_match_options()(this.matchOptionsReceived)
+			this.primaryCategorySelected = this.categories.standard;
 		},
 
 		onInstallationComplete: function (result) {
@@ -773,6 +825,18 @@ export default {
 			return Object.keys(this.matchSettings.mutators).map(key =>
 				this.matchSettings.mutators[key] != this.matchOptions.mutators[key + "_types"][0]
 			).filter(Boolean).length;
+		},
+		activeBot: function() {
+			return this.$store.state.activeBot;
+		},
+		secondaryCategorySelected: function() {
+			return this.primaryCategorySelected.selected;
+		},
+		displayedBotsCount: function() {
+			return this.botPool.filter(this.passesFilter).length;
+		},
+		displayedScriptsCount: function() {
+			return this.scriptPool.filter(this.passesFilter).length;
 		},
 	},
 	created: function () {
