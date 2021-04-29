@@ -15,10 +15,13 @@ export default {
 	props: ['bots', 'scripts'],
 	template: /*html*/`
 		<div>
-			<div class="mb-2">
+
+			<div class="scripts-header">Scripts</div>
+			<div>
 				<script-card v-for="script in uninvolvedScripts" :script="script"/>
 			</div>
 
+			<div class="scripts-header">Scripts with dependencies</div>
 			<div v-for="dependency in dependencies" class="d-flex align-items-center">
 
 				<script-card :script="dependency.script" class="flex-shrink-0"/>

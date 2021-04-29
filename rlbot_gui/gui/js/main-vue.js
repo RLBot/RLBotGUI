@@ -144,7 +144,7 @@ export default {
 				<span v-if="!isBotpackUpToDate">Try <a href="#" @click="updateBotPack">updating your botpack</a>.</span>
 			</span>
 
-			<hr v-if="displayedScriptsCount > 0 || secondaryCategorySelected.displayScriptDependencies" class="divider">
+			<div v-if="displayedScriptsCount > 0" class="scripts-header">Scripts</div>
 
 			<script-card v-for="script in scriptPool" :script="script" v-show="passesFilter(script)"/>
 			

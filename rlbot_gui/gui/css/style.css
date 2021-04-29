@@ -177,9 +177,11 @@ body, html {
   background-color: white;
 }
 
-.bot-pool .divider {
+.bot-pool .scripts-header {
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
+  margin-left: 3px;
+  font-weight: bold;
 }
 
 .bot-card img {
