@@ -6,7 +6,6 @@ export default {
                 bots: "*",
                 scripts: "*",
                 includePsyonixBots: true,
-                displaySearchField: true,
             },
         ],
     },
@@ -16,12 +15,10 @@ export default {
             {
                 name: "Bots for 1v1",
                 bots: "1v1",
-                displaySearchField: true,
             },
             {
                 name: "Bots with teamplay",
                 bots: "teamplay",
-                displaySearchField: true,
             },	
             {
                 name: "Goalie bots",

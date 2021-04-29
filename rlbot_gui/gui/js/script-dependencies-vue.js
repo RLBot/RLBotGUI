@@ -12,17 +12,17 @@ export default {
 		'bot-card': BotCard,
 		'script-card': ScriptCard,
 	},
-	props: ['bots', 'scripts'],
+	props: ['bots', 'scripts', 'nameFilter'],
 	template: /*html*/`
 		<div>
 
 			<div class="scripts-header">Scripts</div>
 			<div>
-				<script-card v-for="script in uninvolvedScripts" :script="script"/>
+				<script-card v-for="script in uninvolvedScripts" :script="script" v-show="passesFilter(script)"/>
 			</div>
 
 			<div class="scripts-header">Scripts with dependencies</div>
-			<div v-for="dependency in dependencies" class="d-flex align-items-center">
+			<div v-for="dependency in dependencies" class="d-flex align-items-center" v-if="dependency.visible">
 
 				<script-card :script="dependency.script" class="flex-shrink-0"/>
 
@@ -50,6 +50,11 @@ export default {
 			</div>
 		</div>
 	`,
+	methods: {
+		passesFilter: function(runnable) {
+			return runnable.name.toLowerCase().includes(this.nameFilter.toLowerCase());
+		}
+	},
 	computed: {
 		dependencies: function() {
 			// array of objects, which contain a script and bots/scripts that support/require it
@@ -60,11 +65,12 @@ export default {
 					prefixFilter(runnable.info.tags, "requires-").includes(tag)
 				);
 				
-				return {
-					script: script,
-					supportedScripts: this.scripts.filter(enableTagFilter),
-					supportedBots: this.bots.filter(enableTagFilter),
-				};
+				let supportedBots = this.bots.filter(enableTagFilter);
+				let supportedScripts = this.scripts.filter(enableTagFilter);
+				let visible = [script, ...supportedBots, ...supportedScripts].some(this.passesFilter);
+
+				return {script, supportedBots, supportedScripts, visible};
+
 			}).filter(d => d.supportedScripts.length + d.supportedBots.length > 0);
 		},
 		uninvolvedScripts: function() {

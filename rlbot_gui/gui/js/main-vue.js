@@ -132,9 +132,7 @@ export default {
 					size="sm"
 					class="categories-radio-group"
 				/>
-				<span v-if="secondaryCategorySelected.displaySearchField">
-					<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Search..." size="sm" type="search"/>
-				</span>
+				<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Search..." size="sm" type="search"/>
 			</b-form>
 
 			<bot-card v-for="bot in botPool" :bot="bot" v-show="passesFilter(bot)" @click="addToTeam(bot, teamSelection)"/>
@@ -151,6 +149,7 @@ export default {
 			<script-dependencies :bots="botPool" :scripts="scriptPool"
 				v-if="secondaryCategorySelected.displayScriptDependencies"
 				@bot-clicked="addToTeam($event, teamSelection)"
+				:name-filter="botNameFilter"
 			/>
 
 		</b-card>
@@ -625,10 +624,9 @@ export default {
 		passesFilter: function(runnable) {
 			let category = this.secondaryCategorySelected;
 
-			if (category.displaySearchField) {
-				if (!runnable.name.toLowerCase().includes(this.botNameFilter.toLowerCase()))
-					return false;
-			}
+			if (!runnable.name.toLowerCase().includes(this.botNameFilter.toLowerCase()))
+				return false;
+			
 			// only display Human when it's not on any of the teams
 			if (runnable.type === 'human')
 				return !this.blueTeam.concat(this.orangeTeam).includes(HUMAN);
