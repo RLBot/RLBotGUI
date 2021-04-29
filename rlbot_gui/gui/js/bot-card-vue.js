@@ -1,25 +1,46 @@
+import RunnableCard from './runnable-card-vue.js'
+
 export default {
 	name: 'bot-card',
-	props: ['bot'],
-	template: `
-		<b-card class="bot-card md-elevation-3" @click="$emit('click')">
-
-            <slot>
-                <img v-if="!bot.logo" class="darkened" v-bind:src="bot.image">
-                <img v-if="bot.logo" v-bind:src="bot.logo">
-                <span class="bot-name">{{ bot.name }} <span v-if="bot.uniquePathSegment" class="unique-bot-identifier">({{ bot.uniquePathSegment }})</span></span>
-            </slot>
-
-            <b-button size="sm" class="icon-button warning-icon" v-if="bot.warn" variant="outline-warning"
-                        @click.stop="$emit('active-bot')" v-b-modal.language-warning-modal>
-                <b-icon icon="exclamation-triangle-fill"/>
-            </b-button>
-
-            <b-button size="sm" variant="outline-primary" class="bot-hover-reveal icon-button" v-if="bot.info"
-                        @click.stop="$emit('active-bot')" v-b-modal.bot-info-modal>
-                <b-icon icon="info-circle"/>
-            </b-button>
-            
-        </b-card>
+	components: {
+		'runnable-card': RunnableCard,
+	},
+	props: {
+		bot: Object,
+		disabled: Boolean,
+		draggable: {
+			type: Boolean,
+			default: true,
+		},
+	},
+	template: /*html*/`
+		<draggable v-model="draggableModel" :options="draggableOptions" style="display: inline;">
+			<runnable-card :runnable="bot" :disabled="disabled" :class="{draggable: draggable}" @click="$emit('click')">
+				<img v-if="bot.logo" :src="bot.logo">
+				<img v-else class="darkened" :src="bot.image">
+				<span class="bot-name">
+					{{ bot.name }}
+					<span v-if="bot.uniquePathSegment" class="unique-bot-identifier">
+						({{ bot.uniquePathSegment }})
+					</span>
+				</span>
+			</runnable-card>
+		</draggable>
 	`,
+	computed: {
+		draggableModel: function() {
+			return [this.bot];
+		},
+		draggableOptions: function() {
+			return {
+				group: {
+					name: 'bots',
+					pull: 'clone',
+					put: false,
+				},
+				sort: false,
+				disabled: !this.draggable || this.disabled,
+			};
+		},
+	},
 }

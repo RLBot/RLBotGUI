@@ -20,8 +20,20 @@ const router = new VueRouter({
     routes: routes
 });
 
+const store = new Vuex.Store({
+    state: {
+       activeBot: null,
+    },
+    mutations: {
+        setActiveBot(state, bot) {
+            state.activeBot = bot;
+        },
+    },
+});
+
 const app = new Vue({
     router: router,
+    store: store,
     el: '#app',
     data: {
         bodyStyle: null

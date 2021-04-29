@@ -247,12 +247,14 @@ def pick_location(is_folder, filter="Config files (*.cfg)"):
 def read_info(bundle: RunnableConfigBundle):
     details_header = 'Details'
     if bundle.base_agent_config.has_section(details_header):
+        raw_tags = bundle.base_agent_config.get(details_header, 'tags')
         return {
             'developer': bundle.base_agent_config.get(details_header, 'developer'),
             'description': bundle.base_agent_config.get(details_header, 'description'),
             'fun_fact': bundle.base_agent_config.get(details_header, 'fun_fact'),
             'github': bundle.base_agent_config.get(details_header, 'github'),
             'language': bundle.base_agent_config.get(details_header, 'language'),
+            'tags': [tag.strip() for tag in raw_tags.split(',')] if raw_tags else [],
         }
     return None
 
