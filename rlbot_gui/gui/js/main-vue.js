@@ -132,7 +132,7 @@ export default {
 					size="sm"
 					class="categories-radio-group"
 				/>
-				<span v-if="primaryCategorySelected === categories.all">
+				<span v-if="secondaryCategorySelected.displaySearchField">
 					<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Search..." size="sm" type="search"/>
 				</span>
 			</b-form>
