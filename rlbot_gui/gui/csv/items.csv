@@ -2357,7 +2357,7 @@
 3899,Wheels,Product_TA ProductsDB.Products.wheel_perl_se,Asik
 3900,Wheels,Product_TA ProductsDB.Products.wheel_range_se,Gripstride HX
 3901,Wheels,Product_TA ProductsDB.Products.wheel_vented_se,Zowie
-3903,Hat,Product_TA ProductsDB.Products.hat_fishinghat,Fisherman?s Hat
+3903,Hat,Product_TA ProductsDB.Products.hat_fishinghat,Fisherman's Hat
 3904,Hat,Product_TA ProductsDB.Products.hat_mountainhat,Alpinist
 3906,Wheels,Product_TA ProductsDB.Products.wheel_armored,ARMR
 3907,Hat,Product_TA ProductsDB.Products.hat_ufo_tier01,UFO I
@@ -3495,6 +3495,7 @@
 5846,Wheels,Product_TA ProductsDB.Products.wheel_Trix_radiant,X-Tempo: Radiant
 5848,EngineAudio,Product_TA ProductsDB.Products.engineaudio_brick,Tygris
 5851,GoalExplosion,Product_TA ProductsDB.Products.explosion_hypnotik,Chromatic Hollow
+5853,Antenna,Product_TA ProductsDB.Products.flag_elp,Pelé
 5854,Skin,Product_TA ProductsDB.Products.skin_drof,Ford F-150 RLE: Chairman
 5855,Wheels,Product_TA ProductsDB.Products.wheel_drof_b,Ford F-150 SE
 5858,Body,Product_TA ProductsDB.Products.body_raddish_tier1,Tyranno
@@ -3547,7 +3548,7 @@
 5923,Skin,Product_TA ProductsDB.Products.skin_raddish_gust,Tyranno: Sally
 5924,Wheels,Product_TA ProductsDB.Products.wheel_remo_inverted,Zadeh S3: Inverted
 5925,Skin,Product_TA ProductsDB.Products.skin_raddish_spots,Tyranno: Crazed Firefly
-5926,Hat,Product_TA ProductsDB.Products.hat_dj,Yonder?s Crown
+5926,Hat,Product_TA ProductsDB.Products.hat_dj,Yonder's Crown
 5927,EngineAudio,Product_TA ProductsDB.Products.engineaudio_s3_01,Bootlegger
 5929,Wheels,Product_TA ProductsDB.Products.wheel_vindert,Umbrella Royale
 5930,Wheels,Product_TA ProductsDB.Products.Wheel_YokedOut_Negative,Yoked-1K: Obverse
@@ -3555,16 +3556,25 @@
 5932,Hat,Product_TA ProductsDB.Products.Hat_fnlpB,Top Llama ME
 5933,EngineAudio,Product_TA ProductsDB.Products.EngineAudio_Rev_Drof,Ford F-150 RLE
 5935,Wheels,Product_TA ProductsDB.Products.Wheel_VatoLoco_Holy,ChainHelm: Sacred
-5936,Skin,Product_TA ProductsDB.Products.Skin_octane_LDJ,Octane: Yonder?s Fleece
+5936,Skin,Product_TA ProductsDB.Products.Skin_octane_LDJ,Octane: Yonder's Fleece
 5944,MusicStingers,Product_TA ProductsDB.Products.Anthem_EpicAudioTeam_Athena,Llama Bell
 5948,MusicStingers,Product_TA ProductsDB.Products.Album_Anthem_EpicAudioTeam,Epic Audio Team
 5949,MusicStingers,Product_TA ProductsDB.Products.Anthem_Bossfight_Endgame,Endgame
 5959,EngineAudio,Product_TA ProductsDB.Products.engineaudio_s3_02,Sport Cycle
+5964,Body,Product_TA ProductsDB.Products.body_oblong,Lamborghini Huracán STO
+5965,Antenna,Product_TA ProductsDB.Products.flag_oblong,Lamborghini
 5971,Antenna,Product_TA ProductsDB.Products.flag_mc_silk,Monstercat Silk
 5979,Body,Product_TA ProductsDB.Products.body_raddish_tier2,Tyranno GXT
+5980,EngineAudio,Product_TA ProductsDB.Products.engineaudio_oblong,Lamborghini Huracán STO
 5981,EngineAudio,Product_TA ProductsDB.Products.engineaudio_s3_03,Heinrich
+5982,Wheels,Product_TA ProductsDB.Products.wheel_oblong,Lamborghini Huracán STO v1
 5992,MusicStingers,Product_TA ProductsDB.Products.Anthem_JulieB_Vol1_ID1,Brakes Mistakes
 5993,MusicStingers,Product_TA ProductsDB.Products.Anthem_JulieB_Vol1_ID2,Watch Me Go
 5994,MusicStingers,Product_TA ProductsDB.Products.Anthem_JulieB_Vol1_ID3,Wicked Slick
 5996,MusicStingers,Product_TA ProductsDB.Products.Anthem_JulieB_Vol1_ID5,Time For Noise
 5997,MusicStingers,Product_TA ProductsDB.Products.Album_Anthem_JulieB_Vol1,Watch Me Go
+6003,Wheels,Product_TA ProductsDB.Products.wheel_oblongb,Lamborghini Huracán STO v2
+6004,Skin,Product_TA ProductsDB.Products.skin_oblongb,Lamborghini Huracán STO: Lamborghini Huracán STO
+6006,Antenna,Product_TA ProductsDB.Products.flag_oblongb,Lamborghini Huracán STO
+6026,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_oblong,Lamborghini
+6027,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_oblongb,Lamborghini Huracán STO

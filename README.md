@@ -85,6 +85,10 @@ Find the resulting executable in build\nsis.
 ### How to update items in the appearance editor
 1. Install and run [BakkesMod](http://www.bakkesmod.com/)
 2. In Rocket League, press F6 to open the BakkesMod console, and enter the `dumpitems` command
-3. Find the output `items.csv` in the folder where your `RocketLeague.exe` is
+3. Find the output `items.csv` in the folder where your `RocketLeague.exe` is, usually `C:/Program Files (x86)/Steam/steamapps/common/rocketleague/Binaries/Win64`
 4. Replace `rlbot_gui/gui/csv/items.csv` with the new file
-5. Don't forget to bump the version number in `setup.py`
+5. Change encoding of the new file to UTF-8. Here's how to do that in VS Code:
+   - use the _Change File Encoding_ command (or click the UTF-8 button in the bottom right)
+   - select _Reopen with Encoding_, select the one with _Guessed from content_
+   - now do that again, but _Save with Encoding_ and _UTF-8_
+6. Don't forget to bump the version number in `setup.py`
