@@ -765,6 +765,7 @@ export default {
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 			eel.get_match_options()(this.matchOptionsReceived)
 			this.primaryCategorySelected = this.categories.standard;
+			this.isBotpackUpToDate = true;
 		},
 
 		onInstallationComplete: function (result) {

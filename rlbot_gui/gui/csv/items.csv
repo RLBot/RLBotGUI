@@ -3150,6 +3150,7 @@
 5258,Wheels,Product_TA ProductsDB.Products.wheel_lemonade,HRB-20
 5259,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_PlaylistOne,Dominus Dash
 5262,GoalExplosion,Product_TA ProductsDB.Products.explosion_hearthands,Hand Heart
+5265,Body,Product_TA ProductsDB.Products.body_fracture,Formula 1 2021
 5266,Skin,Product_TA ProductsDB.Products.Skin_Idles,Deep Six
 5267,Wheels,Product_TA ProductsDB.Products.wheel_membrane,3-Lobe
 5268,Skin,Product_TA ProductsDB.Products.skin_shark_stripes,Peregrine TT: Stripes
@@ -3200,6 +3201,7 @@
 5327,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_huntress,Huntress
 5329,Skin,Product_TA ProductsDB.Products.skin_shark_mechwings,Peregrine TT: Mechwing
 5334,Wheels,Product_TA ProductsDB.Products.wheel_elder_pro,Patriarch Pro
+5336,Wheels,Product_TA ProductsDB.Products.wheel_fracture,Pirelli
 5337,Skin,Product_TA ProductsDB.Products.Skin_octane_FeralCat,Octane: Bodacious
 5340,Skin,Product_TA ProductsDB.Products.Skin_Som,Retrogression
 5341,Wheels,Product_TA ProductsDB.Products.wheel_flam_inverted,Flim-Flam: Inverted
@@ -3429,6 +3431,7 @@
 5702,Skin,Product_TA ProductsDB.Products.skin_grain_G2_esports,Fennec: G2 Esports
 5704,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_kaykay,Kaskade
 5707,Skin,Product_TA ProductsDB.Products.skin_grain_Soniqs_esports,Fennec: Susquehanna Soniqs
+5709,Body,Product_TA ProductsDB.Products.body_droftwo,NASCAR Ford Mustang
 5710,Skin,Product_TA ProductsDB.Products.skin_grain_Guild,Fennec: Guild Esports
 5713,Body,Product_TA ProductsDB.Products.body_drof,Ford F-150 RLE
 5715,MusicStingers,Product_TA ProductsDB.Products.Album_Anthem_SolarEclipses,Solar Eclipses
@@ -3467,6 +3470,7 @@
 5769,Skin,Product_TA ProductsDB.Products.skin_grain_alpine_esports,Fennec: Alpine Esports
 5770,Skin,Product_TA ProductsDB.Products.skin_grain_ghost_esports,Fennec: Ghost Gaming
 5771,Antenna,Product_TA ProductsDB.Products.flag_mc_kaskade,Kaskade
+5773,Body,Product_TA ProductsDB.Products.body_atoyot,NASCAR Toyota Camry
 5775,Wheels,Product_TA ProductsDB.Products.wheel_football,NFL
 5809,Skin,Product_TA ProductsDB.Products.skin_brick_flames,Tygris: Flames
 5810,Skin,Product_TA ProductsDB.Products.skin_brick_Misterrad,Tygris: Mister Rad
@@ -3479,6 +3483,7 @@
 5819,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_xgames_01,X-Skis
 5820,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_xgames_02,X-Board
 5821,Skin,Product_TA ProductsDB.Products.Skin_octane_Dueling,Octane: 10dril
+5823,Body,Product_TA ProductsDB.Products.body_oramac,NASCAR Chevrolet Camaro
 5824,Boost,Product_TA ProductsDB.Products.boost_checkeredflag,Chequered Flag
 5826,GoalExplosion,Product_TA ProductsDB.Products.explosion_singleatom,Atomic Blip
 5827,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_cavities,Sweet Dreams
@@ -3486,6 +3491,8 @@
 5829,Hat,Product_TA ProductsDB.Products.hat_snowboard_rack_xg,X-Boards
 5830,Hat,Product_TA ProductsDB.Products.hat_ski_rack_XG,X-Skis
 5832,Wheels,Product_TA ProductsDB.Products.wheel_xg2,X Games
+5833,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_football,NFL
+5834,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_football,NFL
 5835,Skin,Product_TA ProductsDB.Products.skin_octane_frost_ex,Octane: X Games
 5836,Wheels,Product_TA ProductsDB.Products.wheel_drof,Ford F-150 RLE
 5838,Skin,Product_TA ProductsDB.Products.skin_musclecar_rooster_psplus,Dominus: Pollo Caliente BL
@@ -3576,5 +3583,44 @@
 6003,Wheels,Product_TA ProductsDB.Products.wheel_oblongb,Lamborghini Huracán STO v2
 6004,Skin,Product_TA ProductsDB.Products.skin_oblongb,Lamborghini Huracán STO: Lamborghini Huracán STO
 6006,Antenna,Product_TA ProductsDB.Products.flag_oblongb,Lamborghini Huracán STO
+6010,Wheels,Product_TA ProductsDB.Products.wheel_nct,Goodyear Racing
+6014,Skin,Product_TA ProductsDB.Products.skin_fracture_Alf,Formula 1 2021: Alfa Romeo 2021
+6015,SupersonicTrail,Product_TA ProductsDB.Products.ss_nct,NASCAR
+6018,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_fracture,Formula 1 2021
+6022,Skin,Product_TA ProductsDB.Products.skin_fracture_Fer,Formula 1 2021: Ferrari 2021
+6023,Skin,Product_TA ProductsDB.Products.skin_fracture_alp,Formula 1 2021: Alpine 2021
+6024,Skin,Product_TA ProductsDB.Products.skin_fracture_mcl,Formula 1 2021: McLaren 2021
+6025,Skin,Product_TA ProductsDB.Products.skin_fracture_Tau,Formula 1 2021: AlphaTauri 2021
 6026,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_oblong,Lamborghini
 6027,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_oblongb,Lamborghini Huracán STO
+6028,Hat,Product_TA ProductsDB.Products.hat_nchat,NASCAR
+6029,Skin,Product_TA ProductsDB.Products.skin_droftwo_stripes,NASCAR Ford Mustang: NASCAR x RL
+6031,Skin,Product_TA ProductsDB.Products.skin_ncrfd_ocm,NASCAR Ford Mustang: Roush Fenway Racing #6
+6032,Skin,Product_TA ProductsDB.Products.skin_ncrfd_sff,NASCAR Ford Mustang: Stewart-Haas Racing #10
+6035,Skin,Product_TA ProductsDB.Products.skin_fracture_haa,Formula 1 2021: Haas 2021
+6037,Skin,Product_TA ProductsDB.Products.skin_fracture_ast,Formula 1 2021: Aston Martin 2021
+6039,Skin,Product_TA ProductsDB.Products.skin_fracture_wil,Formula 1 2021: Williams 2021
+6042,Skin,Product_TA ProductsDB.Products.skin_fracture_red,Formula 1 2021: Red Bull 2021
+6044,Skin,Product_TA ProductsDB.Products.skin_ncrfd_pzl,NASCAR Ford Mustang: Team Penske #22
+6047,EngineAudio,Product_TA ProductsDB.Products.engineaudio_ncrcy,NASCAR
+6048,EngineAudio,Product_TA ProductsDB.Products.engineaudio_ncrfd,NASCAR
+6049,EngineAudio,Product_TA ProductsDB.Products.engineaudio_ncrta,NASCAR
+6050,Skin,Product_TA ProductsDB.Products.skin_fracture_mer,Formula 1 2021: Mercedes-AMG Petronas 2021
+6051,Skin,Product_TA ProductsDB.Products.skin_ncrcy_bps,NASCAR Chevrolet Camaro: Richard Childress Racing #3
+6052,Skin,Product_TA ProductsDB.Products.skin_ncrcy_grw,NASCAR Chevrolet Camaro: Chip Ganassi Racing #1
+6053,EngineAudio,Product_TA ProductsDB.Products.engineaudio_fracture,Formula 1
+6054,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_bps,Richard Childress Racing #3
+6055,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_grw,Chip Ganassi Racing #1
+6056,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_MCD,23XI Racing #23
+6057,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_NAP,Hendrick Motorsports #9
+6058,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_ocm,Roush Fenway Racing #6
+6059,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_pzl,Team Penske #22
+6061,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_sff,Stewart-Haas Racing #10
+6062,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_STP,Richard Petty Motorsports #43
+6063,Skin,Product_TA ProductsDB.Products.skin_ncrcy_NAP,NASCAR Chevrolet Camaro: Hendrick Motorsports #9
+6064,Skin,Product_TA ProductsDB.Products.skin_ncrcy_STP,NASCAR Chevrolet Camaro: Richard Petty Motorsports #43
+6065,Skin,Product_TA ProductsDB.Products.skin_ncrcy_stripes,NASCAR Chevrolet Camaro: NASCAR x RL
+6066,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_MM,Joe Gibbs Racing #18
+6067,Skin,Product_TA ProductsDB.Products.skin_ncrta_MCD,NASCAR Toyota Camry: 23XI Racing #23
+6068,Skin,Product_TA ProductsDB.Products.skin_ncrta_MM,NASCAR Toyota Camry: Joe Gibbs Racing #18
+6069,Skin,Product_TA ProductsDB.Products.skin_ncrta_stripes,NASCAR Toyota Camry: NASCAR x RL
