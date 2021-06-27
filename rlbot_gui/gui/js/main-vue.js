@@ -624,6 +624,8 @@ export default {
 		passesFilter: function(runnable) {
 			let category = this.secondaryCategorySelected;
 
+			// hide runnable when its name doesn't match the search filter
+			// if the filter is an empty string, anything matches
 			if (!runnable.name.toLowerCase().includes(this.botNameFilter.toLowerCase()))
 				return false;
 			
@@ -631,8 +633,14 @@ export default {
 			if (runnable.type === 'human')
 				return !this.blueTeam.concat(this.orangeTeam).includes(HUMAN);
 
+			// show psyonix bots only in specific categories
 			if (runnable.type === 'psyonix')
 				return category.includePsyonixBots;
+
+			// if a script is enabled, display it regardless of which category is selected
+			// except for the script dependencies, where all scripts are displayed already
+			if (runnable.type === 'script' && !category.displayScriptDependencies && runnable.enabled)
+				return true;
 
 			let allowedTags = runnable.type === 'script' ? category.scripts : category.bots;
 			if (allowedTags) {
