@@ -574,9 +574,10 @@ def get_recommendations():
 
 
 @eel.expose
-def show_bot_in_explorer(bot_cfg_path):
+def show_path_in_explorer(path_str):
     import subprocess
-    directory = os.path.dirname(bot_cfg_path)
+    path = Path(path_str)
+    directory = path if path.is_dir() else path.parent
     subprocess.Popen(f'explorer "{directory}"')
 
 

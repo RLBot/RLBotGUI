@@ -282,7 +282,7 @@ export default {
 				<b-button v-if="activeBot.type !== 'script'" @click="showAppearanceEditor(activeBot.looks_path)" v-b-modal.appearance-editor-dialog>
 					<b-icon icon="card-image"></b-icon> Edit Appearance
 				</b-button>
-				<b-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
+				<b-button v-if="activeBot.path" @click="showPathInExplorer(activeBot.path)">
 					<b-icon icon="folder"></b-icon> Show Files
 				</b-button>
 			</div>
@@ -346,26 +346,21 @@ export default {
 		</b-modal>
 
 		<b-modal id="folder-settings-modal" title="Folder Settings" size="xl" hide-footer centered>
-			<b-form inline v-for="(settings, path) in folderSettings.folders">
-				<b-form-checkbox v-model="settings.visible" style="overflow:hidden;">
-					{{ path }}
-				</b-form-checkbox>
+			<span v-for="settingsList in [folderSettings.folders, folderSettings.files]">
+				<b-form inline v-for="(settings, path) in settingsList">
+					<b-form-checkbox switch v-model="settings.visible" class="folder-setting-switch">
+						{{ path }}
+					</b-form-checkbox>
 
-				<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(folderSettings.folders, path)">
-					<b-icon icon="x"></b-icon>
-				</b-button>
-			</b-form>
+					<b-button size="sm" class="icon-button" @click="showPathInExplorer(path)" variant="outline-info" v-b-tooltip.hover title="Open folder in explorer">
+						<b-icon icon="folder"></b-icon>
+					</b-button>
 
-			<b-form inline v-for="(settings, path) in folderSettings.files">
-				<b-form-checkbox v-model="settings.visible" style="overflow: hidden;">
-					{{ path }}
-				</b-form-checkbox>
-
-				<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(folderSettings.files, path)">
-					<b-icon icon="x"></b-icon>
-				</b-button>
-			</b-form>
-
+					<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(settingsList, path)">
+						<b-icon icon="x"></b-icon>
+					</b-button>
+				</b-form>
+			</span>
 			<b-button variant="primary" class="mt-3" @click="applyFolderSettings()">Apply</b-button>
 
 		</b-modal>
@@ -598,8 +593,8 @@ export default {
 			this.activeBot = null;
 			if (path) this.showAppearanceEditor(path);
 		},
-		showBotInExplorer: function (botPath) {
-			eel.show_bot_in_explorer(botPath);
+		showPathInExplorer: function (path) {
+			eel.show_path_in_explorer(path);
 		},
 		hotReload: function() {
 			eel.hot_reload_python_bots();
