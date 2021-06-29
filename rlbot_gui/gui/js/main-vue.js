@@ -506,6 +506,7 @@ export default {
 		},
 		killBots: function(event) {
 			eel.kill_bots();
+			this.matchStarting = false;
 		},
 		pickBotFolder: function (event) {
 			eel.pick_bot_folder()();
