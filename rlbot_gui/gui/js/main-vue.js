@@ -197,7 +197,11 @@ export default {
 
 				<span style="flex-grow: 1"></span>
 
-				<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
+				<b-button @click="startMatch()" variant="success" size="lg" :disabled="matchStarting" class="start-match-btn">
+					<span v-if="matchStarting">Starting match</span>
+					<span v-else-if="gameAlreadyLaunched">Start another match</span>
+					<span v-else>Launch Rocket League<br>and start match</span>
+				</b-button>
 				<b-button @click="killBots()" variant="secondary" size="lg" class="ml-2">Stop</b-button>
 			</div>
 
@@ -278,7 +282,7 @@ export default {
 				<b-button v-if="activeBot.type !== 'script'" @click="showAppearanceEditor(activeBot.looks_path)" v-b-modal.appearance-editor-dialog>
 					<b-icon icon="card-image"></b-icon> Edit Appearance
 				</b-button>
-				<b-button v-if="activeBot.path" @click="showBotInExplorer(activeBot.path)">
+				<b-button v-if="activeBot.path" @click="showPathInExplorer(activeBot.path)">
 					<b-icon icon="folder"></b-icon> Show Files
 				</b-button>
 			</div>
@@ -342,26 +346,21 @@ export default {
 		</b-modal>
 
 		<b-modal id="folder-settings-modal" title="Folder Settings" size="xl" hide-footer centered>
-			<b-form inline v-for="(settings, path) in folderSettings.folders">
-				<b-form-checkbox v-model="settings.visible" style="overflow:hidden;">
-					{{ path }}
-				</b-form-checkbox>
+			<span v-for="settingsList in [folderSettings.folders, folderSettings.files]">
+				<b-form inline v-for="(settings, path) in settingsList">
+					<b-form-checkbox switch v-model="settings.visible" class="folder-setting-switch">
+						{{ path }}
+					</b-form-checkbox>
 
-				<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(folderSettings.folders, path)">
-					<b-icon icon="x"></b-icon>
-				</b-button>
-			</b-form>
+					<b-button size="sm" class="icon-button" @click="showPathInExplorer(path)" variant="outline-info" v-b-tooltip.hover title="Open folder in explorer">
+						<b-icon icon="folder"></b-icon>
+					</b-button>
 
-			<b-form inline v-for="(settings, path) in folderSettings.files">
-				<b-form-checkbox v-model="settings.visible" style="overflow: hidden;">
-					{{ path }}
-				</b-form-checkbox>
-
-				<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(folderSettings.files, path)">
-					<b-icon icon="x"></b-icon>
-				</b-button>
-			</b-form>
-
+					<b-button size="sm" variant="outline-danger" class="icon-button" @click="Vue.delete(settingsList, path)">
+						<b-icon icon="x"></b-icon>
+					</b-button>
+				</b-form>
+			</span>
 			<b-button variant="primary" class="mt-3" @click="applyFolderSettings()">Apply</b-button>
 
 		</b-modal>
@@ -460,6 +459,8 @@ export default {
 			showSnackbar: false,
 			snackbarContent: null,
 			showProgressSpinner: false,
+			gameAlreadyLaunched: false,
+			matchStarting: false,
 			languageSupport: null,
 			newBotName: '',
 			newBotLanguageChoice: 'python',
@@ -487,6 +488,8 @@ export default {
 
 	methods: {
 		startMatch: async function (event) {
+			this.matchStarting = true;
+
 			if (this.matchSettings.randomizeMap) await this.setRandomMap();
 
 			this.matchSettings.scripts = this.scriptPool.filter((val) => { return val.enabled });
@@ -503,6 +506,7 @@ export default {
 		},
 		killBots: function(event) {
 			eel.kill_bots();
+			this.matchStarting = false;
 		},
 		pickBotFolder: function (event) {
 			eel.pick_bot_folder()();
@@ -590,8 +594,8 @@ export default {
 			this.activeBot = null;
 			if (path) this.showAppearanceEditor(path);
 		},
-		showBotInExplorer: function (botPath) {
-			eel.show_bot_in_explorer(botPath);
+		showPathInExplorer: function (path) {
+			eel.show_path_in_explorer(path);
 		},
 		hotReload: function() {
 			eel.hot_reload_python_bots();
@@ -624,6 +628,8 @@ export default {
 		passesFilter: function(runnable) {
 			let category = this.secondaryCategorySelected;
 
+			// hide runnable when its name doesn't match the search filter
+			// if the filter is an empty string, anything matches
 			if (!runnable.name.toLowerCase().includes(this.botNameFilter.toLowerCase()))
 				return false;
 			
@@ -631,8 +637,14 @@ export default {
 			if (runnable.type === 'human')
 				return !this.blueTeam.concat(this.orangeTeam).includes(HUMAN);
 
+			// show psyonix bots only in specific categories
 			if (runnable.type === 'psyonix')
 				return category.includePsyonixBots;
+
+			// if a script is enabled, display it regardless of which category is selected
+			// except for the script dependencies, where all scripts are displayed already
+			if (runnable.type === 'script' && !category.displayScriptDependencies && runnable.enabled)
+				return true;
 
 			let allowedTags = runnable.type === 'script' ? category.scripts : category.bots;
 			if (allowedTags) {
@@ -810,6 +822,13 @@ export default {
 			eel.expose(noRLBotFlagPopup)
 			function noRLBotFlagPopup(title, text){
 				self.$bvModal.show("no-rlbot-flag-modal")
+				self.matchStarting = false;
+			}
+
+			eel.expose(matchStarted)
+			function matchStarted(){
+				self.matchStarting = false;
+				self.gameAlreadyLaunched = true;
 			}
 
 			eel.expose(updateDownloadProgress);

@@ -305,6 +305,16 @@ button.icon-button {
   box-shadow: 0 3px 0 green;
 }
 
+.folder-setting-switch {
+  max-width: 1000px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.start-match-btn {
+  min-width: 250px;
+}
+
 .navbar-nav {
   align-items: center;
 }

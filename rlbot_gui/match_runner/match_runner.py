@@ -1,6 +1,7 @@
 from math import pi
 from typing import List
 
+import eel
 from rlbot.gateway_util import NetworkingRole
 from rlbot.matchconfig.loadout_config import LoadoutConfig
 from rlbot.matchconfig.match_config import PlayerConfig, MatchConfig, MutatorConfig, ScriptConfig
@@ -222,6 +223,8 @@ def start_match_helper(bot_list: List[dict], match_settings: dict, launcher_pref
     setup_match(sm , match_config, launcher_prefs)
     # Note that we are not calling infinite_loop because that is not compatible with the way eel works!
     # Instead we will reproduce the important behavior from infinite_loop inside this file.
+
+    eel.matchStarted()
 
 
 def do_infinite_loop_content():
