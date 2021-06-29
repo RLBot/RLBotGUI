@@ -305,6 +305,10 @@ button.icon-button {
   box-shadow: 0 3px 0 green;
 }
 
+.start-match-btn {
+  min-width: 250px;
+}
+
 .navbar-nav {
   align-items: center;
 }

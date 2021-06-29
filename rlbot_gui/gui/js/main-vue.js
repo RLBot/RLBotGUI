@@ -197,7 +197,11 @@ export default {
 
 				<span style="flex-grow: 1"></span>
 
-				<b-button @click="startMatch({'blue': blueTeam, 'orange': orangeTeam})" variant="success" size="lg">Start Match</b-button>
+				<b-button @click="startMatch()" variant="success" size="lg" :disabled="matchStarting" class="start-match-btn">
+					<span v-if="matchStarting">Starting match</span>
+					<span v-else-if="gameAlreadyLaunched">Start another match</span>
+					<span v-else>Launch Rocket League<br>and start match</span>
+				</b-button>
 				<b-button @click="killBots()" variant="secondary" size="lg" class="ml-2">Stop</b-button>
 			</div>
 
@@ -460,6 +464,8 @@ export default {
 			showSnackbar: false,
 			snackbarContent: null,
 			showProgressSpinner: false,
+			gameAlreadyLaunched: false,
+			matchStarting: false,
 			languageSupport: null,
 			newBotName: '',
 			newBotLanguageChoice: 'python',
@@ -487,6 +493,8 @@ export default {
 
 	methods: {
 		startMatch: async function (event) {
+			this.matchStarting = true;
+
 			if (this.matchSettings.randomizeMap) await this.setRandomMap();
 
 			this.matchSettings.scripts = this.scriptPool.filter((val) => { return val.enabled });
@@ -818,6 +826,13 @@ export default {
 			eel.expose(noRLBotFlagPopup)
 			function noRLBotFlagPopup(title, text){
 				self.$bvModal.show("no-rlbot-flag-modal")
+				self.matchStarting = false;
+			}
+
+			eel.expose(matchStarted)
+			function matchStarted(){
+				self.matchStarting = false;
+				self.gameAlreadyLaunched = true;
 			}
 
 			eel.expose(updateDownloadProgress);
