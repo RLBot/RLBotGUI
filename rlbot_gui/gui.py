@@ -418,7 +418,7 @@ def get_match_options():
 
 @eel.expose
 def install_package(package_string):
-    exit_code = subprocess.call([sys.executable, "-m", "pip", "install", '--upgrade', package_string])
+    exit_code = subprocess.call([sys.executable, "-m", "pip", "install", '--upgrade', '--no-warn-script-location', package_string])
     print(exit_code)
     return {'exitCode': exit_code, 'package': package_string}
 
