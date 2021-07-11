@@ -659,7 +659,6 @@ def on_websocket_close(page, sockets):
     if not len(eel._websockets):
         # At this point we think the browser window has been closed.
         should_quit = True
-        shut_down()
 
 
 def is_chrome_installed():
@@ -699,7 +698,7 @@ def launch_eel(use_chrome):
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
-    eel.start('main.html', size=(1300, 870), block=False, callback=on_websocket_close, options=options,
+    eel.start('main.html', size=(1300, 870), block=False, callback=on_websocket_close, close_callback=on_websocket_close, options=options,
               disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
 
 
@@ -730,4 +729,6 @@ def start():
 
     while not should_quit:
         do_infinite_loop_content()
-        eel.sleep(1.0)
+        eel.sleep(0.4)
+        
+    shut_down(kill_rlbot_exe=True)
