@@ -12,8 +12,9 @@ def load_settings() -> QSettings:
 
 
 def launcher_preferences_from_map(launcher_preference_map: dict) -> RocketLeagueLauncherPreference:
-    return RocketLeagueLauncherPreference(launcher_preference_map['preferred_launcher'],
-                                          launcher_preference_map['use_login_tricks'])
+    return RocketLeagueLauncherPreference(
+        launcher_preference_map['preferred_launcher'],
+        use_login_tricks=True)  # Epic launch now ONLY works with login tricks
 
 
 def load_launcher_settings():
