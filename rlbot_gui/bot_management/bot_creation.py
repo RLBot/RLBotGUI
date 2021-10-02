@@ -147,3 +147,38 @@ def bootstrap_python_hivemind(hive_name, directory):
         print(f"You have no default program to open .py files. Your new bot is located at {os.path.abspath(top_dir)}")
 
     return config_file
+
+def bootstrap_rust_bot(bot_name, directory):
+    sanitized_name = convert_to_filename(bot_name)
+    bot_directory = Path(directory or '.')
+    top_dir = bot_directory / sanitized_name
+    if os.path.exists(top_dir):
+        raise FileExistsError(f'There is already a bot named {sanitized_name}, please choose a different name!')
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        tmpdir = Path(tmpdirname)
+        print('created temporary directory', tmpdir)
+
+        download_and_extract_zip(
+            download_url='https://github.com/NicEastvillage/RLBotRustTemplateBot/archive/master.zip',
+            local_folder_path=tmpdir)
+
+        safe_move(tmpdir / 'RLBotRustTemplateBot-master', top_dir)
+
+    bundle = scan_directory_for_bot_configs(top_dir).pop()
+    config_file = bundle.config_path
+    replace_all(config_file, r'name = .*$', f'name = {bot_name}')
+    replace_all(config_file, r'path = .*$', f'path = ../target/debug/{bot_name}.exe')
+
+    cargo_toml_file = top_dir / 'Cargo.toml'
+    replace_all(cargo_toml_file, r'name = .*$', f'name = "{bot_name}"')
+    replace_all(cargo_toml_file, r'authors = .*$', f'authors = []')
+
+    # This is intended to open the main module in the default system editor for .rs files.
+    # Hopefully this will be VS Code or notepad++ or something.
+    try:
+        os.startfile(top_dir / 'src' / 'main.rs')
+    except OSError:
+        print(f"You have no default program to open .rs files. Your new bot is located at {os.path.abspath(top_dir)}")
+
+    return config_file

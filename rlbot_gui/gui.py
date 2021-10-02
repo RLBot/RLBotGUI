@@ -24,7 +24,7 @@ from rlbot.setup_manager import SetupManager
 from rlbot.utils.requirements_management import install_requirements_file
 
 from rlbot_gui.bot_management.bot_creation import bootstrap_python_bot, bootstrap_scratch_bot, \
-    bootstrap_python_hivemind, convert_to_filename
+    bootstrap_python_hivemind, bootstrap_rust_bot, convert_to_filename
 from rlbot_gui.bot_management.downloader import BotpackStatus, RepoDownloader, BotpackUpdater, get_json_from_url, \
     MapPackUpdater
 from rlbot_gui.match_runner.match_runner import hot_reload_bots, shut_down, start_match_helper, \
@@ -628,6 +628,17 @@ def begin_python_hivemind(hive_name):
 
     try:
         config_file = bootstrap_python_hivemind(hive_name, bot_directory)
+        return {'bots': load_bot_bundle(config_file)}
+    except FileExistsError as e:
+        return {'error': str(e)}
+
+
+@eel.expose
+def begin_rust_bot(bot_name):
+    bot_directory = ensure_bot_directory()
+
+    try:
+        config_file = bootstrap_rust_bot(bot_name, bot_directory)
         return {'bots': load_bot_bundle(config_file)}
     except FileExistsError as e:
         return {'error': str(e)}
