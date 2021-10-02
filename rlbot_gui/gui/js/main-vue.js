@@ -341,6 +341,7 @@ export default {
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="scratch">Scratch</b-form-radio>
 				</b-form-group>
 			</div>
+			<p style="margin-top: -1rem">If your language isn't listed here, try <a href="https://github.com/RLBot/RLBot/wiki/Supported-Programming-Languages" target="_blank">this list</a>.</p>
 
 			<b-button variant="primary" @click="beginNewBot(newBotLanguageChoice, newBotName)">Begin</b-button>
 		</b-modal>
