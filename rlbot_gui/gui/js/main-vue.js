@@ -338,6 +338,7 @@ export default {
 				<b-form-group>
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="python">Python</b-form-radio>
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="python_hive">Python Hivemind</b-form-radio>
+					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="rust">Rust</b-form-radio>
 					<b-form-radio v-model="newBotLanguageChoice" name="lang-radios" value="scratch">Scratch</b-form-radio>
 				</b-form-group>
 			</div>
@@ -613,6 +614,9 @@ export default {
 			} else if (language === 'python_hive') {
 				this.showProgressSpinner = true;
 				eel.begin_python_hivemind(bot_name)(this.botLoadHandler);
+			} else if (language === 'rust') {
+				this.showProgressSpinner = true;
+				eel.begin_rust_bot(bot_name)(this.botLoadHandler);
 			}
 		},
 		prepareFolderSettingsDialog: function() {
