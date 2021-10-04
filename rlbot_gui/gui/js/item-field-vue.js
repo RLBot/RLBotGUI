@@ -18,6 +18,7 @@ export default {
 						:list="'list' + itemType.name + team"
 						autocomplete="off"
 						:state="validationState"
+						@mousedown="itemSelection = '';"
 					/>
 					<b-form-datalist :id="'list' + itemType.name + team" :options="items" value-field="itemKey" text-field="name"></b-form-datalist>
 
