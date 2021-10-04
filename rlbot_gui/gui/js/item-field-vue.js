@@ -3,12 +3,28 @@ export default {
 	props: ['value', 'items', 'itemType', 'team'],
 	template: `
 	<b-row>
-		<b-col>
-			<b-form-group :label="itemType.name" label-cols="5">
-				<b-form-input v-model="itemSelection" :list="'list' + itemType.name + team" autocomplete="off" :state="validationState"></b-form-input>
-				<b-form-datalist :id="'list' + itemType.name + team" :options="items" value-field="itemKey" text-field="name"></b-form-datalist>
+		<b-col class="pr-1">
+			<b-form-group :label="itemType.name" label-cols="4">
+				<b-input-group>
+						
+					<b-input-group-prepend>
+						<b-button variant="secondary" size="sm" v-b-tooltip.hover title="Set random" @click="selectRandomItem">
+							<b-icon icon="shuffle"/>
+						</b-button>
+					</b-input-group-prepend>
+
+					<b-form-input
+						v-model="itemSelection"
+						:list="'list' + itemType.name + team"
+						autocomplete="off"
+						:state="validationState"
+					/>
+					<b-form-datalist :id="'list' + itemType.name + team" :options="items" value-field="itemKey" text-field="name"></b-form-datalist>
+
+				</b-input-group>
 			</b-form-group>
 		</b-col>
+
 		<b-col cols="3">
 			<md-field v-if="itemType.paintKey">
 				<b-form-select v-model="selectedPaint" class="paint-color" :class="selectedPaintColorClass">
@@ -47,6 +63,14 @@ export default {
 			let id = this.value[this.itemType.itemKey];
 			let item = this.items.find(el => el.id === id);
 			this.itemSelection = item ? item.name : '';
+		},
+		selectRandomItem: function() {
+			let randomIndex = Math.floor(Math.random() * this.items.length);
+			this.itemSelection = this.items[randomIndex].name;
+		},
+		selectRandomPaintColor: function() {
+			let randomIndex = Math.floor(Math.random() * this.paintColors.length);
+			this.selectedPaint = this.paintColors[randomIndex].id;
 		},
 	},
 	created: function() {
