@@ -28,13 +28,16 @@ export default {
 			<b-col v-for="team in teams">
 				<colorpicker text="Primary Color" v-model="config[team]['team_color_id']" primary :team="team"/>
 				<colorpicker text="Accent Color" v-model="config[team]['custom_color_id']"/>
+				<b-button class="float-right" @click="randomizeTeamLoadout(team)" v-b-tooltip.hover :title="'Randomize entire ' + team + ' team loadout'">
+					<b-icon icon="shuffle"/>
+				</b-button>
 			</b-col>
 		</b-row>
 
 		<b-row v-if="Object.keys(config.blue).length" class="mb-4">
 			<b-col v-for="team in teams">
 				<div v-for="itemType in itemTypes">
-					<item-field :item-type="itemType" :items="items[itemType.category]" :team="team" v-model="config[team]"/>
+					<item-field :item-type="itemType" :items="items[itemType.category]" :team="team" v-model="config[team]" :ref="team"/>
 				</div>
 			</b-col>
 		</b-row>
@@ -45,19 +48,24 @@ export default {
 					<b-icon icon="eye"></b-icon>
 					View blue car in game
 				</b-button>
+
 				<b-button variant="outline-primary" @click="spawnCarForViewing(1)" class="mr-1">
 					<b-icon icon="eye"></b-icon>
 					View orange car in game
 				</b-button>
+
 				<b-form-select v-model="selectedShowcaseType">
 					<b-form-select-option v-for="showcaseType in showcaseTypes" :value="showcaseType.id">
 						{{ showcaseType.name }}
 					</b-form-select-option>
 				</b-form-select>
+
 				<span style="flex-grow: 1"></span>
+
 				<b-button variant="primary" @click="saveAppearance" class="mr-1">
 					Save and close
 				</b-button>
+
 				<b-button @click="loadLooks(path)">
 					Revert changes
 				</b-button>
@@ -80,8 +88,8 @@ export default {
 					{name: 'Boost', category: 'Boost', itemKey: 'boost_id', paintKey: 'boost_paint_id'},
 					{name: 'Antenna', category: 'Antenna', itemKey: 'antenna_id', paintKey: 'antenna_paint_id'},
 					{name: 'Topper', category: 'Hat', itemKey: 'hat_id', paintKey: 'hat_paint_id'},
-					{name: 'Paint Finish', category: 'PaintFinish', itemKey: 'paint_finish_id', paintKey: null},
-					{name: 'Accent Paint Finish', category: 'PaintFinish', itemKey: 'custom_finish_id', paintKey: null},
+					{name: 'Primary Finish', category: 'PaintFinish', itemKey: 'paint_finish_id', paintKey: null},
+					{name: 'Accent Finish', category: 'PaintFinish', itemKey: 'custom_finish_id', paintKey: null},
 					{name: 'Engine Audio', category: 'EngineAudio', itemKey: 'engine_audio_id', paintKey: null},
 					{name: 'Trail', category: 'SupersonicTrail', itemKey: 'trails_id', paintKey: 'trails_paint_id'},
 					{name: 'Goal Explosion', category: 'GoalExplosion', itemKey: 'goal_explosion_id', paintKey: 'goal_explosion_paint_id'},
@@ -142,7 +150,16 @@ export default {
 			},
 			loadLooks: async function (path) {
 				this.config = await eel.get_looks(path)();
-			}
+			},
+			randomizeTeamLoadout: function(team) {
+				this.config[team].team_color_id = Math.round(Math.random() * 70);
+				this.config[team].custom_color_id = Math.round(Math.random() * 105);
+
+				for (const itemField of this.$refs[team]) {
+					itemField.selectRandomItem();
+					itemField.selectRandomPaintColor();
+				}
+			},
 		},
 
 	created: function() {
