@@ -2,10 +2,9 @@ import AppearanceEditor from './appearance-editor-vue.js'
 import MutatorField from './mutator-field-vue.js'
 import BotCard from './bot-card-vue.js'
 import ScriptCard from './script-card-vue.js'
-import ScriptDependencies from './script-dependencies-vue.js'
+import BotPool from './bot-pool-vue.js'
 import TeamCard from './team-card-vue.js'
 import LauncherPreferenceModal from './launcher-preference-vue.js'
-import categories from './categories.js';
 
 const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
 const STARTING_BOT_POOL = [
@@ -116,40 +115,12 @@ export default {
 				</b-button>
 			</div>
 
-			<b-form inline class="mb-2">
-				<b-form-radio-group buttons
-					v-model="primaryCategorySelected"
-					:options="primaryCategoryOptions"
-					button-variant="outline-primary"
-					size="sm"
-					class="categories-radio-group"
-				/>
-				<b-form-radio-group buttons
-					v-if="primaryCategorySelected.categories.length > 1"
-					v-model="primaryCategorySelected.selected"
-					:options="primaryCategorySelected.options"
-					button-variant="outline-primary"
-					size="sm"
-					class="categories-radio-group"
-				/>
-				<b-form-input id="filter-text-input" v-model="botNameFilter" placeholder="Search..." size="sm" type="search"/>
-			</b-form>
-
-			<bot-card v-for="bot in botPool" :bot="bot" v-show="passesFilter(bot)" @click="addToTeam(bot, teamSelection)"/>
-
-			<span v-if="displayedBotsCount + displayedScriptsCount === 0">
-				No bots available.
-				<span v-if="!isBotpackUpToDate">Try <a href="#" @click="updateBotPack">updating your botpack</a>.</span>
-			</span>
-
-			<div v-if="displayedScriptsCount > 0" class="scripts-header">Scripts</div>
-
-			<script-card v-for="script in scriptPool" :script="script" v-show="passesFilter(script)"/>
-			
-			<script-dependencies :bots="botPool" :scripts="scriptPool"
-				v-if="secondaryCategorySelected.displayScriptDependencies"
+			<bot-pool
+				:bots="botPool"
+				:scripts="scriptPool"
 				@bot-clicked="addToTeam($event, teamSelection)"
-				:name-filter="botNameFilter"
+				ref="botPool"
+				:display-human="displayHumanInBotPool"
 			/>
 
 		</b-card>
@@ -413,7 +384,7 @@ export default {
 		'mutator-field': MutatorField,
 		'bot-card': BotCard,
 		'script-card': ScriptCard,
-		'script-dependencies': ScriptDependencies,
+		'bot-pool': BotPool,
 		'team-card': TeamCard,
 		'launcher-preference-modal': LauncherPreferenceModal,
 	},
@@ -474,17 +445,9 @@ export default {
 			downloadProgressPercent: 0,
 			downloadStatus: '',
 			showBotpackUpdateSnackbar: false,
-			botNameFilter: '',
 			appearancePath: '',
 			recommendations: null,
 			downloadModalTitle: "Downloading Bot Pack",
-			categories: categories,
-			primaryCategoryOptions: Object.values(categories).map(ctg => {
-				ctg.options = ctg.categories.map(sc => ({text: sc.name, value: sc}));
-				ctg.selected = ctg.categories[0];
-				return {text: ctg.name, value: ctg};
-			}),
-			primaryCategorySelected: categories.all,
 		}
 	},
 
@@ -630,36 +593,6 @@ export default {
 			eel.scan_for_bots()(this.botsReceived);
 			eel.scan_for_scripts()(this.scriptsReceived);
 		},
-		passesFilter: function(runnable) {
-			let category = this.secondaryCategorySelected;
-
-			// hide runnable when its name doesn't match the search filter
-			// if the filter is an empty string, anything matches
-			if (!runnable.name.toLowerCase().includes(this.botNameFilter.toLowerCase()))
-				return false;
-			
-			// only display Human when it's not on any of the teams
-			if (runnable.type === 'human')
-				return !this.blueTeam.concat(this.orangeTeam).includes(HUMAN);
-
-			// show psyonix bots only in specific categories
-			if (runnable.type === 'psyonix')
-				return category.includePsyonixBots;
-
-			// if a script is enabled, display it regardless of which category is selected
-			// except for the script dependencies, where all scripts are displayed already
-			if (runnable.type === 'script' && !category.displayScriptDependencies && runnable.enabled)
-				return true;
-
-			let allowedTags = runnable.type === 'script' ? category.scripts : category.bots;
-			if (allowedTags) {
-				if (allowedTags === '*') {
-					return true;
-				}
-				return runnable.info.tags.some(tag => allowedTags.includes(tag));
-			}
-			return false;
-		},
 		botLoadHandler: function (response) {
 			this.$bvModal.hide('new-bot-modal');
 			this.showProgressSpinner = false;
@@ -781,7 +714,7 @@ export default {
 			eel.get_folder_settings()(this.folderSettingsReceived);
 			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
 			eel.get_match_options()(this.matchOptionsReceived)
-			this.primaryCategorySelected = this.categories.standard;
+			this.$refs.botPool.setDefaultCategory();
 			this.isBotpackUpToDate = true;
 		},
 
@@ -852,14 +785,9 @@ export default {
 		activeBot: function() {
 			return this.$store.state.activeBot;
 		},
-		secondaryCategorySelected: function() {
-			return this.primaryCategorySelected.selected;
-		},
-		displayedBotsCount: function() {
-			return this.botPool.filter(this.passesFilter).length;
-		},
-		displayedScriptsCount: function() {
-			return this.scriptPool.filter(this.passesFilter).length;
+		displayHumanInBotPool: function() {
+			// only display Human when it's not on any of the teams
+			return !this.blueTeam.concat(this.orangeTeam).some(bot => bot.type === "human");
 		},
 	},
 	created: function () {
