@@ -135,13 +135,15 @@ class RepoDownloader:
 
         # Unfortunately we can't know the size of the zip file before downloading it,
         # so we have to get the size from the GitHub API.
-        # Github's compression ratio for the botpack is around 75%
-        self.estimated_zip_size = get_repo_size(repo_full_name) * 0.75
+        self.estimated_zip_size = get_repo_size(repo_full_name)
+        if self.estimated_zip_size:
+            # Github's compression ratio for the botpack is around 75%
+            self.estimated_zip_size *= 0.75
 
         # If we fail to get the repo size, set it to a fallback value,
         # so the progress bar will show at least some progress.
         # Let's assume the zip file is around 60 MB.
-        if not self.estimated_zip_size:
+        else:
             self.estimated_zip_size = 60_000_000
 
         try:
