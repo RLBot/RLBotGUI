@@ -17,7 +17,7 @@ const STARTING_BOT_POOL = [
 export default {
 	name: 'match-setup',
 	template: /*html*/`
-	<div>
+	<div class="noscroll-flex flex-grow-1">
 	<b-navbar class="navbar">
 		<b-navbar-brand>
 			<img class="logo" src="imgs/rlbot_logo.png">
@@ -65,7 +65,7 @@ export default {
 			</b-dropdown>
 		</b-navbar-nav>
 	</b-navbar>
-	<b-container fluid class="rlbot-main-config">
+	<b-container fluid class="rlbot-main-config noscroll-flex flex-grow-1">
 
 	
 
@@ -81,9 +81,9 @@ export default {
 	</b-modal>
 
 
-		<b-card class="bot-pool">
-			<div class="center-flex mb-3">
-				<span class="rlbot-card-header">Bots</span>
+		<b-card no-body class="bot-pool noscroll-flex flex-grow-1">
+			<div class="center-flex my-2">
+				<span class="rlbot-card-header ml-1">Bots</span>
 				<b-dropdown class="ml-2 mr-2">
 					<template v-slot:button-content><b-icon icon="plus"/>Add</template>
 					<b-dropdown-item  @click="updateBotPack()">
@@ -121,6 +121,7 @@ export default {
 				@bot-clicked="addToTeam($event, teamSelection)"
 				ref="botPool"
 				:display-human="displayHumanInBotPool"
+				class="noscroll-flex"
 			/>
 
 		</b-card>
@@ -168,7 +169,7 @@ export default {
 
 				<span style="flex-grow: 1"></span>
 
-				<b-button @click="startMatch()" variant="success" size="lg" :disabled="matchStarting" class="start-match-btn">
+				<b-button @click="startMatch()" variant="success" size="lg" :disabled="matchStarting" class="start-match-btn" style="margin-top: -10px;">
 					<span v-if="matchStarting">Starting match</span>
 					<span v-else-if="gameAlreadyLaunched">Start another match</span>
 					<span v-else>Launch Rocket League<br>and start match</span>
