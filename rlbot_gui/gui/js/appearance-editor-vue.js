@@ -152,8 +152,8 @@ export default {
 				this.config = await eel.get_looks(path)();
 			},
 			randomizeTeamLoadout: function(team) {
-				this.config[team].team_color_id = Math.round(Math.random() * 70);
-				this.config[team].custom_color_id = Math.round(Math.random() * 105);
+				this.config[team].team_color_id = Math.floor(Math.random() * 70);
+				this.config[team].custom_color_id = Math.floor(Math.random() * 105);
 
 				for (const itemField of this.$refs[team]) {
 					itemField.selectRandomItem();

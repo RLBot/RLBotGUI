@@ -82,12 +82,11 @@
   border-color: #929292;
 }
 
-.colorpicker-menu {
-  max-width: 1000px;
-}
-
-.colorpicker-menu .md-list {
-  padding: 5px;
+.colorpicker-menu .b-dropdown-text {
+  padding: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: -5px;
 }
 
 .colorpicker-menu td {
@@ -109,12 +108,11 @@
 }
 
 .color-indicator {
-  border-radius: 16px;
-  width: 32px;
-  height: 32px;
+  border-radius: 12px;
+  width: 24px;
+  height: 24px;
   display: inline-block;
   vertical-align: middle;
-  margin-right: 20px;
 }
 
 #appearance-editor-dialog .form-group {

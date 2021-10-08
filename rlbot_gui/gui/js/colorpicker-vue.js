@@ -8,8 +8,13 @@ export default {
     },
 	template: `
         <span v-if="colors">
-            <b-dropdown :text="text">
-                <b-dropdown-text>
+            <b-dropdown>
+                <template #button-content>
+                    <span class="color-indicator" :style="indicatorColorStyle"></span>
+                    {{ text }}
+                </template>
+
+                <b-dropdown-text class="colorpicker-menu">
                     <table style="border-spacing: 0;">
                         <tr v-for="i in rows">
                             <td v-for="j in columns" :style="getColorStyle(getColorID(i, j))">
@@ -22,7 +27,6 @@ export default {
                     </table>
                 </b-dropdown-text>
             </b-dropdown>
-            <span class="color-indicator" :style="indicatorColorStyle"></span>
         </span>
 	`,
 	data () {
