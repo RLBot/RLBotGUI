@@ -523,7 +523,7 @@ export default {
 			this.updateBGImage(this.matchSettings.map);
 		},
 		updateBGImage: function(mapName) {
-			let bodyStyle = {backgroundImage: 'url(../imgs/arenas/' + mapName + '.jpg)'};
+			let bodyStyle = {backgroundImage: 'url(../imgs/arenas/' + mapName + '.jpg), url(../imgs/arenas/UtopiaRetro.jpg)'};
 			this.$emit('background-change', bodyStyle);
 		},
 		downloadBotPack: function() {
