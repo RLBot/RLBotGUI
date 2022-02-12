@@ -9,7 +9,7 @@ This stands for the Rocket League Bot Graphical User Interface via the Linux Ins
 4. You will be asked to provide your sudo password. The RLBotGUI requires sudo in order to run:
 
    - `sudo apt install software-properties-common` (If needed)
-   - `sudo adt-repository ppa:deadsnakes/ppa` (If needed; this is the Linux Python archive - https://github.com/deadsnakes)
+   - `sudo add-apt-repository ppa:deadsnakes/ppa` (If needed; this is the Linux Python archive - https://github.com/deadsnakes)
    - `sudo apt update`
    - `sudo apt install build-essential python3.7-dev python3.7-venv python3-distutils` (If needed)
 
