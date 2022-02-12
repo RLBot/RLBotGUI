@@ -2,12 +2,11 @@
 
 set +v
 
-echo "Installing RLBotGUI if necessary, then launching!"
+echo "Installing/upgrading RLBotGUI if necessary, then launching!"
 echo ""
 
 if [ ! -d "$HOME/.RLBotGUI" ]
 then
-    sudo apt-get update
     mkdir "$HOME/.RLBotGUI"
 fi
 
@@ -18,70 +17,52 @@ pushd "$HOME/.RLBotGUI"
 python3.7 -V
 if [ $? -gt 0 ]
 then
-    echo ""
+    echo
     echo "Invalid Python install. Installing Python 3.7, and possibly not present dependencies..."
-    echo ""
-    sudo apt-get install software-properties-common
+    echo
+    sudo apt install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
-    sudo apt-get update
-    sudo apt-get install python3.7
+    sudo apt update
+    sudo apt install python3.7
+
+    # Instead of waiting to see if these aren't installed, just install them. If they're already installed, then nothing will happen.
+    echo
+    echo "Installing build-essential, python3.7-dev, python3.7-venv, python3-distutils..."
+    echo
+    sudo apt install build-essential python3.7-dev python3.7-venv python3-distutils
 fi
 
 # Check if the virtual environment exists
 
 if [ ! -e "$HOME/.RLBotGUI/env/bin/activate" ]
 then
-    # Instead of waiting to see if these aren't installed, just install them. If they're already installed, then nothing will happen.
-    echo ""
-    echo "Installing build-essential, python3.7-venv, python3.7-dev, python3-distutils, and curl if they're needed"
-    echo ""
-    sudo apt-get install build-essential
-    sudo apt-get install python3.7-venv
-    sudo apt-get install python3.7-dev
-    sudo apt-get install python3-distutils
-    sudo apt-get install curl
-    sudo apt autoremove
-	
-    # Create the virutal environment
-    # There's currently a bug in Ubuntu, so we must create the venv without pip and then manually install it
-
-    echo ""
+    echo
     echo "Creating the Python 3.7 Virtual Environment"
-    echo ""
+    python3.7 -m venv env
+fi
 
-    python3.7 -m venv --without-pip env
+# Enter the virtual environment
+source ./env/bin/activate
 
-    # Enter the virtual environment
-    source ./env/bin/activate
-
-    # Install pip, wheel and setuptools
-    sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-
-    python get-pip.py
-	
-    # Pip is now installed, so we can remove get-pip.py as it's no longer needed
-    sudo rm get-pip.py
-
-    # Install packages
-	
-    pip install eel rlbot_gui rlbot
-
+# Check for an internet connection
+ping -c 1 pypi.org >/dev/null 2>&1
+if [ $? -eq 0 ]
+then
+    echo
+    echo "Checking for updates..."
+    echo
+    python -m pip install -U pip
+    pip install -U setuptools wheel
+    pip install -U eel rlbot_gui rlbot
 else
-    # Enter the virtual environment and upgrade all packages
-    echo ""
-    echo "Activating virtual environment"
-    echo ""
-    source ./env/bin/activate
-	
-    echo ""
-    echo "Updating packages"
-    echo ""
-    pip install --upgrade pip wheel setuptools eel rlbot_gui rlbot
+    echo
+    echo "No internet connection, skipping update check"
+    echo "NOTE - INTERNET IS REQURIED FOR FIRST TIME LAUNCHES"
 fi
 
 # Launch the GUI
 
-echo ""
+echo
 echo "Launching RLBotGUI"
-echo ""
+echo
 python -c "from rlbot_gui import gui; gui.start()"
