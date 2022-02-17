@@ -61,11 +61,17 @@ def start_match(bot_list, match_settings):
     try:
         testSetupManager = SetupManager()
         temp, port = gateway_util.find_existing_process()
+        if port is None:
+            # RLBot.exe is not running, but Rocket League might be. That's a situation we can recover from, RLBot.exe
+            # will be booted up using the ideal port later, so assume that port.
+            port = gateway_util.IDEAL_RLBOT_PORT
         del temp
-        testSetupManager.is_rocket_league_running(port);
-    except Exception:
+        # It's fine if rocket league is not running, this would just return false and we'd proceed. What we're checking
+        # for is an exception thrown when rocket league IS running but without the necessary flags or a mismatched port.
+        testSetupManager.is_rocket_league_running(port)
+    except Exception as e:
         eel.noRLBotFlagPopup()
-        print("Error starting match. This is probably due to Rocket League not being started under the -rlbot flag.")
+        print(f"Error starting match. This is probably due to Rocket League not being started under the -rlbot flag. {e}")
     else:
         eel.spawn(start_match_helper, bot_list, match_settings, launcher_prefs)
 
