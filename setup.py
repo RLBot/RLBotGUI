@@ -14,7 +14,7 @@ setuptools.setup(
     install_requires=[
         'numba==0.48.0',
         'scipy',
-        'numpy==1.19.3',
+        'numpy',
         'RLUtilities',  # Used by Snek
         'websockets',  # Needed for scratch bots
         'selenium',  # Needed for scratch bots
