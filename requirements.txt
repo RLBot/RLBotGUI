@@ -8,3 +8,4 @@ pip
 gevent
 eel>=0.12
 PyQt5
+show-in-file-manager

@@ -39,6 +39,8 @@ from rlbot import gateway_util
 from rlbot_gui.story import story_runner
 ####
 
+from showinfm import show_in_file_manager
+
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
 MAPPACK_FOLDER = 'RLBotMapPackDeletable'
@@ -581,10 +583,9 @@ def get_recommendations():
 
 @eel.expose
 def show_path_in_explorer(path_str):
-    import subprocess
     path = Path(path_str)
     directory = path if path.is_dir() else path.parent
-    subprocess.Popen(f'explorer "{directory}"')
+    show_in_file_manager(str(directory))
 
 
 @eel.expose
