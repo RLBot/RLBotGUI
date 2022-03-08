@@ -1,6 +1,7 @@
 import json
 import multiprocessing as mp
 import os
+import platform
 import tempfile
 import time
 import urllib.request
@@ -246,6 +247,25 @@ class BotpackUpdater:
                     with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
                         zip_ref.extractall(local_folder_path)
 
+                        # Zip was made on Windows using Powershell
+                        # Files will all be called something like "RLBotPack\Necto\bot.cfg" instead of being in their folders
+                        # All we need to do is loop through the files and rename them
+                        if platform.system() != 'Windows':
+                            print("Not on Windows, placing files in their folders")
+                            members = zip_ref.namelist()
+
+                            for zipinfo in members:
+                                if zipinfo.count("\\") == 0:
+                                    continue
+
+                                old_path = local_folder_path / zipinfo
+                                new_path = local_folder_path / zipinfo.replace("\\", "/")
+
+                                if not os.path.isdir(new_path.parent):
+                                    os.makedirs(new_path.parent)
+
+                                os.rename(old_path, new_path)
+
                     with open(local_folder_path / ".deleted", "r", encoding="utf-16") as deleted_ref:
                         files = deleted_ref.readlines()
 
@@ -254,6 +274,9 @@ class BotpackUpdater:
                                 file_name = local_folder_path / line.replace("\n", "")
                                 if os.path.isfile(file_name):
                                     os.remove(file_name)
+
+                    # clean up .deleted
+                    os.remove(local_folder_path / ".deleted")
                                     
                     # encase something goes wrong in the future, we can save our place between commit upgrades
                     settings.setValue(RELEASE_TAG, f"incr-{tag}")
