@@ -1,4 +1,5 @@
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -38,8 +39,6 @@ from rlbot import gateway_util
 #### LOAD JUST TO EXPOSE STORY_MODE
 from rlbot_gui.story import story_runner
 ####
-
-from showinfm import show_in_file_manager
 
 DEFAULT_BOT_FOLDER = 'default_bot_folder'
 BOTPACK_FOLDER = 'RLBotPackDeletable'
@@ -583,9 +582,18 @@ def get_recommendations():
 
 @eel.expose
 def show_path_in_explorer(path_str):
+    import subprocess
+
     path = Path(path_str)
     directory = path if path.is_dir() else path.parent
-    show_in_file_manager(str(directory))
+    path_str = str(directory)
+
+    if platform.system() == "Windows":
+        subprocess.Popen(["explorer", path_str])
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path_str])
+    else:
+        subprocess.Popen(["xdg-open", path_str])
 
 
 @eel.expose
