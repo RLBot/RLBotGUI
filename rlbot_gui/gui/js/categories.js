@@ -1,6 +1,6 @@
 export default {
     all: {
-        name: "All",
+        name: "All bots",
         categories: [
             {
                 bots: "*",
