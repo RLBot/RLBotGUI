@@ -1,4 +1,5 @@
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -582,9 +583,17 @@ def get_recommendations():
 @eel.expose
 def show_path_in_explorer(path_str):
     import subprocess
+
     path = Path(path_str)
     directory = path if path.is_dir() else path.parent
-    subprocess.Popen(f'explorer "{directory}"')
+    path_str = str(directory)
+
+    if platform.system() == "Windows":
+        subprocess.Popen(["explorer", path_str])
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path_str])
+    else:
+        subprocess.Popen(["xdg-open", path_str])
 
 
 @eel.expose
