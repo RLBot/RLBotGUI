@@ -261,6 +261,12 @@ class BotpackUpdater:
                                 old_path = local_folder_path / zipinfo
                                 new_path = local_folder_path / zipinfo.replace("\\", "/")
 
+                                if zipinfo[-1] == "\\":
+                                    if not os.path.exists(new_path):
+                                        os.makedirs(new_path)
+                                    os.remove(old_path)
+                                    continue
+
                                 if not os.path.isdir(new_path.parent):
                                     os.makedirs(new_path.parent)
 
