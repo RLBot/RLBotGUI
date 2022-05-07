@@ -5,8 +5,9 @@ export default {
 	<div>
 		<div>
 			<b-form-group>
+				<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="epic">Try All</b-form-radio>
 				<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="steam">Steam</b-form-radio>
-				<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="epic">Epic Games</b-form-radio>
+				<b-form-radio v-model="launcherSettings.preferred_launcher" name="launcher-radios" value="epic_only">Epic Games</b-form-radio>
 			</b-form-group>
 		</div>
 		<b-button variant="primary" class="mt-3" @click="saveLauncherSettings()">Save</b-button>

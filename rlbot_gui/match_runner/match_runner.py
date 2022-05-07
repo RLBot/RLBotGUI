@@ -220,10 +220,15 @@ def start_match_helper(bot_list: List[dict], match_settings: dict, launcher_pref
     match_config.script_configs = [create_script_config(script) for script in match_settings['scripts']]
 
     sm = get_fresh_setup_manager()
-    setup_match(sm , match_config, launcher_prefs)
+    try:
+        setup_match(sm, match_config, launcher_prefs)
+    except Exception as e:
+        print(e)
+        eel.matchStartFailed(str(e))
+        return
+
     # Note that we are not calling infinite_loop because that is not compatible with the way eel works!
     # Instead we will reproduce the important behavior from infinite_loop inside this file.
-
     eel.matchStarted()
 
 

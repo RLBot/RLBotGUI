@@ -1,3 +1,4 @@
+import mimetypes
 import os
 import platform
 import shutil
@@ -743,6 +744,8 @@ def init_settings():
 
 def start():
     init_settings()
+    # Some people get defaulted to text/plain for some reason, and Chrome forbids that.
+    mimetypes.add_type('text/javascript', '.js')
     gui_folder = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'gui')
     eel.init(gui_folder)
 
