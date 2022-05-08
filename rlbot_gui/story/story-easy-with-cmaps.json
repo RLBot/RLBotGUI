@@ -173,7 +173,7 @@
                 {
                     "id": "CHAMP-3",
                     "humanTeamSize": 3,
-                    "opponentBots": ["diablo", "lanfear", "manticore", "atlas"],
+                    "opponentBots": ["diablo", "lanfear", "phoenix", "atlas"],
                     "map": "ChampionsField_Day",
                     "display": "These are mythical and magical cars. Can you take them on in a 3v4?"
                 },

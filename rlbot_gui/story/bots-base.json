@@ -89,10 +89,10 @@
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "The Forsaken", "Lanfear.cfg"]
     },
-    "manticore": {
-        "name": "Manticore",
+    "phoenix": {
+        "name": "Phoenix",
         "type": "rlbot",
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "manticore", "manticore.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "PhoenixCS", "phoenix.cfg"]
     },
     "atlas": {
         "name": "Atlas",

@@ -184,7 +184,7 @@
                 {
                     "id": "CHAMP-3",
                     "humanTeamSize": 3,
-                    "opponentBots": ["kamael", "diablo", "lanfear", "manticore", "atlas"],
+                    "opponentBots": ["kamael", "diablo", "lanfear", "phoenix", "atlas"],
                     "map": "ChampionsField_Day",
                     "display": "These are mythical and magical cars. Can you take them on in a 3v5?"
                 },
