@@ -528,7 +528,7 @@ export default {
 		},
 		downloadBotPack: function() {
 			this.showBotpackUpdateSnackbar = false;
-			this.downloadModalTitle = "Downloading Bot Pack" 
+			this.downloadModalTitle = "Downloading Bot Pack"
 			this.$bvModal.show('download-modal');
 			this.downloadStatus = "Starting";
 			this.downloadProgressPercent = 0;
@@ -536,7 +536,7 @@ export default {
 		},
 		updateBotPack: function() {
 			this.showBotpackUpdateSnackbar = false;
-			this.downloadModalTitle = "Updating Bot Pack" 
+			this.downloadModalTitle = "Updating Bot Pack"
 			this.$bvModal.show('download-modal');
 			this.downloadStatus = "Starting";
 			this.downloadProgressPercent = 0;
@@ -544,7 +544,7 @@ export default {
 		},
 		updateMapPack: function() {
 			this.showBotpackUpdateSnackbar = false;
-			this.downloadModalTitle = "Downloading Custom Maps" 
+			this.downloadModalTitle = "Downloading Custom Maps"
 			this.$bvModal.show('download-modal');
 			this.downloadStatus = "Starting";
 			this.downloadProgressPercent = 0;
@@ -768,6 +768,13 @@ export default {
 			function matchStarted(){
 				self.matchStarting = false;
 				self.gameAlreadyLaunched = true;
+			}
+
+			eel.expose(matchStartFailed)
+			function matchStartFailed(message){
+				self.matchStarting = false;
+				self.snackbarContent = "Error starting match: " + message + "\n See console for more details.";
+				self.showSnackbar = true;
 			}
 
 			eel.expose(updateDownloadProgress);

@@ -12,9 +12,15 @@ def load_settings() -> QSettings:
 
 
 def launcher_preferences_from_map(launcher_preference_map: dict) -> RocketLeagueLauncherPreference:
+    exe_path = launcher_preference_map['rocket_league_exe_path']
+    if not exe_path:
+        exe_path = None  # Don't pass in an empty string, pass None instead so it will be ignored.
+
     return RocketLeagueLauncherPreference(
         launcher_preference_map['preferred_launcher'],
-        use_login_tricks=True)  # Epic launch now ONLY works with login tricks
+        use_login_tricks=True,  # Epic launch now ONLY works with login tricks
+        rocket_league_exe_path=exe_path,
+    )
 
 
 def load_launcher_settings():
