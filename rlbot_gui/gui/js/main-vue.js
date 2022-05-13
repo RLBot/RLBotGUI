@@ -144,10 +144,13 @@ export default {
 			<span class="rlbot-card-header">Match Settings</span>
 			<div style="display:flex; align-items: flex-end">
 
-				<div>
+				<div style="max-width: 250px">
 					<label for="map_selection">Map</label>
 					<b-form-select v-model="matchSettings.map" id="map_selection" @change="updateBGImage(matchSettings.map)">
-						<b-form-select-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">{{map}}</b-form-select-option>
+						<b-form-select-option v-for="map in matchOptions.map_types" :key="map" v-bind:value="map">
+							{{map}}
+							<span v-if="map == 'BeckwithPark_Midnight'">(DO NOT SELECT)</span> <!-- temporary until https://github.com/RLBot/RLBot/issues/523 is fixed -->
+						</b-form-select-option>
 					</b-form-select>
 				</div>
 				<div class="ml-2">
