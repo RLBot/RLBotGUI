@@ -428,7 +428,7 @@ def get_match_options():
 def install_package(package_string):
     exit_code = subprocess.call([sys.executable, "-m", "pip", "install", '--upgrade', '--no-warn-script-location', package_string])
     print(exit_code)
-    return {'exitCode': exit_code, 'package': package_string}
+    return {'exitCode': exit_code, 'packages': [package_string]}
 
 
 @eel.expose
@@ -440,9 +440,10 @@ def install_requirements(config_path):
 
     if bundle.requirements_file:
         exit_code = install_requirements_file(bundle.requirements_file)
-        return {'exitCode': exit_code, 'package': bundle.requirements_file}
+        installed_packages = [r.line for r in bundle.get_missing_python_packages() + bundle.get_python_packages_needing_upgrade()]
+        return {'exitCode': exit_code, 'packages': installed_packages}
     else:
-        return {'exitCode': 1, 'package': None}
+        return {'exitCode': 1, 'packages': None}
 
 
 def get_last_botpack_commit_id():
