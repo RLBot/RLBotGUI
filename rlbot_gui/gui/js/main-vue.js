@@ -724,10 +724,20 @@ export default {
 
 		onInstallationComplete: function (result) {
 			let message = result.exitCode === 0 ? 'Successfully installed ' : 'Failed to install ';
-			message += result.package;
+			message += result.packages.join(", ");
 			this.snackbarContent = message;
 			this.showSnackbar = true;
 			this.showProgressSpinner = false;
+
+			// remove missing packages from other bots and maybe hide the yellow triangle
+			if (result.exitCode === 0) {
+				for (const bot of this.botPool) if (bot.missing_python_packages) {
+					bot.missing_python_packages = bot.missing_python_packages.filter(pkg => !result.packages.includes(pkg));
+					if (bot.missing_python_packages.length == 0 && bot.warn == "pythonpkg") {
+						bot.warn = null;
+					}
+				}
+			}
 		},
 		installPackage: function () {
 			this.showProgressSpinner = true;
