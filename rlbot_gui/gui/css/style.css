@@ -277,6 +277,7 @@ button.icon-button {
   margin-top: 15px;
   margin-bottom: 10px;
   max-width: 250px;
+  max-height: 250px;
 }
 
 .md-dialog{
