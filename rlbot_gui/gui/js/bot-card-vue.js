@@ -15,16 +15,7 @@ export default {
 	},
 	template: /*html*/`
 		<draggable v-model="draggableModel" :options="draggableOptions" style="display: inline;">
-			<runnable-card :runnable="bot" :disabled="disabled" :class="{draggable: draggable}" @click="$emit('click')">
-				<img v-if="bot.logo" :src="bot.logo">
-				<img v-else class="darkened" :src="bot.image">
-				<span class="bot-name">
-					{{ bot.name }}
-					<span v-if="bot.uniquePathSegment" class="unique-bot-identifier">
-						({{ bot.uniquePathSegment }})
-					</span>
-				</span>
-			</runnable-card>
+			<runnable-card :runnable="bot" v-bind="[$props,$attrs]" :class="{draggable: draggable}" @click="$emit('click')">
 		</draggable>
 	`,
 	computed: {

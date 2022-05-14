@@ -11,7 +11,10 @@ export default {
 			<b-form inline>
 				<b-form-checkbox v-model="script.enabled" class="script-switch" switch :disabled="disabled">
 					<img :src="script.logo">
-					<span>{{ script.name }}</span>
+					{{ script.name }}
+					<span v-if="script.uniquePathSegment" class="unique-bot-identifier">
+						&nbsp;({{ script.uniquePathSegment }})
+					</span>
 				</b-form-checkbox>
 			</b-form>
 		</runnable-card>

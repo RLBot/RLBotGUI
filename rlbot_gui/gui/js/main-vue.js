@@ -128,13 +128,13 @@ export default {
 
 		<b-row>
 			<b-col>
-				<team-card v-model="blueTeam" team-class="blu">
+				<team-card v-model="blueTeam" team-class="blu" @botadded="handleBotAddedToTeam">
 					<b-form-radio v-model="teamSelection" name="team-radios" value="blue">Add to Blue Team</b-form-radio>
 				</team-card>
 			</b-col>
 
 			<b-col>
-				<team-card v-model="orangeTeam" team-class="org">
+				<team-card v-model="orangeTeam" team-class="org" @botadded="handleBotAddedToTeam">
 					<b-form-radio v-model="teamSelection" name="team-radios" value="orange">Add to Orange Team</b-form-radio>
 				</team-card>
 			</b-col>
@@ -263,7 +263,8 @@ export default {
 			</div>
 		</b-modal>
 
-		<b-modal id="language-warning-modal" v-if="activeBot && activeBot.warn" title="Compatibility Warning" hide-footer centered>
+		<b-modal id="language-warning-modal" title="Compatibility Warning" hide-footer centered>
+			<div v-if="activeBot && activeBot.warn">
 			<div v-if="activeBot.warn === 'java'">
 				<p><b>{{activeBot.name}}</b> requires Java and it looks like you don't have it installed!</p>
 				To play with it, you'll need to:
@@ -301,6 +302,7 @@ export default {
 					<li>Install it</li>
 					<li>Restart RLBotGUI</li>
 				</ol>
+			</div>
 			</div>
 		</b-modal>
 
@@ -354,7 +356,7 @@ export default {
 			<p>Not sure which bots to play against? Try our recommended picks:</p>
 			<b-list-group>
 				<b-list-group-item v-for="recommendation in recommendations.recommendations">
-					<bot-card v-for="bot in recommendation.bots" :bot="bot" :draggable="false"/>
+					<bot-card v-for="bot in recommendation.bots" :bot="bot" :draggable="false" hidewarning />
 					<b-button variant="primary" class="float-right" @click="selectRecommendation(recommendation.bots)">Select</b-button>
 				</b-list-group-item>
 			</b-list-group>
@@ -491,7 +493,14 @@ export default {
 			} else {
 				this.blueTeam.push(bot);
 			}
+			this.handleBotAddedToTeam(bot);
 		},
+		handleBotAddedToTeam: function(bot) {
+            if (bot.warn) {
+                this.$store.commit('setActiveBot', bot);
+                this.$bvModal.show('language-warning-modal');
+            }
+        },
 		setRandomMap: async function() {
 			if (this.randomMapPool.length == 0) {
 				let response = await fetch("json/standard-maps.json");
@@ -560,7 +569,7 @@ export default {
 		},
 		pickAndEditAppearanceFile: async function() {
 			let path = await eel.pick_location(false)();
-			this.activeBot = null;
+			this.$store.commit('setActiveBot', null);
 			if (path) this.showAppearanceEditor(path);
 		},
 		showPathInExplorer: function (path) {
@@ -615,9 +624,9 @@ export default {
 			freshBots.forEach((bot) => bot.warn = false);
 			freshBots.sort((a, b) => a.name.localeCompare(b.name));
 
+			this.applyLanguageWarnings(freshBots);
 			this.botPool = this.botPool.concat(freshBots);
-			this.applyLanguageWarnings();
-			this.distinguishDuplicateBots();
+			this.distinguishDuplicateBots(this.botPool);
 			this.showProgressSpinner = false;
 		},
 
@@ -627,14 +636,15 @@ export default {
 			freshScripts.forEach((script) => {script.enabled = !!this.matchSettings.scripts.find( (element) => element.path === script.path )});
 			freshScripts.sort((a, b) => a.name.localeCompare(b.name));
 
+			this.applyLanguageWarnings(freshScripts);
 			this.scriptPool = this.scriptPool.concat(freshScripts);
-			this.applyLanguageWarnings();
+			this.distinguishDuplicateBots(this.scriptPool);
 			this.showProgressSpinner = false;
 		},
 
-		applyLanguageWarnings: function () {
+		applyLanguageWarnings: function (bots) {
 			if (this.languageSupport) {
-				this.botPool.concat(this.scriptPool).forEach((bot) => {
+				bots.forEach((bot) => {
 					if (bot.info && bot.info.language) {
 						const language = bot.info.language.toLowerCase();
 						if (!this.languageSupport.java && language.match(/java|kotlin|scala/) && !language.match(/javascript/)) {
@@ -654,12 +664,12 @@ export default {
 			}
 		},
 
-		distinguishDuplicateBots: function() {
-			const uniqueNames = [...new Set(this.botPool.map(bot => bot.name))];
+		distinguishDuplicateBots: function(pool) {
+			const uniqueNames = [...new Set(pool.filter(bot => bot.path).map(bot => bot.name))];
 			const splitPath = bot => bot.path.split(/[\\|\/]/).reverse();
 
 			for (const name of uniqueNames) {
-				const bots = this.botPool.filter(bot => bot.name == name);
+				const bots = pool.filter(bot => bot.name == name);
 				if (bots.length == 1) {
 					bots[0].uniquePathSegment = null;
 					continue;
@@ -697,6 +707,15 @@ export default {
 				this.blueTeam = teamSettings.blue_team;
 				this.orangeTeam = teamSettings.orange_team;
 			}
+			this.distinguishDuplicateBots(this.blueTeam.concat(this.orangeTeam));
+			this.applyLanguageWarnings(this.blueTeam.concat(this.orangeTeam));
+		},
+
+		recommendationsReceived: function (recommendations) {
+			if (recommendations) {
+				recommendations.recommendations.forEach(recommendation => this.applyLanguageWarnings(recommendation.bots));
+				this.recommendations = recommendations;
+			}
 		},
 
 		folderSettingsReceived: function (folderSettings) {
@@ -716,7 +735,7 @@ export default {
 			this.showSnackbar = true;
 			this.$bvModal.hide('download-modal');
 			eel.get_folder_settings()(this.folderSettingsReceived);
-			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
+			eel.get_recommendations()(this.recommendationsReceived);
 			eel.get_match_options()(this.matchOptionsReceived)
 			this.$refs.botPool.setDefaultCategory();
 			this.isBotpackUpToDate = true;
@@ -728,15 +747,16 @@ export default {
 			this.snackbarContent = message;
 			this.showSnackbar = true;
 			this.showProgressSpinner = false;
-
-			// remove missing packages from other bots and maybe hide the yellow triangle
+			
 			if (result.exitCode === 0) {
-				for (const bot of this.botPool) if (bot.missing_python_packages) {
-					bot.missing_python_packages = bot.missing_python_packages.filter(pkg => !result.packages.includes(pkg));
-					if (bot.missing_python_packages.length == 0 && bot.warn == "pythonpkg") {
-						bot.warn = null;
+				// remove missing packages from other bots and maybe hide the yellow triangle
+				for (const runnable of this.allUsableRunnables) if (runnable.missing_python_packages) {
+					runnable.missing_python_packages = runnable.missing_python_packages.filter(pkg => !result.packages.includes(pkg));
+					if (runnable.missing_python_packages.length == 0 && runnable.warn == "pythonpkg") {
+						runnable.warn = null;
 					}
 				}
+				this.$bvModal.hide('language-warning-modal');
 			}
 		},
 		installPackage: function () {
@@ -750,6 +770,7 @@ export default {
 		selectRecommendation: function(bots) {
 			this.blueTeam = [HUMAN];
 			this.orangeTeam = bots.slice();
+			bots.forEach(this.handleBotAddedToTeam);
 			this.$bvModal.hide('recommendations-modal');
 		},
 		startup: function() {
@@ -763,11 +784,11 @@ export default {
 
 			eel.get_language_support()((support) => {
 				this.languageSupport = support;
-				this.applyLanguageWarnings();
+				this.applyLanguageWarnings(this.botPool.concat(this.scriptPool));
 			});
 
 			eel.is_botpack_up_to_date()(this.botpackUpdateChecked);
-			eel.get_recommendations()(recommendations => this.recommendations = recommendations);
+			eel.get_recommendations()(this.recommendationsReceived);
 
 			const self = this;
 
@@ -809,6 +830,13 @@ export default {
 		displayHumanInBotPool: function() {
 			// only display Human when it's not on any of the teams
 			return !this.blueTeam.concat(this.orangeTeam).some(bot => bot.type === "human");
+		},
+		allUsableRunnables: function() {
+			let runnables = this.botPool.concat(this.scriptPool).concat(this.blueTeam).concat(this.orangeTeam).concat(this.matchSettings.scripts);
+			if (this.recommendations) this.recommendations.recommendations.forEach(recommendation => {
+				runnables = runnables.concat(recommendation.bots);
+			});
+			return runnables;
 		},
 	},
 	created: function () {
