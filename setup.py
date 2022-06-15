@@ -12,7 +12,7 @@ setuptools.setup(
     # already bundling those in the pynsist installer.
     # We'll go ahead and list some packages needed by bots in the bot pack, though.
     install_requires=[
-        'numba==0.48.0',
+        'numba==0.55.1',
         'scipy',
         'numpy',
         'RLUtilities',  # Used by Snek
