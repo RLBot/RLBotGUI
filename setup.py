@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '0.0.139'
+__version__ = '0.0.140'
 
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
@@ -18,7 +18,7 @@ setuptools.setup(
         'RLUtilities',  # Used by Snek
         'websockets',  # Needed for scratch bots
         'selenium',  # Needed for scratch bots
-        'PyQt5==5.15.0'  # Used for settings and file pickers currently.
+        'PyQt5==5.15.*'  # Used for settings and file pickers currently.
         ],
     version=__version__,
     description='A streamlined user interface for RLBot.',
