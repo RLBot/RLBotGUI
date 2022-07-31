@@ -39,17 +39,17 @@ export default {
 			launcherSettings: {
 				preferred_launcher: 'epic',
 				use_login_tricks: true,
-				rocket_league_exe_path: '',
+				rocket_league_exe_path: null,
 			},
 		}
 	},
 	computed: {
 		exePathState: function() {
-			if (this.launcherSettings.preferred_launcher == 'steam' || this.launcherSettings.rocket_league_exe_path === '') return null;
+			if (this.launcherSettings.preferred_launcher == 'steam' || !this.launcherSettings.rocket_league_exe_path) return null;
 			return this.launcherSettings.rocket_league_exe_path.endsWith("RocketLeague.exe");
 		},
 		correctedExePath: function() {
-			let path = this.launcherSettings.rocket_league_exe_path;
+			let path = this.launcherSettings.rocket_league_exe_path || '';
 			if (path.endsWith("rocketleague")) {
 				path += "\\Binaries";
 			}

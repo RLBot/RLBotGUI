@@ -221,6 +221,7 @@ def save_match_settings(match_settings):
 def save_launcher_settings(launcher_settings_map):
     settings = load_settings()
     settings.setValue(LAUNCHER_SETTINGS_KEY, launcher_settings_map)
+    print("Saved launcher settings:", launcher_settings_map)
 
 
 @eel.expose
