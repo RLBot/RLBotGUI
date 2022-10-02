@@ -84,12 +84,12 @@ export default {
 			if (runnable.type === 'script' && !category.displayScriptDependencies && runnable.enabled)
 				return true;
 
-			let allowedTags = runnable.type === 'script' ? category.scripts : category.bots;
-			if (allowedTags) {
-				if (allowedTags === '*') {
+			let allowedTag = runnable.type === 'script' ? category.scripts : category.bots;
+			if (allowedTag) {
+				if (allowedTag === '*') {
 					return true;
 				}
-				return runnable.info.tags.some(tag => allowedTags.includes(tag));
+				return runnable.info.tags.includes(allowedTag);
 			}
 			return false;
 		},

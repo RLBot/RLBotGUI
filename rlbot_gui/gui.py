@@ -263,7 +263,7 @@ def read_info(bundle: RunnableConfigBundle):
             'fun_fact': bundle.base_agent_config.get(details_header, 'fun_fact'),
             'github': bundle.base_agent_config.get(details_header, 'github'),
             'language': bundle.base_agent_config.get(details_header, 'language'),
-            'tags': [tag.strip() for tag in raw_tags.split(',')] if raw_tags else [],
+            'tags': [tag.strip() for tag in raw_tags.split(',') if not tag.isspace()] if raw_tags else [],
         }
     return None
 
