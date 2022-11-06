@@ -89,7 +89,7 @@
                 {
                     "id": "WASTELAND-2",
                     "humanTeamSize": 3,
-                    "opponentBots": ["adversity", "diablo", "wildfire"],
+                    "opponentBots": ["adversity", "beast", "wildfire"],
                     "completionConditions": {
                         "win": true,
                         "demoAchievedCount": 2
@@ -101,7 +101,7 @@
         },
         "CAMPANDSNIPE": {
             "description": {
-                "message": "This city has a different feel. Sometimes the ball is possesed, other times its the cars. Be careful, you may be next!",
+                "message": "This city has a different feel. Sometimes the ball is possessed, other times its the cars. Be careful, you may be next!",
                 "prereqs": ["TRYHARD", "PBOOST"],
                 "color": 39
             },
@@ -117,20 +117,13 @@
             {
                 "id": "CS-2",
                 "humanTeamSize": 1,
-                "opponentBots": ["kamael", "baf"],
+                "opponentBots": ["king", "baf"],
                 "limitations": ["half-field"],
                 "completionConditions": {
                     "goalsScored": 1
                 },
                 "map": "AquaDome",
                 "display": "You are making the saves alone! Win heatseeker 1v2!"
-            },
-            {
-                "id": "CS-4",
-                "humanTeamSize": 2,
-                "opponentBots": ["invisibot", "invisibot", "peter"],
-                "map": "NeoTokyo",
-                "display": "Wait where did that car go?"
             },
             {
                 "id": "CS-3",
@@ -146,14 +139,21 @@
                 "opponentBots": ["snek", "peter"],
                 "max_score": "3 Goals",
                 "map": "NeoTokyo",
-                "display": "There's something unnatural-er about these bots"
+                "display": "How does that car turn so fast?"
+            },
+            {
+                "id": "CS-4",
+                "humanTeamSize": 2,
+                "opponentBots": ["invisibot"],
+                "map": "NeoTokyo",
+                "display": "Wait where did that car go?"
             }
             ]
         },
         "CHAMPIONSIAN": {
             "description": {
                 "message": "You have made it far but this is the next level. The odds are stacked against you but if you win here, you will be the Champion of this world.",
-                "prereqs": ["WASTELAND", "CAMPANDSNIPE"],
+                "prereqs": ["WASTELAND"],
                 "color": 69
             },
             "challenges": [
@@ -167,30 +167,37 @@
                 {
                     "id": "CHAMP-2",
                     "humanTeamSize": 2,
-                    "opponentBots": ["botimus", "sdc", "kamael"],
+                    "opponentBots": ["botimus", "sdc", "king"],
                     "map": "ChampionsField_Day",
                     "display": "Things are getting unfair. Can you handle a 2v3 against some of the best solo players?"
                 },
                 {
-                    "id": "CHAMP-5",
+                    "id": "CHAMP-3",
                     "humanTeamSize": 2,
-                    "opponentBots": ["snek", "sniper", "invisibot"],
+                    "opponentBots": ["snek", "sniper", "adversity"],
                     "map": "ChampionsField_Day",
                     "display": "These masters of space and time have united to stop you!"
                 },
                 {
-                    "id": "CHAMP-3",
-                    "humanTeamSize": 3,
-                    "opponentBots": ["kamael", "diablo", "lanfear", "phoenix", "atlas"],
+                    "id": "CHAMP-4",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["element"],
                     "map": "ChampionsField_Day",
-                    "display": "These are mythical and magical cars. Can you take them on in a 3v5?"
+                    "display": "This ML prodigy would like to have a word with you."
                 },
                 {
-                    "id": "CHAMP-4",
+                    "id": "CHAMP-5",
                     "humanTeamSize": 1,
                     "opponentBots": ["bumblebee", "bumblebee", "bumblebee"],
                     "map": "ChampionsField",
                     "display": "1v3! Time to face the beehive."
+                },
+                {
+                    "id": "CHAMP-6",
+                    "humanTeamSize": 1,
+                    "opponentBots": ["nexto"],
+                    "map": "ChampionsField_Day",
+                    "display": "You made it to the top. Time to face the champion."
                 }
             ]
         }

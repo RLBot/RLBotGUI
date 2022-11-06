@@ -121,7 +121,7 @@ class StoryState:
 
     def __init__(self):
         self.version = 1
-        self.story_config = "default" # can be dict for custom config
+        self.story_config = "default"  # can be dict for custom config
         self.team_info = {"name": "", "color_secondary": ""}
         self.teammates = []
         self.challenges_attempts = {}  # many entries per challenge
@@ -194,7 +194,7 @@ class StoryState:
         return s
 
 
-def launch_challenge_with_config(challenge_id, pickedTeammates):
+def launch_challenge_with_config(challenge_id, picked_teammates):
     print(f"In launch_challenge {challenge_id}")
 
     story_id = CURRENT_STATE.story_config
@@ -202,8 +202,7 @@ def launch_challenge_with_config(challenge_id, pickedTeammates):
     all_bots = get_bots_configs(story_id)
     all_scripts = get_scripts_configs(story_id)
 
-
-    match_config = configure_challenge(challenge, CURRENT_STATE, pickedTeammates, all_bots, all_scripts)
+    match_config = configure_challenge(challenge, CURRENT_STATE, picked_teammates, all_bots, all_scripts)
     launcher_settings_map = load_launcher_settings()
     launcher_prefs = launcher_preferences_from_map(launcher_settings_map)
     completed, results = run_challenge(match_config, challenge, CURRENT_STATE.upgrades, launcher_prefs)

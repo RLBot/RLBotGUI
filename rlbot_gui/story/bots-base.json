@@ -134,10 +134,29 @@
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Kamael_family", "peter.cfg"]
     },
+    "oneborg": {
+        "name": "Oneborg",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Oneborg", "src", "bot.cfg"]
+    },
     "invisibot": {
         "name": "Invisibot",
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Invisibot", "src", "invisibot.cfg"]
+    },
+    "king": {
+        "name": "king.",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "King", "King.cfg"]
+    },
+    "element": {
+        "name": "Element",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Element", "bot.cfg"]
+    },
+    "nexto": {
+        "name": "Nexto",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Necto", "Nexto", "bot.cfg"]
     }
-
 }

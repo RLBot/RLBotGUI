@@ -27,7 +27,7 @@ def get_story_config(story_id):
 
 def get_cities(story_id):
     """
-    Get the challenges file specificed by the story_id
+    Get the challenges file specified by the story_id
     """
     return get_story_config(story_id)["cities"]
 

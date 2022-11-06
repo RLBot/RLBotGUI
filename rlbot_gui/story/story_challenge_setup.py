@@ -35,10 +35,11 @@ from rlbot_gui.match_runner.match_runner import get_fresh_setup_manager, setup_m
 
 from rlbot_gui import gui as rlbot_gui  # TODO: Need to remove circular import
 
-WITNESS_ID = random.randint(0, 1e5)
+WITNESS_ID = random.randint(0, 100000)
 RENDERING_GROUP = "STORY"
 
 DEBUG_MODE_SHORT_GAMES = False
+
 
 def setup_failure_freeplay(setup_manager: SetupManager, message: str, color_key="red"):
     setup_manager.shut_down()
@@ -141,7 +142,7 @@ def make_human_config(team: Team):
     return player_config
 
 
-def pysonix_to_player_config(player: dict, team: Team):
+def psyonix_to_player_config(player: dict, team: Team):
     player_config = PlayerConfig()
     player_config.bot = True
     player_config.rlbot_controlled = False
@@ -156,16 +157,15 @@ def pysonix_to_player_config(player: dict, team: Team):
 def bot_to_player(player: dict, team: Team):
     """Helper to choose the right config for a bot"""
     if player["type"] == "psyonix":
-        return pysonix_to_player_config(player, team)
+        return psyonix_to_player_config(player, team)
     else:
         return rlbot_to_player_config(player, team)
 
 
 def make_player_configs(
-    challenge: dict, human_picks: List[int], team_info: dict, teammates: List[dict], all_bots
+    challenge: dict, human_picks: List[int], team_info: dict, all_bots
 ):
-    player_configs = []
-    player_configs.append(make_human_config(Team.BLUE))
+    player_configs = [make_human_config(Team.BLUE)]
 
     for i in range(challenge["humanTeamSize"] - 1):
         print(i)
@@ -253,6 +253,7 @@ def has_user_perma_failed(challenge, manual_stats):
         failed = failed or not survived
     return failed
 
+
 def end_by_mercy(challenge, manual_stats, results):
     """Returns true if the human team is ahead by a lot
     and the other challenges have finished"""
@@ -267,38 +268,38 @@ def end_by_mercy(challenge, manual_stats, results):
 
 def calculate_completion(challenge, manual_stats, results):
     """
-    parse challenge to file completionConditions and evaluate
+    parse challenge to file completion_conditions and evaluate
     each.
     All conditions are "and"
     """
     completed = results["human_won"]
-    if "completionConditions" not in challenge:
+    if "completion_conditions" not in challenge:
         return completed
 
     if has_user_perma_failed(challenge, manual_stats):
         return False
 
-    completionConditions = challenge["completionConditions"]
+    completion_conditions = challenge["completion_conditions"]
 
-    if not completionConditions.get("win", True):
+    if not completion_conditions.get("win", True):
         # the "win" requirement is explicitly off
         completed = True
 
-    if "scoreDifference" in completionConditions:
-        # ignore the team, jsut look at the differential
-        condition = completionConditions["scoreDifference"]
+    if "scoreDifference" in completion_conditions:
+        # ignore the team, just look at the difference
+        condition = completion_conditions["scoreDifference"]
         difference = results["score"][0]["score"] - results["score"][1]["score"]
         completed = completed and (difference >= condition)
 
-    if "demoAchievedCount" in completionConditions:
+    if "demoAchievedCount" in completion_conditions:
         achieved = (
             manual_stats["opponentRecievedDemos"]
-            >= completionConditions["demoAchievedCount"]
+            >= completion_conditions["demoAchievedCount"]
         )
         completed = completed and achieved
 
-    if "goalsScored" in completionConditions:
-        achieved = manual_stats["humanGoalsScored"] >= completionConditions["goalsScored"]
+    if "goalsScored" in completion_conditions:
+        achieved = manual_stats["humanGoalsScored"] >= completion_conditions["goalsScored"]
         completed = completed and achieved
 
     return completed
@@ -323,7 +324,7 @@ class ManualStatsTracker:
         self._last_touch_by_team = [None, None]
         self._last_score_by_team = [0, 0]
 
-    def updateStats(self, gamePacket: GameTickPacket):
+    def update_stats(self, gamePacket: GameTickPacket):
         """
         Update and track stats based on the game packet
         """
@@ -421,7 +422,7 @@ def manage_game_state(
                 print("User ended the match")
                 return early_failure
 
-            stats_tracker.updateStats(packet)
+            stats_tracker.update_stats(packet)
             results = packet_to_game_results(packet)
 
             if has_user_perma_failed(challenge, stats_tracker.stats):
@@ -454,7 +455,6 @@ def manage_game_state(
                     last_boost_bump_time = now
                     human_desired_state.boost_amount = min(human_info.boost + 1, max_boost)
 
-
             if changed:
                 setup_manager.game_interface.set_game_state(game_state)
 
@@ -471,8 +471,6 @@ def manage_game_state(
     return calculate_completion(challenge, stats_tracker.stats, results), results
 
 
-
-
 def run_challenge(
     match_config: MatchConfig, challenge: dict, upgrades: dict, launcher_pref: RocketLeagueLauncherPreference
 ) -> Tuple[bool, dict]:
@@ -481,7 +479,6 @@ def run_challenge(
     setup_match(setup_manager, match_config, launcher_pref)
 
     setup_manager.game_interface.renderer.clear_screen(RENDERING_GROUP)
-    game_results = None
     try:
         game_results = manage_game_state(challenge, upgrades, setup_manager)
     except:
@@ -499,7 +496,7 @@ def run_challenge(
 
 def configure_challenge(challenge: dict, saveState, human_picks: List[int], all_bots, all_scripts):
     player_configs = make_player_configs(
-        challenge, human_picks, saveState.team_info, saveState.teammates, all_bots
+        challenge, human_picks, saveState.team_info, all_bots
     )
     script_configs = make_script_configs(
         challenge, all_scripts
