@@ -89,7 +89,7 @@
                 {
                     "id": "WASTELAND-2",
                     "humanTeamSize": 3,
-                    "opponentBots": ["adversity", "diablo", "wildfire"],
+                    "opponentBots": ["adversity", "beast", "wildfire"],
                     "completionConditions": {
                         "win": true,
                         "demoAchievedCount": 2
@@ -113,13 +113,6 @@
                 "limitations": ["half-field"],
                 "map": "AquaDome",
                 "display": "The ball is moving a lot faster! Win this heatseeker match!"
-            },
-            {
-                "id": "CS-4",
-                "humanTeamSize": 2,
-                "opponentBots": ["invisibot", "invisibot", "peter"],
-                "map": "NeoTokyo",
-                "display": "Wait where did that car go?"
             },
             {
                 "id": "CS-3",
@@ -156,23 +149,30 @@
                 {
                     "id": "CHAMP-2",
                     "humanTeamSize": 3,
-                    "opponentBots": ["botimus", "sdc", "kamael"],
+                    "opponentBots": ["botimus", "sdc", "king"],
                     "map": "ChampionsField_Day",
                     "display": "Take on a crew of some of the best solo players!"
                 },
                 {
                     "id": "CHAMP-5",
                     "humanTeamSize": 2,
-                    "opponentBots": ["snek", "sniper", "invisibot"],
+                    "opponentBots": ["snek", "sniper", "adversity"],
                     "map": "ChampionsField_Day",
                     "display": "These masters of space and time have united to stop you!"
                 },
                 {
                     "id": "CHAMP-3",
                     "humanTeamSize": 3,
-                    "opponentBots": ["diablo", "lanfear", "phoenix", "atlas"],
+                    "opponentBots": ["beast", "lanfear", "phoenix", "atlas"],
                     "map": "ChampionsField_Day",
                     "display": "These are mythical and magical cars. Can you take them on in a 3v4?"
+                },
+                {
+                    "id": "CHAMP-4",
+                    "humanTeamSize": 3,
+                    "opponentBots": ["element"],
+                    "map": "ChampionsField_Day",
+                    "display": "This ML prodigy would like to have a word with you."
                 },
                 {
                     "id": "CHAMP-4",
@@ -180,6 +180,13 @@
                     "opponentBots": ["bumblebee", "bumblebee", "bumblebee"],
                     "map": "ChampionsField",
                     "display": "Time to face the beehive and prove yourself."
+                },
+                {
+                    "id": "CHAMP-6",
+                    "humanTeamSize": 2,
+                    "opponentBots": ["nexto"],
+                    "map": "ChampionsField_Day",
+                    "display": "You made it to the top. Time to face the champion."
                 }
             ]
         }
