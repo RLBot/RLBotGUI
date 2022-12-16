@@ -757,7 +757,6 @@
 1047,Skin,Product_TA ProductsDB.Products.Skin_Import_Anubis,Takumi: Anubis
 1048,Skin,Product_TA ProductsDB.Products.Skin_Import_Combo,Takumi: Combo
 1050,Skin,Product_TA ProductsDB.Products.skin_import_edgedots,Takumi: Dot Matrix
-1052,Skin,Product_TA ProductsDB.Products.Skin_Import_EdgeStatic,Takumi: Distortion
 1056,Skin,Product_TA ProductsDB.Products.Skin_Import_TechArrows,Takumi: Vector
 1059,Skin,Product_TA ProductsDB.Products.Skin_Octane_Dragon,Octane: Dragon Lord
 1060,Skin,Product_TA ProductsDB.Products.skin_octane_edgedots,Octane: Dot Matrix
@@ -1974,6 +1973,7 @@
 3252,Skin,Product_TA ProductsDB.Products.skin_daggy_50th,Fast 4WD: 50th Anniversary
 3253,Skin,Product_TA ProductsDB.Products.skin_daggy_clean,Fast 4WD: Sleek
 3254,Skin,Product_TA ProductsDB.Products.skin_daggy_rt,Fast 4WD: Hot Wheels Race Team
+3255,Skin,Product_TA ProductsDB.Products.skin_import_wallpaper,Takumi: Dolphino
 3256,Wheels,Product_TA ProductsDB.Products.wheel_diggy,MR11
 3257,Skin,Product_TA ProductsDB.Products.skin_daggy_alt,Fast 4WD: Diecast
 3259,Skin,Product_TA ProductsDB.Products.skin_Octane_coloredlogo,Octane: RC Rivals
@@ -2049,6 +2049,7 @@
 3342,SupersonicTrail,Product_TA ProductsDB.Products.ss_strobe,Discotheque
 3343,Wheels,Product_TA ProductsDB.Products.wheel_zooms,Tungsten
 3344,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_colorful,Phantastic
+3348,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_ink_purple,Dragon?s Breath
 3349,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_lightning,Jolted
 3350,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_paladin,Paladin
 3364,Hat,Product_TA ProductsDB.Products.hat_Gnem,Hot Wheels Gorilla
@@ -2124,6 +2125,7 @@
 3461,EngineAudio,Product_TA ProductsDB.Products.engineaudio_train,Locomotive
 3462,Antenna,Product_TA ProductsDB.Products.flag_kindafunny,Kinda Funny
 3465,EngineAudio,Product_TA ProductsDB.Products.engineaudio_ratrod,Rat Rod
+3466,Hat,Product_TA ProductsDB.Products.hat_voodooskull,Snazzy Skull
 3467,Skin,Product_TA ProductsDB.Products.skin_snowflake,Snowstorm
 3468,PremiumInventory,Product_TA ProductsDB.Products.CrateUnlocked_Halloween18,Golden Pumpkin '18
 3469,Skin,Product_TA ProductsDB.Products.skin_cropduster,Formation
@@ -2238,6 +2240,7 @@
 3622,Body,Product_TA ProductsDB.Products.body_enspier_Tier3,Artemis GXT
 3623,Skin,Product_TA ProductsDB.Products.skin_enspier_splat_tierall,Artemis: Splat
 3624,Skin,Product_TA ProductsDB.Products.skin_octane_contemplativerabbit,Octane: Titanfruit
+3625,Skin,Product_TA ProductsDB.Products.skin_octane_slayer,Octane: Dragon Slayer
 3626,Skin,Product_TA ProductsDB.Products.skin_octane_venustrapper,Octane: Venus Trapper
 3627,Skin,Product_TA ProductsDB.Products.skin_geoanim2,Plosion
 3629,Wheels,Product_TA ProductsDB.Products.wheel_zytech,Ulterior
@@ -2456,6 +2459,7 @@
 3947,PlayerBanner,Product_TA ProductsDB.Products.pack_bb_playerbanner,Major League Baseball
 3948,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_bbchi1,Chicago Cubs
 3949,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_bbchi2,Chicago White Sox
+3950,Hat,Product_TA ProductsDB.Products.hat_helmet,Stahlhelm
 3951,GoalExplosion,Product_TA ProductsDB.Products.explosion_poof,Poof
 3952,GoalExplosion,Product_TA ProductsDB.Products.explosion_seasonten01,Season 10 - Bronze
 3953,GoalExplosion,Product_TA ProductsDB.Products.explosion_splash,Big Splash
@@ -2660,6 +2664,7 @@
 4243,Hat,Product_TA ProductsDB.Products.hat_gsph,Sloth's Hat
 4244,Skin,Product_TA ProductsDB.Products.skin_blessed,Glorifier
 4245,Wheels,Product_TA ProductsDB.Products.wheel_bluesteel,Dimonix
+4246,Wheels,Product_TA ProductsDB.Products.wheel_demoneyes,Darkwell
 4248,Skin,Product_TA ProductsDB.Products.skin_pillage,Nox
 4249,Wheels,Product_TA ProductsDB.Products.wheel_crote,Clodhopper
 4250,Wheels,Product_TA ProductsDB.Products.wheel_flowerchild,Flower Child
@@ -2768,6 +2773,7 @@
 4394,Wheels,Product_TA ProductsDB.Products.wheel_moonpaws,Moonpaw
 4395,Wheels,Product_TA ProductsDB.Products.wheel_tw,TP19
 4396,EngineAudio,Product_TA ProductsDB.Products.engineaudio_chip,Sentinel
+4397,Hat,Product_TA ProductsDB.Products.hat_lunchbox_01,Lunchbox - Esper
 4398,Hat,Product_TA ProductsDB.Products.hat_lunchbox_02,Lunchbox - Wasteland
 4399,Hat,Product_TA ProductsDB.Products.hat_lunchbox_03,Lunch Box - Salty Shores
 4400,Hat,Product_TA ProductsDB.Products.hat_peanut,Salty Peanut
@@ -3077,6 +3083,7 @@
 4887,GoalExplosion,Product_TA ProductsDB.Products.explosion_badaboom,Hades Bomb
 4888,Wheels,Product_TA ProductsDB.Products.wheel_TumbaCasa,Boomstick
 4892,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_Carnival,Thermoplastic
+4893,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_metropolis,CutCorner
 4894,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_bluehellfire,Fallen Angel
 4895,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_carrotthief,Carrot Thief
 4896,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_eUnited,eUnited
@@ -3143,9 +3150,24 @@
 4997,Skin,Product_TA ProductsDB.Products.Skin_grain_edgestatic,Fennec: Distortion
 4998,Skin,Product_TA ProductsDB.Products.Skin_Blueprint,W.I.P.
 4999,Wheels,Product_TA ProductsDB.Products.wheel_FormulaTwo,Y.O.U.
+5002,Skin,Product_TA ProductsDB.Products.skin_octane_denmark,Octane: Denmark
+5003,Skin,Product_TA ProductsDB.Products.skin_octane_finland,Octane: Finland
+5005,Skin,Product_TA ProductsDB.Products.skin_octane_italy,Octane: Italy
+5006,Skin,Product_TA ProductsDB.Products.skin_octane_spain,Octane: Spain
+5007,Skin,Product_TA ProductsDB.Products.skin_octane_sweden,Octane: Sweden
 5009,ShopItem,Product_TA ProductsDB.Products.ShopItem_Body_CarCar,Breakout Type-S
+5011,Skin,Product_TA ProductsDB.Products.skin_octane_austria,Octane: Austria
+5015,Skin,Product_TA ProductsDB.Products.skin_octane_Germany,Octane: Germany
+5017,Skin,Product_TA ProductsDB.Products.skin_octane_belgium,Octane: Belgium
+5019,Skin,Product_TA ProductsDB.Products.skin_octane_norway,Octane: Norway
 5020,Body,Product_TA ProductsDB.Products.body_rattrap,Outlaw
 5023,Boost,Product_TA ProductsDB.Products.boost_animesmoke,Righteous Gale
+5025,Skin,Product_TA ProductsDB.Products.skin_octane_wales,Octane: Wales
+5026,Skin,Product_TA ProductsDB.Products.skin_octane_Czech,Octane: Czech Republic
+5027,Skin,Product_TA ProductsDB.Products.skin_octane_switzerland,Octane: Switzerland
+5028,Skin,Product_TA ProductsDB.Products.skin_octane_china,Octane: China
+5029,Skin,Product_TA ProductsDB.Products.skin_octane_japan,Octane: Japan
+5030,Skin,Product_TA ProductsDB.Products.skin_octane_mexico,Octane: Mexico
 5033,SupersonicTrail,Product_TA ProductsDB.Products.ss_animesmoke,Righteous Gale
 5035,Antenna,Product_TA ProductsDB.Products.antenna_carrot,Mr. Carrot
 5036,GoalExplosion,Product_TA ProductsDB.Products.explosion_animesmoke,Righteous Gale
@@ -3315,6 +3337,7 @@
 5307,Skin,Product_TA ProductsDB.Products.Skin_relic,Spatiotemporal
 5309,Skin,Product_TA ProductsDB.Products.skin_shark_stroke,Peregrine TT: Hoodbar
 5310,Skin,Product_TA ProductsDB.Products.Skin_sunsetR,Sunsetter
+5312,Wheels,Product_TA ProductsDB.Products.wheel_yolky,Yolky
 5313,Boost,Product_TA ProductsDB.Products.boost_toon_psplus,Blue Smoke
 5314,SupersonicTrail,Product_TA ProductsDB.Products.ss_ToonRocks_psplus,Blue Rocks
 5315,Skin,Product_TA ProductsDB.Products.skin_shark_lightning,Peregrine TT: Lightning
@@ -3543,6 +3566,7 @@
 5590,Boost,Product_TA ProductsDB.Products.boost_2d_smoke,Anispray
 5592,Wheels,Product_TA ProductsDB.Products.wheel_goblin,Imptekk
 5593,Skin,Product_TA ProductsDB.Products.skin_grain_thornbrow,Fennec: RLCS X
+5599,Skin,Product_TA ProductsDB.Products.skin_octane_Sharpstripe,Octane: Sharp Stripe
 5600,Boost,Product_TA ProductsDB.Products.Boost_lava_jet,Lava
 5603,Skin,Product_TA ProductsDB.Products.skin_unicorn_smood_all,R3MX: Exscinder
 5605,Wheels,Product_TA ProductsDB.Products.wheel_citrus,Optic
@@ -3654,6 +3678,7 @@
 5755,SupersonicTrail,Product_TA ProductsDB.Products.ss_sharkfin,Shark Attack
 5756,Skin,Product_TA ProductsDB.Products.skin_grain_pittsburghknights_esports,Fennec: Pittsburgh Knights
 5757,Skin,Product_TA ProductsDB.Products.skin_grain_eunited_esports,Fennec: eUnited
+5761,Boost,Product_TA ProductsDB.Products.boost_illgraph,Manganese
 5764,PremiumInventory,Product_TA ProductsDB.Products.CrateUnlocked_ChineseNewYear21,Golden Lantern '21
 5765,Blueprint,Product_TA ProductsDB.Products.BP_Series5,Season 2
 5766,Skin,Product_TA ProductsDB.Products.skin_grain_rogue_esports,Fennec: Rogue
@@ -3827,6 +3852,7 @@
 5971,Antenna,Product_TA ProductsDB.Products.flag_mc_silk,Monstercat Silk
 5972,Skin,Product_TA ProductsDB.Products.skin_ramen_simplefade,Dingo: Silencer
 5975,GoalExplosion,Product_TA ProductsDB.Products.explosion_ioncannon,Phoenix Cannon
+5977,Skin,Product_TA ProductsDB.Products.skin_sugarnoggin,Bedeviled
 5979,Body,Product_TA ProductsDB.Products.body_raddish_tier2,Tyranno GXT
 5980,EngineAudio,Product_TA ProductsDB.Products.engineaudio_oblong,Lamborghini Huracán STO
 5981,EngineAudio,Product_TA ProductsDB.Products.engineaudio_s3_03,Heinrich
@@ -4022,6 +4048,8 @@
 6234,Antenna,Product_TA ProductsDB.Products.antenna_dreamcatcher,Dreamcatcher
 6235,Blueprint,Product_TA ProductsDB.Products.Crate_ImportSkins2,Select Favorites
 6236,EngineAudio,Product_TA ProductsDB.Products.engineaudio_train_voice,Iron Horse
+6237,Wheels,Product_TA ProductsDB.Products.wheel_bpad,Boost Boot
+6238,Skin,Product_TA ProductsDB.Products.skin_BendyBoxBand,Splitzer
 6240,EngineAudio,Product_TA ProductsDB.Products.engineaudio_chopper,Steel Horse
 6242,Wheels,Product_TA ProductsDB.Products.wheel_tre,Hasher
 6243,Body,Product_TA ProductsDB.Products.body_norton,Nexus
@@ -4031,9 +4059,11 @@
 6248,Wheels,Product_TA ProductsDB.Products.wheel_twist_infinity,Twista: Infinite
 6249,MusicStingers,Product_TA ProductsDB.Products.Anthem_2ts_vol1_ID_01,W A N T
 6250,MusicStingers,Product_TA ProductsDB.Products.Anthem_2ts_Vol1_ID_02,N E X T 2
+6251,MusicStingers,Product_TA ProductsDB.Products.Anthem_2ts_Vol1_ID_03,G A M B L E O N U
 6252,MusicStingers,Product_TA ProductsDB.Products.Anthem_2ts_Vol1_ID_04,H O L D O N
 6253,MusicStingers,Product_TA ProductsDB.Products.Anthem_2ts_Vol1_ID_05,O P E N U P
 6254,MusicStingers,Product_TA ProductsDB.Products.Album_Anthem_2ts_Vol1,D R I F T
+6256,Wheels,Product_TA ProductsDB.Products.wheel_bpad_inverted,Boost Boot: Inverted
 6258,Skin,Product_TA ProductsDB.Products.skin_grain_bouncecube,Fennec: Tumbling Blocks
 6260,Body,Product_TA ProductsDB.Products.body_heaven,007's Aston Martin Valhalla
 6261,Wheels,Product_TA ProductsDB.Products.wheel_flowerboom,Acero-Florentina
@@ -4041,6 +4071,7 @@
 6268,Skin,Product_TA ProductsDB.Products.skin_feline_b,K.I.T.T.: Reel Life
 6269,Skin,Product_TA ProductsDB.Products.skin_greycar_b,DeLorean Time Machine: Reel Life
 6276,MusicStingers,Product_TA ProductsDB.Products.Anthem_JulieBuchanan_JetFueled,Jet Fueled
+6279,MusicStingers,Product_TA ProductsDB.Products.Anthem_JulieBuchanan_TheBrick,The Brick
 6281,Boost,Product_TA ProductsDB.Products.boost_inky,Phase-R
 6282,Hat,Product_TA ProductsDB.Products.hat_sixty,Bavarian Hat
 6285,Skin,Product_TA ProductsDB.Products.skin_vanquish_tsunami,Merc: Anthrophobe
@@ -4062,6 +4093,7 @@
 6348,Skin,Product_TA ProductsDB.Products.skin_chip_TechArrows,Sentinel: Vector
 6349,Skin,Product_TA ProductsDB.Products.skin_chip_Tsunami,Sentinel: Anthrophobe
 6350,Skin,Product_TA ProductsDB.Products.skin_chip_xmat,Sentinel: Kana
+6363,Skin,Product_TA ProductsDB.Products.skin_Force_comet,Breakout: Agamid
 6377,Skin,Product_TA ProductsDB.Products.skin_grain_omens,Fennec: Martian Wind
 6378,Skin,Product_TA ProductsDB.Products.skin_grain_TechArrows,Fennec: Vector
 6381,Skin,Product_TA ProductsDB.Products.skin_musclecar_atl_h,Dominus: Atlanta Falcons
@@ -4413,6 +4445,7 @@
 6982,Skin,Product_TA ProductsDB.Products.pack_rlcs2122,RLCS '21-'22
 6983,EngineAudio,Product_TA ProductsDB.Products.engineaudio_elm,Ford Mustang Mach-E RLE
 6984,Wheels,Product_TA ProductsDB.Products.wheel_turek_infinite,Canister: Infinite
+6985,Hat,Product_TA ProductsDB.Products.hat_comet,Hot Comet
 6987,Skin,Product_TA ProductsDB.Products.skin_norton_gust,Nexus: Sally
 6988,Wheels,Product_TA ProductsDB.Products.wheel_cured,Pirelli
 6989,Skin,Product_TA ProductsDB.Products.skin_ran_a,McLaren 765LT: McLaren 765 (Silver)
@@ -4578,6 +4611,8 @@
 7179,Skin,Product_TA ProductsDB.Products.skin_musclecar_twankle,Dominus: Hyperspace
 7180,Skin,Product_TA ProductsDB.Products.skin_octane_twankle,Octane: Hyperspace
 7181,Skin,Product_TA ProductsDB.Products.skin_ramen_twankle,Dingo: Hyperspace
+7183,Wheels,Product_TA ProductsDB.Products.wheel_bubu,Jetvanes
+7184,Antenna,Product_TA ProductsDB.Products.antenna_Oilcan,Oil Can
 7185,Wheels,Product_TA ProductsDB.Products.wheel_alpine_radiant,Rival: Radiant
 7186,Wheels,Product_TA ProductsDB.Products.wheel_sunny_holy,Happy Sunbeam: Sacred
 7197,Antenna,Product_TA ProductsDB.Products.flag_mc_aether,Aether
@@ -4724,7 +4759,7 @@
 7342,Hat,Product_TA ProductsDB.Products.hat_fluffy,Nomster
 7343,Body,Product_TA ProductsDB.Products.body_quartz,007's Aston Martin DBS
 7344,Wheels,Product_TA ProductsDB.Products.wheel_quartz,007's Aston Martin DBS
-7346,PaintFinish,Product_TA ProductsDB.Products.paintfinish_quartz,Aston Martin DBS
+7346,PaintFinish,Product_TA ProductsDB.Products.paintfinish_quartz,007's Aston Martin DBS
 7347,Skin,Product_TA ProductsDB.Products.skin_quartz_a,007's Aston Martin DBS: Reel Life
 7348,Antenna,Product_TA ProductsDB.Products.antenna_rattly,Rattler
 7349,Wheels,Product_TA ProductsDB.Products.wheel_bennie,Artifuss
@@ -4841,7 +4876,9 @@
 7479,Wheels,Product_TA ProductsDB.Products.wheel_alpine_infinite,Rival: Infinite
 7481,GoalExplosion,Product_TA ProductsDB.Products.Explosion_ESports_Misfits,Misfits Gaming
 7482,Wheels,Product_TA ProductsDB.Products.wheel_zuka,Gala
+7483,Wheels,Product_TA ProductsDB.Products.wheel_junk,Pointed Posts
 7484,GoalExplosion,Product_TA ProductsDB.Products.Explosion_ESports_BDS,Team BDS
+7485,GoalExplosion,Product_TA ProductsDB.Products.explosion_bender,Elemental
 7486,Wheels,Product_TA ProductsDB.Products.wheel_duckie,Scrub-a-Dub
 7487,EngineAudio,Product_TA ProductsDB.Products.engineaudio_maser,Mamba
 7488,GoalExplosion,Product_TA ProductsDB.Products.Explosion_ESports_Dignitas,Dignitas
@@ -4873,8 +4910,10 @@
 7516,Wheels,Product_TA ProductsDB.Products.wheel_rage_A,Lamborghini Countach LPI 800-4
 7517,Skin,Product_TA ProductsDB.Products.skin_rage_a,Lamborghini Countach LPI 800-4: Argento Luna
 7518,Skin,Product_TA ProductsDB.Products.skin_scar_b_04,NASCAR Next Gen Chevrolet Camaro: Richard Childress Racing #8
+7519,Skin,Product_TA ProductsDB.Products.skin_JaneSaid,Iced
 7520,GoalExplosion,Product_TA ProductsDB.Products.pack_esportsexplosions,RLCS 2021-22
 7521,Skin,Product_TA ProductsDB.Products.Skin_WeekendWaves,Wacky Taffy
+7522,Wheels,Product_TA ProductsDB.Products.wheel_kuri,Forerunner
 7523,Wheels,Product_TA ProductsDB.Products.wheel_rage_B,Lamborghini Countach 70?s
 7524,Wheels,Product_TA ProductsDB.Products.wheel_elvesb,Brainfreeze
 7526,Skin,Product_TA ProductsDB.Products.skin_ran_fronds,McLaren 765LT: Miami Grand Prix
@@ -4941,6 +4980,7 @@
 7596,EngineAudio,Product_TA ProductsDB.Products.Engineaudio_Cured,Formula 1 2022
 7597,Wheels,Product_TA ProductsDB.Products.wheel_dimen,Halcyon
 7598,Skin,Product_TA ProductsDB.Products.Skin_bartees,Affluenter
+7599,Skin,Product_TA ProductsDB.Products.skin_RainyPeaks,Sharpstorm
 7600,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_chatter,Colorful Canines
 7601,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_fractureB,Formula 1 2022
 7602,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_sassy,Nissan Z Performance
@@ -5002,6 +5042,8 @@
 7692,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_Spotlight,Premiere
 7694,Skin,Product_TA ProductsDB.Products.skin_lux_branded,Maestro: Apollo
 7695,Wheels,Product_TA ProductsDB.Products.wheel_ninja_gilded,Spyder: Anniversary Edition
+7696,Body,Product_TA ProductsDB.Products.body_whiplash,Whiplash
+7697,Wheels,Product_TA ProductsDB.Products.wheel_whiplash,Whiplash
 7698,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_AT7,Accolade VII
 7699,Hat,Product_TA ProductsDB.Products.hat_fancyglasses,Fancy Shades
 7700,SupersonicTrail,Product_TA ProductsDB.Products.ss_doughnut,Dunker
@@ -5010,6 +5052,7 @@
 7705,MusicStingers,Product_TA ProductsDB.Products.album_anthem_kevinriepl_vol1,Voltaic Valley
 7710,MusicStingers,Product_TA ProductsDB.Products.Anthem_KevinRiepl_Vacillate,Vacillate
 7711,MusicStingers,Product_TA ProductsDB.Products.album_anthem_phillboucher_vol1,Catharsis
+7712,MusicStingers,Product_TA ProductsDB.Products.anthem_phillboucher_awakening,Awakening
 7713,MusicStingers,Product_TA ProductsDB.Products.Anthem_PhillBoucher_Blind,Blind
 7714,MusicStingers,Product_TA ProductsDB.Products.anthem_phillboucher_cage,Cage
 7722,MusicStingers,Product_TA ProductsDB.Products.anthem_rlcs_theme,RLCS Theme
@@ -5038,6 +5081,7 @@
 7750,Antenna,Product_TA ProductsDB.Products.flag_mc_helloworld,helloworld
 7752,PlayerAvatarBorder,Product_TA ProductsDB.Products.AvatarBorder_DecoArt,Deco
 7753,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_DecoArt,Deco Palm
+7754,Wheels,Product_TA ProductsDB.Products.wheel_ming,Dynasty
 7755,Skin,Product_TA ProductsDB.Products.Skin_Moonstar,Starliner
 7758,Wheels,Product_TA ProductsDB.Products.wheel_FR22,FR-22
 7762,MusicStingers,Product_TA ProductsDB.Products.MX_anthem_Pride2022_03,Rise Like a Phoenix
@@ -5049,6 +5093,7 @@
 7772,Body,Product_TA ProductsDB.Products.body_rafael,Ferrari 296 GTB
 7773,Wheels,Product_TA ProductsDB.Products.wheel_rafael,Ferrari 296 GTB
 7774,Antenna,Product_TA ProductsDB.Products.flag_rafael,Ferrari
+7779,Boost,Product_TA ProductsDB.Products.boost_fireball,Fireball
 7781,Boost,Product_TA ProductsDB.Products.boost_fusion_dark,Fusion FR
 7783,Skin,Product_TA ProductsDB.Products.skin_rafael_a,Ferrari 296 GTB: Assetto Fiorano
 7784,Hat,Product_TA ProductsDB.Products.Hat_SharkFin_FR22,Shark Fin FR
@@ -5056,6 +5101,7 @@
 7787,Skin,Product_TA ProductsDB.Products.skin_scar_a_05,NASCAR Next Gen Ford Mustang: NASCAR Next Gen Ford Mustang
 7790,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_fera,Ferrari
 7791,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_quartz,Aston Martin DBS
+7792,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_Whiplash,Whiplash
 7793,EngineAudio,Product_TA ProductsDB.Products.engineaudio_rafael,Ferrari 296 GTB
 7797,Skin,Product_TA ProductsDB.Products.skin_scar_c_02,NASCAR Next Gen Toyota Camry: NASCAR Next Gen Toyota Camry TRD
 7798,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_raptors,Ford Bronco Raptor
@@ -5064,6 +5110,8 @@
 7802,Wheels,Product_TA ProductsDB.Products.wheel_streetclock,Tic-King
 7804,Skin,Product_TA ProductsDB.Products.skin_scar_b_05,NASCAR Next Gen Chevrolet Camaro: NASCAR Next Gen Chevrolet Camaro ZL1
 7805,Antenna,Product_TA ProductsDB.Products.antenna_ladybug,Lucky Ladybug
+7808,EngineAudio,Product_TA ProductsDB.Products.engineaudio_whiplash,Whiplash
+7809,Skin,Product_TA ProductsDB.Products.skin_Snailmail,Duskapade
 7810,Wheels,Product_TA ProductsDB.Products.wheel_swoosh,Nike Air Zoom Mercurial
 7812,Wheels,Product_TA ProductsDB.Products.wheel_pinwheel_inverted,Bladeon: Inverted
 7813,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_NML,Nike Air Zoom Mercurial
@@ -5075,9 +5123,13 @@
 7819,Skin,Product_TA ProductsDB.Products.skin_octane_nse,Octane: Nike Air Zoom Mercurial ? Green
 7820,EngineAudio,Product_TA ProductsDB.Products.engineaudio_rev_fbrn,Ford Bronco Raptor RLE
 7821,Wheels,Product_TA ProductsDB.Products.wheel_sido,Module
+7824,Hat,Product_TA ProductsDB.Products.hat_gato,Cat Eye
 7825,Antenna,Product_TA ProductsDB.Products.antenna_displeased_pop,Ice Pop
+7827,Wheels,Product_TA ProductsDB.Products.wheel_tronx,Ratchet
 7829,Wheels,Product_TA ProductsDB.Products.wheel_subber,BG
+7830,Wheels,Product_TA ProductsDB.Products.wheel_ecoblu,TruBlu
 7831,EngineAudio,Product_TA ProductsDB.Products.engineaudio_quartz,007's Aston Martin DBS
+7833,Skin,Product_TA ProductsDB.Products.skin_cheekface,Skulking Scale
 7834,Wheels,Product_TA ProductsDB.Products.wheel_coober,Wildstyle
 7835,Antenna,Product_TA ProductsDB.Products.flag_mc_bleuclair,Bleu Clair
 7836,Antenna,Product_TA ProductsDB.Products.flag_mc_drinksonme,Drinks On Me
@@ -5085,16 +5137,22 @@
 7838,Antenna,Product_TA ProductsDB.Products.flag_mc_oddkidout,OddKidOut
 7839,Antenna,Product_TA ProductsDB.Products.antenna_cookie,Chocolate Chip
 7840,Wheels,Product_TA ProductsDB.Products.wheel_yilmaz,Maz
+7842,Wheels,Product_TA ProductsDB.Products.wheel_bibble,DevCon
 7843,Hat,Product_TA ProductsDB.Products.hat_burrrga,Cheeseburger
+7845,Wheels,Product_TA ProductsDB.Products.wheel_flow,Artifice
+7847,Wheels,Product_TA ProductsDB.Products.wheel_kuri_flare,Forerunner: Roasted
 7848,Hat,Product_TA ProductsDB.Products.hat_krylo,Savage Spray
 7850,Wheels,Product_TA ProductsDB.Products.wheel_vega,Block Beat
 7852,PaintFinish,Product_TA ProductsDB.Products.Paintfinish_Streetfinish,Crown Town
 7853,PaintFinish,Product_TA ProductsDB.Products.PaintFinish_StreetFinish_02,GridKid
 7854,PaintFinish,Product_TA ProductsDB.Products.paintfinish_brickwall,Brick Hitter
+7856,Skin,Product_TA ProductsDB.Products.skin_IndigoD,Lunation
 7857,Wheels,Product_TA ProductsDB.Products.wheel_neka,Proffer
 7858,PaintFinish,Product_TA ProductsDB.Products.paintfinish_asphalt,1-Way
 7859,Wheels,Product_TA ProductsDB.Products.wheel_coily,Founder
+7860,Skin,Product_TA ProductsDB.Products.skin_musclecar_gamez,Sweat Vet
 7861,PaintFinish,Product_TA ProductsDB.Products.paintfinish_windows,Windowed
+7862,Skin,Product_TA ProductsDB.Products.skin_musclecar_eyewing,Dominus: Razerwing
 7863,GoalExplosion,Product_TA ProductsDB.Products.Explosion_MiniRLBalls_Gold,Ballistic Pro
 7864,EngineAudio,Product_TA ProductsDB.Products.engineaudio_hic,Honda Civic Type R
 7867,Antenna,Product_TA ProductsDB.Products.flag_was22_h,Washington Commanders
@@ -5107,8 +5165,10 @@
 7874,Hat,Product_TA ProductsDB.Products.hat_headphones_psplus,MMS RBY
 7876,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_AT8,Accolade VIII
 7880,Hat,Product_TA ProductsDB.Products.hat_xo,XnO
+7882,Hat,Product_TA ProductsDB.Products.hat_tom,Tickled Tomato
 7888,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_fbwas22,Washington Commanders
 7889,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_Loy,San Diego Loyal
+7893,Skin,Product_TA ProductsDB.Products.skin_octane_flametress,Octane: Flametress
 7895,Hat,Product_TA ProductsDB.Products.hat_shoes,Fresh Kicks
 7896,Wheels,Product_TA ProductsDB.Products.wheel_streetclock_glitch,Tic-King: Glitched
 7898,Hat,Product_TA ProductsDB.Products.hat_phatcap,Big Cap
@@ -5140,11 +5200,13 @@
 7935,Skin,Product_TA ProductsDB.Products.skin_octane_sdl2,Octane: San Diego Loyal (Home)
 7936,Skin,Product_TA ProductsDB.Products.skin_octane_sdl3,Octane: San Diego Loyal (Away)
 7937,Skin,Product_TA ProductsDB.Products.skin_octane_sdl4,Octane: San Diego Loyal (Special Edition)
+7938,Wheels,Product_TA ProductsDB.Products.wheel_veski,Veski
 7944,Skin,Product_TA ProductsDB.Products.Skin_Octane_Quads_Color,Octane: Wrapstar
 7947,Body,Product_TA ProductsDB.Products.body_hic_t1,Honda Civic Type R
 7948,Body,Product_TA ProductsDB.Products.body_hic_t2,Honda Civic Type R-LE
 7951,Skin,Product_TA ProductsDB.Products.skin_octane_elin,Octane: Síganme los Buenos
 7952,Skin,Product_TA ProductsDB.Products.skin_hic_01_tierall,Honda Civic Type R: 10-94
+7954,SupersonicTrail,Product_TA ProductsDB.Products.ss_fireball,Seared
 7955,MusicStingers,Product_TA ProductsDB.Products.album_anthem_monstercat_vol2022,RL X Monstercat 2022
 7956,MusicStingers,Product_TA ProductsDB.Products.Anthem_AthenaAndsmle_Moment,Moment
 7957,MusicStingers,Product_TA ProductsDB.Products.Anthem_OddKidOut_CINEMA,CINEMA (feat. Marlhy)
@@ -5155,7 +5217,9 @@
 7964,Skin,Product_TA ProductsDB.Products.skin_hic_tierall_lightning,Honda Civic Type R: Lightning
 7965,Skin,Product_TA ProductsDB.Products.skin_hic_tierall_stripes,Honda Civic Type R: Stripes
 7966,Skin,Product_TA ProductsDB.Products.skin_hic_tierall_wings,Honda Civic Type R: Wings
+7968,Skin,Product_TA ProductsDB.Products.skin_cxcx,Constella
 7972,Skin,Product_TA ProductsDB.Products.skin_hic_maz_tierall,Honda Civic Type R: Maz
+7973,PaintFinish,Product_TA ProductsDB.Products.paintfinish_PanelY,Eschered
 7974,Skin,Product_TA ProductsDB.Products.skin_hic_frosted,Honda Civic Type R: Ombre
 7975,Skin,Product_TA ProductsDB.Products.skin_hic_huntress,Honda Civic Type R: Huntress
 7976,Skin,Product_TA ProductsDB.Products.skin_hic_quads_color_tierall,Honda Civic Type R: Wrapstar
@@ -5165,6 +5229,7 @@
 7991,Wheels,Product_TA ProductsDB.Products.wheel_elin,Más Rápido que una Tortuga
 7994,Wheels,Product_TA ProductsDB.Products.wheel_quads_inverted,Franko Fone: Inverted
 7995,Skin,Product_TA ProductsDB.Products.skin_hic_quads_se_tierall,Honda Civic Type R: Wrapstar: Remixed
+7996,Hat,Product_TA ProductsDB.Products.hat_crikey,Gator
 7997,MusicStingers,Product_TA ProductsDB.Products.Anthem_RadioClassics_Vol1_04,Low Rider
 8010,Wheels,Product_TA ProductsDB.Products.wheel_Gnarly,Charly
 8013,Skin,Product_TA ProductsDB.Products.skin_grain_spacestation_away,Fennec: Spacestation Gaming (Away)
@@ -5173,6 +5238,7 @@
 8016,Skin,Product_TA ProductsDB.Products.skin_musclecar_spacestation_home,Dominus: Spacestation Gaming (Home)
 8017,Skin,Product_TA ProductsDB.Products.skin_octane_spacestation_away,Octane: Spacestation Gaming (Away)
 8018,Skin,Product_TA ProductsDB.Products.skin_octane_spacestation_home,Octane: Spacestation Gaming (Home)
+8020,Skin,Product_TA ProductsDB.Products.Skin_Octane_SamTrT,Octane: Sam's Trick
 8021,MusicStingers,Product_TA ProductsDB.Products.anthem_oddkidout_cinema_featmarlhy_fameandfortunevip,CINEMA (feat. Marlhy) (Fame & Fortune VIP)
 8022,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_spray_paint,Spray?d
 8023,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_phat_cap,Cannon
@@ -5266,6 +5332,20 @@
 8116,Skin,Product_TA ProductsDB.Products.skin_musclecar_bds_home,Dominus: Team BDS (Home)
 8117,Skin,Product_TA ProductsDB.Products.skin_octane_bds_away,Octane: Team BDS (Away)
 8118,Skin,Product_TA ProductsDB.Products.skin_octane_bds_home,Octane: Team BDS (Home)
+8119,Wheels,Product_TA ProductsDB.Products.Wheel_hhhide,Leatherface's Chainsaw
+8120,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_australia,Octane: Australia (Nike)
+8121,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_brazil,Octane: Brazil (Nike)
+8122,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_canada,Octane: Canada (Nike)
+8123,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_croatia,Octane: Croatia (Nike)
+8124,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_england,Octane: England (Nike)
+8125,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_france,Octane: France (Nike)
+8126,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_korea,Octane: Korea Republic (Nike)
+8127,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_netherlands,Octane: Netherlands (Nike)
+8128,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_newzealand,Octane: New Zealand (Nike)
+8129,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_nigeria,Octane: Nigeria (Nike)
+8130,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_poland,Octane: Poland (Nike)
+8131,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_portugal,Octane: Portugal (Nike)
+8132,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_qatar,Octane: Qatar
 8135,Skin,Product_TA ProductsDB.Products.skin_grain_v1_away,Fennec: Version1 (Away)
 8136,Skin,Product_TA ProductsDB.Products.skin_grain_v1_home,Fennec: Version1 (Home)
 8137,Skin,Product_TA ProductsDB.Products.skin_musclecar_v1_away,Dominus: Version1 (Away)
@@ -5281,6 +5361,8 @@
 8162,Skin,Product_TA ProductsDB.Products.skin_musclecar_furia_home,Dominus: Furia (Home)
 8163,Skin,Product_TA ProductsDB.Products.skin_octane_furia_away,Octane: Furia (Away)
 8164,Skin,Product_TA ProductsDB.Products.skin_octane_furia_home,Octane: Furia (Home)
+8165,GoalExplosion,Product_TA ProductsDB.Products.explosion_fireball,Fire Clap
+8166,Wheels,Product_TA ProductsDB.Products.wheel_hhpuzzle,Jigsaw Blade
 8167,Skin,Product_TA ProductsDB.Products.skin_grain_teamliquid_away,Fennec: Team Liquid (Away)
 8168,Skin,Product_TA ProductsDB.Products.skin_grain_teamliquid_home,Fennec: Team Liquid (Home)
 8169,Skin,Product_TA ProductsDB.Products.skin_musclecar_teamliquid_away,Dominus: Team Liquid (Away)
@@ -5302,33 +5384,114 @@
 8185,Skin,Product_TA ProductsDB.Products.skin_grain_teamsecret_away,Fennec: Team Secret (Away)
 8186,Skin,Product_TA ProductsDB.Products.skin_grain_teamsecret_home,Fennec: Team Secret (Home)
 8189,Skin,Product_TA ProductsDB.Products.skin_octane_teamsecret_away,Octane: Team Secret (Away)
+8193,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_argentina,Argentina
+8194,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_austria,Austria
+8195,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_belgium,Belgium
+8196,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_cameroon,Cameroon
+8197,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_china,China
+8198,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_costarica,Costa Rica
+8199,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_czechrepublic,Czech Republic
+8200,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_denmark,Denmark
+8201,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_ecuador,Ecuador
+8202,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_finland,Finland
+8203,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_germany,Germany
+8204,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_ghana,Ghana
+8205,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_iran,Iran
+8206,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_italy,Italy
+8207,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_japan,Japan
+8208,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_mexico,Mexico
+8209,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_morocco,Morocco
+8210,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_norway,Norway
+8211,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_senegal,Senegal
+8212,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_serbia,Serbia
+8213,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_spain,Spain
+8214,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_sweden,Sweden
+8215,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_switzerland,Switzerland
+8216,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_tunisia,Tunisia
+8217,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_uruguay,Uruguay
+8218,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_wales,Wales
+8221,Skin,Product_TA ProductsDB.Products.skin_octane_argentina,Octane: Argentina
+8222,Skin,Product_TA ProductsDB.Products.skin_octane_cameroon,Octane: Cameroon
+8223,Skin,Product_TA ProductsDB.Products.skin_octane_costarica,Octane: Costa Rica
 8224,Skin,Product_TA ProductsDB.Products.skin_octane_ecuador,Octane: Ecuador
+8225,Skin,Product_TA ProductsDB.Products.skin_octane_Ghana,Octane: Ghana
+8226,Skin,Product_TA ProductsDB.Products.skin_octane_iran,Octane: Iran
+8227,Skin,Product_TA ProductsDB.Products.skin_octane_morocco,Octane: Morocco
+8228,Skin,Product_TA ProductsDB.Products.skin_octane_senegal,Octane: Senegal
+8229,Skin,Product_TA ProductsDB.Products.skin_octane_serbia,Octane: Serbia
+8230,Skin,Product_TA ProductsDB.Products.skin_octane_tunisia,Octane: Tunisia
+8231,Skin,Product_TA ProductsDB.Products.skin_octane_uruguay,Octane: Uruguay
 8261,PremiumInventory,Product_TA ProductsDB.Products.CrateUnlocked_Halloween22,Golden Pumpkin '22
 8262,GoalExplosion,Product_TA ProductsDB.Products.explosion_mexico,Chipote Chillón
+8265,Wheels,Product_TA ProductsDB.Products.wheel_gec,Lit Lizard
 8266,MusicStingers,Product_TA ProductsDB.Products.anthem_slowmotionandloudtech_goback,Go Back
+8267,Skin,Product_TA ProductsDB.Products.Skin_Vanquish_HHLF,Merc: Leatherface's Mask
 8268,Skin,Product_TA ProductsDB.Products.skin_grain_dignitas_away,Fennec: Dignitas (Away)
 8269,Skin,Product_TA ProductsDB.Products.skin_grain_dignitas_home,Fennec: Dignitas (Home)
 8270,Skin,Product_TA ProductsDB.Products.skin_musclecar_dignitas_away,Dominus: Dignitas (Away)
 8271,Skin,Product_TA ProductsDB.Products.skin_musclecar_dignitas_home,Dominus: Dignitas (Home)
 8272,Skin,Product_TA ProductsDB.Products.skin_octane_dignitas_away,Octane: Dignitas (Away)
 8273,Skin,Product_TA ProductsDB.Products.skin_octane_dignitas_home,Octane: Dignitas (Home)
+8278,GoalExplosion,Product_TA ProductsDB.Products.explosion_jigsaw,Billy The Puppet
+8279,GoalExplosion,Product_TA ProductsDB.Products.explosion_ekin,Nike Swoosh
 8281,MusicStingers,Product_TA ProductsDB.Products.anthem_athena_smleandisaacapp_moment_worldsversion,Moment (Worlds Version)
+8282,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_australia,Australia
+8283,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_brazil,Brazil
+8284,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_canada,Canada
+8285,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_cristro,Nike Air Zoom Mercurial - CR7
+8286,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_croatia,Croatia
+8287,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_england,England
+8288,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_france,France
+8290,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_netherlands,Netherlands
+8291,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_newzealand,New Zealand
+8292,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_nigeria,Nigeria
+8293,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_poland,Poland
+8294,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_portugal,Portugal
+8295,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_quatar,Qatar
+8296,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_saudiarabia,Saudi Arabia
+8297,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_southkorea,South Korea
+8298,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_nwc_usa,USA
+8300,Skin,Product_TA ProductsDB.Products.skin_octane_nasr,Octane: NASCAR
+8301,Wheels,Product_TA ProductsDB.Products.wheel_hhdoll,Good Guys
+8302,Skin,Product_TA ProductsDB.Products.skin_grain_nasr,Fennec: NASCAR
+8303,Skin,Product_TA ProductsDB.Products.skin_musclecar_nasr,Dominus: NASCAR
 8307,Skin,Product_TA ProductsDB.Products.skin_grain_soniqs_away,Fennec: Susquehanna Soniqs (Away)
 8308,Skin,Product_TA ProductsDB.Products.skin_grain_soniqs_home,Fennec: Susquehanna Soniqs (Home)
 8309,Skin,Product_TA ProductsDB.Products.skin_musclecar_soniqs_away,Dominus: Susquehanna Soniqs (Away)
 8310,Skin,Product_TA ProductsDB.Products.skin_musclecar_soniqs_home,Dominus: Susquehanna Soniqs (Home)
 8311,Skin,Product_TA ProductsDB.Products.skin_octane_soniqs_away,Octane: Susquehanna Soniqs (Away)
 8312,Skin,Product_TA ProductsDB.Products.skin_octane_soniqs_home,Octane: Susquehanna Soniqs (Home)
+8313,Skin,Product_TA ProductsDB.Products.Skin_Octane_Ukraine,Octane: Ukraine
+8314,Wheels,Product_TA ProductsDB.Products.wheel_trt,Sam's Treat
+8316,Skin,Product_TA ProductsDB.Products.skin_ToroMoi,ZonTron
+8317,PlayerBanner,Product_TA ProductsDB.Products.playerBanner_wc_ukraine,Ukraine
 8318,Skin,Product_TA ProductsDB.Products.pack_NWCdecals,Nike Federation Decals
+8320,Skin,Product_TA ProductsDB.Products.skin_MuscleCar_hhpuzzle,Dominus: Billy The Puppet
+8324,MusicStingers,Product_TA ProductsDB.Products.Anthem_HH2022_01,Trick or Treat
 8325,Skin,Product_TA ProductsDB.Products.skin_grain_endpoint_away,Fennec: Endpoint (Away)
 8326,Skin,Product_TA ProductsDB.Products.skin_grain_endpoint_home,Fennec: Endpoint (Home)
 8327,Skin,Product_TA ProductsDB.Products.skin_musclecar_endpoint_away,Dominus: Endpoint (Away)
 8328,Skin,Product_TA ProductsDB.Products.skin_musclecar_endpoint_home,Dominus: Endpoint (Home)
 8329,Skin,Product_TA ProductsDB.Products.skin_octane_endpoint_away,Octane: Endpoint (Away)
 8330,Skin,Product_TA ProductsDB.Products.skin_octane_endpoint_home,Octane: Endpoint (Home)
+8331,MusicStingers,Product_TA ProductsDB.Products.album_anthem_hauntedhallows,Haunted Hallows
+8332,Wheels,Product_TA ProductsDB.Products.wheel_goopy,Hotty Dotty
+8333,Skin,Product_TA ProductsDB.Products.Skin_Octane_NM_E,Octane: Nike Air Zoom Mercurial - CR7
+8334,Skin,Product_TA ProductsDB.Products.Skin_Octane_NM_RCSF,Octane: Nike FC 2022 - Multicolor
 8336,PlayerBanner,Product_TA ProductsDB.Products.pack_genericcountrybanners,Federation Banners
 8338,Skin,Product_TA ProductsDB.Products.pack_rlcs2223,RLCS '22-'23
+8339,MusicStingers,Product_TA ProductsDB.Products.album_anthem_champanthems,Champ Anthems
+8340,MusicStingers,Product_TA ProductsDB.Products.anthem_champanthems_01,Kernkraft 400 (Sport Chant Stadium Anthem Mix)
+8342,PaintFinish,Product_TA ProductsDB.Products.paintfinish_matches,Matchbook
+8343,Boost,Product_TA ProductsDB.Products.Boost_IcyBreath,Cryostream
+8344,MusicStingers,Product_TA ProductsDB.Products.anthem_radioclassics_vol1_05,Jump
+8346,Skin,Product_TA ProductsDB.Products.Skin_Grain_NM_Phantom,Fennec: Nike Phantom GT - Copper
+8347,Skin,Product_TA ProductsDB.Products.Skin_MuscleCar_NM_Tiempo,Dominus: Nike Tiempo - Copper
 8352,Skin,Product_TA ProductsDB.Products.skin_octane_teamsecret_home,Octane: Team Secret (Home)
+8353,Skin,Product_TA ProductsDB.Products.skin_octane_saudiarabia,Octane: Saudi Arabia
+8357,Hat,Product_TA ProductsDB.Products.hat_kolder,Frosty Skull
+8360,Body,Product_TA ProductsDB.Products.body_beak_tier1,Emperor
+8361,Body,Product_TA ProductsDB.Products.body_beak_tier2,Emperor II
 8362,Skin,Product_TA ProductsDB.Products.skin_grain_complexity_away,Fennec: Complexity (Away)
 8363,Skin,Product_TA ProductsDB.Products.skin_grain_complexity_home,Fennec: Complexity (Home)
 8364,Skin,Product_TA ProductsDB.Products.skin_musclecar_complexity_away,Dominus: Complexity (Away)
@@ -5345,20 +5508,131 @@
 8378,Skin,Product_TA ProductsDB.Products.skin_musclecar_teamvitality_home,Dominus: Team Vitality (Home)
 8379,Skin,Product_TA ProductsDB.Products.skin_musclecar_teamsecret_away,Dominus: Team Secret (Away)
 8380,Skin,Product_TA ProductsDB.Products.skin_musclecar_teamsecret_home,Dominus: Team Secret (Home)
+8381,Wheels,Product_TA ProductsDB.Products.wheel_frio,Piercer
+8382,Antenna,Product_TA ProductsDB.Products.antenna_match,Lit Match
+8385,Skin,Product_TA ProductsDB.Products.skin_octane_nwc_turkey,Octane: Turkey (Nike)
+8386,Antenna,Product_TA ProductsDB.Products.antenna_thermometer,Thermometer
+8387,MusicStingers,Product_TA ProductsDB.Products.Anthem_HH2022_02,Chucky's Laugh
+8388,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_wc_turkey,Turkey
+8391,GoalExplosion,Product_TA ProductsDB.Products.explosion_ekin2,Nike FC 2022
+8394,MusicStingers,Product_TA ProductsDB.Products.anthem_hh2022_03,Leatherface's Chainsaw
+8395,MusicStingers,Product_TA ProductsDB.Products.anthem_hh2022_04,Hello Zepp
+8397,Skin,Product_TA ProductsDB.Products.skin_Octane_hhdoll,Octane: Chucky Doll
+8398,MusicStingers,Product_TA ProductsDB.Products.anthem_hh2022_05,Halloween
+8399,MusicStingers,Product_TA ProductsDB.Products.anthem_fandf_03,Act A Fool
 8400,MusicStingers,Product_TA ProductsDB.Products.anthem_mikeault_gametime,Game Time (feat. Dr. Awkward)
-8413,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCA,Africa
-8414,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCAO,Asia & Oceania
-8415,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCEE,Eastern Europe
-8416,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCME,Middle East
-8417,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCNA,North America
-8418,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCNE,Northern Europe
-8419,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCSA,South America
-8420,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCSE,Southern Europe
-8421,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCWE,Western Europe
+8401,Antenna,Product_TA ProductsDB.Products.antenna_iceaxe,Icy Axe
+8404,MusicStingers,Product_TA ProductsDB.Products.anthem_hh2022_06,You Make Me Feel Like It's Halloween
+8405,Boost,Product_TA ProductsDB.Products.boost_bender,Elemental
+8406,Antenna,Product_TA ProductsDB.Products.flag_mc_bolermani,boler mani
+8407,Antenna,Product_TA ProductsDB.Products.flag_mc_dustycloud,Dustycloud
+8408,Antenna,Product_TA ProductsDB.Products.flag_mc_kage,Kage
+8409,Antenna,Product_TA ProductsDB.Products.flag_mc_solrising,Sol Rising
+8410,Antenna,Product_TA ProductsDB.Products.flag_mc_tisoki,Tisoki
+8411,Hat,Product_TA ProductsDB.Products.hat_skullfire,Skullfire
+8412,Antenna,Product_TA ProductsDB.Products.flag_mc_saintpunk,Saint Punk
+8413,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCA,Africa Decal Pack
+8414,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCAO,Asia & Oceania Decal Pack
+8415,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCEE,Eastern Europe Decal Pack
+8416,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCME,Middle East Decal Pack
+8417,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCNA,North America Decal Pack
+8418,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCNE,Northern Europe Decal Pack
+8419,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCSA,South America Decal Pack
+8420,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCSE,Southern Europe Decal Pack
+8421,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCWE,Western Europe Decal Pack
+8422,Antenna,Product_TA ProductsDB.Products.flag_mc_asdek,Asdek
+8424,Wheels,Product_TA ProductsDB.Products.wheel_frio_Crystal,Piercer: Crystalized
+8426,Skin,Product_TA ProductsDB.Products.skin_whiplash_Flames,Whiplash: Flames
+8427,Skin,Product_TA ProductsDB.Products.skin_whiplash_lightning,Whiplash: Lightning
+8428,Skin,Product_TA ProductsDB.Products.skin_whiplash_stripes,Whiplash: Stripes
+8430,Skin,Product_TA ProductsDB.Products.skin_whiplash_wings,Whiplash: Wings
+8431,MusicStingers,Product_TA ProductsDB.Products.anthem_radioclassics_vol1_06,Monster Mash
+8432,MusicStingers,Product_TA ProductsDB.Products.album_anthem_seasonthemes,Season Themes
+8433,MusicStingers,Product_TA ProductsDB.Products.anthem_dxrk_rave,RAVE
+8434,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_octotoon,Inked
+8435,Skin,Product_TA ProductsDB.Products.Skin_octane_LD,Octane: Landon Donovan
+8437,Antenna,Product_TA ProductsDB.Products.antenna_cutfire,Scorched Scimitar
+8439,Hat,Product_TA ProductsDB.Products.hat_burntkey,Crispy Turkey
+8441,Skin,Product_TA ProductsDB.Products.Skin_Octane_NM,Octane: Nike Air Zoom Mercurial - Copper
 8442,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_WCBNRS,Federation Banners
+8443,SupersonicTrail,Product_TA ProductsDB.Products.ss_bender,Elemental
 8445,ESportsTeam,Product_TA ProductsDB.Products.ESportsTeam_KansasCityPioneers,Kansas City Pioneers
 8446,ESportsTeam,Product_TA ProductsDB.Products.ESportsTeam_Luminosity,Luminosity Gaming
 8447,ESportsTeam,Product_TA ProductsDB.Products.ESportsTeam_MoistEsports,Moist Esports
 8448,ESportsTeam,Product_TA ProductsDB.Products.ESportsTeam_OpticGaming,OpTic Gaming
 8449,ESportsTeam,Product_TA ProductsDB.Products.ESportsTeam_TeamFalcons,Team Falcons
 8450,ESportsTeam,Product_TA ProductsDB.Products.ESportsTeam_TeamSecret,Team Secret
+8456,Hat,Product_TA ProductsDB.Products.hat_fyre,Furrowed Flame
+8457,PremiumInventory,Product_TA ProductsDB.Products.crateunlocked_AT9,Accolade IX
+8458,PremiumInventory,Product_TA ProductsDB.Products.CrateUnlocked_Winter22,Golden Gift '22
+8460,Skin,Product_TA ProductsDB.Products.Skin_Octane_Rodo,Octane: Nike Mercurial - R9
+8461,Skin,Product_TA ProductsDB.Products.skin_octane_usa,Octane: USA
+8462,Wheels,Product_TA ProductsDB.Products.wheel_swooshFC,Nike FC 2022 - Multicolor
+8471,Wheels,Product_TA ProductsDB.Products.wheel_blender_psplus,Blender YNP
+8472,Hat,Product_TA ProductsDB.Products.hat_cherry_psplus,Chafed Cherry YNP
+8473,Boost,Product_TA ProductsDB.Products.boost_molten,Volcano Crag
+8474,Skin,Product_TA ProductsDB.Products.skin_octane_chillbeat,Octane: Lofi Girl
+8475,GoalExplosion,Product_TA ProductsDB.Products.explosion_ekin_org,Nike Swoosh
+8476,GoalExplosion,Product_TA ProductsDB.Products.explosion_ekin3_PA,Nike FC 2022
+8483,Wheels,Product_TA ProductsDB.Products.wheel_goopy_inverted,Hotty Dotty: Inverted
+8484,Wheels,Product_TA ProductsDB.Products.wheel_gec_flare,Lit Lizard: Roasted
+8485,Skin,Product_TA ProductsDB.Products.Skin_Musclecar_FrostyFlake,Dominus: Frosty Flake
+8486,Hat,Product_TA ProductsDB.Products.Hat_Igloo,Igloo
+8487,Skin,Product_TA ProductsDB.Products.skin_force_edgedots_psplus,Breakout: Dot Matrix YNP
+8489,Hat,Product_TA ProductsDB.Products.hat_dragonwings_f,Dragon Wings: Roasted
+8490,Hat,Product_TA ProductsDB.Products.hat_dragonwings_i,Dragon Wings: Frosted
+8491,Hat,Product_TA ProductsDB.Products.hat_chillbeat,Lofi Girl Cocoa
+8492,Boost,Product_TA ProductsDB.Products.boost_sunrays_psplus,Sun Ray YNP
+8494,Wheels,Product_TA ProductsDB.Products.wheel_chillbeat,Lofi Girl
+8495,Antenna,Product_TA ProductsDB.Products.Antenna_Snowflake,Snowflake
+8496,Skin,Product_TA ProductsDB.Products.skin_beak_clean,Emperor: ShapeUp
+8497,Hat,Product_TA ProductsDB.Products.hat_crown_fire,Royal Crown: Roasted
+8498,Hat,Product_TA ProductsDB.Products.hat_crown_ice,Royal Crown: Frosted
+8500,Hat,Product_TA ProductsDB.Products.hat_pigeon_anodized,Pigeon: Anodized
+8501,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_cybernetic,CyberNoir
+8502,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_cyberpunkpop,Cyberpunked
+8503,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_firedragon,Fire Drake
+8504,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_icedragon,Ice Drake
+8506,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardbronze,S8 - Bronze
+8507,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardchampion,S8 - Champion
+8508,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewarddiamond,S8 - Diamond
+8509,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardgold,S8 - Gold
+8510,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardgrandchampion,S8 - Grand Champion
+8511,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardplatinum,S8 - Platinum
+8512,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardsilver,S8 - Silver
+8513,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_s8rewardsupersoniclegend,S8 - Supersonic Legend
+8514,Skin,Product_TA ProductsDB.Products.skin_beak_tierall_frosted,Emperor: Ombre
+8515,Skin,Product_TA ProductsDB.Products.skin_beak_tierall_huntress,Emperor: Huntress
+8516,Skin,Product_TA ProductsDB.Products.skin_beak_litesmoke,Emperor: Brume
+8517,Skin,Product_TA ProductsDB.Products.skin_beak_tierall_flames,Emperor: Flames
+8518,Skin,Product_TA ProductsDB.Products.skin_beak_tierall_lightning,Emperor: Lightning
+8519,Skin,Product_TA ProductsDB.Products.skin_beak_tierall_stripes,Emperor: Stripes
+8520,Skin,Product_TA ProductsDB.Products.skin_beak_tierall_wings,Emperor: Wings
+8521,Wheels,Product_TA ProductsDB.Products.wheel_dragon_fni,Draco: Frosted
+8522,Wheels,Product_TA ProductsDB.Products.wheel_veski_inverted,Veski: Inverted
+8523,Wheels,Product_TA ProductsDB.Products.wheel_swirl,Elemental
+8525,PlayerAvatarBorder,Product_TA ProductsDB.Products.AvatarBorder_ChillBeat,Lofi Girl Headphones
+8526,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_dragonmarks,Dragon Claw
+8527,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_stiles,Royalty
+8528,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_ChillBeatA,Lofi Girl Winter
+8529,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_ChillBeatB,Lofi Girl
+8530,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_fits,Style-phile
+8532,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_rodo,Nike Mercurial - R9
+8535,Boost,Product_TA ProductsDB.Products.boost_animesmoke_smh,Righteous Fail
+8536,GoalExplosion,Product_TA ProductsDB.Products.explosion_fullscreen_fire,Brimstone
+8537,GoalExplosion,Product_TA ProductsDB.Products.explosion_fullscreen_ice,Ice Age
+8559,Hat,Product_TA ProductsDB.Products.hat_chillcat,Lofi Girl Cat
+8565,Body,Product_TA ProductsDB.Products.body_beak_tier2_ice,Emperor II: Frozen
+8566,Body,Product_TA ProductsDB.Products.body_beak_tier2_fire,Emperor II: Scorched
+8568,PlayerBanner,Product_TA ProductsDB.Products.PlayerBanner_MindBlown,Yolkel
+8569,EngineAudio,Product_TA ProductsDB.Products.engineaudio_beak,Emperor
+8577,MusicStingers,Product_TA ProductsDB.Products.album_anthem_frostyfest2022,Frosty Fest 2022 feat. Lofi Girl
+8578,MusicStingers,Product_TA ProductsDB.Products.anthem_kainbeats_flyingsled,Flying Sled
+8579,MusicStingers,Product_TA ProductsDB.Products.anthem_kainbeats_winterdrive,Winter Drive
+8580,MusicStingers,Product_TA ProductsDB.Products.anthem_purrplecat_firstsnow,First Snow
+8581,MusicStingers,Product_TA ProductsDB.Products.anthem_purrplecat_wintermorning,Winter Morning
+8582,MusicStingers,Product_TA ProductsDB.Products.anthem_xander_monday,Monday
+8590,Skin,Product_TA ProductsDB.Products.skin_hotchip,Thawed
+8607,PaintFinish,Product_TA ProductsDB.Products.paintfinish_crackedice,Glacier
+8624,EngineAudio,Product_TA ProductsDB.Products.engineaudio_beak_fire,Emperor II: Scorched
+8625,EngineAudio,Product_TA ProductsDB.Products.engineaudio_beak_ice,Emperor II: Frozen
