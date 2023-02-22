@@ -5,6 +5,7 @@ import ScriptCard from './script-card-vue.js'
 import BotPool from './bot-pool-vue.js'
 import TeamCard from './team-card-vue.js'
 import LauncherPreferenceModal from './launcher-preference-vue.js'
+import CommunityEvents from './community-events-vue.js'
 
 const HUMAN = {'name': 'Human', 'type': 'human', 'image': 'imgs/human.png'};
 const STARTING_BOT_POOL = [
@@ -27,6 +28,14 @@ export default {
 
 		<b-navbar-nav class="ml-auto">
 			<b-spinner v-if="showProgressSpinner" variant="success" label="Spinning" class="mr-2"></b-spinner>
+
+			<b-button @click="$bvModal.show('community-events')" variant="dark" class="ml-2">
+				Events
+				<b-badge v-if="$refs.communityEvents?.events.length > 0" variant="danger">
+					{{ $refs.communityEvents.events.length }}
+				</b-badge>
+			</b-button>
+
 			<span id="sandbox-button-wrapper">
 				<b-button
 					@click="$router.replace('/sandbox')" variant="dark" class="ml-2"
@@ -380,6 +389,7 @@ export default {
 			<launcher-preference-modal modal-id="launcher-modal" />
 		</b-modal>
 
+		<community-events ref="communityEvents"/>
 	</div>
 
 	</b-container>
@@ -393,6 +403,7 @@ export default {
 		'bot-pool': BotPool,
 		'team-card': TeamCard,
 		'launcher-preference-modal': LauncherPreferenceModal,
+		'community-events': CommunityEvents,
 	},
 	data () {
 		return {
