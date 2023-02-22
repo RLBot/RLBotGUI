@@ -26,7 +26,7 @@ export default {
             const names = event.summary;
             const start = event.start.dateTime;
             let new_date = new Date(start);
-            const raw_date = new_date.getTime();
+
             try {
                 const recurrence = event.recurrence[0].split(";");
                 const rec_type = recurrence[0].split("=")[1];
@@ -64,7 +64,7 @@ export default {
             }
 
             const time_untils = new_date.getTime() - today.getTime();
-            return [names, new_date, time_untils, raw_date];
+            return [names, new_date, time_untils];
         },
         formatFromNow: function(milliseconds) {
             let days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
@@ -93,29 +93,28 @@ export default {
 
             fetch(url).then((response) => {
                 response.json().then((data) => {
-                    console.log(data.items);
                     this.events = [];
 
                     // compute dates and times
                     for (let event of data.items) {
-                        let [names, new_date, time_untils, raw_date] = this.dateTimeCheck(new Date(), event);
+                        let [names, new_date, time_until_ms] = this.dateTimeCheck(new Date(), event);
 
                         // time_untils is the time until the event in milliseconds
                         // convert this to something human readable, like "in 2 days"
-                        const format = this.formatFromNow(time_untils);
+                        const format = this.formatFromNow(time_until_ms);
 
                         this.events.push({
                             name: names,
                             location: event.location,
                             time: new_date.toLocaleString(),
                             timeUntil: format,
-                            // timeUntil: timeUntil.toLocaleString(),
+                            timeUntilMs: time_until_ms,
                         });
                     }
 
                     // sort community events by start time
                     this.events.sort((a, b) => {
-                        return new Date(a.start) - new Date(b.start);
+                        return new Date(a.timeUntilMs) - new Date(b.timeUntilMs);
                     });
 
                     // only show the first 3
