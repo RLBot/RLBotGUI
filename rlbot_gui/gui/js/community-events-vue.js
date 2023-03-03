@@ -7,8 +7,11 @@ export default {
 			</div>
 			<div v-else v-for="event in events">
 				<h3>{{ event.name }}</h3>
-                <p class="mb-1">
-                    <b-icon icon="alarm"/> Starts in <b>{{ event.timeUntil }}</b> ({{ event.time }})
+                <p v-if="event.timeUntilMs > 0" class="mb-1">
+                    <b-icon icon="calendar-plus"/> Starts in <b>{{ event.timeUntil }}</b> ({{ event.time }})
+                </p>
+                <p v-else class="mb-1">
+                    <b-icon icon="alarm"/> Started <b>{{ event.timeUntil }}</b> ago, but you can still join!
                 </p>
 				<p>
                     <b-icon icon="geo"/> <a :href="event.location" target="_blank">{{ event.location }}</a>
@@ -19,6 +22,8 @@ export default {
     data() {
         return {
             events: [],
+            eventsNow: 0,
+            eventsFuture: 0,
         }
     },
     methods: {
@@ -60,7 +65,7 @@ export default {
                 }
             }
             catch (e) {
-                console.log("Error checking recurrence:" + e);
+                console.error("Error checking recurrence:" + e);
             }
 
             const time_untils = new_date.getTime() - today.getTime();
@@ -76,13 +81,28 @@ export default {
             );
             let format = "";
             if (days > 0) {
-                format += days + " days ";
+                format += days;
+                if (days > 1) {
+                    format += " days ";
+                } else {
+                    format += " day ";
+                }
             }
             if (hours > 0) {
-                format += hours + " hours ";
+                format += hours;
+                if (hours > 1) {
+                    format += " hours ";
+                } else {
+                    format += " hour ";
+                }
             }
             if (minutes > 0) {
-                format += minutes + " minutes ";
+                format += minutes;
+                if (minutes > 1) {
+                    format += " minutes ";
+                } else {
+                    format += " minute ";
+                }
             }
             return format;
         },
@@ -99,9 +119,14 @@ export default {
                     for (let event of data.items) {
                         let [names, new_date, time_until_ms] = this.dateTimeCheck(new Date(), event);
 
+                        if (time_until_ms > 0)
+                            this.eventsFuture += 1;
+                        else
+                            this.eventsNow += 1;
+
                         // time_untils is the time until the event in milliseconds
                         // convert this to something human readable, like "in 2 days"
-                        const format = this.formatFromNow(time_until_ms);
+                        const format = this.formatFromNow(Math.abs(time_until_ms));
 
                         this.events.push({
                             name: names,
