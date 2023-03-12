@@ -1,4 +1,3 @@
-
 import StoryUpgrades from './story-upgrades.js';
 import StoryPickTeam from './story-pick-team.js';
 import StoryRecruitList from './story-recruit-list.js';
@@ -8,12 +7,14 @@ const DEBUG = false;
 const CITY_STATE = {
     'LOCKED': 0,
     'OPEN': 1,
-    'DONE': 2
+    'OPTIONALS_LEFT': 2,
+    'DONE': 3
 };
 
 const CITY_ICON_MAP = [
     'imgs/story/lock-100px.png', // LOCKED
-    '',
+    '', // OPEN
+    'imgs/story/checkmark-outline-100px.png', // OPTIONALS_LEFT
     'imgs/story/checkmark-100px.png' // DONE
 ];
 
@@ -193,7 +194,7 @@ export default {
                                 <b-button block
                                     @click="$refs.pickTeamPopup.show(challenge)"
                                     v-bind:variant="challengeCompleted(challenge.id)? 'outline-dark' : 'outline-primary' ">
-                                    {{challenge.display}}
+                                    {{!!challenge.optional ? "Optional: " + challenge.display : challenge.display}}
                                 </b-button>
                             </b-list-group-item>
                         </b-list-group>
@@ -273,7 +274,6 @@ export default {
             return result;
         },
         recruit_list: function () {
-            const completed = this.saveState.challenges_completed;
             let recruits = {};
 
             for (let city of Object.keys(this.challenges)) {
@@ -306,13 +306,17 @@ export default {
                 return;
             }
             else {
-                let open_cities = Object.keys(
-                    this.cityDisplayInfo).filter((city) =>
-                        this.getCityState(city) == CITY_STATE.OPEN);
-
-                let random = open_cities[Math.floor(Math.random() * open_cities.length)];
-                console.log(random);
-                this.selectedCityId = random;
+                let open_cities = Object.keys(this.cityDisplayInfo)
+                    .filter((city) => this.getCityState(city) == CITY_STATE.OPEN);
+                // Fall back to cities with optional challenges left
+                if (open_cities.length === 0)
+                    open_cities = Object.keys(this.cityDisplayInfo)
+                        .filter((city) => this.getCityState(city) == CITY_STATE.OPTIONALS_LEFT);
+                // Fall back to cur
+                if (open_cities.length === 0)
+                    this.selectedCityId = cur;
+                else
+                    this.selectedCityId = open_cities[Math.floor(Math.random() * open_cities.length)];
             }
         },
         challengeCompleted: function (id) {
@@ -325,6 +329,7 @@ export default {
             const suffix = [
                 'is still locked.',
                 'is open to challenge!',
+                'has optional challenges!',
                 'has been completed!'
             ];
             return displayName + ' ' + suffix[state];
@@ -341,13 +346,23 @@ export default {
             let state = CITY_STATE.LOCKED;
 
             let prereqs = this.cityDisplayInfo[city].prereqs;
-            if (prereqs.every(c => (this.getCityState(c) === CITY_STATE.DONE))) {
-                state = CITY_STATE.OPEN;
+            if (prereqs.every(c => [CITY_STATE.DONE, CITY_STATE.OPTIONALS_LEFT].includes(this.getCityState(c)))) {
+                let anyOptionalsLeft = false
+                let anyRequiredLeft = false
 
-                // only need to check completion of challenges if we are open
                 let cityChallenges = this.challenges[city];
-                if (cityChallenges.every(c => this.challengeCompleted(c.id))) {
-                    state = CITY_STATE.DONE;
+                for (const c of cityChallenges) {
+                    if (!this.challengeCompleted(c.id)) {
+                        if (!!c.optional) anyOptionalsLeft = true
+                        else anyRequiredLeft = true
+                    }
+                }
+                if (anyRequiredLeft) {
+                    state = CITY_STATE.OPEN
+                } else if (anyOptionalsLeft) {
+                    state = CITY_STATE.OPTIONALS_LEFT
+                } else {
+                    state = CITY_STATE.DONE
                 }
             }
             return state;
