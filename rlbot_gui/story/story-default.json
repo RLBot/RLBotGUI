@@ -172,7 +172,7 @@
             {
                 "id": "CS-4",
                 "humanTeamSize": 1,
-                "opponentBots": ["snek", "peter"],
+                "opponentBots": ["snek", "broccoli"],
                 "max_score": "3 Goals",
                 "map": "NeoTokyo",
                 "display": "How does that car turn so fast?"
