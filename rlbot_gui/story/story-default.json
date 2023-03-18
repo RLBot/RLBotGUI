@@ -21,7 +21,7 @@
                     "humanTeamSize": 1,
                     "opponentBots": ["noobbot"],
                     "optional": true,
-                    "map": "BeckwithPark_Dawn",
+                    "map": "Farmstead",
                     "display": "A training partner challenges you"
                 }
             ]

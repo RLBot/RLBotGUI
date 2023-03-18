@@ -276,12 +276,18 @@ export default {
         recruit_list: function () {
             let recruits = {};
 
+            // You can recruit bots from mandatory challenges of
+            // a city once all the mandatory challenges of that city is complete.
             for (let city of Object.keys(this.challenges)) {
-                if (this.getCityState(city) != CITY_STATE.DONE) {
+                const state = this.getCityState(city);
+                if (state === CITY_STATE.LOCKED || state === CITY_STATE.OPEN) {
                     continue;
                 }
                 for (let challenge of this.challenges[city]) {
-                    // This challenge was completed so opponents are available
+                    if (challenge.optional) {
+                        continue
+                    }
+                    // This challenge was mandatory and now completed so opponents are available
                     const botIds = challenge.opponentBots;
                     for (let botId of botIds) {
                         let bot = Object.assign({}, this.bots_config[botId]);
