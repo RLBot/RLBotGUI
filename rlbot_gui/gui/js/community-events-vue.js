@@ -145,7 +145,6 @@ export default {
                                 .split("href=\"")[1]
                                 .split("\"")[0]
                             : null;
-                        console.log(logo);
 
                         let description = event.description
                             ? event.description
