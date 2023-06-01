@@ -1,23 +1,31 @@
 export default {
     name: 'community-events',
     template: /*html*/`
-		<b-modal title="Community Events" id="community-events" size="lg" centered ok-only>
-			<div v-if="events.length == 0">
-				<p>There are no community events at this time.</p>
-			</div>
-			<div v-else v-for="event in events">
-				<h3>{{ event.name }}</h3>
-                <p v-if="event.timeUntilMs > 0" class="mb-1">
-                    <b-icon icon="calendar-plus"/> Starts in <b>{{ event.timeUntil }}</b> ({{ event.time }})
-                </p>
-                <p v-else class="mb-1">
-                    <b-icon icon="alarm"/> Started <b>{{ event.timeUntil }}</b> ago, but you can still join!
-                </p>
-				<p>
-                    <b-icon icon="geo"/> <a :href="event.location" target="_blank">{{ event.location }}</a>
-                </p>
-			</div>
-		</b-modal>
+        <b-modal title="Community Events" id="community-events" size="xl" centered ok-only>
+            <div v-if="events.length == 0">
+                <p>There are no community events at this time.</p>
+            </div>
+            <div v-else v-for="event in events">
+                <div class="d-flex align-items-center">
+                    <img v-if="event.logo" :src="event.logo" class="mr-3" style="max-width: 100%; max-height: 150px;"/>
+                    <div>
+                        <h3>{{ event.name }}</h3>
+                        <p v-if="event.timeUntilMs > 0" class="mb-1">
+                            <b-icon icon="calendar-plus"/> Starts in <b>{{ event.timeUntil }}</b> ({{ event.time }})
+                        </p>
+                        <p v-else class="mb-1">
+                            <b-icon icon="alarm"/> Started <b>{{ event.timeUntil }}</b> ago, but you can still join!
+                        </p>
+                        <p>
+                            <b-icon icon="geo"/> <a :href="event.location" target="_blank">{{ event.location }}</a>
+                        </p>
+                        <p v-if="event.moreInfo">
+                            <b-icon icon="info-circle"/> <a :href="event.moreInfo" target="_blank">More info</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </b-modal>
 	`,
     data() {
         return {
@@ -32,40 +40,41 @@ export default {
             const start = event.start.dateTime;
             let new_date = new Date(start);
 
-            try {
-                const recurrence = event.recurrence[0].split(";");
-                const rec_type = recurrence[0].split("=")[1];
-                const interval = recurrence[2].split("=")[1];
-                const end_date_type = recurrence[2].split("=")[0];
-                const end_date_raw = recurrence[2].split("=")[1];
-                let end_date = new Date(new_date);
-                if (end_date_type == "COUNT") {
+            if (event.recurrence) {
+                try {
+                    const recurrence = event.recurrence[0].split(";");
+                    const rec_type = recurrence[0].split("=")[1];
+                    const interval = recurrence[2].split("=")[1];
+                    const end_date_type = recurrence[2].split("=")[0];
+                    const end_date_raw = recurrence[2].split("=")[1];
+                    let end_date = new Date(new_date);
+                    if (end_date_type == "COUNT") {
+                        if (rec_type == "WEEKLY") {
+                            end_date.setDate(new_date.getDate() + 7 * interval * end_date_raw);
+                        } else if (rec_type == "MONTHLY") {
+                            end_date.setDate(new_date.getDate() + 4 * interval * end_date_raw);
+                        }
+                    } else {
+                        end_date.setDate(end_date_raw);
+                    }
                     if (rec_type == "WEEKLY") {
-                        end_date.setDate(new_date.getDate() + 7 * interval * end_date_raw);
+                        while (new_date <= end_date) {
+                            if (new_date > today) {
+                                break;
+                            }
+                            new_date.setDate(new_date.getDate() + 7);
+                        }
                     } else if (rec_type == "MONTHLY") {
-                        end_date.setDate(new_date.getDate() + 4 * interval * end_date_raw);
-                    }
-                } else {
-                    end_date.setDate(end_date_raw);
-                }
-                if (rec_type == "WEEKLY") {
-                    while (new_date <= end_date) {
-                        if (new_date > today) {
-                            break;
+                        while (new_date <= end_date) {
+                            if (new_date > today) {
+                                break;
+                            }
+                            new_date.setDate(new_date.getDate() + 4);
                         }
-                        new_date.setDate(new_date.getDate() + 7);
                     }
-                } else if (rec_type == "MONTHLY") {
-                    while (new_date <= end_date) {
-                        if (new_date > today) {
-                            break;
-                        }
-                        new_date.setDate(new_date.getDate() + 4);
-                    }
+                } catch (e) {
+                    console.error("Error checking recurrence:" + e);
                 }
-            }
-            catch (e) {
-                console.error("Error checking recurrence:" + e);
             }
 
             const time_untils = new_date.getTime() - today.getTime();
@@ -128,12 +137,31 @@ export default {
                         // convert this to something human readable, like "in 2 days"
                         const format = this.formatFromNow(Math.abs(time_until_ms));
 
+                        let logo =
+                          event.description && event.description.includes("logo:")
+                            ? event.description
+                                .split("logo:")[1]
+                                .replace("\n", "")
+                                .split("href=\"")[1]
+                                .split("\"")[0]
+                            : null;
+
+                        let description = event.description
+                            ? event.description
+                                .split("logo:")[0]
+                                .replace("\n", "")
+                                .split("href=\"")[1]
+                                .split("\"")[0]
+                            : null;
+
                         this.events.push({
                             name: names,
                             location: event.location,
                             time: new_date.toLocaleString(),
                             timeUntil: format,
                             timeUntilMs: time_until_ms,
+                            moreInfo: description,
+                            logo: logo,
                         });
                     }
 
@@ -142,8 +170,8 @@ export default {
                         return new Date(a.timeUntilMs) - new Date(b.timeUntilMs);
                     });
 
-                    // only show the first 3
-                    this.events = this.events.slice(0, 3);
+                    // only show the first 4
+                    this.events = this.events.slice(0, 4);
                 });
             });
         },
