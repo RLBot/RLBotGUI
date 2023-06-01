@@ -7,7 +7,7 @@ export default {
             </div>
             <div v-else v-for="event in events">
                 <div class="d-flex align-items-center">
-                    <img v-if="event.logo" :src="event.logo" class="mr-3" style="max-width: 100%; max-height: 100px;"/>
+                    <img v-if="event.logo" :src="event.logo" class="mr-3" style="max-width: 100%; max-height: 150px;"/>
                     <div>
                         <h3>{{ event.name }}</h3>
                         <p v-if="event.timeUntilMs > 0" class="mb-1">
