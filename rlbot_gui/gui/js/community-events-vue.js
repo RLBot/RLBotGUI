@@ -19,6 +19,9 @@ export default {
                         <p>
                             <b-icon icon="geo"/> <a :href="event.location" target="_blank">{{ event.location }}</a>
                         </p>
+                        <p v-if="event.moreInfo">
+                            <b-icon icon="info-circle"/> <a :href="event.moreInfo" target="_blank">More info</a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -139,9 +142,17 @@ export default {
                             ? event.description
                                 .split("logo:")[1]
                                 .replace("\n", "")
-                                .replace("</a>", "")
-                                .split(">")[1]
-                                .trim()
+                                .split("href=\"")[1]
+                                .split("\"")[0]
+                            : null;
+                        console.log(logo);
+
+                        let description = event.description
+                            ? event.description
+                                .split("logo:")[0]
+                                .replace("\n", "")
+                                .split("href=\"")[1]
+                                .split("\"")[0]
                             : null;
 
                         this.events.push({
@@ -150,6 +161,7 @@ export default {
                             time: new_date.toLocaleString(),
                             timeUntil: format,
                             timeUntilMs: time_until_ms,
+                            moreInfo: description,
                             logo: logo,
                         });
                     }
