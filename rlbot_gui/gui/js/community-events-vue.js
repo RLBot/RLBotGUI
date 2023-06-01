@@ -1,7 +1,7 @@
 export default {
     name: 'community-events',
     template: /*html*/`
-        <b-modal title="Community Events" id="community-events" size="lg" centered ok-only>
+        <b-modal title="Community Events" id="community-events" size="xl" centered ok-only>
             <div v-if="events.length == 0">
                 <p>There are no community events at this time.</p>
             </div>
