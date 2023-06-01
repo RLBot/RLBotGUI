@@ -31,11 +31,15 @@ export default {
 
 			<b-button @click="$bvModal.show('community-events')" variant="dark" class="ml-2">
 				Events
-				<b-badge v-if="$refs.communityEvents?.events.length" variant="primary">
-					{{ $refs.communityEvents.events.length }}
-				</b-badge>
-				<b-badge v-if="$refs.communityEvents?.eventsNow" variant="danger">
-					{{ $refs.communityEvents.eventsNow }} live!
+				<b-badge v-if="$refs.communityEvents?.events.length > 0" variant="danger">
+					<span v-if="$refs.communityEvents?.eventsNow">
+						<b-icon icon="alarm"/>
+						{{ $refs.communityEvents.eventsNow }}
+					</span>
+					<span v-if="$refs.communityEvents?.eventsFuture">
+						<b-icon icon="calendar-plus"/>
+						{{ $refs.communityEvents.eventsFuture }}
+					</span>
 				</b-badge>
 			</b-button>
 
