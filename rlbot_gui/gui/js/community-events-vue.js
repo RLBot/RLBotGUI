@@ -170,8 +170,8 @@ export default {
                         return new Date(a.timeUntilMs) - new Date(b.timeUntilMs);
                     });
 
-                    // only show the first 3
-                    this.events = this.events.slice(0, 3);
+                    // only show the first 4
+                    this.events = this.events.slice(0, 4);
                 });
             });
         },
