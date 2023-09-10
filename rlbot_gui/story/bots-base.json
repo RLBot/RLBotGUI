@@ -129,10 +129,10 @@
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "beastbot", "beastbot.cfg"]
     },
-    "noobbot": {
-        "name": "Noob Bot",
+    "noobblue": {
+        "name": "Noob Blue",
         "type": "rlbot",
-        "path": ["$RLBOTPACKROOT", "RLBotPack", "Noob_Bot", "src", "bot.cfg"]
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Noob_Blue", "src", "bot.cfg"]
     },
     "monkey": {
         "name": "Monkey",
