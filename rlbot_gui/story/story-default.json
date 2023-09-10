@@ -19,7 +19,7 @@
                 {
                     "id": "INTRO-2",
                     "humanTeamSize": 1,
-                    "opponentBots": ["noobbot"],
+                    "opponentBots": ["noobblue"],
                     "optional": true,
                     "map": "Farmstead",
                     "display": "A training partner challenges you"
