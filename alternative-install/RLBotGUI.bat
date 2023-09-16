@@ -35,7 +35,7 @@ call .\venv\Scripts\activate.bat
 
 rem We ping google.com to see if we have an internet connection
 rem We then store the output of the command to nul which prevents the command from printing to the console
-ping -n 1 google.com > nul
+%WINDIR%\system32\ping -n 1 google.com > nul
 if %errorlevel% == 0 (
   echo Installing / upgrading RLBot components...
   python -m pip install --upgrade pip
