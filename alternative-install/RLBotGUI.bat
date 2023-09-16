@@ -40,6 +40,7 @@ if %errorlevel% == 0 (
   echo Installing / upgrading RLBot components...
   python -m pip install --upgrade pip
   pip install wheel
+  pip install gevent^<22
   pip install eel
   pip install --upgrade rlbot_gui rlbot
 ) else (
