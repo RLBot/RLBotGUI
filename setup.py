@@ -8,6 +8,7 @@ with open("README.md", "r") as readme_file:
 setuptools.setup(
     name='rlbot_gui',
     packages=setuptools.find_packages(),
+    python_requires='>=3.11',
     # It actually requires 'gevent', 'eel', 'PyQt5', but that messes up the install for some people and we're
     # already bundling those in the pynsist installer.
     # We'll go ahead and list some packages needed by bots in the bot pack, though.
