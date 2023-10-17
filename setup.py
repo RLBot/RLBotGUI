@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '0.0.154'
+__version__ = '0.0.155'
 
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
@@ -8,17 +8,18 @@ with open("README.md", "r") as readme_file:
 setuptools.setup(
     name='rlbot_gui',
     packages=setuptools.find_packages(),
+    python_requires='>=3.11',
     # It actually requires 'gevent', 'eel', 'PyQt5', but that messes up the install for some people and we're
     # already bundling those in the pynsist installer.
     # We'll go ahead and list some packages needed by bots in the bot pack, though.
     install_requires=[
-        'numba==0.55.1',
+        'numba',
         'scipy',
         'numpy',
         'RLUtilities',  # Used by Snek
         'websockets',  # Needed for scratch bots
         'selenium',  # Needed for scratch bots
-        'PyQt5==5.15.*'  # Used for settings and file pickers currently.
+        'PyQt5'  # Used for settings and file pickers currently.
         ],
     version=__version__,
     description='A streamlined user interface for RLBot.',
