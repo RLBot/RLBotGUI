@@ -6,7 +6,7 @@ environment:
 
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      PYTHON: C:\Python37-x64\python.exe
+      PYTHON: C:\Python311-x64\python.exe
 
 branches:
    only:
