@@ -387,8 +387,12 @@ def filter_hidden_bundles(bundles):
 
 @eel.expose
 def get_language_support():
-    java_return_code = os.system("java -version 2> nul")
-    node_return_code = os.system("node --version> nul")
+    if platform.system() == "Windows":
+        java_return_code = os.system("java -version 2> nul")
+        node_return_code = os.system("node --version 2> nul")
+    else:
+        java_return_code = os.system("java -version > /dev/null 2>&1")
+        node_return_code = os.system("node --version > /dev/null 2>&1")
     # Only bother returning iffy languages. No point in sending 'python': True
     return {
         'java': java_return_code == 0,

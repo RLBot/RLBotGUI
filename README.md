@@ -40,7 +40,7 @@ It will put "RLBotGUI" in your Windows start menu.
 
 ### Prerequisites
 
-- Python 3.7
+- Python 3.11
 
 ### Setup
 
@@ -60,25 +60,13 @@ https://github.com/RLBot/RLBot/wiki/Deploying-Changes#first-time-setup
 1. Run `publish-to-pypi-prod.bat`
 
 #### Note
+
 When deploying to pypi, the files which get included are controlled by the MANIFEST.in file.
 You may wish to exclude anything which does not belong in the initial install, e.g.
 bot logos which get copied in to the GUI folder as you use the program.
 
 As a rule of thumb, if you add something to .gitignore, it may also belong in MANIFEST.in
 as a prune line.
-
-### Building the Installer
-
-You can build an installer executable for users to download. You will rarely need
-to do this, because normal updates should be pushed to users by deploying to PyPI.
-
-You really only need a new installer if you changed something in the pynsist_helpers
-folder, run.py, or anything else that gets referenced in installer.cfg. **AVOID THIS**
-because you don't want to run around bugging users to reinstall.
-
-1. Follow https://pynsist.readthedocs.io/en/latest/index.html to get NSIS installed.
-2. Run `pip install pynsist`
-3. Run `pynsist installer.cfg`
 
 Find the resulting executable in build\nsis.
 

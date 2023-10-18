@@ -45,7 +45,7 @@ fi
 source ./env/bin/activate
 
 # Check for an internet connection
-ping -c 1 pypi.org >/dev/null 2>&1
+ping -c 1 google.com >/dev/null 2>&1
 if [ $? -eq 0 ]
 then
     echo

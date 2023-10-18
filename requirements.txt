@@ -5,6 +5,6 @@ rlbot==1.*
 # This will cause pip to auto-upgrade and stop scaring people with warning messages
 pip
 
-gevent<22
+gevent
 eel>=0.12
 PyQt5

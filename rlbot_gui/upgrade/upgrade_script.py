@@ -27,12 +27,12 @@ def upgrade():
         elif public_utils.is_safe_to_upgrade():
             # Upgrade only the rlbot-related stuff.
             rlbot_requirements = os.path.join(folder, 'rlbot-requirements.txt')
-            pipmain(['install', '-r', rlbot_requirements, '--upgrade'])
+            pipmain(['install', '-r', rlbot_requirements, '--upgrade' '--no-warn-script-location'])
 
     except (ImportError, ModuleNotFoundError):
         # First time installation, install lots of stuff
         all_requirements = os.path.join(folder, 'requirements.txt')
-        pipmain(['install', '-r', all_requirements])
+        pipmain(['install', '-r', all_requirements, '--no-warn-script-location'])
 
 
 if __name__ == '__main__':
