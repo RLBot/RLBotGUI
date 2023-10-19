@@ -324,7 +324,7 @@ export default {
 					This bot requires Python 3.7 which is an additional dependency that must be setup per-bot.
 				</p>
 				<b-button @click="installPython37(activeBot.path)"
-						variant="primary">Setup Python 3.7 venv</b-button>
+						variant="primary">Setup Python 3.7 environment</b-button>
 			</div>
 			</div>
 		</b-modal>
