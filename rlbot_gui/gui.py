@@ -6,6 +6,8 @@ import subprocess
 import sys
 import json
 from pathlib import Path
+import urllib.request
+import zipfile
 
 import eel
 from PyQt5.QtCore import QSettings
@@ -445,6 +447,7 @@ def needs_python37_venv(bundle):
 
     return not path.exists()
 
+
 @eel.expose
 def install_python_37(config_path):
     is_windows = platform.system() == "Windows"
@@ -459,17 +462,34 @@ def install_python_37(config_path):
         if not is_windows:
             print(f"Unsupported operating system! Please manually install python 3.7 and try again. (ensure the command 'python3.7' is available)")
         else:
-            # download python 3.7 and unzip it
-            # url: https://github.com/RLBot/RLBotGUI/releases/download/v1.0/python-3.7.9-custom-amd64.zip
-            print("Downloading python 3.7...")
-            print("... is unimplemented lmao")
-            pass
+            install_folder = get_content_folder()
+            downloaded_zip_path = install_folder / 'python-3.7.9-custom-amd64.zip'
+
+            if not downloaded_zip_path.exists():
+                download_url = "https://github.com/RLBot/RLBotGUI/releases/download/v1.0/python-3.7.9-custom-amd64.zip"
+                print("Downloading python 3.7...")
+
+                try:
+                    urllib.request.urlretrieve(download_url, downloaded_zip_path)
+                except Exception as err:
+                    print(err)
+                    return {
+                        'exitCode': 1,
+                        'configPath': config_path,
+                    }
+                
+            print("Extracting Python 3.7...")
+
+            with zipfile.ZipFile(downloaded_zip_path, 'r') as zip_ref:
+                zip_ref.extractall(install_folder)
+
+    print("Setting up bot-specific Python 3.7 environment...")
 
     venv_path = Path(config_path).parent / 'venv'
     exit_code = subprocess.call([python_exe, "-m", "venv", venv_path])
 
     if exit_code == 0:
-        print(f"Successfully created Python 3.7 venv @ {venv_path}")
+        print(f"Successfully created the environment @ {venv_path}")
 
     return {
         'exitCode': exit_code,
