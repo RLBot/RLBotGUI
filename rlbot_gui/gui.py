@@ -110,6 +110,7 @@ def serialize_bundle(bundle: BotConfigBundle):
         'info': read_info(bundle),
         'logo': try_copy_logo(bundle),
         'missing_python_packages': [r.line for r in bundle.get_missing_python_packages() + bundle.get_python_packages_needing_upgrade()],
+        'requires_py37': needs_python37_venv(bundle),
     }
 
 
@@ -426,6 +427,53 @@ def get_match_options():
             'demolish_types': demolish_mutator_types,
             'respawn_time_types': respawn_time_mutator_types
         }
+    }
+
+
+def is_python_37(bundle):
+    return bundle.requires_py37 and bundle.supports_standalone and bundle.use_virtual_environment and bundle.requirements_file is not None
+
+
+def needs_python37_venv(bundle):
+    if not is_python_37(bundle):
+        return False
+
+    if platform.system() == "Windows":
+        path = Path(bundle.config_directory) / 'venv' / 'Scripts' / 'python.exe'
+    else:
+        path = Path(bundle.config_directory) / 'venv' / 'bin' / 'python'
+
+    return not path.exists()
+
+@eel.expose
+def install_python_37(config_path):
+    is_windows = platform.system() == "Windows"
+    if is_windows:
+        python_exe = get_content_folder() / 'Python37' / 'python.exe'
+        python_exists = python_exe.exists()
+    else:
+        python_exe = "python3.7"
+        python_exists = shutil.which(python_exe) is not None
+
+    if not python_exists:
+        if not is_windows:
+            print(f"Unsupported operating system! Please manually install python 3.7 and try again. (ensure the command 'python3.7' is available)")
+        else:
+            # download python 3.7 and unzip it
+            # url: https://github.com/RLBot/RLBotGUI/releases/download/v1.0/python-3.7.9-custom-amd64.zip
+            print("Downloading python 3.7...")
+            print("... is unimplemented lmao")
+            pass
+
+    venv_path = Path(config_path).parent / 'venv'
+    exit_code = subprocess.call([python_exe, "-m", "venv", venv_path])
+
+    if exit_code == 0:
+        print(f"Successfully created Python 3.7 venv @ {venv_path}")
+
+    return {
+        'exitCode': exit_code,
+        'configPath': config_path,
     }
 
 

@@ -55,7 +55,7 @@ export default {
 				State setting is turned off, sandbox won't work!
 			</b-tooltip>
 
-			<b-button 
+			<b-button
 				@click="$router.replace('/story')" variant="dark" class="ml-2"
 				>
 				Story Mode
@@ -83,7 +83,7 @@ export default {
 	</b-navbar>
 	<b-container fluid class="rlbot-main-config noscroll-flex flex-grow-1">
 
-	
+
 
 	<b-modal title="Install Package" id="package-installer" centered>
 
@@ -319,6 +319,13 @@ export default {
 					<li>Restart RLBotGUI</li>
 				</ol>
 			</div>
+			<div v-if="activeBot.warn === 'python37'">
+				<p>
+					This bot requires Python 3.7 which is an additional dependency that must be setup per-bot.
+				</p>
+				<b-button @click="installPython37(activeBot.path)"
+						variant="primary">Setup Python 3.7 venv</b-button>
+			</div>
 			</div>
 		</b-modal>
 
@@ -391,7 +398,7 @@ export default {
 				v-bind:path="appearancePath"
 				v-bind:map="matchSettings.map"
 				id="appearance-editor-dialog" />
-				
+
 		<b-modal title="Preferred Rocket League Launcher" id="launcher-modal" size="md" hide-footer centered>
 			<launcher-preference-modal modal-id="launcher-modal" />
 		</b-modal>
@@ -678,6 +685,10 @@ export default {
 					if (bot.missing_python_packages && bot.missing_python_packages.length > 0) {
 						bot.warn = 'pythonpkg';
 					}
+
+					if (bot.requires_py37) {
+						bot.warn = 'python37';
+					}
 				});
 			}
 		},
@@ -759,13 +770,31 @@ export default {
 			this.isBotpackUpToDate = true;
 		},
 
+		onPythonSetup: function (result) {
+			// result: exitCode, configPath
+			let message = result.exitCode === 0 ? 'Successfully set up' : 'Failed to set up';
+			this.snackbarContent = message;
+			this.showSnackbar = true;
+			this.showProgressSpinner = false;
+
+			if (result.exitCode === 0) {
+				// remove warning from result
+				for (const runnable of this.allUsableRunnables) if (runnable.requires_py37) {
+					if (runnable.path == result.configPath && runnable.warn == "python37") {
+						runnable.warn = null;
+					}
+				}
+				this.$bvModal.hide('language-warning-modal');
+			}
+		},
+
 		onInstallationComplete: function (result) {
 			let message = result.exitCode === 0 ? 'Successfully installed ' : 'Failed to install ';
 			message += result.packages.join(", ");
 			this.snackbarContent = message;
 			this.showSnackbar = true;
 			this.showProgressSpinner = false;
-			
+
 			if (result.exitCode === 0) {
 				// remove missing packages from other bots and maybe hide the yellow triangle
 				for (const runnable of this.allUsableRunnables) if (runnable.missing_python_packages) {
@@ -777,20 +806,29 @@ export default {
 				this.$bvModal.hide('language-warning-modal');
 			}
 		},
+
+		installPython37: function (botPath) {
+			this.showProgressSpinner = true;
+			eel.install_python_37(botPath)(this.onPythonSetup);
+		},
+
 		installPackage: function () {
 			this.showProgressSpinner = true;
 			eel.install_package(this.packageString)(this.onInstallationComplete);
 		},
+
 		installRequirements: function (configPath) {
 			this.showProgressSpinner = true;
 			eel.install_requirements(configPath)(this.onInstallationComplete);
 		},
+
 		selectRecommendation: function(bots) {
 			this.blueTeam = [HUMAN];
 			this.orangeTeam = bots.slice();
 			bots.forEach(this.handleBotAddedToTeam);
 			this.$bvModal.hide('recommendations-modal');
 		},
+
 		startup: function() {
 			if (this.$route.path != "/") {
 				return
