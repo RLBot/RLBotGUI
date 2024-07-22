@@ -13,7 +13,7 @@ branches:
       - master
 
 install:
-  - cmd: "%PYTHON% -m pip install --upgrade pip wheel twine"
+  - cmd: "%PYTHON% -m pip install --upgrade pip wheel build twine"
 
 build_script:
   - cmd: "%PYTHON% -m pip install ."
@@ -25,7 +25,7 @@ after_test:
   - cmd: "echo [pypi] > %USERPROFILE%\\.pypirc"
   - cmd: "echo username: RLBotOfficial >> %USERPROFILE%\\.pypirc"
   - cmd: "echo password: %pypipw% >> %USERPROFILE%\\.pypirc"
-  - cmd: "%PYTHON% setup.py bdist_wheel sdist"
+  - cmd: "%PYTHON% -m build"
 
 on_success:
   - cmd: "%PYTHON% -m twine upload dist\\*"
