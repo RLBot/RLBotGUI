@@ -713,23 +713,19 @@ def is_full_python():
 
 
 def launch_eel(use_chrome):
-    port = 40993  # Arbitrary choice from the 'registered sockets' range of 1024 to 49151
-    options = {'port': port}
-
     if use_chrome:
         # Don't put anything in the options dict. The dict is used by old eel,
         # and old eel (0.10) defaults nicely to chrome app.
         browser_mode = 'chrome'  # New eel (1.0) needs it to be 'chrome'.
     else:
         browser_mode = 'system-default'
-        options['mode'] = browser_mode
 
     # This disable_cache thing only works if you have tare's fork of eel https://github.com/ChrisKnott/Eel/pull/102
     # installed to pip locally using this technique https://stackoverflow.com/a/49684835
     # The suppress_error=True avoids the error "'options' argument deprecated in v1.0.0", we need to keep the
     # options argument since a lot of our user base has an older version of eel.
-    eel.start('main.html', size=(1300, 870), block=False, close_callback=on_websocket_close, options=options,
-              disable_cache=True, mode=browser_mode, port=port, suppress_error=True)
+    eel.start('main.html', size=(1300, 870), block=False, close_callback=on_websocket_close, port=40993,
+              disable_cache=True, mode=browser_mode, suppress_error=True)
 
 
 def init_settings():
