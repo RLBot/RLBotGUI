@@ -12,24 +12,24 @@ fi
 
 pushd "$HOME/.RLBotGUI"
 
-# If any version of Python 3.7 is not installed, then install it
+# If any version of Python 3.11 is not installed, then install it
 
-python3.7 -V
+python3.11 -V
 if [ $? -gt 0 ]
 then
     echo
-    echo "Invalid Python install. Installing Python 3.7, and possibly not present dependencies..."
+    echo "Invalid Python install. Installing Python 3.11, and possibly not present dependencies..."
     echo
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt update
-    sudo apt install python3.7
+    sudo apt install python3.11
 
     # Instead of waiting to see if these aren't installed, just install them. If they're already installed, then nothing will happen.
     echo
-    echo "Installing build-essential, python3.7-dev, python3.7-venv, python3-distutils..."
+    echo "Installing build-essential, python3.11-dev, python3.11-venv, python3.11-distutils..."
     echo
-    sudo apt install build-essential python3.7-dev python3.7-venv python3-distutils
+    sudo apt install build-essential python3.11-dev python3.11-venv, python3.11-distutils
 fi
 
 # Check if the virtual environment exists
@@ -37,8 +37,8 @@ fi
 if [ ! -e "$HOME/.RLBotGUI/env/bin/activate" ]
 then
     echo
-    echo "Creating the Python 3.7 Virtual Environment"
-    python3.7 -m venv env
+    echo "Creating the Python 3.11 Virtual Environment"
+    python3.11 -m venv env
 fi
 
 # Enter the virtual environment
