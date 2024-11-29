@@ -2,7 +2,7 @@ version: '{build}'
 
 environment:
   pypipw:
-    secure: AnvQqXXhbyfD5/CeJkbivk088RZBnIObU2mXBLH2paw=
+    secure: tTJUexu4V68/Zbl3l/K7x8eI4TR56JZhn2DEvCemP8zNYPCkcFgYfaGp27c6fCoPpgWEvyzJjYyqAzsxLl4mYKtMDEtV9a1B9tD2ElnbERnxpvK4lldg8fAhdpYFw+L3EqPLEaVTAROysUl4w+qf+OQrEet6kcdMGa7jlXSFdqjW/kjU4/SdSD/mQp/Uec4GqcyvxXb8wIm1+tjblFxm9yVh6FfcDdv6/WEm3nWuveUpfQ3yxx6B5RY3SfTySgsS6izSMp//Yqgo5feJ3snv7MzKBezYW90OabQ7Af8o9jY=
 
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
