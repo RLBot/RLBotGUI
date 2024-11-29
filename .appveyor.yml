@@ -26,4 +26,4 @@ after_test:
   - cmd: "%PYTHON% -m build"
 
 on_success:
-  - cmd: "%PYTHON% -m twine upload dist\\*"
+  - cmd: "%PYTHON% -m twine upload dist\\* --verbose"
