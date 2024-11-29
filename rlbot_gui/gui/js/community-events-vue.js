@@ -137,22 +137,20 @@ export default {
                         // convert this to something human readable, like "in 2 days"
                         const format = this.formatFromNow(Math.abs(time_until_ms));
 
-                        let logo =
-                          event.description && event.description.includes("logo:")
-                            ? event.description
-                                .split("logo:")[1]
+                        let logo_split = event.description ? event.description.split("logo:") : [];
+                        let logo = logo_split.length > 1
+                            ? logo_split[1]
                                 .replace("\n", "")
                                 .split("href=\"")[1]
                                 .split("\"")[0]
                             : null;
 
-                        let description = event.description
-                            ? event.description
-                                .split("logo:")[0]
+                        let description = logo_split.length > 0 && logo_split[0].includes("href=\"")
+                            ? logo_split[0]
                                 .replace("\n", "")
                                 .split("href=\"")[1]
                                 .split("\"")[0]
-                            : null;
+                            : event.description;
 
                         this.events.push({
                             name: names,
