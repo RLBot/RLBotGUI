@@ -53,10 +53,19 @@ For normal changes, e.g. things happening inside the rlbot_gui folder,
 you should be publishing an update to PyPI. All users will get this change
 automatically without needing to reinstall!
 
+#### Automated
+
 To deploy:
-1. Create a .pypirc file like the one described here:
+1. Look in `setup.py` and increment the version number
+2. Push a commit to the master branch (or open a PR with your changes to the master branch)
+   - After the commit is made, a new version will automatically be deployed to PyPi.
+
+#### Manual 
+
+To deploy:
+1. Create a `.pypirc` file like the one described here:
 https://github.com/RLBot/RLBot/wiki/Deploying-Changes#first-time-setup
-1. Look in setup.py and increment the version number.
+1. Look in `setup.py` and increment the version number.
 1. Run `publish-to-pypi-prod.bat`
 
 #### Note
