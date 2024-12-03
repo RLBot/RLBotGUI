@@ -1,13 +1,13 @@
 import setuptools
 
-__version__ = '0.0.157'
+__version__ = '0.0.158'
 
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
 
 setuptools.setup(
     name='rlbot_gui',
-    packages=setuptools.find_namespace_packages(exclude=['*logos*'], include=["rlbot_gui.*"]),
+    packages=setuptools.find_namespace_packages(exclude=['*logos*'], include=["rlbot_gui*"]),
     python_requires='>=3.11',
     # It actually requires 'gevent', 'eel', 'PyQt5', but that messes up the install for some people and we're
     # already bundling those in the pynsist installer.
