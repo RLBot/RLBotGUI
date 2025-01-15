@@ -35,7 +35,7 @@
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Kamael_family", "Kamael.cfg"]
     },
     "botimus": {
-        "name": "BoltimusPrime",
+        "name": "BotimusPrime",
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Botimus&Bumblebee", "botimus.cfg"]
     },
@@ -163,6 +163,11 @@
         "name": "Invisibot",
         "type": "rlbot",
         "path": ["$RLBOTPACKROOT", "RLBotPack", "Invisibot", "src", "invisibot.cfg"]
+    },
+    "molten": {
+        "name": "Molten",
+        "type": "rlbot",
+        "path": ["$RLBOTPACKROOT", "RLBotPack", "Molten", "bot.cfg"]
     },
     "king": {
         "name": "king.",
