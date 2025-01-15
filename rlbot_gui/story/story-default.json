@@ -182,6 +182,7 @@
                 "humanTeamSize": 2,
                 "opponentBots": ["invisibot"],
                 "map": "NeoTokyo",
+                "optional": true,
                 "display": "Wait where did that car go?"
             },
             {
