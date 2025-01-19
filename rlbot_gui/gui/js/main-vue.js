@@ -137,6 +137,7 @@ export default {
 				@bot-clicked="addToTeam($event, teamSelection)"
 				ref="botPool"
 				:display-human="displayHumanInBotPool"
+				:favorites="favoritesPool"
 				class="noscroll-flex"
 			/>
 
@@ -255,6 +256,13 @@ export default {
 		</b-toast>
 
 		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer centered>
+			<template #modal-title="{ close }">
+				<b-button v-if="activeBot.path" variant="outline-primary" class="icon-button" @click="toggleFavoriteRunnable(activeBot)">
+					<b-icon v-if="favoritesPool.includes(activeBot.path)"  icon="star-fill" variant="warning" />
+					<b-icon v-if="!favoritesPool.includes(activeBot.path)" icon="star" />
+				</b-button>
+				{{activeBot.name}}
+			</template>
 
 			<img v-if="activeBot.logo" class="bot-logo" v-bind:src="activeBot.logo">
 			<p><span class="bot-info-key">Developers:</span> {{activeBot.info.developer}}</p>
@@ -471,6 +479,7 @@ export default {
 			showBotpackUpdateSnackbar: false,
 			appearancePath: '',
 			recommendations: null,
+			favoritesPool: [],
 			downloadModalTitle: "Downloading Bot Pack",
 		}
 	},
@@ -743,6 +752,10 @@ export default {
 			eel.get_match_options()(this.matchOptionsReceived)
 		},
 
+		favoriteRunnablesReceived: function (runnables) {
+			this.favoritesPool = runnables;
+		},
+
 		botpackUpdateChecked: function (isBotpackUpToDate) {
 			this.showBotpackUpdateSnackbar = !isBotpackUpToDate;
 			this.isBotpackUpToDate = isBotpackUpToDate;
@@ -791,6 +804,16 @@ export default {
 			bots.forEach(this.handleBotAddedToTeam);
 			this.$bvModal.hide('recommendations-modal');
 		},
+		toggleFavoriteRunnable: async function(runnable) {
+			let i = this.favoritesPool.indexOf(runnable.path);
+			if (i >= 0) {
+				this.favoritesPool.splice(i, 1);
+			} else {
+				this.favoritesPool.push(runnable.path);
+			}
+			await eel.save_favorite_runnables(this.favoritesPool)();
+		},
+
 		startup: function() {
 			if (this.$route.path != "/") {
 				return
@@ -799,6 +822,7 @@ export default {
 			eel.get_match_options()(this.matchOptionsReceived);
 			eel.get_match_settings()(this.matchSettingsReceived);
 			eel.get_team_settings()(this.teamSettingsReceived);
+			eel.get_favorite_runnables()(this.favoriteRunnablesReceived);
 
 			eel.get_language_support()((support) => {
 				this.languageSupport = support;

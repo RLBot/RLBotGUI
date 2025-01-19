@@ -8,6 +8,7 @@ export default {
 	props: {
 		bot: Object,
 		disabled: Boolean,
+		favorited: Boolean,
 		draggable: {
 			type: Boolean,
 			default: true,
@@ -15,7 +16,7 @@ export default {
 	},
 	template: /*html*/`
 		<draggable v-model="draggableModel" :options="draggableOptions" style="display: inline;">
-			<runnable-card :runnable="bot" v-bind="[$props,$attrs]" :class="{draggable: draggable}" @click="$emit('click')">
+			<runnable-card :runnable="bot" v-bind="[$props,$attrs]" :class="{draggable: draggable}" :favorited="favorited" @click="$emit('click')">
 		</draggable>
 	`,
 	computed: {

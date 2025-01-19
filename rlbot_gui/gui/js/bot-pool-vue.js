@@ -10,7 +10,7 @@ export default {
 		'script-card': ScriptCard,
 		'script-dependencies': ScriptDependencies,
 	},
-	props: ['bots', 'scripts', 'display-human'],
+	props: ['bots', 'scripts', 'display-human', 'favorites'],
 	template: /*html*/`
 		<div class="p-1">
 			<b-form inline class="mb-2">
@@ -33,7 +33,7 @@ export default {
 			</b-form>
 	
 			<div class="overflow-auto">
-				<bot-card v-for="bot in bots" :bot="bot" v-show="passesFilter(bot)" @click="$emit('bot-clicked', bot)"/>
+				<bot-card v-for="bot in bots" :bot="bot" v-show="passesFilter(bot)" @click="$emit('bot-clicked', bot)" :favorited="favorites.includes(bot.path)" />
 	
 				<span v-if="displayedBotsCount + displayedScriptsCount === 0">
 					No bots available for this category.
@@ -41,7 +41,7 @@ export default {
 	
 				<div v-if="displayedScriptsCount > 0" class="scripts-header">Scripts</div>
 	
-				<script-card v-for="script in scripts" :script="script" v-show="passesFilter(script)"/>
+				<script-card v-for="script in scripts" :script="script" v-show="passesFilter(script)" :favorited="favorites.includes(script.path)"/>
 				
 				<script-dependencies :bots="bots" :scripts="scripts"
 					v-if="secondaryCategorySelected.displayScriptDependencies"
@@ -83,6 +83,10 @@ export default {
 			// except for the script dependencies, where all scripts are displayed already
 			if (runnable.type === 'script' && !category.displayScriptDependencies && runnable.enabled)
 				return true;
+
+			if (category && category.favorites) {
+				return this.favorites.includes(runnable.path)
+			}
 
 			let allowedTag = runnable.type === 'script' ? category.scripts : category.bots;
 			if (allowedTag) {
