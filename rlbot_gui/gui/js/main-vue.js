@@ -257,11 +257,15 @@ export default {
 
 		<b-modal id="bot-info-modal" size="xl" :title="activeBot.name" v-if="activeBot && activeBot.info" hide-footer centered>
 			<template #modal-title="{ close }">
-				<b-button v-if="activeBot.path" variant="outline-primary" class="icon-button" @click="toggleFavoriteRunnable(activeBot)">
-					<b-icon v-if="favoritesPool.includes(activeBot.path)"  icon="star-fill" variant="warning" />
-					<b-icon v-if="!favoritesPool.includes(activeBot.path)" icon="star" />
-				</b-button>
-				{{activeBot.name}}
+				<div class="d-flex align-items-center">
+					{{activeBot.name}}
+					<b-button v-if="activeBot.path" variant="outline-warning" class="icon-button" @click="toggleFavoriteRunnable(activeBot)"
+						v-b-tooltip.hover title="Toggle bot as favorite"
+					>
+						<b-icon v-if="favoritesPool.includes(activeBot.path)" icon="star-fill" />
+						<b-icon v-else icon="star" />
+					</b-button>
+				</div>
 			</template>
 
 			<img v-if="activeBot.logo" class="bot-logo" v-bind:src="activeBot.logo">
