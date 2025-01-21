@@ -70,4 +70,12 @@ export default {
             },
         ],
     },
+    favorites: {
+        name: "Favorites",
+        categories: [
+            {
+                favorites: true,
+            },
+        ],
+    },
 };

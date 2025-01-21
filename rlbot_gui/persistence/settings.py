@@ -5,6 +5,7 @@ BOT_FOLDER_SETTINGS_KEY = 'bot_folder_settings'
 MATCH_SETTINGS_KEY = 'match_settings'
 LAUNCHER_SETTINGS_KEY = 'launcher_settings'
 TEAM_SETTINGS_KEY = 'team_settings'
+FAVORITES_KEY = 'favorite_runnables'
 
 
 def load_settings() -> QSettings:

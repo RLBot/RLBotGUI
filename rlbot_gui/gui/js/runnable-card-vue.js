@@ -5,6 +5,7 @@ export default {
 		disabled: Boolean,
 		removable: Boolean,
 		hidewarning: Boolean,
+		favorited: Boolean,
 	},
 	template: /*html*/`
 		<b-card class="bot-card" @click="disabled || $emit('click')" :class="{disabled: disabled}">
@@ -19,6 +20,8 @@ export default {
 					</span>
 				</span>
 			</slot>
+			
+			<b-icon v-if="favorited" icon="star-fill" variant="warning" style="margin-left: 0.33em"></b-icon>
 
 			<b-button size="sm" class="icon-button warning-icon" v-if="runnable.warn && !hidewarning" variant="outline-warning"
 						@click.stop="$store.commit('setActiveBot', runnable)" v-b-modal.language-warning-modal>
