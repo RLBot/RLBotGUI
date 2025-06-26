@@ -8022,6 +8022,7 @@
 11597,MusicStingers,Product_TA ProductsDB.Products.anthem_parkwild_ifyouliketogofast,If You Like To Go Fast
 11599,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_utopia02,Future Fashion
 11600,Boost,Product_TA ProductsDB.Products.boost_magical,Misteek
+11603,Body,Product_TA ProductsDB.Products.body_zrf,Fennec ZR-F
 11608,Skin,Product_TA ProductsDB.Products.skin_autodignitas_00,Dignitas (2025)
 11609,Skin,Product_TA ProductsDB.Products.skin_autobds_00,Team BDS (2025)
 11610,Skin,Product_TA ProductsDB.Products.skin_autovitality_00,Team Vitality (2025)
@@ -8030,6 +8031,7 @@
 11615,GoalExplosion,Product_TA ProductsDB.Products.explosion_ESports_TSM_V3,TSM (2025)
 11616,Skin,Product_TA ProductsDB.Products.pack_rlcs2025,RLCS '25
 11618,Skin,Product_TA ProductsDB.Products.skin_autotsm_00,TSM (2025)
+11619,Wheels,Product_TA ProductsDB.Products.wheel_zrf,Fennec ZR-F
 11620,Skin,Product_TA ProductsDB.Products.skin_autogeng_00,Gen.G (2025)
 11621,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_evilornament01,Darth Vader
 11622,Wheels,Product_TA ProductsDB.Products.Wheel_Frog,Turtle Van Stock
@@ -8074,10 +8076,12 @@
 11694,Hat,Product_TA ProductsDB.Products.hat_evilornament02,Stormtrooper Helmet
 11696,SupersonicTrail,Product_TA ProductsDB.Products.ss_evilornament,Force Lightning
 11697,Skin,Product_TA ProductsDB.Products.skin_jam_evilornament03,Porsche 911 GT3 RS: Captain Phasma
+11698,Boost,Product_TA ProductsDB.Products.boost_rlcsraleigh,RLCS Raleigh Major 2025
 11702,Hat,Product_TA ProductsDB.Products.hat_evilornament01,TIE Fighter
 11703,Skin,Product_TA ProductsDB.Products.skin_lime_lightning,Stampede: Lightning
 11705,Boost,Product_TA ProductsDB.Products.boost_toonywater_psplus,Torrent PK
 11706,Skin,Product_TA ProductsDB.Products.skin_rafael_livery2,Ferrari 296 GTB: Rosso Ferrari F1-75
+11707,Skin,Product_TA ProductsDB.Products.skin_rawly,RLCS Raleigh Major 2025
 11709,Skin,Product_TA ProductsDB.Products.skin_rafael_b,Ferrari 296 GTB: Assetto Fiorano (Custom)
 11712,Skin,Product_TA ProductsDB.Products.skin_lime_wings,Stampede: Wings
 11713,Boost,Product_TA ProductsDB.Products.boost_skullchromatic,Skelly
@@ -8086,6 +8090,10 @@
 11719,GoalExplosion,Product_TA ProductsDB.Products.explosion_aglet04,Manchester United
 11720,GoalExplosion,Product_TA ProductsDB.Products.explosion_aglet05,Juventus
 11721,Skin,Product_TA ProductsDB.Products.skin_ruckus_wings,Xentari: Wings
+11722,Skin,Product_TA ProductsDB.Products.skin_zrf_flames,Fennec ZR-F: Flames
+11723,Skin,Product_TA ProductsDB.Products.skin_zrf_lightning,Fennec ZR-F: Lightning
+11724,Skin,Product_TA ProductsDB.Products.skin_zrf_stripes,Fennec ZR-F: Stripes
+11725,Skin,Product_TA ProductsDB.Products.skin_zrf_wings,Fennec ZR-F: Wings
 11726,Skin,Product_TA ProductsDB.Products.skin_lime_stripes,Stampede: Stripes
 11727,Skin,Product_TA ProductsDB.Products.skin_10x,Cen10ial
 11729,Wheels,Product_TA ProductsDB.Products.wheel_oemplus,OEM+
@@ -8094,6 +8102,7 @@
 11735,Wheels,Product_TA ProductsDB.Products.wheel_lime2,Stampede
 11738,MusicStingers,Product_TA ProductsDB.Products.anthem_evilornament,The Imperial March (Darth Vader's Theme)
 11742,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_10yearbirthday,Birthday Balloons
+11743,Skin,Product_TA ProductsDB.Products.skin_octane_wub_10th,Octane: ?INT?Products.skin_octane_wub_10th.Label?
 11745,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_genielamp,Genie Lamp
 11746,SupersonicTrail,Product_TA ProductsDB.Products.ss_rp10year,Mystic Streamer
 11747,GoalExplosion,Product_TA ProductsDB.Products.explosion_fs_ghost,Reaper Ultra
@@ -8110,6 +8119,8 @@
 11762,Skin,Product_TA ProductsDB.Products.skin_rafael_livery3,Ferrari 296 GTB: Rosso Corsa
 11766,Antenna,Product_TA ProductsDB.Products.antenna_ballsnake,Snakeshot
 11767,PlayerAvatarBorder,Product_TA ProductsDB.Products.avatarborder_s19rlrocketpass03,Architex
+11768,Wheels,Product_TA ProductsDB.Products.wheel_rlcsraleigh,RLCS Raleigh Major 2025
+11769,Skin,Product_TA ProductsDB.Products.skin_zrf_livery2,Fennec ZR-F: R=CE
 11771,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_aglet02,Arsenal F.C.
 11772,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_aglet03,Real Madrid CF
 11773,PlayerBanner,Product_TA ProductsDB.Products.playerbanner_aglet04,Manchester United
@@ -8142,12 +8153,14 @@
 11826,Skin,Product_TA ProductsDB.Products.skin_crikey_lightning,Breakout X: Lightning
 11827,Skin,Product_TA ProductsDB.Products.skin_crikey_stripes,Breakout X: Stripes
 11828,Skin,Product_TA ProductsDB.Products.skin_crikey_wings,Breakout X: Wings
+11831,Skin,Product_TA ProductsDB.Products.skin_zrf_livery3,Fennec ZR-F: Graffiti'd
 11835,Skin,Product_TA ProductsDB.Products.skin_musclecar_10year,Dominus: Gilded Glass
 11839,GoalExplosion,Product_TA ProductsDB.Products.explosion_goldniceshot,Nice Shot!
 11840,Hat,Product_TA ProductsDB.Products.hat_magic_carpet,Magic Carpet
 11847,Wheels,Product_TA ProductsDB.Products.wheel_octaneneonlight,Neon Octane
 11849,EngineAudio,Product_TA ProductsDB.Products.engineaudio_ruckus,Xentari
 11850,EngineAudio,Product_TA ProductsDB.Products.engineaudio_slick,Megastar
+11851,EngineAudio,Product_TA ProductsDB.Products.engineaudio_zrf,Fennec ZR-F
 11859,Skin,Product_TA ProductsDB.Products.skin_skull,Hellfire
 11860,Skin,Product_TA ProductsDB.Products.skin_slick01,Megastar: Cold-blooded
 11861,Skin,Product_TA ProductsDB.Products.skin_slick02,Megastar: Crosshair
@@ -8167,10 +8180,26 @@
 11880,Wheels,Product_TA ProductsDB.Products.wheel_s1808,S18 - Supersonic Legend
 11883,Wheels,Product_TA ProductsDB.Products.wheel_slick02,Infinite Overdrive
 11888,EngineAudio,Product_TA ProductsDB.Products.engineaudio_crikey,Breakout X
-11892,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet03,?INT?Products.body_zrf.Label?: Real Madrid CF
-11894,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet02,?INT?Products.body_zrf.Label?: Arsenal F.C.
-11897,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet05,?INT?Products.body_zrf.Label?: Juventus
-11898,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet04,?INT?Products.body_zrf.Label?: Manchester United
+11892,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet03,Fennec ZR-F: Real Madrid CF
+11894,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet02,Fennec ZR-F: Arsenal F.C.
+11897,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet05,Fennec ZR-F: Juventus
+11898,Skin,Product_TA ProductsDB.Products.skin_zrf_aglet04,Fennec ZR-F: Manchester United
 11899,MusicStingers,Product_TA ProductsDB.Products.anthem_hollywoodprinciple_breathingunderwater_vip,Breathing Underwater (VIP)
+11911,MusicStingers,Product_TA ProductsDB.Products.album_anthem_monstercat2025,Monstercat 2025
+11912,MusicStingers,Product_TA ProductsDB.Products.anthem_slushii_loveuneedu,?INT?Products.anthem_slushii_loveuneedu.Label?
+11913,MusicStingers,Product_TA ProductsDB.Products.anthem_diontimmer_shiawase,?INT?Products.anthem_diontimmer_shiawase.Label?
+11914,MusicStingers,Product_TA ProductsDB.Products.anthem_snavs_us,?INT?Products.anthem_snavs_us.Label?
+11915,MusicStingers,Product_TA ProductsDB.Products.anthem_stephenwalking_glide,?INT?Products.anthem_stephenwalking_glide.Label?
+11916,MusicStingers,Product_TA ProductsDB.Products.anthem_tokyomachine_rockit,?INT?Products.anthem_tokyomachine_rockit.Label?
 11917,MusicStingers,Product_TA ProductsDB.Products.anthem_hollywoodprinciple_drawkward_solareclipses_vip,Solar Eclipses (VIP)
+11918,MusicStingers,Product_TA ProductsDB.Products.anthem_conro_therapy,?INT?Products.anthem_conro_therapy.Label?
+11919,MusicStingers,Product_TA ProductsDB.Products.anthem_crankdat_powerstone,?INT?Products.anthem_crankdat_powerstone.Label?
+11920,MusicStingers,Product_TA ProductsDB.Products.anthem_foolextraterra_agonize,?INT?Products.anthem_foolextraterra_agonize.Label?
+11921,MusicStingers,Product_TA ProductsDB.Products.anthem_koven_gold,?INT?Products.anthem_koven_gold.Label?
+11922,MusicStingers,Product_TA ProductsDB.Products.anthem_koven_lionsvip,?INT?Products.anthem_koven_lionsvip.Label?
+11923,MusicStingers,Product_TA ProductsDB.Products.anthem_shingonakamura_glow,?INT?Products.anthem_shingonakamura_glow.Label?
+11924,MusicStingers,Product_TA ProductsDB.Products.anthem_throttle_forme,?INT?Products.anthem_throttle_forme.Label?
 11925,MusicStingers,Product_TA ProductsDB.Products.anthem_hollywoodprinciple_fireworkvip,Firework (VIP)
+11928,MusicStingers,Product_TA ProductsDB.Products.anthem_fool_duality_vip,?INT?Products.anthem_fool_duality_vip.Label?
+11929,MusicStingers,Product_TA ProductsDB.Products.anthem_bossfight_endgame_vip,?INT?Products.anthem_bossfight_endgame_vip.Label?
+11948,MusicStingers,Product_TA ProductsDB.Products.anthem_tokyomachine_teminite_boomkitty_busted,BUSTED
