@@ -1,14 +1,18 @@
-# RLBotGUI
+# RLBotGUI (Deprecated)
 
 [<img src="https://img.shields.io/pypi/v/rlbot-gui.svg">](https://pypi.org/project/rlbot-gui/)
 
 ## About
 
 RLBotGUI is a streamlined user interface that helps you run custom
-Rocket League bots for offline entertainment. It relies on the RLBot
-project to work its magic: https://github.com/RLBot/RLBot
+Rocket League bots for offline entertainment. It relies on the [RLBot v4](https://github.com/RLBot/RLBot) project to work its magic.
 
-Works on Windows and Linux
+Works on Windows and Linux.
+
+> [!WARNING]
+> This is the GUI for RLBot v4 which is deprecated and will not receive more updates.
+> Try out the preview for the new RLBot v5 GUI by visiting https://rlbot.org/ (the new GUI has built-in RocketHost support!).
+> You can have both installed at the same time.
 
 ## Features
 
@@ -40,7 +44,7 @@ It will put "RLBotGUI" in your Windows start menu.
 
 ### Prerequisites
 
-- Python 3.7
+- Python 3.11+
 
 ### Setup
 
