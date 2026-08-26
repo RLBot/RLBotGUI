@@ -8,3 +8,7 @@ pip
 gevent==24.*
 eel>=0.12
 PyQt5
+
+# Pin websockets to a version compatible with rlbot's matchcomms server
+# websockets 10.x+ removed the deprecated `loop` parameter
+websockets<10.0.0
